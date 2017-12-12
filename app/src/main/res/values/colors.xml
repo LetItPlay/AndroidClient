@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorNavigationView">#f2f2f2</color>
+    <color name="colorFeedChannelItem">#ff6666</color>
+    <color name="colorWhite">#fff</color>
 </resources>
