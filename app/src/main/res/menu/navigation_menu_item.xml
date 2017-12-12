@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_channels"
+        android:icon="@drawable/channels"
+        android:title="@string/menu_item_channels" />
+    <item
+        android:id="@+id/action_trends"
+        android:icon="@drawable/trends"
+        android:title="@string/menu_item_trends"/>
+    <item
+        android:id="@+id/action_feed"
+        android:icon="@drawable/feed"
+        android:title="@string/menu_item_feed"/>
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search"
+        android:title="@string/menu_item_search"/>
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/profile"
+        android:title="@string/menu_item_profile"/>
+
+</menu>

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LetItPlay</string>
+    <string name="menu_item_channels">Channels</string>
+    <string name="menu_item_trends">Trends</string>
+    <string name="menu_item_search">Search</string>
+    <string name="menu_item_feed">Feed</string>
+    <string name="menu_item_profile">Profile</string>
 </resources>
