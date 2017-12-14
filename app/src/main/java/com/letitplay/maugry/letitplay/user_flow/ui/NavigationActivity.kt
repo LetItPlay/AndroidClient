@@ -1,13 +1,12 @@
 package com.letitplay.maugry.letitplay.user_flow.ui
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.letitplay.maugry.letitplay.R
 
-class NavigationActivity : AppCompatActivity() {
+
+class NavigationActivity : BaseActivity(R.layout.navigation_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.navigation_main)
     }
 }

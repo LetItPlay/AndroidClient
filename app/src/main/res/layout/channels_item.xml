@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="170dp">
+
+    <ImageView
+        android:id="@+id/channel_logo"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/channel_channel_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/channel_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Disgusting men"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/channel_follow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/channel_logo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/channel_follow"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/following_button"
+        app:layout_constraintBottom_toTopOf="@+id/teg_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/channel_logo"
+        app:layout_constraintTop_toBottomOf="@+id/channel_title" />
+
+    <LinearLayout
+        android:id="@+id/teg_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/channel_statistic_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/channel_logo"
+        app:layout_constraintTop_toBottomOf="@+id/channel_follow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tag_backgraund"
+            android:padding="4dp"
+            android:text="VIDEOGAME"
+            android:textSize="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:background="@drawable/tag_backgraund"
+            android:padding="4dp"
+            android:text="FRIEND"
+            android:textSize="8dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/channel_statistic_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/channel_logo"
+        app:layout_constraintTop_toBottomOf="@+id/teg_container">
+
+        <ImageView
+            android:id="@+id/followers_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/followers" />
+
+        <TextView
+            android:id="@+id/follower_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/followers_icon"
+            android:text="195 893"
+            android:textSize="11dp" />
+
+        <ImageView
+            android:id="@+id/track_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/follower_count"
+            android:src="@drawable/tracks_count" />
+
+        <TextView
+            android:id="@+id/track_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/track_icon"
+            android:text="237"
+            android:textSize="11dp" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
