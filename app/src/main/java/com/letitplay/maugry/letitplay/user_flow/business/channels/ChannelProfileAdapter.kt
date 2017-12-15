@@ -7,12 +7,13 @@ import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 
 
-class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>() {
+class ChannelProfileAdapter : RecyclerView.Adapter<ChannelProfileAdapter.ChannelsProfileItemHolder>() {
 
     private var data: List<ChannelModel> = ArrayList()
+
     var onClick: (() -> Unit)? = null
 
-    override fun onBindViewHolder(holder: ChannelsItemHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ChannelsProfileItemHolder?, position: Int) {
         holder?.apply {
             update(data[position])
             itemView.setOnClickListener { onClick?.invoke() }
@@ -28,9 +29,9 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelsItemHolder = ChannelsItemHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelsProfileItemHolder = ChannelsProfileItemHolder(parent)
 
-    class ChannelsItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item) {
+    class ChannelsProfileItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channel_profile_item) {
 
         fun update(channel: ChannelModel) {
 

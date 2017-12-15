@@ -1,5 +1,13 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
+import android.os.Bundle
+import android.view.View
+import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 
-class ProfileFragment {
+
+class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 }

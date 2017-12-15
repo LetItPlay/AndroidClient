@@ -1,18 +1,16 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
 import android.os.Parcelable
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import paperparcel.PaperParcel
-import java.util.*
 
 @PaperParcel
-object ChannelsKey : BaseKey() {
+object ProfileKey : BaseKey() {
+    override fun createFragment(): BaseFragment = ProfileFragment()
 
-    override fun createFragment(): BaseFragment = ChannelsFragment()
-
-    @JvmField val CREATOR: Parcelable.Creator<ChannelsKey> = PaperParcelChannelsKey.CREATOR
+    @JvmField val CREATOR: Parcelable.Creator<ProfileKey> = PaperParcelProfileKey.CREATOR
 
     override fun toString(): String = this::class.java.name
 }
