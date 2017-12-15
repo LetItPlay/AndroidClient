@@ -7,7 +7,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelsAdapter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import kotlinx.android.synthetic.main.feed_fragment.*
+import kotlinx.android.synthetic.main.channels_fragment.*
 
 
 class ChannelsFragment : BaseFragment(R.layout.channels_fragment) {
@@ -17,7 +17,7 @@ class ChannelsFragment : BaseFragment(R.layout.channels_fragment) {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        feed_channels_list.apply {
+        recent_channels_list.apply {
             adapter = channelsListAdapter
             layoutManager = llm
         }

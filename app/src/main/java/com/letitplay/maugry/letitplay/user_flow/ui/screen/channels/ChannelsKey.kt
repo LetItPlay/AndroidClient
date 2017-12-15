@@ -1,16 +1,11 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.BaseKay
+import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 import java.util.*
 
 
-abstract class ChannelsKey : BaseKay() {
-
-    companion object {
-        fun create(): Any = UUID.randomUUID().toString()
-    }
+ class ChannelsKey : BaseKey() {
 
     override fun createFragment(): BaseFragment = ChannelsFragment()
-
 }

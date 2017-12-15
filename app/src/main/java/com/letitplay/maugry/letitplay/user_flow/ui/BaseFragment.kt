@@ -12,5 +12,5 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment() {
         return inflater?.inflate(layoutId, container, false)
     }
 
-    fun <T> getKey(): T where T : BaseKay = arguments.getParcelable("KEY")
+    fun getKey(): String = arguments.getString("KEY")
 }
