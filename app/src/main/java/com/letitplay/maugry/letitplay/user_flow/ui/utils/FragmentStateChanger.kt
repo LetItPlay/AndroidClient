@@ -21,8 +21,8 @@ class FragmentStateChanger(val fragmentManager: android.support.v4.app.FragmentM
                 }
             }
 
-            val previousState = stateChange.getPreviousState<BaseKey>()
-            val newState = stateChange.getNewState<BaseKey>()
+            val previousState: List<BaseKey> = stateChange.getPreviousState()
+            val newState: List<BaseKey> = stateChange.getNewState()
 
             previousState.forEach {
                 var fragment: Fragment = fragmentManager.findFragmentByTag(it.fragmentTag)
@@ -34,7 +34,6 @@ class FragmentStateChanger(val fragmentManager: android.support.v4.app.FragmentM
             }
 
             newState.forEach {
-                val s: String = it.fragmentTag
                 var fragment = fragmentManager.findFragmentByTag(it.fragmentTag)
                 if (it == stateChange.topNewState<Any>()) {
                     if (fragment != null) {
@@ -49,8 +48,6 @@ class FragmentStateChanger(val fragmentManager: android.support.v4.app.FragmentM
                     if (fragment != null && !fragment.isDetached) detach(fragment)
                 }
             }
-
-            commitNow()
-        }
+        }.commitNow()
     }
 }

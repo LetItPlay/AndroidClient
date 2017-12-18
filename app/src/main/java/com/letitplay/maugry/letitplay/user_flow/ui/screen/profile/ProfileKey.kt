@@ -8,6 +8,9 @@ import paperparcel.PaperParcel
 
 @PaperParcel
 object ProfileKey : BaseKey() {
+
+    override fun isRootFragment(): Boolean = true
+
     override fun createFragment(): BaseFragment = ProfileFragment()
 
     @JvmField val CREATOR: Parcelable.Creator<ProfileKey> = PaperParcelProfileKey.CREATOR

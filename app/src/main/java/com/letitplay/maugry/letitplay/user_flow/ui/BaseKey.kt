@@ -17,6 +17,8 @@ abstract class BaseKey : PaperParcelable {
         return fragment
     }
 
+    abstract fun isRootFragment(): Boolean
+
     abstract fun createFragment(): BaseFragment
 
 }

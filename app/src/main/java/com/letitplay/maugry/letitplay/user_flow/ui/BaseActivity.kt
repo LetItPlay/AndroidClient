@@ -28,6 +28,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         navigationMenu = findViewById(R.id.navigation)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
         setNavigationMenu()
         navigationMenu?.menu?.findItem(R.id.action_feed)?.isChecked = true
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
@@ -60,15 +61,20 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         }
     }
 
-    fun navigateTo(key: Any) {
-        toolbar.setNavigationOnClickListener { onBackPressed() }
-        toolbar.setNavigationIcon(R.drawable.back)
+    private fun setBackNavigationIcon(key: BaseKey) {
+        if (key.isRootFragment()) toolbar.setNavigationIcon(R.drawable.play)
+        else toolbar.setNavigationIcon(R.drawable.back)
+    }
+
+    fun navigateTo(key: BaseKey) {
         backstackDelegate.backstack.goTo(key)
     }
 
     override fun handleStateChange(stateChange: StateChange, completionCallback: StateChanger.Callback) {
+        setBackNavigationIcon(stateChange.topNewState())
         if (stateChange.topNewState<Any>() == stateChange.topPreviousState<Any>()) {
             completionCallback.stateChangeComplete()
+            return
         }
         fragmentStateChanger.handleStateChange(stateChange)
         completionCallback.stateChangeComplete()

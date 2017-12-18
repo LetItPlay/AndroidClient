@@ -32,6 +32,5 @@ class FeedChannelsAdapter : RecyclerView.Adapter<FeedChannelsAdapter.FeedChannel
         fun update(channel: ChannelModel) {
 
         }
-
     }
 }

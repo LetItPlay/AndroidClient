@@ -24,7 +24,7 @@ class ChannelProfileFragment : BaseFragment(R.layout.channel_profile_fragment) {
         channelsProfileAdapter.setData(arrayListOf(ChannelModel(), ChannelModel(), ChannelModel(), ChannelModel()))
     }
     private fun goToOtherView() {
-        (activity as NavigationActivity).navigateTo(ChannelProfileKey())
+        (activity as NavigationActivity).navigateTo(ChannelProfileKey)
     }
 
 }

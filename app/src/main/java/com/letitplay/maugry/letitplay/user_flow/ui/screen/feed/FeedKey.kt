@@ -7,6 +7,8 @@ import paperparcel.PaperParcel
 
 @PaperParcel
 object FeedKey : BaseKey() {
+    override fun isRootFragment(): Boolean = true
+
     override fun createFragment(): BaseFragment = FeedFragment()
 
     @JvmField val CREATOR: Parcelable.Creator<FeedKey> = PaperParcelFeedKey.CREATOR
