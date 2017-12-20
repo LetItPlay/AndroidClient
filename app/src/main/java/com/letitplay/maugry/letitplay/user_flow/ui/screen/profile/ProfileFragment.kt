@@ -13,6 +13,6 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        home_button.setOnClickListener { (activity as NavigationActivity).navigateTo(ChannelProfileKey) }
+        home_button.setOnClickListener { (activity as NavigationActivity).navigateTo(ChannelProfileKey()) }
     }
 }

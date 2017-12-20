@@ -9,10 +9,14 @@ import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 class FeedChannelsAdapter : RecyclerView.Adapter<FeedChannelsAdapter.FeedChannelsItemHolder>() {
 
     private var data: List<ChannelModel> = ArrayList()
+    var onClick: (() -> Unit)? = null
+
 
     override fun onBindViewHolder(holder: FeedChannelsItemHolder?, position: Int) {
         holder?.apply {
             update(data[position])
+            itemView.setOnClickListener { onClick?.invoke() }
+
         }
     }
 

@@ -27,7 +27,7 @@ class ChannelsFragment : BaseFragment(R.layout.channels_fragment) {
     }
 
     private fun goToOtherView() {
-        (activity as NavigationActivity).navigateTo(ChannelProfileKey)
+        (activity as NavigationActivity).navigateTo(ChannelProfileKey())
     }
 
     override fun onDetach() {
