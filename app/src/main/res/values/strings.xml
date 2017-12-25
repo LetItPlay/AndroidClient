@@ -6,4 +6,14 @@
     <string name="menu_item_feed">Feed</string>
     <string name="menu_item_profile">Profile</string>
     <string name="menu_item_profile_gggg">Profile</string>
+    
+    <!--CHANNELS-->
+    <string name="channels_following">Following</string>
+    <string name="channels_follow">Follow</string>
+
+    <!--FEED-->
+    <string name="feed_playing_now">playing now</string>
+
+    <!--TRACK-->
+    <string name="track_recent_added">Recent added</string>
 </resources>

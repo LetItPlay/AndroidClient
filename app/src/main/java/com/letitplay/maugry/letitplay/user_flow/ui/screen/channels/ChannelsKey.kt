@@ -8,7 +8,7 @@ import com.zhuinden.simplestack.navigator.ViewChangeHandler
 import com.zhuinden.simplestack.navigator.changehandlers.SegueViewChangeHandler
 
 
-class ChannelsKey : BaseKey(), StateKey {
+object ChannelsKey : BaseKey(), StateKey {
 
     override fun layout(): Int = R.layout.channels_fragment
 

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_marginBottom="8dp"
-    android:layout_height="170dp">
+    android:layout_height="190dp"
+    android:layout_marginBottom="8dp">
 
     <ImageView
         android:id="@+id/channel_logo"
-        android:layout_width="170dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/channel_channel_logo"
+        android:layout_width="164dp"
+        android:layout_height="164dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/channel_placeholder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,21 +26,27 @@
         android:layout_marginTop="8dp"
         android:text="Disgusting men"
         android:textColor="@color/colorBlack"
-        android:textStyle="bold"
+        android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/channel_follow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/channel_logo"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <TextView
         android:id="@+id/channel_follow"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:src="@drawable/following_button"
+        android:background="@drawable/following_bg"
+        android:paddingBottom="6dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="6dp"
+        android:text="@string/channels_following"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/teg_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -63,18 +71,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/tag_backgraund"
-            android:padding="4dp"
+            android:paddingEnd="6dp"
+            android:alpha="0.6"
+            android:paddingStart="6dp"
             android:text="VIDEOGAME"
-            android:textSize="8dp" />
+            android:textSize="12dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
+            android:alpha="0.6"
             android:background="@drawable/tag_backgraund"
-            android:padding="4dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="6dp"
             android:text="FRIEND"
-            android:textSize="8dp" />
+            android:textSize="12dp" />
 
     </LinearLayout>
 
@@ -95,7 +107,7 @@
             android:id="@+id/followers_icon"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:src="@drawable/followers" />
+            android:src="@drawable/followers_ic" />
 
         <TextView
             android:id="@+id/follower_count"
@@ -109,9 +121,9 @@
             android:id="@+id/track_icon"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/follower_count"
-            android:src="@drawable/tracks_count" />
+            android:src="@drawable/track_ic" />
 
         <TextView
             android:id="@+id/track_count"
@@ -123,4 +135,12 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.1"
+        android:background="@color/colorBlack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

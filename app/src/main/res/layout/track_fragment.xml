@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/track_recent_added"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/track_recent_added"
+        android:textColor="#000000"
+        android:textSize="24dp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/track_track_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/track_ic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
+
+    <TextView
+        android:id="@+id/track_track"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="76"
+        android:textColor="#4a4a4a"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/track_track_icon"
+        app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
+
+    <ImageView
+        android:id="@+id/track_time_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/time_ic"
+        app:layout_constraintStart_toEndOf="@+id/track_track"
+        app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
+
+    <TextView
+        android:id="@+id/track_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="23:07:18"
+        android:textColor="#4a4a4a"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/track_time_icon"
+        app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tracks_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/track_time" />
+</android.support.constraint.ConstraintLayout>

@@ -4,7 +4,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 
 
-class FeedKey : BaseKey() {
+object FeedKey : BaseKey() {
     override fun isRootFragment(): Boolean = true
 
     override fun createFragment(): BaseFragment = FeedFragment()

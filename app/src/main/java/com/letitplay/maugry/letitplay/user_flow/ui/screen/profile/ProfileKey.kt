@@ -4,7 +4,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 
 
-class ProfileKey : BaseKey() {
+object ProfileKey : BaseKey() {
 
     override fun isRootFragment(): Boolean = true
 

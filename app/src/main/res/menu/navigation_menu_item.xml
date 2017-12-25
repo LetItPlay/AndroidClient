@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_channels"
-        android:icon="@drawable/channels"
-        android:title="@string/menu_item_channels" />
-    <item
         android:id="@+id/action_feed"
-        android:icon="@drawable/feed"
+        android:icon="@drawable/feed_menu_item"
         android:title="@string/menu_item_feed"/>
     <item
+        android:id="@+id/action_trands"
+        android:icon="@drawable/trands_menu_item"
+        android:title="@string/menu_item_trends"/>
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search_menu_item"
+        android:title="@string/menu_item_search"/>
+    <item
+        android:id="@+id/action_channels"
+        android:icon="@drawable/channels_menu_item"
+        android:title="@string/menu_item_channels" />
+    <item
         android:id="@+id/action_profile"
-        android:icon="@drawable/profile"
+        android:icon="@drawable/profile_menu_item"
         android:title="@string/menu_item_profile"/>
 
 </menu>
