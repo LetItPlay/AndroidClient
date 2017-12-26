@@ -17,7 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            app:navigationIcon="@drawable/toolbar_avatar"
             app:title="@string/app_name" />
     </android.support.design.widget.AppBarLayout>
 

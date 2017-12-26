@@ -9,7 +9,6 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
@@ -46,7 +45,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             R.id.action_feed -> replaceHistory(FeedKey)
             R.id.action_channels -> replaceHistory(ChannelsKey)
             R.id.action_search -> replaceHistory(SearchKey)
-            R.id.action_trands -> replaceHistory(TrendsKey)
             R.id.action_profile -> replaceHistory(ProfileKey)
         }
         return true
@@ -66,7 +64,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     private fun setBackNavigationIcon(key: BaseKey) {
-        if (key.isRootFragment()) toolbar.setNavigationIcon(R.drawable.toolbar_avatar)
+        if (key.isRootFragment()) toolbar.navigationIcon = null
         else toolbar.setNavigationIcon(R.drawable.back)
     }
 

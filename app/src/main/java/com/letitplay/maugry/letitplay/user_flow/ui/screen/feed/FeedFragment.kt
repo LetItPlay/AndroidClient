@@ -6,11 +6,12 @@ import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import kotlinx.android.synthetic.main.feed_fragment.*
 
-class FeedFragment : BaseFragment(R.layout.feed_fragment) {
+class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
 
     private val feedListAdapter = FeedAdapter()
 

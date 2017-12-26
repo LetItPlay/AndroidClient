@@ -6,11 +6,12 @@ import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import kotlinx.android.synthetic.main.search_fragment.*
 
 
-class SearchFragment : BaseFragment(R.layout.search_fragment) {
+class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter) {
 
     private val searchAdapter = SearchAdapter()
 

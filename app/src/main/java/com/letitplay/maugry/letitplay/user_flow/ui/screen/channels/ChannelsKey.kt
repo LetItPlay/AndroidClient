@@ -1,8 +1,10 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
+import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.zhuinden.simplestack.navigator.StateKey
 import com.zhuinden.simplestack.navigator.ViewChangeHandler
 import com.zhuinden.simplestack.navigator.changehandlers.SegueViewChangeHandler
@@ -16,6 +18,6 @@ object ChannelsKey : BaseKey(), StateKey {
 
     override fun isRootFragment(): Boolean = true
 
-    override fun createFragment(): BaseFragment = ChannelsFragment()
+    override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = ChannelsFragment()
 
 }

@@ -6,11 +6,12 @@ import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfileAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfilePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 
-class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
+class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment, ProfilePresenter) {
 
     private val profileListAdapter = ProfileAdapter()
 

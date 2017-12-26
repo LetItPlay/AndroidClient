@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 26
@@ -26,16 +24,25 @@ android {
 
 dependencies {
     final SUPPORT_LIBRARY_VERSION = '26.1.0'
+    final REACTIVE_JAVA_VERSION = '2.1.0'
+    final REACTIVE_JAVA_ANDROID_VERSION = '2.0.1'
+    final REACTIVE_JAVA_KOTLIN_VERSION = '2.0.2'
+    final RETROFIT_VERSION = '2.2.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.github.Zhuinden:simple-stack:1.8.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
+    implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.jakewharton.timber:timber:4.1.0'
     implementation "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
-    implementation 'nz.bradcampbell:paperparcel:2.0.4'
-    implementation 'nz.bradcampbell:paperparcel-kotlin:2.0.4'
-    kapt 'nz.bradcampbell:paperparcel-compiler:2.0.4'
+    implementation "io.reactivex.rxjava2:rxandroid:$REACTIVE_JAVA_ANDROID_VERSION"
+    implementation "io.reactivex.rxjava2:rxjava:$REACTIVE_JAVA_VERSION"
+    implementation "io.reactivex.rxjava2:rxkotlin:$REACTIVE_JAVA_KOTLIN_VERSION"
+    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
 }

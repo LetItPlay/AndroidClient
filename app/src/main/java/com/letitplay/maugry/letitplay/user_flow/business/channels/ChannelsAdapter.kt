@@ -19,8 +19,8 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
         }
     }
 
-    fun setData(channelList: List<ChannelModel>) {
-        channelList.let {
+    fun setData(channelList: List<ChannelModel>?) {
+        channelList?.let {
             data = it
             notifyDataSetChanged()
         }

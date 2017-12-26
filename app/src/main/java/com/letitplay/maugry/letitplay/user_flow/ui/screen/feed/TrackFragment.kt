@@ -6,10 +6,11 @@ import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.feed.TrackAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.feed.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import kotlinx.android.synthetic.main.track_fragment.*
 
-class TrackFragment : BaseFragment(R.layout.track_fragment) {
+class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, TrackPresenter) {
 
     private val trackAdapter = TrackAdapter()
 
