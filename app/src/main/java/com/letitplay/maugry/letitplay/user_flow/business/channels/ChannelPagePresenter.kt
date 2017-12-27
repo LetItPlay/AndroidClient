@@ -11,8 +11,9 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
 
     var vm: List<TrackModel>? = null
 
-    fun loadTracks(id: Int, onComplete: ((IMvpView?) -> Unit)? = null) = ChannelPagePresenter.execute(
+    fun loadTracks(id: Int, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
+                    triggerProgress = true,
                     asyncObservable = TrackManager.getTracks(id),
                     onNextNonContext = {
                         vm = it
