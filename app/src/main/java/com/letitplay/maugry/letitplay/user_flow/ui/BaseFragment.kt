@@ -24,12 +24,15 @@ abstract class BaseFragment<out P>(open val layoutId: Int,
         return inflater?.inflate(layoutId, container, false)
     }
 
+    var isFragmentDestroying: Boolean = false
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isFragmentDestroying = false
         presenter?.apply(this)
     }
 
-    fun getKey(): String = arguments.getString("KEY")
+    fun getKey(): Int = arguments.getInt("KEY")
 
     override val name: String
         get() = this.toString()
@@ -45,8 +48,6 @@ abstract class BaseFragment<out P>(open val layoutId: Int,
 
     override val isViewDestroyed: Boolean
         get() = activity?.isDestroyed ?: true
-
-    var isFragmentDestroying: Boolean = false
 
     override val safeView: IMvpView?
         get() = if (!isViewDestroying && !isViewDestroyed && view != null && !isFragmentDestroying) this else null

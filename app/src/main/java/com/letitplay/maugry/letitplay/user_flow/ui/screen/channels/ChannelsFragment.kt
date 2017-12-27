@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelsAdapter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import kotlinx.android.synthetic.main.channels_fragment.*
 
 
@@ -28,7 +29,9 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         })
     }
 
-    private fun goToOtherView() {
+    private fun goToOtherView(id:Int?) {
+        ChannelPageKey.param=id
+        (activity as NavigationActivity).navigateTo(ChannelPageKey)
     }
 
 }

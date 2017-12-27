@@ -10,6 +10,10 @@
     <!--CHANNELS-->
     <string name="channels_following">Following</string>
     <string name="channels_follow">Follow</string>
+    <string name="channel_page_description">No description</string>
+    <string name="channel_page_recent_added">Recent added</string>
+    <string name="channel_page_most_listened">Most listened</string>
+    <string name="channel_page_with_guest">With guest</string>
 
     <!--FEED-->
     <string name="feed_playing_now">playing now</string>

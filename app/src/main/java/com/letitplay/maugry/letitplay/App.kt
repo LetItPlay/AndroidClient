@@ -10,6 +10,7 @@ import java.util.concurrent.Executors
 
 val GL_SCHEDULER_REALM: Scheduler = Schedulers.from(Executors.newSingleThreadExecutor())
 var GL_DATA_SERVICE_URL = "https://manage.letitplay.io/api/"
+var GL_IMAGE_SERVICE_URL = "https://manage.letitplay.io/uploads/"
 val GL_SCHEDULER_IO: Scheduler = Schedulers.from(Executors.newFixedThreadPool(3))
 const val GL_PROGRESS_DELAY: Long = 300 // in ms
 const val GL_PRESENTER_ACTION_RETRY_DELAY: Long = 300 // in ms

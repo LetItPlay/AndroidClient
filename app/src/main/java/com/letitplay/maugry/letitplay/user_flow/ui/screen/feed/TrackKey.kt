@@ -11,5 +11,4 @@ object TrackKey : BaseKey() {
     override fun isRootFragment(): Boolean = false
 
     override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = TrackFragment()
-
 }

@@ -8,12 +8,14 @@ import com.google.gson.GsonBuilder
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 
 private fun <T> response(): (DeserializerArg) -> T? = {
@@ -37,12 +39,19 @@ private val service = Retrofit.Builder()
 interface Service {
     @GET("stations")
     fun channels(): Observable<List<ChannelModel>>
+
+    @GET("tracks/stations/{id}")
+    fun tracks(@Path("id") idStation: Int): Observable<List<TrackModel>>
 }
 
 object ServiceController : BaseServiceController() {
 
     fun getChannels(): Observable<List<ChannelModel>> {
         return get(service.channels())
+    }
+
+    fun getTracks(id:Int): Observable<List<TrackModel>> {
+        return get(service.tracks(id))
     }
 }
 
