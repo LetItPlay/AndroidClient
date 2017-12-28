@@ -9,9 +9,19 @@ import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 
 object TrackManager : BaseManager() {
 
-    fun getTracks(id: Int) = get(
+    fun getTracks() = get(
             local = { TrackModel().queryAll() },
-            remote = ServiceController.getTracks(id),
+            remote = ServiceController.getTracks(),
+            remoteWhen = { true },
+            update = { remote ->
+                TrackModel().deleteAll()
+                remote.saveAll()
+            }
+    )
+
+    fun getPieceTracks(id: Int) = get(
+            local = { TrackModel().queryAll() },
+            remote = ServiceController.getPieceTracks(id),
             remoteWhen = { true },
             update = { remote ->
                 TrackModel().deleteAll()

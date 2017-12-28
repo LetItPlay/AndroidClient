@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="0dp"
@@ -22,11 +23,12 @@
                 android:layout_height="134dp"
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/channel_placeholder"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_preview"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/channel_placeholder" />
 
             <ImageView
                 android:id="@+id/channel_page_preview"
@@ -34,9 +36,12 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/feed_preview_placeholder"
+                android:background="@drawable/channel_preview_backgraund"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_banner"
+                tools:src="@drawable/feed_preview_placeholder" />
 
             <ImageView
                 android:id="@+id/channel_preview_followers_icon"
@@ -53,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginStart="5dp"
                 android:text="345 567"
                 android:textColor="#4a4a4a"
                 android:textSize="12sp"
@@ -90,7 +96,9 @@
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_description"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_preview" />
 
             <TextView
                 android:id="@+id/channel_page_description"
@@ -105,15 +113,17 @@
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_teg_container"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_title" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/channel_page_teg_container"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 app:alignContent="flex_start"
                 app:alignItems="flex_start"
                 app:flexDirection="row"
@@ -121,7 +131,9 @@
                 app:justifyContent="flex_start"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_separator"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_description" />
 
             <View
                 android:id="@+id/channel_page_separator"
@@ -134,7 +146,9 @@
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_recent_added"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_teg_container" />
 
             <TextView
                 android:id="@+id/channel_page_recent_added"
@@ -151,7 +165,9 @@
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/recent_added_list"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_separator" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recent_added_list"
@@ -162,7 +178,9 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_most_listened"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_recent_added" />
 
             <TextView
                 android:id="@+id/channel_page_most_listened"
@@ -179,7 +197,9 @@
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/most_listened_list"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recent_added_list" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/most_listened_list"
@@ -190,7 +210,9 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_with_guests"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_most_listened" />
 
             <TextView
                 android:id="@+id/channel_page_with_guests"
@@ -207,7 +229,9 @@
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/with_guests_list"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/most_listened_list" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/with_guests_list"
@@ -218,7 +242,9 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_with_guests" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>

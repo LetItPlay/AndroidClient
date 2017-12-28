@@ -8,13 +8,16 @@ import com.google.gson.GsonBuilder
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 
@@ -40,8 +43,16 @@ interface Service {
     @GET("stations")
     fun channels(): Observable<List<ChannelModel>>
 
+    @POST("stations/{id}/counts/")
+    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: FollowersModel): Observable<ChannelModel>
+
     @GET("tracks/stations/{id}")
-    fun tracks(@Path("id") idStation: Int): Observable<List<TrackModel>>
+    fun getPieceTracks(@Path("id") idStation: Int): Observable<List<TrackModel>>
+
+    @GET("tracks")
+    fun getTracks(): Observable<List<TrackModel>>
+
+
 }
 
 object ServiceController : BaseServiceController() {
@@ -50,8 +61,16 @@ object ServiceController : BaseServiceController() {
         return get(service.channels())
     }
 
-    fun getTracks(id:Int): Observable<List<TrackModel>> {
-        return get(service.tracks(id))
+    fun updateChannelFollowers(id: Int, body: FollowersModel): Observable<ChannelModel> {
+        return get(service.updateChannelFollowers(id, body))
+    }
+
+    fun getTracks(): Observable<List<TrackModel>> {
+        return get(service.getTracks())
+    }
+
+    fun getPieceTracks(id: Int): Observable<List<TrackModel>> {
+        return get(service.getPieceTracks(id))
     }
 }
 
