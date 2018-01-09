@@ -11,12 +11,10 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
     private var data: List<ChannelModel> = ArrayList()
     var onClick: (() -> Unit)? = null
 
-
     override fun onBindViewHolder(holder: FeedChannelsItemHolder?, position: Int) {
         holder?.apply {
             update(data[position])
             itemView.setOnClickListener { onClick?.invoke() }
-
         }
     }
 
