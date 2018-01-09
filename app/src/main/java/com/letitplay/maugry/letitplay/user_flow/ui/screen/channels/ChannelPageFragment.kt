@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.letitplay.maugry.letitplay.GL_IMAGE_SERVICE_URL
+import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
@@ -25,11 +25,11 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
         val id: Int = getKey()
         presenter?.loadTracks(id) {
             Glide.with(context)
-                    .load("${GL_IMAGE_SERVICE_URL}${presenter.vmChannel?.image}")
+                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.image}")
                     .into(channel_page_banner)
 
             Glide.with(context)
-                    .load("${GL_IMAGE_SERVICE_URL}${presenter.vmChannel?.image}")
+                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.image}")
                     .into(channel_page_preview)
             val tags = presenter.vmChannel?.tags?.split(",")
             tags?.forEach {

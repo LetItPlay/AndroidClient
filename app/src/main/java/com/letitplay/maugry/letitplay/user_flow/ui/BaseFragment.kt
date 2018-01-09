@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.gsfoxpro.musicservice.service.MusicService
+import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.GL_PROGRESS_DELAY
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.ProgressView
@@ -23,6 +25,10 @@ abstract class BaseFragment<out P>(open val layoutId: Int,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layoutId, container, false)
     }
+
+    protected val musicService: MusicService?
+        get() = (activity?.application as App).musicService
+
 
     var isFragmentDestroying: Boolean = false
 

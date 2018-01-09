@@ -107,12 +107,16 @@ abstract class MusicPlayer : FrameLayout {
         }
     }
 
-    protected fun next() {
+    public fun next() {
         mediaController?.transportControls?.skipToNext()
     }
 
-    protected fun prev() {
+    public fun prev() {
         mediaController?.transportControls?.skipToPrevious()
+    }
+
+    public fun skipToQueueItem(id: Long) {
+        mediaController?.transportControls?.skipToQueueItem(id)
     }
 
     protected fun initSeekBar(seekBar: SeekBar) {
