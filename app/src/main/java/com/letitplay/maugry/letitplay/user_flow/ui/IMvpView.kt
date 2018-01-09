@@ -11,7 +11,7 @@ interface IMvpView {
     fun restart()
 
     val viewFragmentManager: FragmentManager?
-    val ctx: Context
+    val ctx: Context?
 
     val isViewDestroying: Boolean
     val isViewDestroyed: Boolean

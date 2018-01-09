@@ -19,7 +19,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
     private var mostListedListAdapter = ChannelPageAdapter()
     private var withGuestsListAdapter = ChannelPageAdapter()
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val id: Int = getKey()

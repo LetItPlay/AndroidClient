@@ -21,7 +21,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     private var channelsListAdapter = ChannelsAdapter()
 
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         presenter?.loadChannels({
@@ -45,12 +45,12 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         when (state) {
             "FOLLOW" -> {
                 view.text = getString(R.string.channels_follow)
-                view.setTextColor(ContextCompat.getColor(context,R.color.colorWhite))
+                context?.let { view.setTextColor(ContextCompat.getColor(it, R.color.colorWhite)) }
                 view.setBackgroundResource(R.drawable.follow_bg)
             }
             "FOLLOWING" -> {
                 view.text = getString(R.string.channels_following)
-                view.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary))
+                context?.let { view.setTextColor(ContextCompat.getColor(it, R.color.colorPrimary)) }
                 view.setBackgroundResource(R.drawable.following_bg)
             }
         }

@@ -16,7 +16,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     private val searchAdapter = SearchAdapter()
 
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         search_list.apply {
             adapter = searchAdapter

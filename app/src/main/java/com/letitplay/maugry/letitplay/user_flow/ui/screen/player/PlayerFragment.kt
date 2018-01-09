@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 
 class PlayerFragment : BaseFragment<PlayerPresenter>(R.layout.player_fragment, PlayerPresenter) {
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
 }

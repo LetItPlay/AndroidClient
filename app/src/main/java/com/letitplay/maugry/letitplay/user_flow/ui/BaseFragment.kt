@@ -20,24 +20,24 @@ abstract class BaseFragment<out P>(open val layoutId: Int,
                                    open val presenter: P? = null) : Fragment(), IMvpView
         where P : BasePresenter<IMvpView> {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(layoutId, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(layoutId, container, false)
     }
 
     var isFragmentDestroying: Boolean = false
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isFragmentDestroying = false
         presenter?.apply(this)
     }
 
-    fun getKey(): Int = arguments.getInt("KEY")
+    fun getKey(): Int = arguments?.getInt("KEY") ?: -1
 
     override val name: String
         get() = this.toString()
 
-    override val ctx: Context
+    override val ctx: Context?
         get() = context
 
     override val viewFragmentManager: FragmentManager?
