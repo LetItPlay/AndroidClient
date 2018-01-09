@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
