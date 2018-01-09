@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.media.MediaMetadataCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
 import kotlinx.android.synthetic.main.music_player_small.view.*
@@ -36,6 +37,9 @@ class MusicPlayerSmall : MusicPlayer {
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
         title.text = metadata.description?.title
         subtitle.text = metadata.description?.subtitle
+        Glide.with(context)
+                .load(metadata.description.iconUri)
+                .into(cover)
     }
 
     override fun updateDuration(durationMs: Long) {

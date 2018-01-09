@@ -3,10 +3,14 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.gsfoxpro.musicservice.MusicRepo
+import com.gsfoxpro.musicservice.model.AudioTrack
+import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
@@ -23,28 +27,28 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                     adapter = feedListAdapter
                     layoutManager = LinearLayoutManager(context)
                 }
-                presenter.trackList?.let {
+                presenter.trackAndChannel?.let {
                     feedListAdapter.data = it
-                    feedListAdapter.onClickItem = { createFeedRepo(it) }
+                    feedListAdapter.onClickItem = { playTrack(it) }
                 }
-                feedListAdapter.setData(presenter.trackAndChannel)
             } else {
                 feed_no_tracks.visibility = View.VISIBLE
             }
         }
     }
 
-    fun createFeedRepo(trackId: Long) {
+    private fun playTrack(trackId: Long) {
         if (feedRepo != null) {
+            (activity as NavigationActivity).musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
-        val playlist = presenter?.trackList?.map {
+        val playlist = presenter?.trackAndChannel?.map {
             AudioTrack(
-                    id = it.id!!,
-                    url = "$GL_MEDIA_SERVICE_URL${it.audio_file?.file}",
-                    title = it.name,
-                    subtitle = it.description,
-                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.image}"
+                    id = it.second.id!!,
+                    url = "$GL_MEDIA_SERVICE_URL${it.second.audio_file?.file}",
+                    title = it.second.name,
+                    subtitle = it.second.description,
+                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.first.image}"
             )
         } ?: return
 

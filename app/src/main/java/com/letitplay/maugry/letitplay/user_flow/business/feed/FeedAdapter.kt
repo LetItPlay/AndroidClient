@@ -3,7 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.business.feed
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.letitplay.maugry.letitplay.GL_IMAGE_SERVICE_URL
+import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
@@ -12,22 +12,18 @@ import kotlinx.android.synthetic.main.feed_item.view.*
 
 class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
 
-    private var data: List<Pair<ChannelModel, TrackModel>> = ArrayList()
-    var onClick: (() -> Unit)? = null
+    var data: List<Pair<ChannelModel, TrackModel>> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+    var onClickItem: ((Long) -> Unit)? = null
 
 
     override fun onBindViewHolder(holder: FeedChannelsItemHolder?, position: Int) {
         holder?.apply {
             update(data[position])
-            itemView.setOnClickListener { onClick?.invoke() }
-
-        }
-    }
-
-    fun setData(channelList: List<Pair<ChannelModel, TrackModel>>?) {
-        channelList?.let {
-            data = it
-            notifyDataSetChanged()
+            itemView.setOnClickListener { onClickItem?.invoke(data[position].second.id!!) }
         }
     }
 
@@ -44,10 +40,10 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
                 feed_track_title.text = pair.second.name
                 feed_channel_title.text = pair.first.name
                 Glide.with(context)
-                        .load("${GL_IMAGE_SERVICE_URL}${pair.first.image}")
+                        .load("$GL_MEDIA_SERVICE_URL${pair.first.image}")
                         .into(feed_channel_logo)
                 Glide.with(context)
-                        .load("${GL_IMAGE_SERVICE_URL}${pair.second.image}")
+                        .load("$GL_MEDIA_SERVICE_URL${pair.second.image}")
                         .into(feed_track_image)
 
             }
