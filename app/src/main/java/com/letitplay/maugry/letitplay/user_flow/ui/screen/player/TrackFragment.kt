@@ -1,12 +1,12 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.user_flow.business.feed.TrackAdapter
-import com.letitplay.maugry.letitplay.user_flow.business.feed.TrackPresenter
+import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import kotlinx.android.synthetic.main.track_fragment.*
 
@@ -21,9 +21,6 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
             layoutManager = LinearLayoutManager(context)
         }
         trackAdapter.setData(arrayListOf(ChannelModel(), ChannelModel(), ChannelModel(), ChannelModel()))
-    }
-
-    private fun goToOtherView() {
     }
 
 }

@@ -6,27 +6,29 @@ import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelMode
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
-import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
 
 object FeedPresenter : BasePresenter<IMvpView>() {
+
+    var trackList: List<TrackModel>? = null
+    var followingChannelList: List<FollowingChannelModel>? = null
+
     fun loadTracks(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
                             TrackManager.getTracks(),
                             FollowingChannelManager.getFollowingChannels(),
-                            BiFunction { channels: List<TrackModel>, followingChannels: List<FollowingChannelModel> ->
-                                Pair(channels, followingChannels)
+                            BiFunction { tracks: List<TrackModel>, followingChannels: List<FollowingChannelModel> ->
+                                Pair(tracks, followingChannels)
                             }),
-                    onNextNonContext = { (channel, tracks) ->
-                        ChannelPagePresenter.vmTrackList = tracks
-                        ChannelPagePresenter.vmChannel = channel
+                    onNextNonContext = { (tracks, followingChannels) ->
+                        trackList = tracks
+                        followingChannelList = followingChannels
                     },
                     onCompleteWithContext = onComplete
-
-                    )
+            )
     )
 }

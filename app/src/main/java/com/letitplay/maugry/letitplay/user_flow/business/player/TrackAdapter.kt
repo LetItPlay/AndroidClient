@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.business.feed
+package com.letitplay.maugry.letitplay.user_flow.business.player
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
