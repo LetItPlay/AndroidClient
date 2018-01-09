@@ -25,6 +25,10 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                                 Pair(tracks, followingChannels)
                             }),
                     onNextNonContext = { (tracks, followingChannels) ->
+                        tracks.filter {
+                            val id = it.station
+                            followingChannels.find { it.id==id }!=null
+                        }
                         trackList = tracks
                         followingChannelList = followingChannels
                     },

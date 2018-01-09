@@ -17,6 +17,7 @@
 
     <!--FEED-->
     <string name="feed_playing_now">playing now</string>
+    <string name="feed_no_tracks">Пока здесь нет треков.\nПодпишитесь на один из каналов во вкладке «Каналы».</string>
 
     <!--TRACK-->
     <string name="track_recent_added">Recent added</string>
