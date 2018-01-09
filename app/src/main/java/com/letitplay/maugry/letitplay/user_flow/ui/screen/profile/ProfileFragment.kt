@@ -15,7 +15,7 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
 
     private val profileListAdapter = ProfileAdapter()
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         profile_list.apply {

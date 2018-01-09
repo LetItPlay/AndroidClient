@@ -4,15 +4,26 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
+project.ext {
+    support_library_version = "27.0.2"
+    reactive_java_version = '2.1.0'
+    reactive_java_android_version = '2.0.1'
+    reactive_java_kotlin_version = '2.0.2'
+    retrofit_version = '2.2.0'
+    glide_version = "4.3.1"
+    timber_version = "4.6.0"
+}
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.letitplay.maugry.letitplay"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -23,28 +34,25 @@ android {
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '26.1.0'
-    final REACTIVE_JAVA_VERSION = '2.1.0'
-    final REACTIVE_JAVA_ANDROID_VERSION = '2.0.1'
-    final REACTIVE_JAVA_KOTLIN_VERSION = '2.0.2'
-    final RETROFIT_VERSION = '2.2.0'
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.github.Zhuinden:simple-stack:1.8.0'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
+    implementation "com.android.support:appcompat-v7:$support_library_version"
+    implementation "com.android.support:design:$support_library_version"
+    implementation "com.android.support:cardview-v7:$support_library_version"
+    implementation "com.android.support:recyclerview-v7:$support_library_version"
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.jakewharton.timber:timber:4.1.0'
-    implementation "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
-    implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
-    implementation "io.reactivex.rxjava2:rxandroid:$REACTIVE_JAVA_ANDROID_VERSION"
-    implementation "io.reactivex.rxjava2:rxjava:$REACTIVE_JAVA_VERSION"
-    implementation "io.reactivex.rxjava2:rxkotlin:$REACTIVE_JAVA_KOTLIN_VERSION"
-    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
-    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    implementation "io.reactivex.rxjava2:rxjava:$reactive_java_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$reactive_java_android_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$reactive_java_kotlin_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation 'com.google.android:flexbox:0.3.1'
+
+    implementation project(path: ':musicservice')
 }

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import com.letitplay.maugry.letitplay.GL_IMAGE_SERVICE_URL
+import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
@@ -44,7 +44,7 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
                 channel_title.text = channel.name
                 follower_count.text = channel.subscription_count.toString()
                 Glide.with(context)
-                        .load("$GL_IMAGE_SERVICE_URL${channel.image}")
+                        .load("$GL_MEDIA_SERVICE_URL${channel.image}")
                         .into(channel_logo)
                 val tags = channel.tags?.split(",")
                 tags?.forEach {
