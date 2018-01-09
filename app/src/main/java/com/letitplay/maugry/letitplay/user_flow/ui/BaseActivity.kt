@@ -10,6 +10,8 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
+import com.letitplay.maugry.letitplay.utils.active
+import com.letitplay.maugry.letitplay.utils.disableShiftMode
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
@@ -31,7 +33,9 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         navigationMenu = findViewById(R.id.navigation)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         setNavigationMenu()
-        navigationMenu?.menu?.findItem(R.id.action_feed)?.isChecked = true
+        navigationMenu?.disableShiftMode()
+        navigationMenu?.active(R.id.action_feed)
+       // navigationMenu?.menu?.findItem(R.id.action_feed)?.isChecked = true
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
     }
