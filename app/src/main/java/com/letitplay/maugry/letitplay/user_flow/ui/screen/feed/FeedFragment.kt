@@ -23,7 +23,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                     adapter = feedListAdapter
                     layoutManager = LinearLayoutManager(context)
                 }
-                feedListAdapter.setData(presenter.trackList)
+                feedListAdapter.setData(presenter.trackAndChannel)
             } else {
                 feed_no_tracks.visibility = View.VISIBLE
             }

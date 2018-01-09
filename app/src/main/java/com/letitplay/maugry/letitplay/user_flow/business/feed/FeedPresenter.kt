@@ -1,19 +1,21 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
+import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.FollowingChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 
 
 object FeedPresenter : BasePresenter<IMvpView>() {
 
-    var trackList: List<TrackModel>? = null
+    var trackAndChannel: List<Pair<ChannelModel, TrackModel>>? = null
     var followingChannelList: List<FollowingChannelModel>? = null
 
     fun loadTracks(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
@@ -21,18 +23,27 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                     asyncObservable = Observable.zip(
                             TrackManager.getTracks(),
                             FollowingChannelManager.getFollowingChannels(),
-                            BiFunction { tracks: List<TrackModel>, followingChannels: List<FollowingChannelModel> ->
-                                Pair(tracks, followingChannels)
+                            ChannelManager.getChannels(),
+                            Function3
+                            { tracks: List<TrackModel>, followingChannels: List<FollowingChannelModel>, channel: List<ChannelModel> ->
+                                ChannelWithTracks(tracks, followingChannels, channel)
                             }),
-                    onNextNonContext = { (tracks, followingChannels) ->
-                        tracks.filter {
-                            val id = it.station
-                            followingChannels.find { it.id==id }!=null
-                        }
-                        trackList = tracks
-                        followingChannelList = followingChannels
+                    onNextNonContext = { channelWithTracks ->
+                        trackAndChannel = channelWithTracks.tracks
+                                .filter {
+                                    val id = it.station
+                                    channelWithTracks.followingChannels.find { it.id == id } != null
+                                }
+                                .map {
+                                    val id = it.station
+                                    val channel = channelWithTracks.channel.first { it.id == id }
+                                    Pair(channel, it)
+                                }
+                        followingChannelList = channelWithTracks.followingChannels
                     },
                     onCompleteWithContext = onComplete
             )
     )
+
+    class ChannelWithTracks(var tracks: List<TrackModel>, var followingChannels: List<FollowingChannelModel>, var channel: List<ChannelModel>)
 }
