@@ -8,7 +8,6 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import kotlinx.android.synthetic.main.channel_page_item.view.*
-import kotlinx.android.synthetic.main.channels_item.view.*
 
 
 class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageItemHolder>() {
@@ -38,14 +37,12 @@ class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageIt
     class ChannelPageItemHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channel_page_item) {
 
         fun update(track: TrackModel) {
-
             itemView.apply {
                 channel_page_track_title.text = track.name
                 Glide.with(context)
                         .load("${GL_IMAGE_SERVICE_URL}${track.image}")
                         .into(channel_page_track_preview)
             }
-
         }
 
     }
