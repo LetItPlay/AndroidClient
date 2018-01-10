@@ -25,9 +25,9 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     onNextNonContext = { (tracks, channels) ->
                         //tracks.sortedBy { it.like_count }
                         trackAndChannel = tracks
-                                .sortedByDescending { it.like_count }
+                                .sortedByDescending { it.likeCount }
                                 .map {
-                                    val id = it.station
+                                    val id = it.stationId
                                     val channel = channels.first { it.id == id }
                                     Pair(channel, it)
                                 }
