@@ -1,6 +1,9 @@
 package com.letitplay.maugry.letitplay.data_management.model
 
+import com.google.gson.annotations.SerializedName
+
 
 open class FollowersModel(
-        var subscription_count: Int? = null
-        )
+        @SerializedName("subscription_count")
+        var subscriptionCount: Int? = null
+)

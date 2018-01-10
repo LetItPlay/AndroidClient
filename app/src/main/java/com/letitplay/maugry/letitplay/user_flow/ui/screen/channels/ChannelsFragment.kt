@@ -89,7 +89,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
                 if (presenter.channelModel != null) {
                     var index: Int? = presenter.channelList?.indexOfFirst { channel -> channel.id == id }
                     index?.let {
-                        presenter.channelList?.get(index)?.subscription_count = presenter.channelModel?.subscription_count
+                        presenter.channelList?.get(index)?.subscriptionCount = presenter.channelModel?.subscriptionCount
                         channelsListAdapter.setData(presenter.channelList)
                     }
                 }
