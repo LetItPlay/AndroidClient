@@ -25,11 +25,11 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
         val id: Int = getKey()
         presenter?.loadTracks(id) {
             Glide.with(context)
-                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.image}")
+                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.imageUrl}")
                     .into(channel_page_banner)
 
             Glide.with(context)
-                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.image}")
+                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.imageUrl}")
                     .into(channel_page_preview)
             val tags = presenter.vmChannel?.tags?.split(",")
             tags?.forEach {
@@ -37,7 +37,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                 view.text = it
                 channel_page_teg_container.addView(view)
             }
-            channel_page_followers.text = presenter.vmChannel?.subscription_count.toString()
+            channel_page_followers.text = presenter.vmChannel?.subscriptionCount.toString()
 
             channel_page_title.text = presenter.vmChannel?.name
             recent_added_list.apply {
@@ -45,20 +45,20 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
-            recentAddedListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listen_count })
+            recentAddedListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listenCount })
 
             most_listened_list.apply {
                 adapter = mostListedListAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
-            mostListedListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listen_count })
+            mostListedListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listenCount })
             with_guests_list.apply {
                 adapter = withGuestsListAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
-            withGuestsListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listen_count })
+            withGuestsListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listenCount })
         }
 
     }

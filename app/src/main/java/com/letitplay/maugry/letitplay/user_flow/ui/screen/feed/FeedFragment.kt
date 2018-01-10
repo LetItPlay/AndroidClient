@@ -45,10 +45,10 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         val playlist = presenter?.trackAndChannel?.map {
             AudioTrack(
                     id = it.second.id!!,
-                    url = "$GL_MEDIA_SERVICE_URL${it.second.audio_file?.file}",
+                    url = "$GL_MEDIA_SERVICE_URL${it.second.audio?.fileUrl}",
                     title = it.second.name,
                     subtitle = it.second.description,
-                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.first.image}"
+                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.first.imageUrl}"
             )
         } ?: return
 

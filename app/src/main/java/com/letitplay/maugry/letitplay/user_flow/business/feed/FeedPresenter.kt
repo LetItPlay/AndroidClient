@@ -31,11 +31,12 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                     onNextNonContext = { channelWithTracks ->
                         trackAndChannel = channelWithTracks.tracks
                                 .filter {
-                                    val id = it.station
+                                    val id = it.stationId
                                     channelWithTracks.followingChannels.find { it.id == id } != null
                                 }
+                                .sortedByDescending(TrackModel::publishedAt)
                                 .map {
-                                    val id = it.station
+                                    val id = it.stationId
                                     val channel = channelWithTracks.channel.first { it.id == id }
                                     Pair(channel, it)
                                 }

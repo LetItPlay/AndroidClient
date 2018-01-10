@@ -42,9 +42,9 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
         fun update(channel: ChannelModel) {
             itemView.apply {
                 channel_title.text = channel.name
-                follower_count.text = channel.subscription_count.toString()
+                follower_count.text = channel.subscriptionCount.toString()
                 Glide.with(context)
-                        .load("$GL_MEDIA_SERVICE_URL${channel.image}")
+                        .load("$GL_MEDIA_SERVICE_URL${channel.imageUrl}")
                         .into(channel_logo)
                 val tags = channel.tags?.split(",")
                 tags?.forEach {
