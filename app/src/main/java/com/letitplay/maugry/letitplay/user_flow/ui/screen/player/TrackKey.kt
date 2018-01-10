@@ -1,12 +1,16 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
+import android.annotation.SuppressLint
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
+import kotlinx.android.parcel.Parcelize
 
 
-object TrackKey : BaseKey() {
+@SuppressLint("ParcelCreator")
+@Parcelize
+class TrackKey : BaseKey() {
 
     override fun isRootFragment(): Boolean = false
 

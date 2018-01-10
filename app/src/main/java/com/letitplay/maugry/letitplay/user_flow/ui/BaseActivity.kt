@@ -26,7 +26,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
-        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey))
+        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey()))
         backstackDelegate.registerForLifecycleCallbacks(this)
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
@@ -46,10 +46,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     private fun selectFragment(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_feed -> replaceHistory(FeedKey)
-            R.id.action_channels -> replaceHistory(ChannelsKey)
-            R.id.action_search -> replaceHistory(SearchKey)
-            R.id.action_profile -> replaceHistory(ProfileKey)
+            R.id.action_feed -> replaceHistory(FeedKey())
+            R.id.action_channels -> replaceHistory(ChannelsKey())
+            R.id.action_search -> replaceHistory(SearchKey())
+            R.id.action_profile -> replaceHistory(ProfileKey())
         }
         return true
     }

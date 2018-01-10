@@ -36,8 +36,9 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     }
 
     private fun goToOtherView(id: Int?) {
-        ChannelPageKey.param = id
-        (activity as NavigationActivity).navigateTo(ChannelPageKey)
+        id?.let {
+            (activity as NavigationActivity).navigateTo(ChannelPageKey(id))
+        }
     }
 
     private fun changeState(state: String, view: TextView) {
