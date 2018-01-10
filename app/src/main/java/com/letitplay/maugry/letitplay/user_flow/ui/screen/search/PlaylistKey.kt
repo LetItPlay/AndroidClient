@@ -10,10 +10,10 @@ import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class SearchKey : BaseKey() {
+class PlaylistKey : BaseKey() {
 
     override fun isRootFragment(): Boolean = true
 
-    override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = SearchFragment()
+    override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = PlaylistFragment()
 
 }
