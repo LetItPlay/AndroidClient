@@ -23,7 +23,6 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                                 Pair(tracks, channels)
                             }),
                     onNextNonContext = { (tracks, channels) ->
-                        //tracks.sortedBy { it.like_count }
                         trackAndChannel = tracks
                                 .sortedByDescending { it.likeCount }
                                 .map {
