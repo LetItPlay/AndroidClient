@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.search.PlaylistAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.search.PlaylistPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -31,7 +30,11 @@ class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragm
             adapter = playlistAdapter
             layoutManager = LinearLayoutManager(context)
         }
-        playlistAdapter.setData(arrayListOf(ChannelModel(), ChannelModel(), ChannelModel(), ChannelModel()))
+        presenter?.getPlaylists {
+            presenter?.playlists?.let {
+                playlistAdapter.setData(it)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
