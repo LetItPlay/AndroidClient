@@ -36,8 +36,9 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     }
 
     private fun goToOtherView(id: Int?) {
-        ChannelPageKey.param = id
-        (activity as NavigationActivity).navigateTo(ChannelPageKey)
+        id?.let {
+            (activity as NavigationActivity).navigateTo(ChannelPageKey(id))
+        }
     }
 
     private fun changeState(state: String, view: TextView) {
@@ -89,7 +90,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
                 if (presenter.channelModel != null) {
                     var index: Int? = presenter.channelList?.indexOfFirst { channel -> channel.id == id }
                     index?.let {
-                        presenter.channelList?.get(index)?.subscription_count = presenter.channelModel?.subscription_count
+                        presenter.channelList?.get(index)?.subscriptionCount = presenter.channelModel?.subscriptionCount
                         channelsListAdapter.setData(presenter.channelList)
                     }
                 }

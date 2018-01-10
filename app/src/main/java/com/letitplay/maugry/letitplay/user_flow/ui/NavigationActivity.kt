@@ -13,5 +13,6 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setSupportActionBar(toolbar)
     }
 }

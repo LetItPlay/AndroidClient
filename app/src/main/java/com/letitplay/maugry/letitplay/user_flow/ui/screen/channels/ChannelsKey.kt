@@ -8,9 +8,10 @@ import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.zhuinden.simplestack.navigator.StateKey
 import com.zhuinden.simplestack.navigator.ViewChangeHandler
 import com.zhuinden.simplestack.navigator.changehandlers.SegueViewChangeHandler
+import kotlinx.android.parcel.Parcelize
 
-
-object ChannelsKey : BaseKey(), StateKey {
+@Parcelize
+class ChannelsKey : BaseKey(), StateKey {
 
     override fun layout(): Int = R.layout.channels_fragment
 

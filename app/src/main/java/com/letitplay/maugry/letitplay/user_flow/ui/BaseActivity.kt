@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.PlaylistKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.utils.active
 import com.letitplay.maugry.letitplay.utils.disableShiftMode
@@ -27,7 +28,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
-        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey))
+        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey()))
         backstackDelegate.registerForLifecycleCallbacks(this)
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
@@ -36,8 +37,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         setNavigationMenu()
         navigationMenu?.disableShiftMode()
         navigationMenu?.active(R.id.action_feed)
+       // navigationMenu?.menu?.findItem(R.id.action_feed)?.isChecked = true
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
+        setSupportActionBar(toolbar)
     }
 
     private fun setNavigationMenu() {

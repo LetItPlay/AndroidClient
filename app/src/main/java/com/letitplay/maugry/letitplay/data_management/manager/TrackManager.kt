@@ -6,6 +6,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.queryAll
 import com.letitplay.maugry.letitplay.data_management.repo.saveAll
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
+import io.reactivex.Observable
 
 
 object TrackManager : BaseManager() {
@@ -20,7 +21,21 @@ object TrackManager : BaseManager() {
             }
     )
 
+    fun getTracksWithTag(tag: String) = get(
+            local = { TrackModel().query { it.contains("tags", tag) } },
+            remoteWhen = { true },
+            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false }}
+    )
+
     fun getPieceTracks(id: Int) = get(
             local = { TrackModel().query { it.equalTo("id", id) } }
     )
+
+    fun queryTracks(query: String): Observable<List<TrackModel>> = getTracks().map { tracks ->
+        tracks.filter { track ->
+            track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)
+        }
+    }
+
+    infix fun Boolean?.or(other: Boolean?) = (other ?: false) || (this ?: false)
 }
