@@ -7,13 +7,13 @@ import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 
 
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchItemHolder>() {
+class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>() {
 
     private var data: List<ChannelModel> = ArrayList()
     var onClick: (() -> Unit)? = null
 
 
-    override fun onBindViewHolder(holder: SearchItemHolder?, position: Int) {
+    override fun onBindViewHolder(holder: PlaylistItemHolder?, position: Int) {
         holder?.apply {
             update(data[position])
             itemView.setOnClickListener { onClick?.invoke() }
@@ -30,9 +30,9 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchItemHolder>() {
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SearchItemHolder = SearchItemHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlaylistItemHolder = PlaylistItemHolder(parent)
 
-    class SearchItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.search_item) {
+    class PlaylistItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.playlist_item) {
 
         fun update(channel: ChannelModel) {
 

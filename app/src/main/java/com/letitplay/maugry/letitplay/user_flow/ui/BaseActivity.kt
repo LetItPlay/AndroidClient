@@ -8,7 +8,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.PlaylistKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.utils.active
 import com.letitplay.maugry.letitplay.utils.disableShiftMode
@@ -38,6 +38,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
        // navigationMenu?.menu?.findItem(R.id.action_feed)?.isChecked = true
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
+        setSupportActionBar(toolbar)
     }
 
     private fun setNavigationMenu() {
@@ -48,7 +49,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         when (item.itemId) {
             R.id.action_feed -> replaceHistory(FeedKey)
             R.id.action_channels -> replaceHistory(ChannelsKey)
-            R.id.action_search -> replaceHistory(SearchKey)
+            R.id.action_search -> replaceHistory(PlaylistKey)
             R.id.action_profile -> replaceHistory(ProfileKey)
         }
         return true
