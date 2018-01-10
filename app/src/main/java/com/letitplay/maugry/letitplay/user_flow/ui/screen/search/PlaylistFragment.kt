@@ -44,7 +44,7 @@ class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragm
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             Timber.d("Navigate to results page")
-            (activity as NavigationActivity).navigateTo(SearchResultsKey)
+            (activity as NavigationActivity).navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
     }

@@ -17,7 +17,7 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
                         var totalTime = 0
                         val tracksInPlaylist: MutableList<TrackModel> = mutableListOf()
                         for (track in tracks) {
-                            val trackDuration = track.audio_file!!.length_seconds!!
+                            val trackDuration = track.audio!!.lengthInSeconds!!
                             if (trackDuration + totalTime < PLAYLIST_DURATION) {
                                 tracksInPlaylist.add(track)
                                 totalTime += trackDuration

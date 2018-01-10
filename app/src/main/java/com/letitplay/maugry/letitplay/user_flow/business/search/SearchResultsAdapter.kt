@@ -60,9 +60,9 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun update(channel: ChannelModel) {
             itemView.apply {
                 channel_name.text = channel.name
-                channel_followers_count.text = channel.subscription_count.toString()
+                channel_followers_count.text = channel.subscriptionCount.toString()
                 Glide.with(context)
-                        .load("${GL_MEDIA_SERVICE_URL}${channel.image}")
+                        .load("${GL_MEDIA_SERVICE_URL}${channel.imageUrl}")
                         .into(channel_small_logo)
             }
         }

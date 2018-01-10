@@ -36,7 +36,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
         fun update(track: TrackModel) {
             itemView.apply {
-                channel_name.text = track.station?.toString()
+                channel_name.text = track.stationId?.toString()
                 track_name.text = track.name
                 Glide.with(context)
                         .load(track.image)
