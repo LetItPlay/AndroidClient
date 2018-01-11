@@ -8,6 +8,7 @@ import io.realm.annotations.PrimaryKey
 open class AudioTrack(
         @PrimaryKey
         var id: Int? = null,
+        @SerializedName("file")
         var fileUrl: String? = null,
         @SerializedName("length_seconds")
         var lengthInSeconds: Int? = null,

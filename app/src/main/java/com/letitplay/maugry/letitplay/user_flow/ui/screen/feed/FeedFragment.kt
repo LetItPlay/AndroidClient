@@ -21,7 +21,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (activity as NavigationActivity).navigationMenu?.visibility = View.VISIBLE
         presenter?.loadTracks {
             if (presenter.followingChannelList?.size != 0) {
                 feed_list.apply {
@@ -48,7 +48,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                     id = it.second.id!!,
                     url = "$GL_MEDIA_SERVICE_URL${it.second.audio?.fileUrl}",
                     title = it.second.name,
-                    subtitle = it.second.description,
+                    subtitle = it.first.name,
                     imageUrl = "$GL_MEDIA_SERVICE_URL${it.second.image}",
                     channelTitle = it.first.name,
                     length = it.second.audio?.lengthInSeconds,

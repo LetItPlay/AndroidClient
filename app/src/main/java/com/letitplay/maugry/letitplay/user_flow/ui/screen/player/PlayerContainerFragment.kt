@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.player.PlayerContainerA
 import com.letitplay.maugry.letitplay.user_flow.business.player.PlayerContainerPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import kotlinx.android.synthetic.main.player_container_fragment.*
 
 
@@ -18,6 +19,12 @@ class PlayerContainerFragment : BaseFragment<PlayerContainerPresenter>(R.layout.
         player_pager.adapter = PlayerContainerAdapter(childFragmentManager)
         (activity as NavigationActivity).musicPlayerSmall?.visibility = View.GONE
         (activity as NavigationActivity).navigationMenu?.visibility = View.GONE
+        collapse.setOnClickListener {
+            goToPreView()
+        }
 
+    }
+    private fun goToPreView() {
+        (activity as NavigationActivity).navigateTo(FeedKey())
     }
 }

@@ -14,4 +14,6 @@ class PlayerContainerKey : BaseKey() {
     override fun isRootFragment(): Boolean = false
 
     override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = PlayerContainerFragment()
+
+
 }
