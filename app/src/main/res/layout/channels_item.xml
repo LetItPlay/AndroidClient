@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
-    android:layout_marginBottom="8dp">
+    android:layout_height="190dp">
 
     <ImageView
         android:id="@+id/channel_logo"
@@ -41,6 +40,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/following_bg"
         android:paddingBottom="6dp"
         android:paddingEnd="16dp"
@@ -48,30 +48,24 @@
         android:paddingTop="6dp"
         android:text="@string/channels_following"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/teg_container"
+        app:layout_constraintBottom_toTopOf="@+id/tag_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/channel_logo"
         app:layout_constraintTop_toBottomOf="@+id/channel_title" />
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/teg_container"
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.TagCloudView
+        android:id="@+id/tag_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        app:alignContent="flex_start"
-        app:alignItems="flex_start"
-        app:flexDirection="row"
-        app:flexWrap="wrap"
-        app:justifyContent="flex_start"
         app:layout_constraintBottom_toTopOf="@+id/channel_statistic_container"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/channel_logo"
         app:layout_constraintTop_toBottomOf="@+id/channel_follow" >
-    </com.google.android.flexbox.FlexboxLayout>
+    </com.letitplay.maugry.letitplay.user_flow.ui.widget.TagCloudView>
 
     <RelativeLayout
         android:id="@+id/channel_statistic_container"
@@ -84,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/channel_logo"
-        app:layout_constraintTop_toBottomOf="@+id/teg_container">
+        app:layout_constraintTop_toBottomOf="@+id/tag_container">
 
         <ImageView
             android:id="@+id/followers_icon"
