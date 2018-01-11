@@ -10,8 +10,9 @@
         android:layout_height="match_parent"
         app:alignContent="flex_start"
         app:alignItems="flex_start"
+        app:dividerDrawable="@drawable/tag_divider"
         app:flexDirection="row"
         app:flexWrap="wrap"
-        android:clipChildren="false"
-        app:justifyContent="flex_start" />
+        app:justifyContent="flex_start"
+        app:showDivider="middle" />
 </FrameLayout>
