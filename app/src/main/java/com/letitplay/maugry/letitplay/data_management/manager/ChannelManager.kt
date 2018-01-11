@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.data_management.manager
 
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.repo.deleteAll
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.queryAll
@@ -33,4 +34,8 @@ object ChannelManager : BaseManager() {
             channel.name!!.contains(query) || channel.tags?.contains(query) ?: false
         }
     }
+
+    fun getFollowingChannels() = get(
+            local = { FollowingChannelModel().queryAll() }
+    )
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,9 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/channel_logo"
         android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
         android:maxLines="1"
@@ -155,31 +154,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/feed_playing_now_icon" />
 
-    <ImageView
-        android:id="@+id/feed_like_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_alignStart="@+id/feed_like"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/like_ic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/feed_like" />
-
-    <TextView
-        android:id="@+id/feed_like"
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.LikeWidget
+        android:id="@+id/like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16dp"
-        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="213k" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:layout_width="match_parent"

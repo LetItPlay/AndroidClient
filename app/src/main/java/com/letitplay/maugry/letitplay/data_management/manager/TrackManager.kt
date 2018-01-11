@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.data_management.manager
 
+import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.data_management.repo.deleteAll
 import com.letitplay.maugry.letitplay.data_management.repo.query
@@ -24,7 +25,11 @@ object TrackManager : BaseManager() {
     fun getTracksWithTag(tag: String) = get(
             local = { TrackModel().query { it.contains("tags", tag) } },
             remoteWhen = { true },
-            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false }}
+            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false } }
+    )
+
+    fun getFavouriteTracks() = get(
+            local = { FavouriteTracksModel().queryAll() }
     )
 
     fun getPieceTracks(id: Int) = get(

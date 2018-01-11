@@ -13,7 +13,7 @@
             android:id="@+id/player_track_image_container"
             android:layout_width="298dp"
             android:layout_height="300dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/player_big_progress"
@@ -34,19 +34,36 @@
                 android:src="@drawable/player_track_background" />
         </FrameLayout>
 
-        <ProgressBar
+        <SeekBar
             android:id="@+id/player_big_progress"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
-            android:layout_height="2dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:progressDrawable="@drawable/player_progreess_horizontal"
             app:layout_constraintBottom_toTopOf="@+id/player_channel_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_track_image_container"
-            tools:progress="50" />
+            app:layout_constraintTop_toBottomOf="@+id/player_track_image_container" />
+
+        <TextView
+            android:id="@+id/player_current_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="0:00"
+            app:layout_constraintBottom_toTopOf="@+id/player_channel_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_big_progress" />
+
+        <TextView
+            android:id="@+id/player_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="0:00"
+            app:layout_constraintBottom_toTopOf="@+id/player_channel_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_big_progress" />
 
         <TextView
             android:id="@+id/player_channel_title"
@@ -61,7 +78,7 @@
             app:layout_constraintBottom_toTopOf="@+id/player_track_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_big_progress"
+            app:layout_constraintTop_toBottomOf="@+id/player_duration"
             tools:text="Disgusting men" />
 
         <TextView
@@ -71,8 +88,8 @@
             android:layout_marginBottom="8dp"
             android:lineSpacingExtra="9sp"
             android:maxLines="1"
-            android:textColor="#020202"
             android:textAlignment="center"
+            android:textColor="#020202"
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/player_back"

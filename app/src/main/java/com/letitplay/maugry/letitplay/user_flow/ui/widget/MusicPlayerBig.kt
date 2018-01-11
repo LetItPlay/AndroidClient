@@ -24,6 +24,10 @@ class MusicPlayerBig : MusicPlayer {
         LayoutInflater.from(context).inflate(R.layout.music_player_big, this)
         player_pause_play.setOnClickListener { playPause() }
         player_next.setOnClickListener { next() }
+        player_back.setOnClickListener { prev() }
+        player_remote_next.setOnClickListener { seekTo(10*1000) }
+        player_remote_back.setOnClickListener { seekTo(-10*1000) }
+        initSeekBar(player_big_progress)
     }
 
     override fun updateButtonsStates() {
@@ -32,6 +36,7 @@ class MusicPlayerBig : MusicPlayer {
             else -> player_pause_play.setImageResource(R.drawable.play_player_ic)
         }
         player_next?.alpha = if (hasNext) 1F else 0.5F
+        player_back?.alpha = if (hasPrev) 1F else 0.5F
     }
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
@@ -43,10 +48,10 @@ class MusicPlayerBig : MusicPlayer {
     }
 
     override fun updateDuration(durationMs: Long) {
-        player_big_progress.max = durationMs.toInt()
+        player_duration.text = getUserFriendlyTime(durationMs)
     }
 
     override fun updateCurrentPosition(positionMs: Long) {
-        player_big_progress.progress = positionMs.toInt()
+        player_current_position.text = getUserFriendlyTime(positionMs)
     }
 }

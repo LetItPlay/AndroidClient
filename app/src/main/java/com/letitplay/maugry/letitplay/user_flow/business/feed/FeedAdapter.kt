@@ -20,12 +20,15 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
             notifyDataSetChanged()
         }
     var onClickItem: ((Long) -> Unit)? = null
-
+    var onLikeClick: ((Long?) -> Unit)? = null
 
     override fun onBindViewHolder(holder: FeedChannelsItemHolder?, position: Int) {
         holder?.apply {
             update(data[position])
             itemView.setOnClickListener { onClickItem?.invoke(data[position].second.id!!) }
+            itemView.like.setOnClickListener {
+                onLikeClick?.invoke(data[position].second.id)
+            }
         }
     }
 
@@ -57,7 +60,6 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
         fun update(pair: Pair<ChannelModel, TrackModel>) {
             itemView.apply {
                 val data = getTime(pair.second.publishedAt!!, context)
-                feed_like.text = pair.second.likeCount.toString()
                 feed_time.text = pair.second.audio?.lengthInSeconds.toString()
                 feed_track_title.text = pair.second.name
                 feed_channel_title.text = pair.first.name

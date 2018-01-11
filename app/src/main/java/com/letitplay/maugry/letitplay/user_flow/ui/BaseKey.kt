@@ -14,6 +14,8 @@ abstract class BaseKey : Parcelable {
         return fragment
     }
 
+    abstract fun menuType(): MenuType
+
     abstract fun isRootFragment(): Boolean
 
     abstract fun createFragment(): BaseFragment<BasePresenter<IMvpView>>

@@ -2,7 +2,9 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.TextureView
 import android.view.View
+import android.widget.TextView
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
@@ -31,11 +33,16 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                 presenter.trackAndChannel?.let {
                     feedListAdapter.data = it
                     feedListAdapter.onClickItem = { playTrack(it) }
+                    feedListAdapter.onLikeClick = this::onLikeClick
                 }
             } else {
                 feed_no_tracks.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun onLikeClick(trackId:Long?) {
+
     }
 
     private fun playTrack(trackId: Long) {

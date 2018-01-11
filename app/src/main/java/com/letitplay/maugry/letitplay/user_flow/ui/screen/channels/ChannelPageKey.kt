@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
+import com.letitplay.maugry.letitplay.user_flow.ui.MenuType
 import com.zhuinden.simplestack.navigator.StateKey
 import com.zhuinden.simplestack.navigator.ViewChangeHandler
 import com.zhuinden.simplestack.navigator.changehandlers.SegueViewChangeHandler
@@ -19,6 +20,8 @@ class ChannelPageKey(private val channelId: Int) : BaseKey(), StateKey {
     override fun layout(): Int = R.layout.channel_page_fragment
 
     override fun viewChangeHandler(): ViewChangeHandler = SegueViewChangeHandler()
+
+    override fun menuType(): MenuType = MenuType.CHANNELS
 
     override fun isRootFragment(): Boolean = false
 

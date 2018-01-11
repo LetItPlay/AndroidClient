@@ -71,7 +71,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     private fun setBackNavigationIcon(key: BaseKey) {
         if (key.isRootFragment()) toolbar.navigationIcon = null
-        else toolbar.setNavigationIcon(R.drawable.back)
+        else {
+            toolbar.setNavigationOnClickListener { onBackPressed() }
+            toolbar.setNavigationIcon(R.drawable.back)
+        }
     }
 
     fun navigateTo(key: Any) {
@@ -79,12 +82,13 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     override fun handleStateChange(stateChange: StateChange, completionCallback: StateChanger.Callback) {
+        val topNewState: BaseKey = stateChange.topNewState()
         setBackNavigationIcon(stateChange.topNewState())
         if (stateChange.topNewState<Any>() == stateChange.topPreviousState<Any>()) {
             completionCallback.stateChangeComplete()
             return
         }
-        fragmentStateChanger.handleStateChange(stateChange)
+        fragmentStateChanger.handleStateChange(stateChange, topNewState.menuType())
         completionCallback.stateChangeComplete()
     }
 }

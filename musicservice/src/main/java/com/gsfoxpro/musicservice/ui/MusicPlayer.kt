@@ -140,6 +140,13 @@ abstract class MusicPlayer : FrameLayout {
 
     }
 
+    fun seekTo(ms: Long) {
+        seekBar?.progress?.toLong()?.let { progressMs ->
+            mediaController?.transportControls?.seekTo(progressMs+ms)
+            needUpdateProgress = true
+        }
+    }
+
     abstract fun updateButtonsStates()
 
     abstract fun updateTrackInfo(metadata: MediaMetadataCompat)
