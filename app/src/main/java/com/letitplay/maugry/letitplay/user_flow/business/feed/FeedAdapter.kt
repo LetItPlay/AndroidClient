@@ -7,7 +7,10 @@ import com.bumptech.glide.Glide
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.repo.query
+import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import kotlinx.android.synthetic.main.feed_item.view.*
 import java.util.*
@@ -20,14 +23,19 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
             notifyDataSetChanged()
         }
     var onClickItem: ((Long) -> Unit)? = null
-    var onLikeClick: ((Long?) -> Unit)? = null
+    var onLikeClick: ((Long?, Boolean) -> Unit)? = null
 
     override fun onBindViewHolder(holder: FeedChannelsItemHolder?, position: Int) {
         holder?.apply {
-            update(data[position])
+            var likeModel: FavouriteTracksModel? = FavouriteTracksModel().query { it.equalTo("id", data[position].second.id) }.firstOrNull()
+            if (likeModel == null) {
+                likeModel = FavouriteTracksModel(data[position].second.id, data[position].second.likeCount, false)
+                likeModel.save()
+            }
+            update(data[position], likeModel)
             itemView.setOnClickListener { onClickItem?.invoke(data[position].second.id!!) }
-            itemView.like.setOnClickListener {
-                onLikeClick?.invoke(data[position].second.id)
+            itemView.feed_like.setOnClickListener {
+                onLikeClick?.invoke(data[position].second.id, it.feed_like.isLiked())
             }
         }
     }
@@ -57,9 +65,10 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
             else return seconds.toString()
         }
 
-        fun update(pair: Pair<ChannelModel, TrackModel>) {
+        fun update(pair: Pair<ChannelModel, TrackModel>, like: FavouriteTracksModel?) {
             itemView.apply {
                 val data = getTime(pair.second.publishedAt!!, context)
+                feed_like.like = like
                 feed_time.text = pair.second.audio?.lengthInSeconds.toString()
                 feed_track_title.text = pair.second.name
                 feed_channel_title.text = pair.first.name

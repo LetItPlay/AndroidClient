@@ -2,13 +2,15 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.TextureView
 import android.view.View
-import android.widget.TextView
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
+import com.letitplay.maugry.letitplay.data_management.model.LikeModel
+import com.letitplay.maugry.letitplay.data_management.repo.query
+import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -41,8 +43,25 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         }
     }
 
-    private fun onLikeClick(trackId:Long?) {
+    private fun onLikeClick(trackId: Long?, isLiked: Boolean) {
+        var like: LikeModel
+        if (isLiked) like = LikeModel(-1, 1, 1)
+        else like = LikeModel(1, 1, 1)
+        trackId?.let {
+            presenter?.updateFavouriteTracks(trackId.toInt(), like) {
+                presenter.updatedTrack?.let {
+                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", trackId) }.first()
+                    track.likeCounts = it.likeCount
+                    track.isLiked = !isLiked
+                    track.save()
 
+                    presenter.trackAndChannel?.let {
+                        feedListAdapter.data = it
+                    }
+                }
+            }
+
+        }
     }
 
     private fun playTrack(trackId: Long) {

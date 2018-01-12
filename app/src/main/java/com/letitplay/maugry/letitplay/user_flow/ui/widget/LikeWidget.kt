@@ -20,20 +20,25 @@ class LikeWidget : LinearLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
 
-    var data: FavouriteTracksModel? = null
-        set(value) = updateState()
+    var like: FavouriteTracksModel? = null
+        set(value) {
+            field  = value
+            updateState(value)
+        }
 
     init {
         LayoutInflater.from(context).inflate(R.layout.like_button, this)
 
     }
 
-    private fun updateState() {
-        data?.let {
+    private fun updateState(like: FavouriteTracksModel?) {
+        like?.let {
             if (it.isLiked)
                 feed_like_icon.setImageResource(R.drawable.like_ic)
             else feed_like_icon.setImageResource(R.drawable.dislike)
             feed_like_count.text = it.likeCounts.toString()
         }
     }
+
+    fun isLiked() = like?.isLiked ?: false
 }

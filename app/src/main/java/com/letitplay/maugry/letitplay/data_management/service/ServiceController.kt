@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
+import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,13 +47,14 @@ interface Service {
     @POST("stations/{id}/counts/")
     fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: FollowersModel): Observable<ChannelModel>
 
+    @POST("tracks/{id}/counts/")
+    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: LikeModel): Observable<TrackModel>
+
     @GET("tracks/stations/{id}")
     fun getPieceTracks(@Path("id") idStation: Int): Observable<List<TrackModel>>
 
     @GET("tracks")
     fun getTracks(): Observable<List<TrackModel>>
-
-
 }
 
 object ServiceController : BaseServiceController() {
@@ -63,6 +65,10 @@ object ServiceController : BaseServiceController() {
 
     fun updateChannelFollowers(id: Int, body: FollowersModel): Observable<ChannelModel> {
         return get(service.updateChannelFollowers(id, body))
+    }
+
+    fun updateFavouriteTracks(id: Int, body: LikeModel): Observable<TrackModel> {
+        return get(service.updateFavouriteTracks(id, body))
     }
 
     fun getTracks(): Observable<List<TrackModel>> {
