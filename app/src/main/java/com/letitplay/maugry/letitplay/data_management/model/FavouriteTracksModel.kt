@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 
-class FavouriteTracksModel(
+open class FavouriteTracksModel(
         @PrimaryKey
         var id: Int? = null,
         var likeCounts: Int? = null,
