@@ -1,54 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="340dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginBottom="8dp"
     android:background="@drawable/rounded_background">
 
-    <RelativeLayout
-        android:id="@+id/top_view_container"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
+    <ImageView
+        android:id="@+id/feed_channel_logo"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/feed_track_image"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/feed_channel_title"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/feed_preview_placeholder" />
 
-        <ImageView
-            android:id="@+id/feed_channel_logo"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            tools:src="@drawable/feed_preview_placeholder" />
+    <TextView
+        android:id="@+id/feed_channel_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/channel_logo"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:textColor="@color/colorBlack"
+        android:textSize="14dp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toStartOf="@+id/feed_track_last_update"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/feed_channel_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Disgusting man" />
 
-        <TextView
-            android:id="@+id/feed_channel_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/channel_logo"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-medium"
-            tools:text="Disgusting man"
-            android:textColor="@color/colorBlack"
-            android:textSize="14dp"
-            android:textStyle="normal" />
+    <TextView
+        android:id="@+id/feed_track_last_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/feed_channels_ago"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/feed_channel_title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="18 hours" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="18 hours ago" />
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/feed_channels_ago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:text="ago"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/feed_track_last_update"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/feed_track_image"
@@ -56,18 +75,20 @@
         android:layout_height="184dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:scaleType="centerCrop"
+        android:layout_marginTop="8dp"
         android:background="@color/colorWhite"
-        tools:src="@drawable/feed_channel_placeholder"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/feed_track_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_view_container" />
+        app:layout_constraintTop_toBottomOf="@+id/feed_channel_logo"
+        tools:src="@drawable/feed_channel_placeholder" />
 
     <TextView
         android:id="@+id/feed_track_title"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -103,12 +124,12 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:fontFamily="sans-serif"
-        tools:text="13:35:15"
         android:textColor="#4a4a4a"
         android:textSize="14dp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/feed_time_icon" />
+        app:layout_constraintStart_toEndOf="@+id/feed_time_icon"
+        tools:text="13:35:15" />
 
 
     <ImageView
@@ -153,18 +174,18 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif"
-        tools:text="213k"
         android:textColor="@color/colorPrimary"
         android:textSize="16dp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="213k" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorBlack"
         android:alpha="0.2"
+        android:background="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 

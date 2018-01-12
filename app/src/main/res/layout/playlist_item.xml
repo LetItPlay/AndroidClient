@@ -11,19 +11,19 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/search_news_preview"
+            android:id="@+id/playlist_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
             android:src="@drawable/search_placeholder"
-            app:layout_constraintBottom_toTopOf="@+id/search_news_title"
+            app:layout_constraintBottom_toTopOf="@+id/playlist_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/search_news_logo"
+            android:id="@+id/letitplay_logo"
             android:layout_width="56dp"
             android:layout_height="14dp"
             android:layout_marginEnd="8dp"
@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/search_news_title"
+            android:id="@+id/playlist_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -46,12 +46,12 @@
             android:textColor="@color/colorBlack"
             android:textSize="20dp"
             android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/search_news_last_update"
+            app:layout_constraintBottom_toTopOf="@+id/playlist_last_update"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/search_news_last_update"
+            android:id="@+id/playlist_last_update"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"

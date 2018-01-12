@@ -10,7 +10,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.RealmDB
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
-import io.realm.Realm
+import timber.log.Timber
 import java.util.concurrent.Executors
 
 
@@ -50,6 +50,7 @@ class App : Application() {
         super.onCreate()
         realmDb.init(this)
         bindMusicService()
+        Timber.plant(Timber.DebugTree())
     }
 
     private fun bindMusicService() {

@@ -1,14 +1,12 @@
 package com.letitplay.maugry.letitplay.user_flow.business.channels
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import com.bumptech.glide.Glide
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
+import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 
@@ -42,16 +40,11 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
         fun update(channel: ChannelModel) {
             itemView.apply {
                 channel_title.text = channel.name
-                follower_count.text = channel.subscription_count.toString()
-                Glide.with(context)
-                        .load("$GL_MEDIA_SERVICE_URL${channel.image}")
-                        .into(channel_logo)
-                val tags = channel.tags?.split(",")
-                tags?.forEach {
-                    val view: TextView = LayoutInflater.from(context).inflate(R.layout.channel_tag, teg_container, false) as TextView
-                    view.text = it
-                    teg_container.addView(view)
-                }
+                follower_count.text = channel.subscriptionCount.toString()
+                channel_logo.loadImage(context, channel.imageUrl)
+                val tags = channel.tags?.split(",")?.map(String::trim)?.filter(String::isNotEmpty)
+                if (tags != null)
+                    tag_container.setTagList(tags)
             }
         }
 

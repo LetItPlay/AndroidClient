@@ -8,8 +8,11 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchResultsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
+import com.letitplay.maugry.letitplay.utils.active
+import com.letitplay.maugry.letitplay.utils.disableShiftMode
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
@@ -24,16 +27,18 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
-        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey))
+        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey()))
         backstackDelegate.registerForLifecycleCallbacks(this)
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         navigationMenu = findViewById(R.id.navigation)
         toolbar.setNavigationOnClickListener { onBackPressed() }
         setNavigationMenu()
-        navigationMenu?.menu?.findItem(R.id.action_feed)?.isChecked = true
+        navigationMenu?.disableShiftMode()
+        navigationMenu?.active(R.id.action_feed)
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
+        setSupportActionBar(toolbar)
     }
 
     private fun setNavigationMenu() {
@@ -42,10 +47,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     private fun selectFragment(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_feed -> replaceHistory(FeedKey)
-            R.id.action_channels -> replaceHistory(ChannelsKey)
-            R.id.action_search -> replaceHistory(SearchKey)
-            R.id.action_profile -> replaceHistory(ProfileKey)
+            R.id.action_feed -> replaceHistory(FeedKey())
+            R.id.action_trands -> replaceHistory(TrendsKey())
+            R.id.action_channels -> replaceHistory(ChannelsKey())
+            R.id.action_search -> replaceHistory(SearchResultsKey())
+            R.id.action_profile -> replaceHistory(ProfileKey())
         }
         return true
     }

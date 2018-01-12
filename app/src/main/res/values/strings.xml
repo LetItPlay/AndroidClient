@@ -6,7 +6,7 @@
     <string name="menu_item_feed">Feed</string>
     <string name="menu_item_profile">Profile</string>
     <string name="menu_item_profile_gggg">Profile</string>
-    
+
     <!--CHANNELS-->
     <string name="channels_following">Following</string>
     <string name="channels_follow">Follow</string>
@@ -18,6 +18,12 @@
     <!--FEED-->
     <string name="feed_playing_now">playing now</string>
     <string name="feed_no_tracks">Пока здесь нет треков.\nПодпишитесь на один из каналов во вкладке «Каналы».</string>
+    <string name="feed_years">years</string>
+    <string name="feed_months">months</string>
+    <string name="feed_days">days</string>
+    <string name="feed_hours">hours</string>
+    <string name="feed_minutes">minutes</string>
+    <string name="feed_seconds">seconds</string>
 
     <!--TRACK-->
     <string name="track_recent_added">Recent added</string>
@@ -25,4 +31,7 @@
     <!--PROFILE-->
     <string name="profile_change_language">Поменять язык на русский</string>
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
+
+    <!-- SEARCH -->
+    <string name="search_title">Search</string>
 </resources>

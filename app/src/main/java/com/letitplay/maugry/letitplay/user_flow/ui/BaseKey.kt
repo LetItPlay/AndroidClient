@@ -1,9 +1,10 @@
 package com.letitplay.maugry.letitplay.user_flow.ui
 
+import android.os.Parcelable
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 
 
-abstract class BaseKey {
+abstract class BaseKey : Parcelable {
 
     val fragmentTag: String
         get() = toString()

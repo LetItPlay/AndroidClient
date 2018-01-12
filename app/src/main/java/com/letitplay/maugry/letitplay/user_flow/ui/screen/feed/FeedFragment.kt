@@ -11,6 +11,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerContainerKey
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
@@ -20,7 +21,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (activity as NavigationActivity).navigationMenu?.visibility = View.VISIBLE
         presenter?.loadTracks {
             if (presenter.followingChannelList?.size != 0) {
                 feed_list.apply {
@@ -45,19 +46,27 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         val playlist = presenter?.trackAndChannel?.map {
             AudioTrack(
                     id = it.second.id!!,
-                    url = "$GL_MEDIA_SERVICE_URL${it.second.audio_file?.file}",
+                    url = "$GL_MEDIA_SERVICE_URL${it.second.audio?.fileUrl}",
                     title = it.second.name,
-                    subtitle = it.second.description,
-                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.first.image}"
+                    subtitle = it.first.name,
+                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.second.image}",
+                    channelTitle = it.first.name,
+                    length = it.second.audio?.lengthInSeconds,
+                    listenCount = it.second.listenCount
             )
         } ?: return
 
         feedRepo = MusicRepo(playlist)
         musicService?.musicRepo = feedRepo
         (activity as NavigationActivity).musicPlayerSmall?.apply {
+            setOnClickListener { goToPlayerView() }
             visibility = View.VISIBLE
             mediaSession = musicService?.mediaSession
             skipToQueueItem(trackId)
         }
+    }
+
+    private fun goToPlayerView() {
+        (activity as NavigationActivity).navigateTo(PlayerContainerKey())
     }
 }
