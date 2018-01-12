@@ -236,14 +236,23 @@ class MusicService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        exoPlayer.release()
-        mediaSession?.release()
-        MusicPlayerNotification.hide(this@MusicService)
+        release()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        release()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MediaButtonReceiver.handleIntent(mediaSession, intent)
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun release() {
+        exoPlayer.release()
+        mediaSession?.release()
+        MusicPlayerNotification.hide(this@MusicService)
     }
 
     private fun initTrack(audioTrack: AudioTrack?) {
