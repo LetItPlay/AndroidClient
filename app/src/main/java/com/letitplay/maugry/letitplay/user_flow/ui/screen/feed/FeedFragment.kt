@@ -27,7 +27,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         super.onViewCreated(view, savedInstanceState)
         (activity as NavigationActivity).navigationMenu?.visibility = View.VISIBLE
         presenter?.loadTracks {
-            if (presenter.followingChannelList?.size != 0) {
+            if (presenter.trackAndChannel?.size != 0) {
                 feed_list.apply {
                     adapter = feedListAdapter
                     layoutManager = LinearLayoutManager(context)
@@ -78,7 +78,8 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                     imageUrl = "$GL_MEDIA_SERVICE_URL${it.second.image}",
                     channelTitle = it.first.name,
                     length = it.second.audio?.lengthInSeconds,
-                    listenCount = it.second.listenCount
+                    listenCount = it.second.listenCount,
+                    publishedAt = it.second.publishedAt
             )
         } ?: return
 

@@ -21,22 +21,25 @@ object DataHelper {
         return hours.toString() + ":" + minutes.toString() + ":" + seconds.toString()
     }
 
-    fun getData(date: Date, ctx: Context): String {
-        val now = System.currentTimeMillis()
-        val diff = Date(now - date.time)
-        val cal = Calendar.getInstance()
-        cal.time = diff
-        val seconds = cal.get(Calendar.SECOND)
-        val minutes = cal.get(Calendar.MINUTE)
-        val hours = cal.get(Calendar.HOUR)
-        val days = cal.get(Calendar.DAY_OF_MONTH)
-        val months = cal.get(Calendar.MONTH)
-        val years = cal.get(Calendar.YEAR) - 1970
-        if (years != 0) return years.toString() + " " + ctx.resources.getString(R.string.feed_years)
-        if (months != 0) return months.toString() + " " + ctx.resources.getString(R.string.feed_months)
-        if (days != 0) return days.toString() + " " + ctx.resources.getString(R.string.feed_days)
-        if (hours != 0) return hours.toString() + " " + ctx.resources.getString(R.string.feed_years)
-        if (minutes != 0) return minutes.toString() + " " + ctx.resources.getString(R.string.feed_years)
-        else return seconds.toString()
+    fun getData(date: Date?, ctx: Context): String {
+        date?.let {
+            val now = System.currentTimeMillis()
+            val diff = Date(now - date.time)
+            val cal = Calendar.getInstance()
+            cal.time = diff
+            val seconds = cal.get(Calendar.SECOND)
+            val minutes = cal.get(Calendar.MINUTE)
+            val hours = cal.get(Calendar.HOUR)
+            val days = cal.get(Calendar.DAY_OF_MONTH)
+            val months = cal.get(Calendar.MONTH)
+            val years = cal.get(Calendar.YEAR) - 1970
+            if (years != 0) return years.toString() + " " + ctx.resources.getString(R.string.feed_years)
+            if (months != 0) return months.toString() + " " + ctx.resources.getString(R.string.feed_months)
+            if (days != 0) return days.toString() + " " + ctx.resources.getString(R.string.feed_days)
+            if (hours != 0) return hours.toString() + " " + ctx.resources.getString(R.string.feed_years)
+            if (minutes != 0) return minutes.toString() + " " + ctx.resources.getString(R.string.feed_years)
+            else return seconds.toString()
+        }
+        return ""
     }
 }

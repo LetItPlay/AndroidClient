@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
 import kotlinx.android.synthetic.main.track_item.view.*
 
 class PlayListAdapter : RecyclerView.Adapter<PlayListAdapter.TrackItemHolder>() {
@@ -33,9 +34,10 @@ class PlayListAdapter : RecyclerView.Adapter<PlayListAdapter.TrackItemHolder>() 
 
         fun update(track: AudioTrack) {
             itemView.apply {
+                track_last_seen.text = DataHelper.getData(track.publishedAt,context)
                 channel_name.text = track.channelTitle
                 track_name.text = track.title
-                track_time.text = track.length.toString()
+                track_time.text = DataHelper.getTime(track.length)
                 track_listen_count.text = track.listenCount.toString()
                 Glide.with(context)
                         .load(track.imageUrl)

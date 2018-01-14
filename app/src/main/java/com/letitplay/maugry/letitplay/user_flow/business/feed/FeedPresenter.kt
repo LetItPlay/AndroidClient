@@ -16,7 +16,6 @@ import io.reactivex.functions.Function3
 object FeedPresenter : BasePresenter<IMvpView>() {
 
     var trackAndChannel: List<Pair<ChannelModel, TrackModel>>? = null
-    var followingChannelList: List<FollowingChannelModel>? = null
 
     var updatedTrack: TrackModel? = null
 
@@ -34,7 +33,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                         trackAndChannel = channelWithTracks.tracks
                                 .filter {
                                     val id = it.stationId
-                                    channelWithTracks.followingChannels.find { it.id == id } != null
+                                    channelWithTracks.followingChannels.find { it.id == id && it.isFollowing} != null
                                 }
                                 .sortedByDescending(TrackModel::publishedAt)
                                 .map {
@@ -42,7 +41,6 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                                     val channel = channelWithTracks.channel.first { it.id == id }
                                     Pair(channel, it)
                                 }
-                        followingChannelList = channelWithTracks.followingChannels
                     },
                     onCompleteWithContext = onComplete
             )

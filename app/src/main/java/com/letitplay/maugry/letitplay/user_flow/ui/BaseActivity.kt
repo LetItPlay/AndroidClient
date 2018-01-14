@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
@@ -11,6 +12,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
+import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
 import com.letitplay.maugry.letitplay.utils.active
 import com.letitplay.maugry.letitplay.utils.disableShiftMode
 import com.zhuinden.simplestack.BackstackDelegate
@@ -24,6 +26,9 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     lateinit var backstackDelegate: BackstackDelegate
     lateinit var fragmentStateChanger: FragmentStateChanger
     var navigationMenu: BottomNavigationView? = null
+
+    val musicPlayerSmall: MusicPlayerSmall?
+        get() = music_player_small
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
@@ -74,6 +79,20 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         else {
             toolbar.setNavigationOnClickListener { onBackPressed() }
             toolbar.setNavigationIcon(R.drawable.back)
+        }
+
+        when (key.menuType()) {
+            MenuType.PLAYER -> {
+                musicPlayerSmall?.visibility = View.GONE
+                navigationMenu?.visibility = View.GONE
+            }
+
+            else -> {
+                navigationMenu?.visibility = View.VISIBLE
+                musicPlayerSmall?.let {
+                    if (it.isPlaying()) it.visibility = View.VISIBLE
+                }
+            }
         }
     }
 

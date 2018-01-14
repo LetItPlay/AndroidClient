@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
-        android:maxLines="3"
         android:ellipsize="end"
+        android:maxLines="3"
         android:textColor="@color/colorBlack"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,19 +31,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Channel name" />
 
-    <TextView
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.FollowWidget
         android:id="@+id/channel_follow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/following_bg"
-        android:paddingBottom="6dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="6dp"
-        android:text="@string/channels_following"
-        android:textColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline"

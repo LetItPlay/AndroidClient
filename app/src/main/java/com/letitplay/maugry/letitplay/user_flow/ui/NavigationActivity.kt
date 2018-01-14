@@ -8,9 +8,6 @@ import kotlinx.android.synthetic.main.navigation_main.*
 
 class NavigationActivity : BaseActivity(R.layout.navigation_main) {
 
-    val musicPlayerSmall: MusicPlayerSmall?
-        get() = music_player_small
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)

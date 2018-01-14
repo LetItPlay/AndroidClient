@@ -16,7 +16,7 @@ object TrackManager : BaseManager() {
     fun getTracks() = get(
             local = { TrackModel().queryAll() },
             remote = ServiceController.getTracks(),
-            remoteWhen = { true },
+            remoteWhen = {local -> local.isEmpty() },
             update = { remote ->
                 TrackModel().deleteAll()
                 remote.saveAll()

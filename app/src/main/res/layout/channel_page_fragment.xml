@@ -65,19 +65,12 @@
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
                 app:layout_constraintStart_toEndOf="@+id/channel_preview_followers_icon" />
 
-            <TextView
+            <com.letitplay.maugry.letitplay.user_flow.ui.widget.FollowWidget
                 android:id="@+id/channel_page_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/following_bg"
-                android:paddingBottom="6dp"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                android:paddingTop="6dp"
-                android:text="@string/channels_following"
-                android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
                 app:layout_constraintEnd_toEndOf="parent" />
 

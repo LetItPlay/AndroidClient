@@ -42,6 +42,8 @@ class MusicPlayerSmall : MusicPlayer {
                 .into(cover)
     }
 
+    fun isPlaying() = playing || pausing
+
     override fun updateDuration(durationMs: Long) {
         progress.max = durationMs.toInt()
     }

@@ -30,6 +30,9 @@ abstract class MusicPlayer : FrameLayout {
     protected val playing
         get() = mediaController?.playbackState?.state == PlaybackStateCompat.STATE_PLAYING
 
+    protected val pausing
+        get() = mediaController?.playbackState?.state == PlaybackStateCompat.STATE_PAUSED
+
     protected var hasNext = false
     protected var hasPrev = false
 
@@ -142,7 +145,7 @@ abstract class MusicPlayer : FrameLayout {
 
     fun seekTo(ms: Long) {
         seekBar?.progress?.toLong()?.let { progressMs ->
-            mediaController?.transportControls?.seekTo(progressMs+ms)
+            mediaController?.transportControls?.seekTo(progressMs + ms)
             needUpdateProgress = true
         }
     }

@@ -43,7 +43,6 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
                     track.likeCounts = it.likeCount
                     track.isLiked = !isLiked
                     track.save()
-
                     presenter.trackAndChannel?.let {
                         trendsListAdapter.data = it
                     }
