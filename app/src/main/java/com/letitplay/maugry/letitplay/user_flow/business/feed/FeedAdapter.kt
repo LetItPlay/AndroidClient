@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.business.feed
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -22,6 +23,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
             field = value
             notifyDataSetChanged()
         }
+
+    var musicService: MusicService? = null
     var onClickItem: ((Long) -> Unit)? = null
     var onLikeClick: ((Long?, Boolean) -> Unit)? = null
 
@@ -32,7 +35,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
                 likeModel = FavouriteTracksModel(data[position].second.id, data[position].second.likeCount, false)
                 likeModel.save()
             }
-            update(data[position], likeModel)
+            update(data[position], likeModel, musicService)
             itemView.setOnClickListener { onClickItem?.invoke(data[position].second.id!!) }
             itemView.feed_like.setOnClickListener {
                 onLikeClick?.invoke(data[position].second.id, it.feed_like.isLiked())
@@ -42,14 +45,20 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedChannelsItemHolder = FeedChannelsItemHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedChannelsItemHolder {
+        return FeedChannelsItemHolder(parent).apply {
+            itemView.feed_playing_now.mediaSession = musicService?.mediaSession
+        }
+    }
+
 
     class FeedChannelsItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.feed_item) {
 
-        fun update(pair: Pair<ChannelModel, TrackModel>, like: FavouriteTracksModel?) {
+        fun update(pair: Pair<ChannelModel, TrackModel>, like: FavouriteTracksModel?, musicService: MusicService?) {
             itemView.apply {
                 val data = DataHelper.getData(pair.second.publishedAt!!, context)
                 feed_like.like = like
+                feed_playing_now.trackModel = pair.second
                 feed_time.text = DataHelper.getTime(pair.second.audio?.lengthInSeconds)
                 feed_track_title.text = pair.second.name
                 feed_channel_title.text = pair.first.name

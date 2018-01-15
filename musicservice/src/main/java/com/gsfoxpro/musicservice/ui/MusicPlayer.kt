@@ -99,6 +99,7 @@ abstract class MusicPlayer : FrameLayout {
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         mediaController?.unregisterCallback(mediaControllerCallback)
+        callbackRegistered=false
     }
 
     protected fun playPause() {

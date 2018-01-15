@@ -15,7 +15,6 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerContainerKey
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
@@ -34,6 +33,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                 }
                 presenter.trackAndChannel?.let {
                     feedListAdapter.data = it
+                    feedListAdapter.musicService = musicService
                     feedListAdapter.onClickItem = { playTrack(it) }
                     feedListAdapter.onLikeClick = this::onLikeClick
                 }
@@ -84,16 +84,6 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         } ?: return
 
         feedRepo = MusicRepo(playlist)
-        musicService?.musicRepo = feedRepo
-        (activity as NavigationActivity).musicPlayerSmall?.apply {
-            setOnClickListener { goToPlayerView() }
-            visibility = View.VISIBLE
-            mediaSession = musicService?.mediaSession
-            skipToQueueItem(trackId)
-        }
-    }
-
-    private fun goToPlayerView() {
-        (activity as NavigationActivity).navigateTo(PlayerContainerKey())
+        (activity as NavigationActivity).updateRepo(trackId, feedRepo)
     }
 }

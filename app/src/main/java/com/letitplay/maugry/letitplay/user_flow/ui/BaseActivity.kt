@@ -1,10 +1,15 @@
 package com.letitplay.maugry.letitplay.user_flow.ui
 
 import android.os.Bundle
+import android.support.constraint.ConstraintSet
 import android.support.design.widget.BottomNavigationView
+import android.support.transition.TransitionManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
+import com.gsfoxpro.musicservice.MusicRepo
+import com.gsfoxpro.musicservice.service.MusicService
+import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
@@ -20,6 +25,7 @@ import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
+import kotlinx.android.synthetic.main.player_container_fragment.view.*
 
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
@@ -27,8 +33,17 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     lateinit var fragmentStateChanger: FragmentStateChanger
     var navigationMenu: BottomNavigationView? = null
 
+    protected val musicService: MusicService?
+        get() = (application as App).musicService
+
     val musicPlayerSmall: MusicPlayerSmall?
-        get() = music_player_small
+        get() {
+            if (music_player_small.mediaSession == null) {
+                music_player_small.mediaSession = musicService?.mediaSession
+
+            }
+            return music_player_small
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
@@ -45,6 +60,17 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         backstackDelegate.setStateChanger(this)
         setSupportActionBar(toolbar)
     }
+
+    fun updateRepo(trackId: Long, repo: MusicRepo?) {
+        musicService?.musicRepo = repo
+        musicPlayerSmall?.apply {
+            setOnClickListener { expandPlayer() }
+            visibility = View.VISIBLE
+            skipToQueueItem(trackId)
+        }
+
+    }
+
 
     private fun setNavigationMenu() {
         navigationMenu?.setOnNavigationItemSelectedListener { item: MenuItem -> selectFragment(item) }
@@ -93,6 +119,34 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
                     if (it.isPlaying()) it.visibility = View.VISIBLE
                 }
             }
+        }
+    }
+
+    fun collapsePlayer() {
+        navigationMenu?.visibility = View.VISIBLE
+        appbar?.visibility = View.VISIBLE
+
+        val set = ConstraintSet()
+        set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+        set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+        set.connect(R.id.main_player, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+        TransitionManager.beginDelayedTransition(root_constraint)
+        set.applyTo(root_constraint)
+    }
+
+    fun expandPlayer() {
+        main_player.setViewPager(supportFragmentManager)
+        val set = ConstraintSet()
+        set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+        set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+        set.connect(R.id.main_player, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+        set.connect(R.id.main_player, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+        navigationMenu?.visibility = View.INVISIBLE
+        appbar?.visibility = View.INVISIBLE
+        TransitionManager.beginDelayedTransition(root_constraint)
+        set.applyTo(root_constraint)
+        main_player.collapse.setOnClickListener {
+            collapsePlayer()
         }
     }
 
