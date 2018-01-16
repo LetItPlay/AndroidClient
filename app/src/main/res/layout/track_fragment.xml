@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tracks_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+    </android.support.v7.widget.RecyclerView>
+
+    <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/track_recent_added"
@@ -66,17 +74,6 @@
                 app:layout_constraintStart_toEndOf="@+id/track_time_icon"
                 app:layout_constraintTop_toBottomOf="@+id/track_recent_added"
                 tools:text="23:07:18" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/tracks_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:nestedScrollingEnabled="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/track_playlist_time" />
         </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.NestedScrollView>
-</android.support.constraint.ConstraintLayout>
+    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+</FrameLayout>

@@ -18,11 +18,12 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        profile_list.apply {
+            adapter = profileListAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+        profile_header.attachTo(profile_list)
         presenter?.loadFavouriteTracks {
-            profile_list.apply {
-                adapter = profileListAdapter
-                layoutManager = LinearLayoutManager(context)
-            }
             presenter.tracksList?.let {
                 profile_track_count.text = it.count().toString()
                 profile_tracks_time.text = DataHelper.getTime(it.sumBy { it.audio?.lengthInSeconds ?: 0 })
