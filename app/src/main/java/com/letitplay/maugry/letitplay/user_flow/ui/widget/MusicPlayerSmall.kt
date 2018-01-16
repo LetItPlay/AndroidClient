@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
-import io.reactivex.subjects.PublishSubject
+import com.letitplay.maugry.letitplay.utils.updateText
 import kotlinx.android.synthetic.main.music_player_small.view.*
 
 class MusicPlayerSmall : MusicPlayer {
@@ -20,14 +20,13 @@ class MusicPlayerSmall : MusicPlayer {
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    var subject: PublishSubject<String>? = null
-
     init {
-        subject = PublishSubject.create()
         LayoutInflater.from(context).inflate(R.layout.music_player_small, this)
 
         play_pause_button.setOnClickListener { playPause() }
         next_button.setOnClickListener { next() }
+        title.isSelected = true
+        subtitle.isSelected = true
     }
 
     override fun updateButtonsStates() {
@@ -39,14 +38,11 @@ class MusicPlayerSmall : MusicPlayer {
     }
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
-        title.text = metadata.description?.title
-        subtitle.text = metadata.description?.subtitle
+        title.updateText(metadata.description?.title)
+        subtitle.updateText(metadata.description?.subtitle)
         Glide.with(context)
                 .load(metadata.description.iconUri)
                 .into(cover)
-        subject?.doOnNext {
-            metadata.description.mediaUri.toString()
-        }
     }
 
     fun isPlaying() = playing || pausing
