@@ -3,11 +3,13 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.player.PlayListAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
 import kotlinx.android.synthetic.main.track_fragment.*
 
@@ -20,6 +22,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val trackList: List<AudioTrack>? = musicService?.musicRepo?.playlist
+        playListRepo = musicService?.musicRepo
         tracks_list.apply {
             adapter = trackAdapter
             layoutManager = LinearLayoutManager(context).apply {

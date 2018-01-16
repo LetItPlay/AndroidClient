@@ -31,7 +31,6 @@ class PlayingNowWidget : MusicPlayer {
     }
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
-        listener_count.text = "0"
         if (metadata.description.mediaUri.toString() == trackUrl)
             listener_count.text = context.getString(R.string.playing_now)
         else listener_count.text = trackListenerCount.toString()
