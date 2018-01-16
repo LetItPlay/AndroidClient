@@ -12,11 +12,8 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
     var onClick: (() -> Unit)? = null
 
-    override fun onBindViewHolder(holder: TrackItemHolder?, position: Int) {
-        holder?.apply {
-            update(data[position])
-            itemView.setOnClickListener { onClick?.invoke() }
-        }
+    override fun onBindViewHolder(holder: TrackItemHolder, position: Int) {
+        holder.update(data[position])
     }
 
     fun setData(channelList: List<TrackModel>) {
@@ -28,7 +25,11 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackItemHolder = TrackItemHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackItemHolder {
+        return TrackItemHolder(parent).apply {
+            itemView.setOnClickListener { onClick?.invoke() }
+        }
+    }
 
     class TrackItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.track_item) {
 

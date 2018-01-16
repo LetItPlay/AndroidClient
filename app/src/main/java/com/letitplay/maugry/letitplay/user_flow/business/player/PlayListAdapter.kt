@@ -1,13 +1,14 @@
 package com.letitplay.maugry.letitplay.user_flow.business.player
 
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
+import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
 class PlayListAdapter : RecyclerView.Adapter<PlayListAdapter.TrackItemHolder>() {
@@ -22,17 +23,18 @@ class PlayListAdapter : RecyclerView.Adapter<PlayListAdapter.TrackItemHolder>() 
     var musicService: MusicService? = null
 
     override fun onBindViewHolder(holder: TrackItemHolder?, position: Int) {
-        holder?.apply {
-            update(data[position])
-            itemView.setOnClickListener { onClickItem?.invoke(data[position].id) }
-        }
+        holder?.update(data[position])
     }
 
     override fun getItemCount(): Int = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackItemHolder {
-        return TrackItemHolder(parent)
-                .apply {
+        return TrackItemHolder(parent).apply {
+            itemView.setOnClickListener {
+                if (adapterPosition != NO_POSITION) {
+                    onClickItem?.invoke(data[adapterPosition].id)
+                }
+            }
             itemView.track_playing_now.mediaSession = musicService?.mediaSession
         }
     }
@@ -47,9 +49,7 @@ class PlayListAdapter : RecyclerView.Adapter<PlayListAdapter.TrackItemHolder>() 
                 track_time.text = DataHelper.getTime(track.length)
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackUrl = track.url
-                Glide.with(context)
-                        .load(track.imageUrl)
-                        .into(track_logo)
+                track_logo.loadImage(context, track.imageUrl, "")
             }
         }
 

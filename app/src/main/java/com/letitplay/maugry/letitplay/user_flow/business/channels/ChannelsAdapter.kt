@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.business.channels
 
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
@@ -19,16 +20,25 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
     var onFollowClick: ((ChannelItemModel, Boolean, Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ChannelsItemHolder?, position: Int) {
-        holder?.apply {
-            update(data[position])
-            itemView.setOnClickListener { onClick?.invoke(data[position].channel?.id) }
-            itemView.channel_follow.setOnClickListener { onFollowClick?.invoke(data[position], it.channel_follow.isFollow(), position) }
-        }
+        holder?.update(data[position])
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelsItemHolder = ChannelsItemHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelsItemHolder {
+        return ChannelsItemHolder(parent).apply {
+            itemView.setOnClickListener {
+                if (adapterPosition != NO_POSITION) {
+                    onClick?.invoke(data[adapterPosition].channel?.id)
+                }
+            }
+            itemView.channel_follow.setOnClickListener {
+                if (adapterPosition != NO_POSITION) {
+                    onFollowClick?.invoke(data[adapterPosition], it.channel_follow.isFollow(), adapterPosition)
+                }
+            }
+        }
+    }
 
     class ChannelsItemHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item) {
 

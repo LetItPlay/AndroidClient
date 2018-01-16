@@ -2,13 +2,12 @@ package com.letitplay.maugry.letitplay.user_flow.business.search
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
+import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.channels_item_small.view.*
 
 typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
@@ -61,9 +60,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.apply {
                 channel_name.text = channel.name
                 channel_followers_count.text = channel.subscriptionCount.toString()
-                Glide.with(context)
-                        .load("${GL_MEDIA_SERVICE_URL}${channel.imageUrl}")
-                        .into(channel_small_logo)
+                channel_small_logo.loadImage(context, channel.imageUrl)
             }
         }
     }
