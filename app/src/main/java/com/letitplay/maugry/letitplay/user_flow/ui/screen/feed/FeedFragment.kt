@@ -8,6 +8,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
+import com.letitplay.maugry.letitplay.data_management.model.FeedItemModel
 import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
@@ -26,12 +27,12 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         super.onViewCreated(view, savedInstanceState)
         (activity as NavigationActivity).navigationMenu?.visibility = View.VISIBLE
         presenter?.loadTracks {
-            if (presenter.trackAndChannel?.size != 0) {
+            if (presenter.feedItemList?.size != 0) {
                 feed_list.apply {
                     adapter = feedListAdapter
                     layoutManager = LinearLayoutManager(context)
                 }
-                presenter.trackAndChannel?.let {
+                presenter.feedItemList?.let {
                     feedListAdapter.data = it
                     feedListAdapter.musicService = musicService
                     feedListAdapter.onClickItem = { playTrack(it) }
@@ -43,21 +44,19 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         }
     }
 
-    private fun onLikeClick(trackId: Long?, isLiked: Boolean) {
+    private fun onLikeClick(feedItem: FeedItemModel, isLiked: Boolean, position:Int) {
         var like: LikeModel
         if (isLiked) like = LikeModel(-1, 1, 1)
         else like = LikeModel(1, 1, 1)
-        trackId?.let {
-            presenter?.updateFavouriteTracks(trackId.toInt(), like) {
+        feedItem.track?.id?.let {
+            presenter?.updateFavouriteTracks(it.toInt(), like) {
                 presenter.updatedTrack?.let {
-                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", trackId) }.first()
+                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", feedItem.track?.id) }.first()
                     track.likeCounts = it.likeCount
                     track.isLiked = !isLiked
                     track.save()
-
-                    presenter.trackAndChannel?.let {
-                        feedListAdapter.data = it
-                    }
+                    feedItem.like = track
+                    feedListAdapter.notifyItemChanged(position)
                 }
             }
 
@@ -69,17 +68,17 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
             (activity as NavigationActivity).musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
-        val playlist = presenter?.trackAndChannel?.map {
+        val playlist = presenter?.feedItemList?.map {
             AudioTrack(
-                    id = it.second.id!!,
-                    url = "$GL_MEDIA_SERVICE_URL${it.second.audio?.fileUrl}",
-                    title = it.second.name,
-                    subtitle = it.first.name,
-                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.second.image}",
-                    channelTitle = it.first.name,
-                    length = it.second.audio?.lengthInSeconds,
-                    listenCount = it.second.listenCount,
-                    publishedAt = it.second.publishedAt
+                    id = it.track?.id!!,
+                    url = "$GL_MEDIA_SERVICE_URL${it.track?.audio?.fileUrl}",
+                    title = it.track?.name,
+                    subtitle = it.channel?.name,
+                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.track?.image}",
+                    channelTitle = it.channel?.name,
+                    length = it.track?.audio?.lengthInSeconds,
+                    listenCount = it.track?.listenCount,
+                    publishedAt = it.track?.publishedAt
             )
         } ?: return
 

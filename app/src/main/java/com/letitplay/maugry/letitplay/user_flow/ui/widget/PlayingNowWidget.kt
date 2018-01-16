@@ -5,15 +5,14 @@ import android.support.v4.media.MediaMetadataCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.gsfoxpro.musicservice.ui.MusicPlayer
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import kotlinx.android.synthetic.main.playing_now_widget.view.*
 
 
 class PlayingNowWidget : MusicPlayer {
 
-    var trackModel: TrackModel? = null
+    var trackUrl: String? = null
+    var trackListenerCount: Int? = null
 
     constructor(context: Context) : super(context)
 
@@ -31,11 +30,11 @@ class PlayingNowWidget : MusicPlayer {
 
     }
 
-
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
-        if (metadata.description.mediaUri.toString() == "${GL_MEDIA_SERVICE_URL}${trackModel?.audio?.fileUrl}")
+        listener_count.text = "0"
+        if (metadata.description.mediaUri.toString() == trackUrl)
             listener_count.text = context.getString(R.string.playing_now)
-        else listener_count.text = trackModel?.listenCount.toString()
+        else listener_count.text = trackListenerCount.toString()
     }
 
     override fun updateDuration(durationMs: Long) {

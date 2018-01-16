@@ -37,7 +37,7 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() 
         fun update(track: TrackModel) {
             itemView.apply {
                 track_last_seen.text = DataHelper.getData(track.publishedAt!!, context)
-                track_listen_count.text = track.listenCount.toString()
+                //track_listen_count.text = track.listenCount.toString()
                 track_time.text = DataHelper.getTime(track.audio?.lengthInSeconds)
                 track_name.text = track.name
                 Glide.with(context)

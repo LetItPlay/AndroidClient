@@ -108,8 +108,8 @@
 
     <ImageView
         android:id="@+id/feed_time_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/time_ic"
@@ -123,8 +123,8 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"
         android:textColor="#4a4a4a"
-        android:textSize="14dp"
         android:textStyle="normal"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/feed_time_icon"
         tools:text="13:35:15" />

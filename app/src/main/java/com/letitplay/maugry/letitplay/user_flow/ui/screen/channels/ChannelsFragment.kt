@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.repo.query
@@ -30,7 +32,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
             }
             channelsListAdapter.onClick = this::goToOtherView
             channelsListAdapter.onFollowClick = this::updateFollowers
-            presenter.channelList?.let {
+            presenter.channelItemsList?.let {
                 channelsListAdapter.data = it
             }
         })
@@ -42,21 +44,20 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         }
     }
 
-    private fun updateFollowers(channelId: Int?, isFollow: Boolean) {
+    private fun updateFollowers(channelItem: ChannelItemModel, isFollow: Boolean, position: Int) {
 
         var followerModel: FollowersModel
         if (isFollow) followerModel = FollowersModel(1)
         else followerModel = FollowersModel(-1)
 
-        channelId?.let {
-            presenter?.updateChannelFollowers(channelId, followerModel) {
+        channelItem.channel?.id?.let {
+            presenter?.updateChannelFollowers(it, followerModel) {
                 presenter.updatedChannel?.let {
-                    var channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelId) }.first()
+                    var channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelItem.channel?.id) }.first()
                     channel.isFollowing = !isFollow
                     channel.save()
-                    presenter.channelList?.let {
-                        channelsListAdapter.data = it
-                    }
+                    channelItem.following = channel
+                    channelsListAdapter.notifyItemChanged(position)
                 }
             }
         }

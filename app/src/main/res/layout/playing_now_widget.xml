@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/feed_playing_now_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:src="@drawable/plays_ic" />
 
     <TextView
@@ -17,5 +17,6 @@
         android:fontFamily="sans-serif"
         android:textColor="#ff6666"
         android:textStyle="normal"
+        android:textSize="12dp"
         tools:text="@string/playing_now" />
 </LinearLayout>
