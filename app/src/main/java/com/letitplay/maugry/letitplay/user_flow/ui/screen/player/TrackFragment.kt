@@ -17,17 +17,14 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var trackList: List<AudioTrack>? = null
-        //Костыль потому что лагает ресайклер надо сделать постепенную загрузку данных
-        musicService?.musicRepo?.playlist?.size?.let {
-            if (it > 15)
-                trackList = musicService?.musicRepo?.playlist?.subList(0, 15)
-            else trackList = musicService?.musicRepo?.playlist?.subList(0, it)
-        }
+        val trackList: List<AudioTrack>? = musicService?.musicRepo?.playlist
         tracks_list.apply {
             adapter = trackAdapter
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context).apply {
+                isAutoMeasureEnabled = true
+            }
         }
+        header.attachTo(tracks_list)
         trackList?.let {
             track_playlist_count.text = it.size.toString()
             track_playlist_time.text = DataHelper.getTime(it.sumBy { it.length ?: 0 })
