@@ -31,7 +31,8 @@ class PlayListAdapter : RecyclerView.Adapter<PlayListAdapter.TrackItemHolder>() 
     override fun getItemCount(): Int = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackItemHolder {
-        return TrackItemHolder(parent).apply {
+        return TrackItemHolder(parent)
+                .apply {
             itemView.track_playing_now.mediaSession = musicService?.mediaSession
         }
     }

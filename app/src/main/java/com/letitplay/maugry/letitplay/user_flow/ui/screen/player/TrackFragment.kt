@@ -24,6 +24,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
         val trackList: List<AudioTrack>? = musicService?.musicRepo?.playlist
         playListRepo = musicService?.musicRepo
         tracks_list.apply {
+            setHasFixedSize(true)
             adapter = trackAdapter
             layoutManager = LinearLayoutManager(context).apply {
                 isAutoMeasureEnabled = true

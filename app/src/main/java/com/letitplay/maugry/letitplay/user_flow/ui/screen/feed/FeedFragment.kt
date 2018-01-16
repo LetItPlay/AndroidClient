@@ -25,7 +25,6 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as NavigationActivity).navigationMenu?.visibility = View.VISIBLE
         presenter?.loadTracks {
             if (presenter.feedItemList?.size != 0) {
                 feed_list.apply {

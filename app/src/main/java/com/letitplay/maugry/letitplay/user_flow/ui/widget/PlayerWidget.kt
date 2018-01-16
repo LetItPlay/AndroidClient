@@ -27,4 +27,8 @@ class PlayerWidget : ConstraintLayout {
         player_tabs.setupWithViewPager(player_pager)
         player_pager.adapter = PlayerContainerAdapter(fm)
     }
+
+    fun releaseViewPager(){
+        player_pager.adapter = null
+    }
 }

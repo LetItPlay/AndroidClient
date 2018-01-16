@@ -132,6 +132,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         set.connect(R.id.main_player, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
         TransitionManager.beginDelayedTransition(root_constraint)
         set.applyTo(root_constraint)
+        main_player.releaseViewPager()
     }
 
     fun expandPlayer() {

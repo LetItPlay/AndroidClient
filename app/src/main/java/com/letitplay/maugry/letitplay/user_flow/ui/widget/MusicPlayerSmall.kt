@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.music_player_small.view.*
 
 class MusicPlayerSmall : MusicPlayer {
@@ -19,7 +20,10 @@ class MusicPlayerSmall : MusicPlayer {
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
+    var subject: PublishSubject<String>? = null
+
     init {
+        subject = PublishSubject.create()
         LayoutInflater.from(context).inflate(R.layout.music_player_small, this)
 
         play_pause_button.setOnClickListener { playPause() }
@@ -40,6 +44,9 @@ class MusicPlayerSmall : MusicPlayer {
         Glide.with(context)
                 .load(metadata.description.iconUri)
                 .into(cover)
+        subject?.doOnNext {
+            metadata.description.mediaUri.toString()
+        }
     }
 
     fun isPlaying() = playing || pausing
