@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.utils.updateText
 import kotlinx.android.synthetic.main.music_player_big.view.*
 
 
@@ -22,6 +23,8 @@ class MusicPlayerBig : MusicPlayer {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.music_player_big, this)
+        player_track_title.isSelected = true
+        player_channel_title.isSelected = true
         player_pause_play.setOnClickListener { playPause() }
         player_next.setOnClickListener { next() }
         player_back.setOnClickListener { prev() }
@@ -40,8 +43,8 @@ class MusicPlayerBig : MusicPlayer {
     }
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
-        player_channel_title.text = metadata.description?.title
-        player_track_title.text = metadata.description?.subtitle
+        player_channel_title.updateText(metadata.description?.title)
+        player_track_title.updateText(metadata.description?.subtitle)
         Glide.with(context)
                 .load(metadata.description.iconUri)
                 .into(player_track_image)

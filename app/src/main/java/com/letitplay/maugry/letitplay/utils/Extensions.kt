@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 
@@ -26,5 +27,11 @@ fun ImageView.loadImage(context: Context, url: String?, prefix: String = GL_MEDI
         Glide.with(context)
                 .load("$prefix$url")
                 .into(this)
+    }
+}
+
+fun TextView.updateText(text: CharSequence?) {
+    if (this.text != text) {
+        this.text = text
     }
 }
