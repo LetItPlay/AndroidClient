@@ -6,7 +6,7 @@ import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.business.player.PlayListAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.track_fragment.*
 
 class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, TrackPresenter) {
 
-    private val trackAdapter = PlayListAdapter()
+    private val trackAdapter = TrackAdapter()
     private var playListRepo: MusicRepo? = null
 
 

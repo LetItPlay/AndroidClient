@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.utils.loadImage
@@ -15,7 +14,7 @@ typealias TrackVH = TrackAdapter.TrackItemHolder
 
 sealed class ResultItem {
     class ChannelItem(val channel: ChannelModel) : ResultItem()
-    class TrackItem(val track: TrackModel) : ResultItem()
+    class TrackItem(val track: com.gsfoxpro.musicservice.model.AudioTrack) : ResultItem()
 }
 
 class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

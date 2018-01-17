@@ -10,7 +10,7 @@ import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 
-class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>() {
+class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
     var data: List<ChannelItemModel> = ArrayList()
         set(value) {
             field = value
@@ -19,14 +19,14 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
     var onClick: ((Int?) -> Unit)? = null
     var onFollowClick: ((ChannelItemModel, Boolean, Int) -> Unit)? = null
 
-    override fun onBindViewHolder(holder: ChannelsItemHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ChannelViewHolder?, position: Int) {
         holder?.update(data[position])
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelsItemHolder {
-        return ChannelsItemHolder(parent).apply {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelViewHolder {
+        return ChannelViewHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
                     onClick?.invoke(data[adapterPosition].channel?.id)
@@ -40,7 +40,7 @@ class ChannelsAdapter : RecyclerView.Adapter<ChannelsAdapter.ChannelsItemHolder>
         }
     }
 
-    class ChannelsItemHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item) {
+    class ChannelViewHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item) {
 
         fun update(channelModel: ChannelItemModel) {
             itemView.apply {

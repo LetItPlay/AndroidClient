@@ -13,7 +13,7 @@ import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.feed_item.view.*
 import java.util.*
 
-class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
+class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
 
     var data: List<FeedItemModel> = ArrayList()
         set(value) {
@@ -25,14 +25,14 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
     var onClickItem: ((Long) -> Unit)? = null
     var onLikeClick: ((FeedItemModel, Boolean, Int) -> Unit)? = null
 
-    override fun onBindViewHolder(holder: FeedChannelsItemHolder?, position: Int) {
+    override fun onBindViewHolder(holder: FeedItemViewHolder?, position: Int) {
         holder?.update(data[position])
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedChannelsItemHolder {
-        return FeedChannelsItemHolder(parent).apply {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedItemViewHolder {
+        return FeedItemViewHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
                     onClickItem?.invoke(data[adapterPosition].track?.id!!)
@@ -48,7 +48,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedChannelsItemHolder>() {
     }
 
 
-    class FeedChannelsItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.feed_item) {
+    class FeedItemViewHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.feed_item) {
 
         fun update(feedItemModel: FeedItemModel) {
             itemView.apply {
