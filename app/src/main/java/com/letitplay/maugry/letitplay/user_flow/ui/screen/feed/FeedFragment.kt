@@ -64,7 +64,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     private fun playTrack(trackId: Long) {
         if (feedRepo != null) {
-            (activity as NavigationActivity).musicPlayerSmall?.skipToQueueItem(trackId)
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
         val playlist = presenter?.feedItemList?.map {

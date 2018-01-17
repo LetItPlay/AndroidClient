@@ -9,10 +9,9 @@ import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
-import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import kotlinx.android.synthetic.main.channels_fragment.*
 
 
@@ -39,7 +38,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
 
     private fun goToOtherView(id: Int?) {
         id?.let {
-            (activity as NavigationActivity).navigateTo(ChannelPageKey(id))
+            navigationActivity.navigateTo(ChannelPageKey(id))
         }
     }
 

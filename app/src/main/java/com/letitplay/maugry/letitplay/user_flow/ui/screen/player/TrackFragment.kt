@@ -9,7 +9,6 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
 import kotlinx.android.synthetic.main.track_fragment.*
 
@@ -42,7 +41,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
 
     private fun playTrack(trackId: Long) {
         if (playListRepo != null) {
-            (activity as NavigationActivity).musicPlayerSmall?.skipToQueueItem(trackId)
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
     }

@@ -15,7 +15,6 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import kotlinx.android.synthetic.main.trends_fragment.*
 
 
@@ -61,7 +60,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
     private fun playTrack(trackId: Long) {
         if (trendsRepo != null) {
-            (activity as NavigationActivity).musicPlayerSmall?.skipToQueueItem(trackId)
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
         val playlist = presenter?.feedItemList?.map {
@@ -79,7 +78,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         } ?: return
 
         trendsRepo = MusicRepo(playlist)
-        (activity as NavigationActivity).updateRepo(trackId, trendsRepo)
+        navigationActivity.updateRepo(trackId, trendsRepo)
     }
 
 }

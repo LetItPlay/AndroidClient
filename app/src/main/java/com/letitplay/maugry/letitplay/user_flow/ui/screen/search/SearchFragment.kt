@@ -39,7 +39,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     }
 
     private fun toChannel(channel: ChannelModel) {
-        (activity as NavigationActivity).navigateTo(ChannelPageKey(channel.id!!))
+        navigationActivity.navigateTo(ChannelPageKey(channel.id!!))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

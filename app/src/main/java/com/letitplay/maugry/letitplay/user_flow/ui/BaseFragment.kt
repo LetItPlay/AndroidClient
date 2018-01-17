@@ -58,6 +58,9 @@ abstract class BaseFragment<out P>(open val layoutId: Int,
     override val safeView: IMvpView?
         get() = if (!isViewDestroying && !isViewDestroyed && view != null && !isFragmentDestroying) this else null
 
+    inline val navigationActivity: NavigationActivity
+        get() = activity as NavigationActivity
+
     override fun onDestroyView() {
         // note: whatever called first or skipped
         isFragmentDestroying = true
