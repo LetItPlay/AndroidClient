@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
@@ -15,7 +16,7 @@ typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
 typealias TrackVH = TrackAdapter.TrackItemHolder
 
 sealed class ResultItem {
-    class ChannelItem(val channel: ChannelModel) : ResultItem()
+    class ChannelItem(val channelItemModel: ChannelItemModel) : ResultItem()
     class TrackItem(val track: com.gsfoxpro.musicservice.model.AudioTrack) : ResultItem()
 }
 
@@ -28,6 +29,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onChannelClick: ((ChannelModel) -> Unit)? = null
     var onTrackClick: ((AudioTrack) -> Unit)? = null
+    var onFollowClick: ((ChannelModel, Boolean, Int) -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -43,7 +45,16 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             CHANNEL_ITEM_TYPE -> ChannelVH(parent).apply {
                 itemView.setOnClickListener {
                     if (adapterPosition != NO_POSITION) {
-                        onChannelClick?.invoke((data[adapterPosition] as ResultItem.ChannelItem).channel)
+                        onChannelClick?.invoke((data[adapterPosition] as ResultItem.ChannelItem).channelItemModel.channel!!)
+                    }
+                }
+                itemView.channel_follow.setOnClickListener {
+                    if (adapterPosition != NO_POSITION) {
+                        onFollowClick?.invoke(
+                                (data[adapterPosition] as ResultItem.ChannelItem).channelItemModel.channel!!,
+                                it.channel_follow.isFollow(),
+                                adapterPosition
+                        )
                     }
                 }
             }
@@ -61,18 +72,19 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = data[position]
         when {
-            holder is ChannelVH && item is ResultItem.ChannelItem -> holder.update(item.channel)
+            holder is ChannelVH && item is ResultItem.ChannelItem -> holder.update(item.channelItemModel)
             holder is TrackVH && item is ResultItem.TrackItem -> holder.update(item.track)
         }
     }
 
     class ChannelSmallViewHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item_small) {
 
-        fun update(channel: ChannelModel) {
+        fun update(channelItem: ChannelItemModel) {
             itemView.apply {
-                channel_name.text = channel.name
-                channel_followers_count.text = channel.subscriptionCount.toString()
-                channel_small_logo.loadImage(channel.imageUrl)
+                channel_name.text = channelItem.channel!!.name
+                channel_follow.data = channelItem.following
+                channel_followers_count.text = channelItem.channel!!.subscriptionCount.toString()
+                channel_small_logo.loadImage(channelItem.channel!!.imageUrl)
             }
         }
     }
