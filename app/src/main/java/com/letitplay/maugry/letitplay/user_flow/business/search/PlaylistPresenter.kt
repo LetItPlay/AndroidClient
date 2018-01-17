@@ -26,7 +26,7 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
                                 tracksInPlaylist.add(track)
                             }
                         }
-                        PlaylistModel("Новости за 30 минут", tracksInPlaylist)
+                        PlaylistModel("Актуальные новости за 30 минут", "Подборка актуальных новостей в виде 30-минутного плейлиста", tracksInPlaylist)
                     },
                     onNextNonContext = { playlists = listOf(it) },
                     onCompleteWithContext = onComplete

@@ -37,6 +37,7 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>
         fun update(playlist: PlaylistModel) {
             itemView.apply {
                 playlist_title.text = playlist.name
+                playlist_description.text = playlist.description
             }
         }
     }
