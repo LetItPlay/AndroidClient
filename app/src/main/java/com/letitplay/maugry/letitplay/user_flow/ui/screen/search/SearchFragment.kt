@@ -40,6 +40,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         resultsAdapter.onChannelClick = this::toChannel
         resultsAdapter.onTrackClick = this::playTrack
         resultsAdapter.onFollowClick = this::updateFollowers
+        resultsAdapter.musicService = musicService
         results_recycler?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = resultsAdapter

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
+import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -11,6 +12,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.channels_item_small.view.*
+import kotlinx.android.synthetic.main.track_item.view.track_playing_now
 
 typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
 typealias TrackVH = TrackAdapter.TrackItemHolder
@@ -30,6 +32,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onChannelClick: ((ChannelModel) -> Unit)? = null
     var onTrackClick: ((AudioTrack) -> Unit)? = null
     var onFollowClick: ((ChannelItemModel, Boolean, Int) -> Unit)? = null
+    var musicService: MusicService? = null
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -64,6 +67,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         onTrackClick?.invoke((data[adapterPosition] as ResultItem.TrackItem).track)
                     }
                 }
+                itemView.track_playing_now.mediaSession = musicService?.mediaSession
             }
             else -> throw IllegalStateException()
         }
