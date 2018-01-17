@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.business.search
 
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -24,6 +25,8 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
 
+    var onChannelClick: ((ChannelModel) -> Unit)? = null
+
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
             is ResultItem.ChannelItem -> CHANNEL_ITEM_TYPE
@@ -35,7 +38,13 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CHANNEL_ITEM_TYPE -> ChannelVH(parent)
+            CHANNEL_ITEM_TYPE -> ChannelVH(parent).apply {
+                itemView.setOnClickListener {
+                    if (adapterPosition != NO_POSITION) {
+                        onChannelClick?.invoke((data[adapterPosition] as ResultItem.ChannelItem).channel)
+                    }
+                }
+            }
             TRACK_ITEM_TYPE -> TrackVH(parent)
             else -> throw IllegalStateException()
         }
@@ -55,6 +64,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class ChannelSmallViewHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item_small) {
+
         fun update(channel: ChannelModel) {
             itemView.apply {
                 channel_name.text = channel.name

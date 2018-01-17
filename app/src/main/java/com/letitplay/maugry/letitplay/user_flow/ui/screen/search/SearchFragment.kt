@@ -10,16 +10,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem.ChannelItem
-import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem.TrackItem
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchResultsAdapter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import kotlinx.android.synthetic.main.search_fragment.*
 
 
-class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter), SearchView.OnQueryTextListener {
+class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter) {
 
     private val resultsAdapter = SearchResultsAdapter()
 
@@ -30,10 +31,15 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        resultsAdapter.onChannelClick = this::toChannel
         results_recycler?.apply {
             adapter = resultsAdapter
             layoutManager = LinearLayoutManager(context)
         }
+    }
+
+    private fun toChannel(channel: ChannelModel) {
+        (activity as NavigationActivity).navigateTo(ChannelPageKey(channel.id!!))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -46,7 +52,22 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
             val searchManager = activity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
             searchView.setSearchableInfo(searchManager.getSearchableInfo(activity.componentName))
         }
-        searchView.setOnQueryTextListener(this)
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                searchView.clearFocus()
+                presenter?.executeQuery(query) {
+                    val (channels, tracks) = presenter.queryResult
+                    resultsAdapter.data = channels
+                            .map(ResultItem::ChannelItem)
+                            .plus(tracks.map(ResultItem::TrackItem))
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(menuItem: MenuItem): Boolean = true
             override fun onMenuItemActionCollapse(menuItem: MenuItem): Boolean {
@@ -59,20 +80,6 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     }
 
     private fun goBack() {
-        (activity as NavigationActivity).backstackDelegate.backstack.goBack()
-    }
-
-    override fun onQueryTextSubmit(query: String): Boolean {
-        presenter?.executeQuery(query) {
-            val (channels, tracks) = presenter.queryResult
-            resultsAdapter.data = channels
-                    .map(::ChannelItem)
-                    .plus(tracks.map(::TrackItem))
-        }
-        return true
-    }
-
-    override fun onQueryTextChange(newText: String): Boolean {
-        return true
+        (activity as NavigationActivity).backstackDelegate.onBackPressed()
     }
 }
