@@ -9,13 +9,14 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import com.gsfoxpro.musicservice.MusicRepo
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchResultsAdapter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import kotlinx.android.synthetic.main.search_fragment.*
 
@@ -32,6 +33,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         resultsAdapter.onChannelClick = this::toChannel
+        resultsAdapter.onTrackClick = this::playTrack
         results_recycler?.apply {
             adapter = resultsAdapter
             layoutManager = LinearLayoutManager(context)
@@ -40,6 +42,13 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
 
     private fun toChannel(channel: ChannelModel) {
         navigationActivity.navigateTo(ChannelPageKey(channel.id!!))
+    }
+
+    private fun playTrack(track: AudioTrack) {
+        val tracks = resultsAdapter.data
+                .filterIsInstance(ResultItem.TrackItem::class.java)
+                .map(ResultItem.TrackItem::track)
+        navigationActivity.updateRepo(track.id, MusicRepo(tracks))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -80,6 +89,6 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     }
 
     private fun goBack() {
-        (activity as NavigationActivity).backstackDelegate.onBackPressed()
+        navigationActivity.backstackDelegate.onBackPressed()
     }
 }

@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.business.search
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
@@ -26,6 +27,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
     var onChannelClick: ((ChannelModel) -> Unit)? = null
+    var onTrackClick: ((AudioTrack) -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -45,7 +47,13 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     }
                 }
             }
-            TRACK_ITEM_TYPE -> TrackVH(parent)
+            TRACK_ITEM_TYPE -> TrackVH(parent).apply {
+                itemView.setOnClickListener {
+                    if (adapterPosition != NO_POSITION) {
+                        onTrackClick?.invoke((data[adapterPosition] as ResultItem.TrackItem).track)
+                    }
+                }
+            }
             else -> throw IllegalStateException()
         }
     }
