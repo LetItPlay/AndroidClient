@@ -47,7 +47,7 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
                 channel_follow.data = channelModel.following
                 channel_title.text = channelModel.channel?.name
                 follower_count.text = channelModel.channel?.subscriptionCount.toString()
-                channel_logo.loadImage(context, channelModel.channel?.imageUrl)
+                channel_logo.loadImage(channelModel.channel?.imageUrl)
                 val tags = channelModel.channel?.tags?.split(",")?.map(String::trim)?.filter(String::isNotEmpty)
                 if (tags != null)
                     tag_container.setTagList(tags)

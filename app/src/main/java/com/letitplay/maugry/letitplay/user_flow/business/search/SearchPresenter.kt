@@ -15,6 +15,7 @@ import io.reactivex.functions.Function3
 
 object SearchPresenter : BasePresenter<IMvpView>() {
     var queryResult: Pair<List<ChannelModel>, List<AudioTrack>> = Pair(emptyList(), emptyList())
+    var lastQuery: String? = null
 
     fun executeQuery(query: String, onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(

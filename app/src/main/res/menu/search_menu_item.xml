@@ -7,6 +7,6 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/search_title"
-        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:actionViewClass="com.letitplay.maugry.letitplay.user_flow.ui.widget.PersistenceSearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 </menu>

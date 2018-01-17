@@ -66,19 +66,19 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    companion object {
-        const val CHANNEL_ITEM_TYPE = 1
-        const val TRACK_ITEM_TYPE = 2
-    }
-
     class ChannelSmallViewHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item_small) {
 
         fun update(channel: ChannelModel) {
             itemView.apply {
                 channel_name.text = channel.name
                 channel_followers_count.text = channel.subscriptionCount.toString()
-                channel_small_logo.loadImage(context, channel.imageUrl)
+                channel_small_logo.loadImage(channel.imageUrl)
             }
         }
+    }
+
+    companion object {
+        const val CHANNEL_ITEM_TYPE = 1
+        const val TRACK_ITEM_TYPE = 2
     }
 }

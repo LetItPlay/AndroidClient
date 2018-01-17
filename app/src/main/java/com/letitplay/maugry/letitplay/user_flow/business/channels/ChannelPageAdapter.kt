@@ -38,7 +38,7 @@ class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageIt
         fun update(track: TrackModel) {
             itemView.apply {
                 channel_page_track_title.text = track.name
-                channel_page_track_preview.loadImage(context, track.image)
+                channel_page_track_preview.loadImage(track.image, context)
             }
         }
 

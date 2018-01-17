@@ -49,7 +49,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
                 track_time.text = DataHelper.getTime(track.length)
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackUrl = track.url
-                track_logo.loadImage(context, track.imageUrl, "")
+                track_logo.loadImage(track.imageUrl, prefix = "")
             }
         }
 

@@ -25,9 +25,9 @@ fun ViewGroup.inflateHolder(layoutId: Int): View =
 @Suppress("UNCHECKED_CAST")
 fun <T> inflate(layoutId: Int, context: Context) = LayoutInflater.from(context).inflate(layoutId, null) as T
 
-fun ImageView.loadImage(context: Context, url: String?, prefix: String = GL_MEDIA_SERVICE_URL) {
+fun ImageView.loadImage(url: String?, context: Context? = null, prefix: String = GL_MEDIA_SERVICE_URL) {
     if (url != null) {
-        Glide.with(context)
+        Glide.with(context ?: this.context)
                 .load("$prefix$url")
                 .into(this)
     }

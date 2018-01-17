@@ -42,7 +42,7 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() 
                 //track_listen_count.text = track.listenCount.toString()
                 track_time.text = DataHelper.getTime(track.audio?.lengthInSeconds)
                 track_name.text = track.name
-                track_logo.loadImage(context, track.image)
+                track_logo.loadImage(track.image)
             }
 
         }

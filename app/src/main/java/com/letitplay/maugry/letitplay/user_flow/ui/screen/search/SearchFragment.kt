@@ -35,8 +35,8 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         resultsAdapter.onChannelClick = this::toChannel
         resultsAdapter.onTrackClick = this::playTrack
         results_recycler?.apply {
-            adapter = resultsAdapter
             layoutManager = LinearLayoutManager(context)
+            adapter = resultsAdapter
         }
     }
 
@@ -51,17 +51,26 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         navigationActivity.updateRepo(track.id, MusicRepo(tracks))
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.lastQuery = null
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu_item, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
         searchItem.expandActionView()
+        presenter?.lastQuery?.let {
+            searchView.setQuery(it, true)
+            searchView.clearFocus()
+        }
         activity?.let { activity ->
             val searchManager = activity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
             searchView.setSearchableInfo(searchManager.getSearchableInfo(activity.componentName))
         }
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchView.clearFocus()
                 presenter?.executeQuery(query) {
@@ -74,6 +83,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                presenter?.lastQuery = newText
                 return true
             }
         })
@@ -86,6 +96,10 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
                 return true
             }
         })
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun goBack() {

@@ -60,8 +60,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
                 feed_track_title.text = feedItemModel.track?.name
                 feed_channel_title.text = feedItemModel.track?.name
                 feed_track_last_update.text = data
-                feed_channel_logo.loadImage(context, feedItemModel.channel?.imageUrl)
-                feed_track_image.loadImage(context, feedItemModel.track?.image)
+                feed_channel_logo.loadImage(feedItemModel.channel?.imageUrl)
+                feed_track_image.loadImage(feedItemModel.track?.image)
             }
         }
     }
