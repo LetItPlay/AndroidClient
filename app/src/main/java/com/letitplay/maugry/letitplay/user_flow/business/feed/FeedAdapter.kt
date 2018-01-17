@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.FeedItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
 import com.letitplay.maugry.letitplay.utils.loadImage
@@ -15,7 +15,7 @@ import java.util.*
 
 class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
 
-    var data: List<FeedItemModel> = ArrayList()
+    var data: List<ExtendTrackModel> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -23,7 +23,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
 
     var musicService: MusicService? = null
     var onClickItem: ((Long) -> Unit)? = null
-    var onLikeClick: ((FeedItemModel, Boolean, Int) -> Unit)? = null
+    var onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: FeedItemViewHolder?, position: Int) {
         holder?.update(data[position])
@@ -50,18 +50,18 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
 
     class FeedItemViewHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.feed_item) {
 
-        fun update(feedItemModel: FeedItemModel) {
+        fun update(extendTrackModel: ExtendTrackModel) {
             itemView.apply {
-                val data = DataHelper.getData(feedItemModel.track?.publishedAt!!, context)
-                feed_like.like = feedItemModel.like
-                feed_playing_now.trackListenerCount = feedItemModel.track?.listenCount
-                feed_playing_now.trackUrl = "$GL_MEDIA_SERVICE_URL${feedItemModel.track?.audio?.fileUrl}"
-                feed_time.text = DataHelper.getTime(feedItemModel.track?.audio?.lengthInSeconds)
-                feed_track_title.text = feedItemModel.track?.name
-                feed_channel_title.text = feedItemModel.track?.name
+                val data = DataHelper.getData(extendTrackModel.track?.publishedAt!!, context)
+                feed_like.like = extendTrackModel.like
+                feed_playing_now.trackListenerCount = extendTrackModel.track?.listenCount
+                feed_playing_now.trackUrl = "$GL_MEDIA_SERVICE_URL${extendTrackModel.track?.audio?.fileUrl}"
+                feed_time.text = DataHelper.getTime(extendTrackModel.track?.audio?.lengthInSeconds)
+                feed_track_title.text = extendTrackModel.track?.name
+                feed_channel_title.text = extendTrackModel.channel?.name
                 feed_track_last_update.text = data
-                feed_channel_logo.loadImage(context, feedItemModel.channel?.imageUrl)
-                feed_track_image.loadImage(context, feedItemModel.track?.image)
+                feed_channel_logo.loadImage(context, extendTrackModel.channel?.imageUrl)
+                feed_track_image.loadImage(context, extendTrackModel.track?.image)
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.business.channels
 
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
@@ -15,39 +15,30 @@ import io.reactivex.functions.BiFunction
 
 object ChannelPresenter : BasePresenter<IMvpView>() {
 
-    var channelItemsList: List<ChannelItemModel>? = null
+    var extendChannelList: List<ExtendChannelModel>? = null
 
     var updatedChannel: ChannelModel? = null
 
     fun loadChannels(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
-                    asyncObservable = Observable.zip(
-                            ChannelManager.getChannels(),
-                            ChannelManager.getFollowingChannels(),
-                            BiFunction { channel: List<ChannelModel>, followingChannel: List<FollowingChannelModel> ->
-                                Pair(channel, followingChannel)
-                            }
-                    ),
-                    onNextNonContext = { (channel, folowingChannel) ->
-                        channelItemsList = channel.map {
-                            val id = it.id
-                            var followingChannel = folowingChannel.find { it.id == id }
-                            if (followingChannel == null) {
-                                followingChannel = FollowingChannelModel(id, false)
-                                followingChannel.save()
-                            }
-                            ChannelItemModel(it, followingChannel)
-                        }
+                    asyncObservable = ChannelManager.getExtendChannel(),
+                    triggerProgress = false,
+                    onNextNonContext = {
+                        extendChannelList = it
                     },
                     onCompleteWithContext = onComplete
 
             )
     )
 
-    fun updateChannelFollowers(id: Int, body: FollowersModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun updateChannelFollowers(channel: ExtendChannelModel, body: FollowersModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
-                    asyncObservable = ChannelManager.updateChannelFollowers(id, body),
+                    asyncObservable = ChannelManager.updateChannelFollowers(channel.id!!, body),
                     onNextNonContext = {
+                        channel.following?.let{
+                            it.isFollowing = !it.isFollowing
+                            ChannelManager.updateFollowingChannels(it)
+                        }
                         updatedChannel = it
                     },
                     onCompleteWithContext = onComplete

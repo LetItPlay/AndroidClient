@@ -1,54 +1,52 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
+import com.gsfoxpro.musicservice.model.AudioTrack
+import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.*
-import com.letitplay.maugry.letitplay.data_management.repo.save
+import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.LikeModel
+import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.BiFunction
 
 
 object FeedPresenter : BasePresenter<IMvpView>() {
 
-    var feedItemList: List<FeedItemModel>? = null
-
+    var extendTrackList: List<ExtendTrackModel>? = null
+    var playlist: List<AudioTrack>? = null
     var updatedTrack: TrackModel? = null
 
     fun loadTracks(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
-                            TrackManager.getTracks(),
                             ChannelManager.getFollowingChannels(),
-                            ChannelManager.getChannels(),
-                            TrackManager.getFavouriteTracks(),
-                            Function4
-                            { tracks: List<TrackModel>, followingChannels: List<FollowingChannelModel>, channel: List<ChannelModel>, favouriteTrack: List<FavouriteTracksModel> ->
-                                FeedVM(tracks, followingChannels, channel, favouriteTrack)
+                            TrackManager.getExtendTrack(),
+                            BiFunction { followingChannels: List<FollowingChannelModel>, tracks: List<ExtendTrackModel> ->
+                                Pair(followingChannels, tracks)
                             }),
-                    onNextNonContext = { feedVM ->
-                        feedItemList = feedVM.tracks
-                                .filter {
-                                    val id = it.stationId
-                                    feedVM.followingChannels.find { it.id == id && it.isFollowing } != null
-                                }
-                                .sortedByDescending(TrackModel::publishedAt)
-                                .map {
-                                    val id = it.stationId
-                                    val channel = feedVM.channel.first { it.id == id }
-                                    Pair(channel, it)
-                                }
-                                .map {
-                                    val id = it.second.id
-                                    var like = feedVM.favouriteTrack.find { it.id == id }
-                                    if (like == null) {
-                                        like = FavouriteTracksModel(id, it.second.likeCount, false)
-                                        like.save()
-                                    }
-                                    FeedItemModel(it.second, it.first, like)
-                                }
+                    onNextNonContext = { (followingChannels, track) ->
+                        extendTrackList = track.filter {
+                            val idStation = it.track?.stationId
+                            followingChannels.find { it.id == idStation && it.isFollowing} != null
+                        }
+                        playlist = extendTrackList?.map {
+                            AudioTrack(
+                                    id = it.track?.id!!,
+                                    url = "$GL_MEDIA_SERVICE_URL${it.track?.audio?.fileUrl}",
+                                    title = it.track?.name,
+                                    subtitle = it.channel?.name,
+                                    imageUrl = "$GL_MEDIA_SERVICE_URL${it.track?.image}",
+                                    channelTitle = it.channel?.name,
+                                    length = it.track?.audio?.lengthInSeconds,
+                                    listenCount = it.track?.listenCount,
+                                    publishedAt = it.track?.publishedAt
+                            )
+                        }
                     },
                     onCompleteWithContext = onComplete
             )
@@ -66,7 +64,4 @@ object FeedPresenter : BasePresenter<IMvpView>() {
 
     )
 
-    class FeedVM(var tracks: List<TrackModel>, var followingChannels: List<FollowingChannelModel>,
-                            var channel: List<ChannelModel>,
-                            var favouriteTrack: List<FavouriteTracksModel>)
 }

@@ -8,10 +8,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
-import com.letitplay.maugry.letitplay.data_management.repo.query
-import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -29,17 +27,17 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
         val id: Int = getKey()
         presenter?.loadTracks(id) {
             Glide.with(context)
-                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.imageUrl}")
+                    .load("${GL_MEDIA_SERVICE_URL}${presenter.extendChannel?.channel?.imageUrl}")
                     .into(channel_page_banner)
 
             Glide.with(context)
-                    .load("${GL_MEDIA_SERVICE_URL}${presenter.vmChannel?.imageUrl}")
+                    .load("${GL_MEDIA_SERVICE_URL}${presenter.extendChannel?.channel?.imageUrl}")
                     .into(channel_page_preview)
-            val tags = presenter.vmChannel?.tags?.split(",")
+            val tags = presenter.extendChannel?.channel?.tags?.split(",")
 
-            channel_page_follow.data = FollowingChannelModel().query { it.equalTo("id", id) }.first()
+            channel_page_follow.data = presenter.extendChannel?.following
             channel_page_follow.setOnClickListener {
-                updateFollowers(id, channel_page_follow.isFollow())
+                updateFollowers(presenter.extendChannel, channel_page_follow.isFollow())
             }
 
             tags?.forEach {
@@ -47,51 +45,45 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                 view.text = it
                 channel_page_teg_container.addView(view)
             }
-            channel_page_followers.text = presenter.vmChannel?.subscriptionCount.toString()
+            channel_page_followers.text = presenter.extendChannel?.channel?.subscriptionCount.toString()
 
-            channel_page_title.text = presenter.vmChannel?.name
+            channel_page_title.text = presenter.extendChannel?.channel?.name
             recent_added_list.apply {
                 adapter = recentAddedListAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
-            recentAddedListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listenCount })
+            recentAddedListAdapter.setData(presenter.extendTrackList?.sortedBy { it.track?.listenCount })
 
             most_listened_list.apply {
                 adapter = mostListedListAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
-            mostListedListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listenCount })
+            mostListedListAdapter.setData(presenter.extendTrackList?.sortedBy { it.track?.listenCount })
             with_guests_list.apply {
                 adapter = withGuestsListAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
-            withGuestsListAdapter.setData(presenter.vmTrackList?.sortedBy { it.listenCount })
+            withGuestsListAdapter.setData(presenter.extendTrackList?.sortedBy { it.track?.listenCount })
         }
 
     }
 
-    private fun updateFollowers(channelId: Int?, isFollow: Boolean) {
+    private fun updateFollowers(extendedChannel: ExtendChannelModel?, isFollow: Boolean) {
 
         var followerModel: FollowersModel
         if (isFollow) followerModel = FollowersModel(1)
         else followerModel = FollowersModel(-1)
 
-        channelId?.let {
-            presenter?.updateChannelFollowers(channelId, followerModel) {
+        extendedChannel?.channel?.id?.let {
+            presenter?.updateChannelFollowers(extendedChannel, followerModel) {
                 presenter.updatedChannel?.let {
-                    var channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelId) }.first()
-                    channel.isFollowing = !isFollow
-                    channel.save()
-                    channel_page_follow.data = channel
+                    channel_page_follow.data = extendedChannel.following
                 }
             }
         }
-    }
-
-    private fun goToOtherView() {
     }
 
 }

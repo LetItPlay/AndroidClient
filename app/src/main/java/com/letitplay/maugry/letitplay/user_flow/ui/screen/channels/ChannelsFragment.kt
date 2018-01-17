@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
-import com.letitplay.maugry.letitplay.data_management.repo.query
-import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -30,7 +27,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
             }
             channelsListAdapter.onClick = this::goToOtherView
             channelsListAdapter.onFollowClick = this::updateFollowers
-            presenter.channelItemsList?.let {
+            presenter.extendChannelList?.let {
                 channelsListAdapter.data = it
             }
         })
@@ -42,19 +39,15 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         }
     }
 
-    private fun updateFollowers(channelItem: ChannelItemModel, isFollow: Boolean, position: Int) {
+    private fun updateFollowers(extendChannel: ExtendChannelModel, isFollow: Boolean, position: Int) {
 
         var followerModel: FollowersModel
         if (isFollow) followerModel = FollowersModel(1)
         else followerModel = FollowersModel(-1)
 
-        channelItem.channel?.id?.let {
-            presenter?.updateChannelFollowers(it, followerModel) {
+        extendChannel.channel?.id?.let {
+            presenter?.updateChannelFollowers(extendChannel, followerModel) {
                 presenter.updatedChannel?.let {
-                    var channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelItem.channel?.id) }.first()
-                    channel.isFollowing = !isFollow
-                    channel.save()
-                    channelItem.following = channel
                     channelsListAdapter.notifyItemChanged(position)
                 }
             }
