@@ -14,7 +14,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.SearchResultsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.PlaylistKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
@@ -81,7 +81,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             R.id.action_feed -> replaceHistory(FeedKey())
             R.id.action_trands -> replaceHistory(TrendsKey())
             R.id.action_channels -> replaceHistory(ChannelsKey())
-            R.id.action_search -> replaceHistory(SearchResultsKey())
+            R.id.action_search -> replaceHistory(PlaylistKey())
             R.id.action_profile -> replaceHistory(ProfileKey())
         }
         return true
