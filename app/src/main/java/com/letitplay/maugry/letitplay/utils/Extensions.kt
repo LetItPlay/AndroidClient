@@ -53,3 +53,9 @@ fun Pair<ChannelModel, TrackModel>.toAudioTrack(): AudioTrack {
             publishedAt = track.publishedAt
     )
 }
+
+fun String.splitTags(): List<String> {
+    return this.split(",")
+            .map(String::trim)
+            .filter(String::isNotEmpty)
+}
