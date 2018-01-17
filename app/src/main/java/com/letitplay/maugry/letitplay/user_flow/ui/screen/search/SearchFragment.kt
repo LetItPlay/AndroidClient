@@ -12,7 +12,12 @@ import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.repo.query
+import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchResultsAdapter
@@ -34,9 +39,29 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         super.onViewCreated(view, savedInstanceState)
         resultsAdapter.onChannelClick = this::toChannel
         resultsAdapter.onTrackClick = this::playTrack
+        resultsAdapter.onFollowClick = this::updateFollowers
         results_recycler?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = resultsAdapter
+        }
+    }
+
+    private fun updateFollowers(channelItem: ChannelItemModel, isFollow: Boolean, position: Int) {
+
+        var followerModel: FollowersModel
+        if (isFollow) followerModel = FollowersModel(1)
+        else followerModel = FollowersModel(-1)
+
+        channelItem.channel?.id?.let {
+            presenter?.updateChannelFollowers(it, followerModel) {
+                presenter.updatedChannel?.let {
+                    var channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelItem.channel?.id) }.first()
+                    channel.isFollowing = !isFollow
+                    channel.save()
+                    channelItem.following = channel
+                    resultsAdapter.notifyItemChanged(position)
+                }
+            }
         }
     }
 

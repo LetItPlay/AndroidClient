@@ -4,6 +4,8 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
 import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
@@ -14,6 +16,7 @@ import io.reactivex.functions.BiFunction
 object SearchPresenter : BasePresenter<IMvpView>() {
     var queryResult: Pair<List<ChannelItemModel>, List<AudioTrack>> = Pair(emptyList(), emptyList())
     var lastQuery: String? = null
+    var updatedChannel: ChannelModel? = null
 
     fun executeQuery(query: String, onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(
@@ -25,6 +28,16 @@ object SearchPresenter : BasePresenter<IMvpView>() {
                                 foundedChannels to foundedTracks
                             }),
                     onNextNonContext = { queryResult = it },
+                    onCompleteWithContext = onComplete
+            )
+    )
+
+    fun updateChannelFollowers(id: Int, body: FollowersModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+            ExecutionConfig(
+                    asyncObservable = ChannelManager.updateChannelFollowers(id, body),
+                    onNextNonContext = {
+                        updatedChannel = it
+                    },
                     onCompleteWithContext = onComplete
             )
     )

@@ -29,7 +29,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onChannelClick: ((ChannelModel) -> Unit)? = null
     var onTrackClick: ((AudioTrack) -> Unit)? = null
-    var onFollowClick: ((ChannelModel, Boolean, Int) -> Unit)? = null
+    var onFollowClick: ((ChannelItemModel, Boolean, Int) -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -51,7 +51,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 itemView.channel_follow.setOnClickListener {
                     if (adapterPosition != NO_POSITION) {
                         onFollowClick?.invoke(
-                                (data[adapterPosition] as ResultItem.ChannelItem).channelItemModel.channel!!,
+                                (data[adapterPosition] as ResultItem.ChannelItem).channelItemModel,
                                 it.channel_follow.isFollow(),
                                 adapterPosition
                         )
