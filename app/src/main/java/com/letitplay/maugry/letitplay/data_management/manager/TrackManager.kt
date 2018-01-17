@@ -25,10 +25,10 @@ object TrackManager : BaseManager() {
 
     fun updateFavouriteTrack (id:Int, body:LikeModel) = ServiceController.updateFavouriteTracks(id, body)
 
-    fun getTracksWithTag(tag: String) = get(
-            local = { TrackModel().query { it.contains("tags", tag) } },
+    fun getLastTracksWithTag(tag: String) = get(
+            local = { TrackModel().query { it.contains("tags", tag) }.sortedByDescending { it.publishedAt } },
             remoteWhen = { true },
-            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false } }
+            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false }.sortedByDescending { it.publishedAt } }
     )
 
     fun getFavouriteTracks() = get(

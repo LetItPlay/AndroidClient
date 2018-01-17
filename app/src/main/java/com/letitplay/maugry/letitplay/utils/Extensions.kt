@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 
 /*
 *       GROUP INFLATION
@@ -34,4 +37,19 @@ fun TextView.updateText(text: CharSequence?) {
     if (this.text != text) {
         this.text = text
     }
+}
+
+fun Pair<ChannelModel, TrackModel>.toAudioTrack(): AudioTrack {
+    val (channel, track) = this
+    return AudioTrack(
+            id = track.id!!,
+            url = "$GL_MEDIA_SERVICE_URL${track.audio?.fileUrl}",
+            title = track.name,
+            subtitle = channel.name,
+            imageUrl = "$GL_MEDIA_SERVICE_URL${track.image}",
+            channelTitle = channel.name,
+            length = track.audio?.lengthInSeconds,
+            listenCount = track.listenCount,
+            publishedAt = track.publishedAt
+    )
 }
