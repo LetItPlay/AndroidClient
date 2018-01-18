@@ -19,18 +19,32 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        presenter?.loadChannels({
-            channels_list.apply {
-                adapter = channelsListAdapter
-                layoutManager = LinearLayoutManager(context)
+        channels_list.apply {
+            adapter = channelsListAdapter.apply {
+                onClick = this@ChannelsFragment::goToOtherView
+                onFollowClick = this@ChannelsFragment::updateFollowers
             }
-            channelsListAdapter.onClick = this::goToOtherView
-            channelsListAdapter.onFollowClick = this::updateFollowers
+            layoutManager = LinearLayoutManager(context)
+        }
+        presenter?.loadChannels {
             presenter.extendChannelList?.let {
                 channelsListAdapter.data = it
             }
-        })
+        }
+        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
+        swipe_refresh.setOnRefreshListener {
+            presenter?.loadChannelsFromRemote(
+                    { _, _ ->
+                        swipe_refresh.isRefreshing = false
+                    },
+                    {
+                        presenter.extendChannelList?.let {
+                            channelsListAdapter.data = it
+                        }
+                        swipe_refresh.isRefreshing = false
+                    }
+            )
+        }
     }
 
     private fun goToOtherView(id: Int?) {

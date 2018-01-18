@@ -1,16 +1,16 @@
 package com.letitplay.maugry.letitplay.user_flow.business.channels
 
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
-import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
+import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
+import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 
 
 object ChannelPresenter : BasePresenter<IMvpView>() {
@@ -19,10 +19,13 @@ object ChannelPresenter : BasePresenter<IMvpView>() {
 
     var updatedChannel: ChannelModel? = null
 
-    fun loadChannels(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun loadChannels(triggerProgress: Boolean = true,
+                     onError: ((IMvpView?, Throwable) -> Unit)? = null,
+                     onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
+                    triggerProgress = triggerProgress,
                     asyncObservable = ChannelManager.getExtendChannel(),
-                    triggerProgress = false,
+                    onErrorWithContext = onError,
                     onNextNonContext = {
                         extendChannelList = it
                     },
@@ -31,9 +34,35 @@ object ChannelPresenter : BasePresenter<IMvpView>() {
             )
     )
 
+    fun loadChannelsFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+            ExecutionConfig(
+                    asyncObservable = Observable.zip(
+                            ChannelManager.getChannels(),
+                            ChannelManager.getFollowingChannels(),
+                            BiFunction { channels: List<ChannelModel>, followingChannels: List<FollowingChannelModel> ->
+                                Pair(channels, followingChannels)
+                            })
+                            .observeOn(Schedulers.io())
+                            .doOnNext { pair ->
+                                val extendChannelList: List<ExtendChannelModel> = pair.first.map {
+                                    val id = it.id
+                                    ExtendChannelModel(it.id, it, pair.second.find { it.id == id }
+                                    )
+                                }
+                                ChannelManager.updateExtendChannel(extendChannelList)
+                            },
+                    triggerProgress = false,
+                    onErrorWithContext = onError,
+                    onCompleteWithContext = {
+                        loadChannels(false, onError, onComplete)
+                    }
+            )
+    )
+
     fun updateChannelFollowers(channel: ExtendChannelModel, body: FollowersModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = ChannelManager.updateChannelFollowers(channel.id!!, body),
+                    triggerProgress = false,
                     onNextNonContext = {
                         channel.following?.let{
                             it.isFollowing = !it.isFollowing

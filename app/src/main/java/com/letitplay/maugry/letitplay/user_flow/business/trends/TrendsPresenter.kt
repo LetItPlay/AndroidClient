@@ -2,16 +2,14 @@ package com.letitplay.maugry.letitplay.user_flow.business.trends
 
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
-import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.*
-import com.letitplay.maugry.letitplay.data_management.repo.save
+import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
+import com.letitplay.maugry.letitplay.data_management.model.LikeModel
+import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
-import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
+import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
-import io.reactivex.Observable
-import io.reactivex.functions.Function3
 
 object TrendsPresenter : BasePresenter<IMvpView>() {
 
@@ -19,9 +17,13 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
     var playlist: List<AudioTrack>? = null
     var updatedTrack: TrackModel? = null
 
-    fun loadTracks(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun loadTracks(triggerProgress: Boolean = true,
+                   onError: ((IMvpView?, Throwable) -> Unit)? = null,
+                   onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
+                    triggerProgress = triggerProgress,
                     asyncObservable = TrackManager.getExtendTrack(),
+                    onErrorWithContext = onError,
                     onNextNonContext = {
                         extendTrackList = it.sortedByDescending { it.like?.likeCounts }
                         playlist = it.map {
@@ -41,6 +43,19 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     onCompleteWithContext = onComplete
             )
     )
+
+    fun loadTracksFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+                ExecutionConfig(
+                        asyncObservable = SplashPresenter.allUpdateObservable,
+                        triggerProgress = false,
+                        onErrorWithContext = onError,
+                        onCompleteWithContext = {
+                            loadTracks(false, onError, onComplete)
+                        }
+                )
+        )
+
+
 
     fun updateFavouriteTracks(id: Int, body: LikeModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(

@@ -7,8 +7,8 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
+import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
@@ -25,28 +25,43 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter?.loadTracks {
-            trend_list.apply {
-                adapter = trendsListAdapter
-                layoutManager = LinearLayoutManager(context)
+        trend_list.apply {
+            adapter = trendsListAdapter.apply {
+                onClickItem = { playTrack(it) }
+                onLikeClick = this@TrendsFragment::onLikeClick
+                musicService = this@TrendsFragment.musicService
             }
+            layoutManager = LinearLayoutManager(context)
+        }
+        presenter?.loadTracks {
             presenter.extendTrackList?.let {
                 trendsListAdapter.data = it
-                trendsListAdapter.musicService = musicService
-                trendsListAdapter.onClickItem = { playTrack(it) }
-                trendsListAdapter.onLikeClick = this::onLikeClick
             }
+        }
+
+        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
+        swipe_refresh.setOnRefreshListener {
+            presenter?.loadTracksFromRemote(
+                    { _, _ ->
+                        swipe_refresh.isRefreshing = false
+                    },
+                    {
+                        presenter.extendTrackList?.let {
+                            trendsListAdapter.data = it
+                        }
+                        swipe_refresh.isRefreshing = false
+                    }
+            )
         }
     }
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position:Int) {
-        var like: LikeModel
-        if (isLiked) like = LikeModel(-1, 1, 1)
-        else like = LikeModel(1, 1, 1)
+        val like: LikeModel = if (isLiked) LikeModel(-1, 1, 1)
+        else LikeModel(1, 1, 1)
         extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(it.toInt(), like) {
                 presenter.updatedTrack?.let {
-                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", extendTrack.track?.id) }.first()
+                    val track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", extendTrack.track?.id) }.first()
                     track.likeCounts = it.likeCount
                     track.isLiked = !isLiked
                     track.save()

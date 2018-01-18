@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
+import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -21,8 +22,11 @@ object FeedPresenter : BasePresenter<IMvpView>() {
     var playlist: List<AudioTrack>? = null
     var updatedTrack: TrackModel? = null
 
-    fun loadTracks(onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun loadTracks(triggerProgress: Boolean = true,
+                   onError: ((IMvpView?, Throwable) -> Unit)? = null,
+                   onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
+                    triggerProgress = triggerProgress,
                     asyncObservable = Observable.zip(
                             ChannelManager.getFollowingChannels(),
                             TrackManager.getExtendTrack(),
@@ -48,10 +52,21 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                             )
                         }
                     },
+                    onErrorWithContext = onError,
                     onCompleteWithContext = onComplete
             )
     )
 
+    fun loadTracksFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+            ExecutionConfig(
+                    asyncObservable = SplashPresenter.allUpdateObservable,
+                    triggerProgress = false,
+                    onErrorWithContext = onError,
+                    onCompleteWithContext = {
+                        loadTracks(false, onError, onComplete)
+                    }
+            )
+    )
 
     fun updateFavouriteTracks(extendTrack: ExtendTrackModel, body: LikeModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(

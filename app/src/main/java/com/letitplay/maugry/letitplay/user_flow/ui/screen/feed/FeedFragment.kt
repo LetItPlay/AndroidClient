@@ -25,28 +25,48 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        feed_list.apply {
+            adapter = feedListAdapter.apply {
+                musicService = this@FeedFragment.musicService
+                onLikeClick = this@FeedFragment::onLikeClick
+                onClickItem = { playTrack(it) }
+            }
+            layoutManager = LinearLayoutManager(context)
+        }
         presenter?.loadTracks {
             if (presenter.extendTrackList?.size != 0) {
-                feed_list.apply {
-                    adapter = feedListAdapter
-                    layoutManager = LinearLayoutManager(context)
-                }
                 presenter.extendTrackList?.let {
                     feedListAdapter.data = it
-                    feedListAdapter.musicService = musicService
-                    feedListAdapter.onClickItem = { playTrack(it) }
-                    feedListAdapter.onLikeClick = this::onLikeClick
                 }
             } else {
+                swipe_refresh.isEnabled = false
                 feed_no_tracks.visibility = View.VISIBLE
             }
+        }
+        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
+        swipe_refresh.setOnRefreshListener {
+            presenter?.loadTracksFromRemote(
+                    { _, _ ->
+                        swipe_refresh.isRefreshing = false
+                    },
+                    {
+                        if (presenter.extendTrackList?.size != 0) {
+                            presenter.extendTrackList?.let {
+                                feedListAdapter.data = it
+                            }
+                        } else {
+                            swipe_refresh.isEnabled = false
+                            feed_no_tracks.visibility = View.VISIBLE
+                        }
+                        swipe_refresh.isRefreshing = false
+                    }
+            )
         }
     }
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {
-        var like: LikeModel
-        if (isLiked) like = LikeModel(-1, 1, 1)
-        else like = LikeModel(1, 1, 1)
+        val like: LikeModel = if (isLiked) LikeModel(-1, 1, 1)
+        else LikeModel(1, 1, 1)
         extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(extendTrack, like) {
                 presenter.updatedTrack?.let {
