@@ -12,10 +12,7 @@ import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
@@ -47,7 +44,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         }
     }
 
-    private fun updateFollowers(channelItem: ChannelItemModel, isFollow: Boolean, position: Int) {
+    private fun updateFollowers(channelItem: ExtendChannelModel, isFollow: Boolean, position: Int) {
 
         var followerModel: FollowersModel
         if (isFollow) followerModel = FollowersModel(1)

@@ -1,12 +1,12 @@
 package com.letitplay.maugry.letitplay.data_management.manager
 
-import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
-import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
-import com.letitplay.maugry.letitplay.data_management.model.LikeModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
+import com.letitplay.maugry.letitplay.utils.toAudioTrack
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import com.gsfoxpro.musicservice.model.AudioTrack
 
 
 object TrackManager : BaseManager() {
@@ -23,10 +23,10 @@ object TrackManager : BaseManager() {
 
     fun updateFavouriteTrack(id: Int, body: LikeModel) = ServiceController.updateFavouriteTracks(id, body)
 
-    fun getTracksWithTag(tag: String) = get(
-            local = { TrackModel().query { it.contains("tags", tag) } },
-            remoteWhen = { true },
-            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false } }
+    fun getLastTracksWithTag(tag: String) = get(
+            local = { ExtendTrackModel().query { it.contains("track.tags", tag) }.sortedByDescending { it.track?.publishedAt } }
+//            remoteWhen = { true },
+//            remote = ServiceController.getTracks().map { it.filter { it.tags?.contains(tag) ?: false }.sortedByDescending { it.publishedAt } }
     )
 
     fun getFavouriteTracks() = get(
@@ -65,11 +65,23 @@ object TrackManager : BaseManager() {
             local = {ExtendTrackModel().query {it.equalTo("like.isLiked", true)  }}
     )
 
-    fun queryTracks(query: String): Observable<List<TrackModel>> = getTracks().map { tracks ->
-        tracks.filter { track ->
-            track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)
-        }
-    }
+
+
+    fun queryTracks(query: String): Observable<List<AudioTrack>> =
+            Observable.zip(ChannelManager.getExtendChannel(),
+                    getExtendTrack().map { tracks ->
+                        tracks.filter {
+                            val track = it.track!!
+                            track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)
+                        }
+                    },
+                    BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->
+                        tracks.map {
+                            val track = it.track!!
+                            val channel = channels.first { it.id == track.stationId }
+                            (channel.channel!! to track).toAudioTrack()
+                        }
+                    })
 
     infix fun Boolean?.or(other: Boolean?) = (other ?: false) || (this ?: false)
 }

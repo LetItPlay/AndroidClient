@@ -1,6 +1,5 @@
 package com.letitplay.maugry.letitplay.data_management.manager
 
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
@@ -8,7 +7,6 @@ import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelMode
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 
 
 object ChannelManager : BaseManager() {
@@ -50,24 +48,13 @@ object ChannelManager : BaseManager() {
             local = { ExtendChannelModel().query { it.equalTo("id", id) } }
     )
 
-    fun queryChannels(query: String): Observable<List<ChannelItemModel>> =
-            Observable.zip(
-                    getChannels().map { channels ->
-                        channels.filter { channel ->
-                            channel.name!!.contains(query) || channel.tags?.contains(query) ?: false
-                        }
-                    },
-                    getFollowingChannels(),
-                    BiFunction { foundedChannels, followingChannels ->
-                        foundedChannels.map { channel ->
-                            var followingChannel = followingChannels.find { channel.id == it.id }
-                            if (followingChannel == null) {
-                                followingChannel = FollowingChannelModel(channel.id, false)
-                                followingChannel.save()
-                            }
-                            ChannelItemModel(channel, followingChannel)
-                        }
-                    })
+    fun queryChannels(query: String): Observable<List<ExtendChannelModel>> = getExtendChannel().map { channels ->
+        channels.filter {
+            val channel = it.channel!!
+            channel.name!!.contains(query) || channel.tags?.contains(query) ?: false
+        }
+    }
+
 
     fun getFollowingChannels() = get(
             local = { FollowingChannelModel().queryAll() }

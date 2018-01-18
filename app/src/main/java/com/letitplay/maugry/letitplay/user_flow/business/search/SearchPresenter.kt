@@ -3,8 +3,8 @@ package com.letitplay.maugry.letitplay.user_flow.business.search
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
@@ -14,7 +14,7 @@ import io.reactivex.functions.BiFunction
 
 
 object SearchPresenter : BasePresenter<IMvpView>() {
-    var queryResult: Pair<List<ChannelItemModel>, List<AudioTrack>> = Pair(emptyList(), emptyList())
+    var queryResult: Pair<List<ExtendChannelModel>, List<AudioTrack>> = Pair(emptyList(), emptyList())
     var lastQuery: String? = null
     var updatedChannel: ChannelModel? = null
 
@@ -23,8 +23,8 @@ object SearchPresenter : BasePresenter<IMvpView>() {
                     asyncObservable = Observable.zip(
                             ChannelManager.queryChannels(query),
                             TrackManager.queryTracks(query),
-                            BiFunction<List<ChannelItemModel>, List<AudioTrack>, Pair<List<ChannelItemModel>, List<AudioTrack>>> {
-                                foundedChannels: List<ChannelItemModel>, foundedTracks: List<AudioTrack> ->
+                            BiFunction
+                            { foundedChannels: List<ExtendChannelModel>, foundedTracks: List<AudioTrack> ->
                                 foundedChannels to foundedTracks
                             }),
                     onNextNonContext = { queryResult = it },

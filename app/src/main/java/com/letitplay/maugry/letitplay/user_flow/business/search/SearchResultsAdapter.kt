@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.utils.loadImage
@@ -18,7 +18,7 @@ typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
 typealias TrackVH = TrackAdapter.TrackItemHolder
 
 sealed class ResultItem {
-    class ChannelItem(val channelItemModel: ChannelItemModel) : ResultItem()
+    class ChannelItem(val channelItemModel: ExtendChannelModel) : ResultItem()
     class TrackItem(val track: com.gsfoxpro.musicservice.model.AudioTrack) : ResultItem()
 }
 
@@ -31,7 +31,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onChannelClick: ((ChannelModel) -> Unit)? = null
     var onTrackClick: ((AudioTrack) -> Unit)? = null
-    var onFollowClick: ((ChannelItemModel, Boolean, Int) -> Unit)? = null
+    var onFollowClick: ((ExtendChannelModel, Boolean, Int) -> Unit)? = null
     var musicService: MusicService? = null
 
     override fun getItemViewType(position: Int): Int {
@@ -83,7 +83,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ChannelSmallViewHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item_small) {
 
-        fun update(channelItem: ChannelItemModel) {
+        fun update(channelItem: ExtendChannelModel) {
             itemView.apply {
                 channel_name.text = channelItem.channel!!.name
                 channel_follow.data = channelItem.following

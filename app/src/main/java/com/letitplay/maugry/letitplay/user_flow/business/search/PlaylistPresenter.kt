@@ -3,9 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.business.search
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.PlaylistModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
@@ -20,16 +18,16 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
     fun getPlaylists(onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
-                            ChannelManager.getChannels(),
+                            ChannelManager.getExtendChannel(),
                             TrackManager.getLastTracksWithTag("новости"),
-                            BiFunction { channels: List<ChannelModel>, tracks: List<TrackModel> ->
+                            BiFunction { channels: List<ExtendChannelModel>, extTracks: List<ExtendTrackModel> ->
                                 var totalTime = 0
                                 val tracksInPlaylist: MutableList<TrackModel> = mutableListOf()
-                                for (track in tracks) {
-                                    val trackDuration = track.audio!!.lengthInSeconds!!
+                                for (extTrack in extTracks) {
+                                    val trackDuration = extTrack.track?.audio!!.lengthInSeconds!!
                                     if (trackDuration == 0) continue
                                     if (trackDuration + totalTime <= PLAYLIST_DURATION) {
-                                        tracksInPlaylist.add(track)
+                                        tracksInPlaylist.add(extTrack.track!!)
                                         totalTime += trackDuration
                                     }
                                     if (totalTime >= PLAYLIST_DURATION) {
@@ -38,7 +36,7 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
                                 }
                                 val tracksWithChannels: List<AudioTrack> = tracksInPlaylist.map { track ->
                                     val channel = channels.first { it.id == track.stationId }
-                                    (channel to track).toAudioTrack()
+                                    (channel.channel!! to track).toAudioTrack()
                                 }
                                 PlaylistModel("Актуальные новости за 30 минут",
                                         "Подборка актуальных новостей в виде 30-минутного плейлиста",
