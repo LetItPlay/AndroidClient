@@ -39,15 +39,15 @@ fun TextView.updateText(text: CharSequence?) {
     }
 }
 
-fun Pair<ChannelModel, TrackModel>.toAudioTrack(): AudioTrack {
+fun Pair<ChannelModel?, TrackModel?>.toAudioTrack(): AudioTrack {
     val (channel, track) = this
     return AudioTrack(
-            id = track.id!!,
+            id = track?.id!!,
             url = "$GL_MEDIA_SERVICE_URL${track.audio?.fileUrl}",
             title = track.name,
-            subtitle = channel.name,
+            subtitle = channel?.name,
             imageUrl = "$GL_MEDIA_SERVICE_URL${track.image}",
-            channelTitle = channel.name,
+            channelTitle = channel?.name,
             length = track.audio?.lengthInSeconds,
             listenCount = track.listenCount,
             publishedAt = track.publishedAt

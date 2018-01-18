@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.utils.loadImage
+import com.letitplay.maugry.letitplay.utils.splitTags
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 
@@ -48,7 +49,8 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
                 channel_title.text = extendChannelModel.channel?.name
                 follower_count.text = extendChannelModel.channel?.subscriptionCount.toString()
                 channel_logo.loadImage(extendChannelModel.channel?.imageUrl)
-                val tags = extendChannelModel.channel?.tags?.split(",")?.map(String::trim)?.filter(String::isNotEmpty)
+                tag_container.removeNotFullVisible = true
+                val tags = extendChannelModel.channel?.tags?.splitTags()
                 if (tags != null)
                     tag_container.setTagList(tags)
             }

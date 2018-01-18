@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="130dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="4dp"
@@ -28,37 +29,51 @@
         app:layout_constraintEnd_toEndOf="@+id/channel_page_track_preview"
         app:layout_constraintStart_toStartOf="@+id/channel_page_track_preview" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
+        app:layout_constraintEnd_toEndOf="@+id/channel_page_info_container"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/channel_page_last_update"
+        app:layout_constraintTop_toTopOf="@+id/channel_page_info_container">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_play" />
+
+        <TextView
+            android:id="@+id/channel_page_playing_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:textColor="#4a4a4a"
+            android:textSize="12dp"
+            tools:text="0000" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/channel_page_last_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:text="2d ago"
+        android:layout_marginTop="8dp"
+        android:text="2d."
         android:textColor="#4a4a4a"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
-        app:layout_constraintStart_toStartOf="@+id/channel_page_info_container"
-        app:layout_constraintTop_toTopOf="@+id/channel_page_info_container" />
-
-    <ImageView
-        android:id="@+id/channel_page_play_icon"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:src="@drawable/plays_ic"
-        app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
-        app:layout_constraintEnd_toStartOf="@+id/channel_page_play"
-        app:layout_constraintTop_toTopOf="@+id/channel_page_info_container" />
-
-    <TextView
-        android:id="@+id/channel_page_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="276"
-        android:textColor="#4a4a4a"
-        android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
-        app:layout_constraintEnd_toEndOf="@+id/channel_page_info_container"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/channel_page_track_preview"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/channel_page_info_container" />
 
     <TextView

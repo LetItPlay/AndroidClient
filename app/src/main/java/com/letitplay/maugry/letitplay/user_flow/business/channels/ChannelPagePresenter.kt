@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.business.channels
 
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -9,16 +10,19 @@ import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
+import com.letitplay.maugry.letitplay.utils.toAudioTrack
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-
 
 object ChannelPagePresenter : BasePresenter<IMvpView>() {
 
     var extendTrackList: List<ExtendTrackModel>? = null
     var extendChannel: ExtendChannelModel? = null
     var updatedChannel: ChannelModel? = null
+    var playlist: List<AudioTrack>? = null
 
+    val recentTracks: List<ExtendTrackModel>
+        get() = extendTrackList?.sortedByDescending { it.track!!.publishedAt } ?: emptyList()
 
     fun loadTracks(id: Int, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
@@ -32,6 +36,9 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
                     onNextNonContext = { (channel, tracks) ->
                         extendTrackList = tracks
                         extendChannel = channel
+                        playlist = tracks.map {
+                            (channel?.channel to it.track).toAudioTrack()
+                        }
                     },
                     onCompleteWithContext = onComplete
 

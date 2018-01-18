@@ -2,11 +2,15 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelAdapter
+import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import kotlinx.android.synthetic.main.channels_fragment.*
@@ -16,17 +20,23 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
 
     private var channelsListAdapter = ChannelAdapter()
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return super.onCreateView(inflater, container, savedInstanceState).also {
+            val recycler = it?.findViewById<RecyclerView>(R.id.channels_list)
+            recycler?.apply {
+                adapter = channelsListAdapter.apply {
+                    onClick = this@ChannelsFragment::gotoChannelPage
+                    onFollowClick = this@ChannelsFragment::updateFollowers
+                }
+                layoutManager = LinearLayoutManager(context)
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        channels_list.apply {
-            adapter = channelsListAdapter.apply {
-                onClick = this@ChannelsFragment::goToOtherView
-                onFollowClick = this@ChannelsFragment::updateFollowers
-            }
-            layoutManager = LinearLayoutManager(context)
-        }
-        presenter?.loadChannels {
+        channels_list.setHasFixedSize(true)
+        presenter?.loadChannels({
             presenter.extendChannelList?.let {
                 channelsListAdapter.data = it
             }
@@ -47,8 +57,9 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         }
     }
 
-    private fun goToOtherView(id: Int?) {
+    private fun gotoChannelPage(id: Int?) {
         id?.let {
+            ChannelPagePresenter.extendChannel = presenter?.extendChannelList?.first { it.id == id }
             navigationActivity.navigateTo(ChannelPageKey(id))
         }
     }

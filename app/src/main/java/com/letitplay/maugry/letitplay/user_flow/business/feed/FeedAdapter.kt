@@ -8,7 +8,7 @@ import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.feed_item.view.*
 import java.util.*
@@ -52,11 +52,11 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
 
         fun update(extendTrackModel: ExtendTrackModel) {
             itemView.apply {
-                val data = DataHelper.getData(extendTrackModel.track?.publishedAt!!, context)
+                val data = DateHelper.getLongPastDate(extendTrackModel.track?.publishedAt!!, context)
                 feed_like.like = extendTrackModel.like
                 feed_playing_now.trackListenerCount = extendTrackModel.track?.listenCount
                 feed_playing_now.trackUrl = "$GL_MEDIA_SERVICE_URL${extendTrackModel.track?.audio?.fileUrl}"
-                feed_time.text = DataHelper.getTime(extendTrackModel.track?.audio?.lengthInSeconds)
+                feed_time.text = DateHelper.getTime(extendTrackModel.track?.audio?.lengthInSeconds)
                 feed_track_title.text = extendTrackModel.track?.name
                 feed_channel_title.text = extendTrackModel.channel?.name
                 feed_track_last_update.text = data

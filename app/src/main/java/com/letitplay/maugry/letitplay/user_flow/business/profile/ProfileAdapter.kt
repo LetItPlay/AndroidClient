@@ -7,9 +7,8 @@ import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.loadImage
-import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.track_item.view.*
 
 
@@ -44,11 +43,11 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() 
 
         fun update(extendTrack: ExtendTrackModel) {
             itemView.apply {
-                track_last_seen.text = DataHelper.getData(extendTrack.track?.publishedAt!!, context)
+                track_last_seen.text = DateHelper.getLongPastDate(extendTrack.track?.publishedAt!!, context)
                 track_playing_now.trackListenerCount = extendTrack.track?.listenCount
                 track_playing_now.trackUrl = "${GL_MEDIA_SERVICE_URL}${extendTrack.track?.audio?.fileUrl}"
                 channel_name.text = extendTrack.channel?.name
-                track_time.text = DataHelper.getTime(extendTrack.track?.audio?.lengthInSeconds)
+                track_time.text = DateHelper.getTime(extendTrack.track?.audio?.lengthInSeconds)
                 track_name.text = extendTrack.track?.name
                 track_logo.loadImage(extendTrack.track?.image)
             }

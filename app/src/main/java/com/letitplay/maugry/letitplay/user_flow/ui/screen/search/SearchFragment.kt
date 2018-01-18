@@ -4,15 +4,16 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.*
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
@@ -20,7 +21,6 @@ import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchResultsAdapter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
-import kotlinx.android.synthetic.main.search_fragment.*
 
 
 class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter) {
@@ -32,28 +32,36 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)?.also {
+            resultsAdapter.onChannelClick = this::toChannel
+            resultsAdapter.onTrackClick = this::playTrack
+            resultsAdapter.onFollowClick = this::updateFollowers
+            resultsAdapter.musicService = musicService
+            val resultsRecyclerView = it.findViewById<RecyclerView>(R.id.results_recycler)
+            resultsRecyclerView?.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = resultsAdapter
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        resultsAdapter.onChannelClick = this::toChannel
-        resultsAdapter.onTrackClick = this::playTrack
-        resultsAdapter.onFollowClick = this::updateFollowers
-        resultsAdapter.musicService = musicService
-        results_recycler?.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = resultsAdapter
+        presenter?.lastQuery?.let {
+            performQuery(it)
         }
     }
 
     private fun updateFollowers(channelItem: ExtendChannelModel, isFollow: Boolean, position: Int) {
 
-        var followerModel: FollowersModel
-        if (isFollow) followerModel = FollowersModel(1)
-        else followerModel = FollowersModel(-1)
+        val followerModel: FollowersModel = if (isFollow) FollowersModel(1)
+        else FollowersModel(-1)
 
         channelItem.channel?.id?.let {
             presenter?.updateChannelFollowers(it, followerModel) {
                 presenter.updatedChannel?.let {
-                    var channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelItem.channel?.id) }.first()
+                    val channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelItem.channel?.id) }.first()
                     channel.isFollowing = !isFollow
                     channel.save()
                     channelItem.following = channel
@@ -79,6 +87,16 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         presenter?.lastQuery = null
     }
 
+    private fun performQuery(query: String) {
+        presenter?.executeQuery(query) {
+            val (channels, tracks) = presenter.queryResult
+            resultsAdapter.data = channels
+                    .map(ResultItem::ChannelItem)
+                    .plus(tracks.map(ResultItem::TrackItem))
+        }
+    }
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu_item, menu)
@@ -96,12 +114,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchView.clearFocus()
-                presenter?.executeQuery(query) {
-                    val (channels, tracks) = presenter.queryResult
-                    resultsAdapter.data = channels
-                            .map(ResultItem::ChannelItem)
-                            .plus(tracks.map(ResultItem::TrackItem))
-                }
+                performQuery(query)
                 return true
             }
 

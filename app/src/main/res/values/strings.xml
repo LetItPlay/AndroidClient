@@ -18,12 +18,6 @@
     <!--FEED-->
     <string name="playing_now">playing now</string>
     <string name="feed_no_tracks">Пока здесь нет треков.\nПодпишитесь на один из каналов во вкладке «Каналы».</string>
-    <string name="feed_years">years</string>
-    <string name="feed_months">months</string>
-    <string name="feed_days">days</string>
-    <string name="feed_hours">hours</string>
-    <string name="feed_minutes">minutes</string>
-    <string name="feed_seconds">seconds</string>
 
     <!--TRACK-->
     <string name="track_recent_added">Recent added</string>
@@ -31,6 +25,7 @@
     <!--PROFILE-->
     <string name="profile_change_language">Поменять язык на русский</string>
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
+    <string name="profile_user_name">ваш будущий про...</string>
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>
@@ -40,4 +35,36 @@
     <string name="language_logo_text">let it play</string>
     <string name="language_en">English</string>
     <string name="language_ru">Russia</string>
+
+    <plurals name="years_long">
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
+    <plurals name="months_long">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d month</item>
+    </plurals>
+    <plurals name="days_long">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="hours_long">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="minutes_long">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="seconds_long">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+
+    <string name="years_short">%dy. ago</string>
+    <string name="months_short">%dm. ago</string>
+    <string name="days_short">%dd. ago</string>
+    <string name="hours_short">%dh. ago</string>
+    <string name="minutes_short">%dmin. ago</string>
+    <string name="seconds_short">%dsec. ago</string>
 </resources>

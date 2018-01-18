@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
+import android.annotation.SuppressLint
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -11,6 +12,7 @@ import com.zhuinden.simplestack.navigator.ViewChangeHandler
 import com.zhuinden.simplestack.navigator.changehandlers.SegueViewChangeHandler
 import kotlinx.android.parcel.Parcelize
 
+@SuppressLint("ParcelCreator")
 @Parcelize
 class ChannelsKey : BaseKey(), StateKey {
 

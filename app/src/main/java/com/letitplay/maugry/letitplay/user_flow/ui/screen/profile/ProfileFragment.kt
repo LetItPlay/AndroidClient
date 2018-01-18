@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfileAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfilePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 
@@ -29,7 +29,7 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
         presenter?.loadFavouriteTracks {
             presenter.extendTrackList?.let {
                 profile_track_count.text = it.count().toString()
-                profile_tracks_time.text = DataHelper.getTime(it.sumBy { it.track?.audio?.lengthInSeconds ?: 0 })
+                profile_tracks_time.text = DateHelper.getTime(it.sumBy { it.track?.audio?.lengthInSeconds ?: 0 })
                 profileListAdapter.musicService = musicService
                 profileListAdapter.onClickItem = { playTrack(it) }
                 profileListAdapter.data = it
