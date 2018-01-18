@@ -36,7 +36,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         channels_list.setHasFixedSize(true)
-        presenter?.loadChannels({
+        presenter?.loadChannels {
             presenter.extendChannelList?.let {
                 channelsListAdapter.data = it
             }
@@ -65,10 +65,8 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     }
 
     private fun updateFollowers(extendChannel: ExtendChannelModel, isFollow: Boolean, position: Int) {
-
-        var followerModel: FollowersModel
-        if (isFollow) followerModel = FollowersModel(1)
-        else followerModel = FollowersModel(-1)
+        val followerModel: FollowersModel = if (isFollow) FollowersModel(1)
+        else FollowersModel(-1)
 
         extendChannel.channel?.id?.let {
             presenter?.updateChannelFollowers(extendChannel, followerModel) {
