@@ -31,6 +31,7 @@
     <!--PROFILE-->
     <string name="profile_change_language">Поменять язык на русский</string>
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
+    <string name="profile_user_name">ваш будущий про...</string>
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>

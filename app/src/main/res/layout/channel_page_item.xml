@@ -40,21 +40,11 @@
         app:layout_constraintStart_toStartOf="@+id/channel_page_info_container"
         app:layout_constraintTop_toTopOf="@+id/channel_page_info_container" />
 
-    <ImageView
-        android:id="@+id/channel_page_play_icon"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:src="@drawable/plays_ic"
-        app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
-        app:layout_constraintEnd_toStartOf="@+id/channel_page_play"
-        app:layout_constraintTop_toTopOf="@+id/channel_page_info_container" />
-
-    <TextView
-        android:id="@+id/channel_page_play"
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.PlayingNowWidget
+        android:id="@+id/channel_page_playing_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="276"
         android:textColor="#4a4a4a"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
