@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.language
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.Splash
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

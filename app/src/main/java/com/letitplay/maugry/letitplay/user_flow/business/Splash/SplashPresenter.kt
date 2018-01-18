@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.business.language
+package com.letitplay.maugry.letitplay.user_flow.business.Splash
 
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
@@ -7,7 +7,6 @@ import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.functions.Function4
 import io.reactivex.schedulers.Schedulers
 
@@ -43,8 +42,6 @@ object SplashPresenter : BasePresenter<IMvpView>() {
                                         }
                                         ChannelManager.updateExtendChannel(extendChannelList)
                                     },
-                            onNextNonContext = {
-                            },
                             triggerProgress = false,
                             onCompleteWithContext = onComplete
                     )

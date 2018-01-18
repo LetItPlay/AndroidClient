@@ -1,10 +1,10 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.language
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.Splash
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.business.language.SplashPresenter
+import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 
