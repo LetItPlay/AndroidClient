@@ -71,6 +71,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
     fun updateFavouriteTracks(extendTrack: ExtendTrackModel, body: LikeModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),
+                    triggerProgress = false,
                     onNextNonContext = {
                         updatedTrack = it
                         extendTrack.like?.let {
