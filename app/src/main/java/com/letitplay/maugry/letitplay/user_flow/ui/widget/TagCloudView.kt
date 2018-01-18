@@ -34,6 +34,7 @@ class TagCloudView : FrameLayout {
     }
 
     fun setTagList(tags: List<Tag>) {
+        if (this.tags == tags) return
         post {
             tag_cloud_flex.removeAllViews()
             this.tags = tags
