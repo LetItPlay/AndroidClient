@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.data_management.manager
 
 import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.repo.*
@@ -24,8 +25,29 @@ object ChannelManager : BaseManager() {
 
     fun updateChannelFollowers(id: Int, body: FollowersModel) = ServiceController.updateChannelFollowers(id, body)
 
-    fun getChannelPiece(id: Int) = get(
-            local = { ChannelModel().query { it.equalTo("id", id) } }
+    fun updateExtendChannel(extendChannelList: List<ExtendChannelModel>) {
+        ExtendChannelModel().deleteAll()
+        extendChannelList.forEach {
+            if (it.following == null) {
+                val followingChannel = FollowingChannelModel(it.id, false)
+                updateFollowingChannels(followingChannel)
+                it.following = followingChannel
+            }
+        }
+        extendChannelList.saveAll()
+    }
+
+    fun updateFollowingChannels(followingChannel: FollowingChannelModel) {
+        followingChannel.save()
+
+    }
+
+    fun getExtendChannel() = get(
+            local = { ExtendChannelModel().queryAll() }
+    )
+
+    fun getExtendChannelPiece(id: Int) = get(
+            local = { ExtendChannelModel().query { it.equalTo("id", id) } }
     )
 
     fun queryChannels(query: String): Observable<List<ChannelItemModel>> =

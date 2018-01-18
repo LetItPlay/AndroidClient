@@ -34,4 +34,10 @@
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>
+
+    <!--LANGUAGE-->
+    <string name="language_select_language">Select your language</string>
+    <string name="language_logo_text">let it play</string>
+    <string name="language_en">English</string>
+    <string name="language_ru">Russia</string>
 </resources>

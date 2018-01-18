@@ -231,7 +231,7 @@ abstract class BasePresenter<V>(
     }
 
     private fun <O> onComplete(conf: ExecutionConfig<O, V>, replaySubject: ReplaySubject<O>): () -> Unit = {
-        stageProgress(hide = conf.triggerProgress, mvp = conf.mvp)
+
         conf.onCompleteNonContext?.invoke()
         if (conf.isAlive)
             conf.onCompleteWithContext?.invoke(conf.mvp)
@@ -239,5 +239,6 @@ abstract class BasePresenter<V>(
             Timber.e("Conf-context is dead, context-dependent action wont be invoked!")
         // todo: onError or onComplete makes RPS throw undeliverable error!!!
         replaySubject.onComplete()
+        stageProgress(hide = conf.triggerProgress, mvp = conf.mvp)
     }
 }

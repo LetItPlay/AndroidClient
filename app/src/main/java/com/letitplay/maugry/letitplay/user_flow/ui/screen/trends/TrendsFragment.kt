@@ -8,7 +8,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
-import com.letitplay.maugry.letitplay.data_management.model.FeedItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
@@ -30,7 +30,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
                 adapter = trendsListAdapter
                 layoutManager = LinearLayoutManager(context)
             }
-            presenter.feedItemList?.let {
+            presenter.extendTrackList?.let {
                 trendsListAdapter.data = it
                 trendsListAdapter.musicService = musicService
                 trendsListAdapter.onClickItem = { playTrack(it) }
@@ -39,18 +39,18 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         }
     }
 
-    private fun onLikeClick(feedItem: FeedItemModel, isLiked: Boolean, position:Int) {
+    private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position:Int) {
         var like: LikeModel
         if (isLiked) like = LikeModel(-1, 1, 1)
         else like = LikeModel(1, 1, 1)
-        feedItem.track?.id?.let {
+        extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(it.toInt(), like) {
                 presenter.updatedTrack?.let {
-                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", feedItem.track?.id) }.first()
+                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", extendTrack.track?.id) }.first()
                     track.likeCounts = it.likeCount
                     track.isLiked = !isLiked
                     track.save()
-                    feedItem.like = track
+                    extendTrack.like = track
                     trendsListAdapter.notifyItemChanged(position)
                 }
             }
@@ -63,7 +63,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
-        val playlist = presenter?.feedItemList?.map {
+        val playlist = presenter?.extendTrackList?.map {
             AudioTrack(
                     id = it.track?.id!!,
                     url = "${GL_MEDIA_SERVICE_URL}${it.track?.audio?.fileUrl}",

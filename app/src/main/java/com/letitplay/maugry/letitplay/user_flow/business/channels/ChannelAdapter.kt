@@ -4,21 +4,20 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ChannelItemModel
+import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.utils.loadImage
-import com.letitplay.maugry.letitplay.utils.splitTags
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 
 class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
-    var data: List<ChannelItemModel> = ArrayList()
+    var data: List<ExtendChannelModel> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
     var onClick: ((Int?) -> Unit)? = null
-    var onFollowClick: ((ChannelItemModel, Boolean, Int) -> Unit)? = null
+    var onFollowClick: ((ExtendChannelModel, Boolean, Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ChannelViewHolder?, position: Int) {
         holder?.update(data[position])
@@ -43,13 +42,13 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
 
     class ChannelViewHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channels_item) {
 
-        fun update(channelModel: ChannelItemModel) {
+        fun update(extendChannelModel: ExtendChannelModel) {
             itemView.apply {
-                channel_follow.data = channelModel.following
-                channel_title.text = channelModel.channel?.name
-                follower_count.text = channelModel.channel?.subscriptionCount.toString()
-                channel_logo.loadImage(channelModel.channel?.imageUrl)
-                val tags = channelModel.channel?.tags?.splitTags()
+                channel_follow.data = extendChannelModel.following
+                channel_title.text = extendChannelModel.channel?.name
+                follower_count.text = extendChannelModel.channel?.subscriptionCount.toString()
+                channel_logo.loadImage(context, extendChannelModel.channel?.imageUrl)
+                val tags = extendChannelModel.channel?.tags?.split(",")?.map(String::trim)?.filter(String::isNotEmpty)
                 if (tags != null)
                     tag_container.setTagList(tags)
             }

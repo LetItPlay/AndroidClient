@@ -12,19 +12,6 @@ class FragmentStateChanger(val fragmentManager: android.support.v4.app.FragmentM
     fun handleStateChange(stateChange: StateChange, menuType: MenuType) {
 
         fragmentManager.beginTransaction().apply {
-
-//            when (menuType) {
-//                MenuType.PLAYER ->
-//                    when (stateChange.direction) {
-//                        StateChange.FORWARD -> {
-//                            setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_to_top, R.anim.slide_in_from_bottom, R.anim.slide_out_to_top)
-//                        }
-//                        StateChange.BACKWARD -> {
-//                            setCustomAnimations(R.anim.slide_in_from_top, R.anim.slide_out_to_bottom, R.anim.slide_in_from_top, R.anim.slide_out_to_bottom)
-//                        }
-//                    }
-//            }
-
             val previousState: List<BaseKey> = stateChange.getPreviousState()
             val newState: List<BaseKey> = stateChange.getNewState()
 
