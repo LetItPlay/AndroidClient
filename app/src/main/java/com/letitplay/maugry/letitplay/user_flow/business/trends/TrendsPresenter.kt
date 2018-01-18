@@ -23,7 +23,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
             ExecutionConfig(
                     asyncObservable = TrackManager.getExtendTrack(),
                     onNextNonContext = {
-                        extendTrackList = it
+                        extendTrackList = it.sortedByDescending { it.like?.likeCounts }
                         playlist = it.map {
                             AudioTrack(
                                     id = it.track?.id!!,

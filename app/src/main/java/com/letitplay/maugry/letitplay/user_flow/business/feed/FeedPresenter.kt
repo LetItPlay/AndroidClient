@@ -32,7 +32,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                     onNextNonContext = { (followingChannels, track) ->
                         extendTrackList = track.filter {
                             val idStation = it.track?.stationId
-                            followingChannels.find { it.id == idStation && it.isFollowing} != null
+                            followingChannels.find { it.id == idStation && it.isFollowing } != null
                         }
                         playlist = extendTrackList?.map {
                             AudioTrack(
@@ -53,11 +53,17 @@ object FeedPresenter : BasePresenter<IMvpView>() {
     )
 
 
-    fun updateFavouriteTracks(id: Int, body: LikeModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun updateFavouriteTracks(extendTrack: ExtendTrackModel, body: LikeModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
-                    asyncObservable = TrackManager.updateFavouriteTrack(id, body),
+                    asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),
                     onNextNonContext = {
                         updatedTrack = it
+                        extendTrack.like?.let {
+                            it.likeCounts = updatedTrack?.likeCount
+                            it.isLiked = !it.isLiked
+                            TrackManager.updateFavouriteTrack(it)
+                        }
+
                     },
                     onCompleteWithContext = onComplete
             )

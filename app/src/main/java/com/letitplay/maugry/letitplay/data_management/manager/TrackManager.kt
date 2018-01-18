@@ -61,6 +61,10 @@ object TrackManager : BaseManager() {
             local = {ExtendTrackModel().query { it.equalTo("track.stationId", id) }}
     )
 
+    fun getFavouriteExtendTrack() = get(
+            local = {ExtendTrackModel().query {it.equalTo("like.isLiked", true)  }}
+    )
+
     fun queryTracks(query: String): Observable<List<TrackModel>> = getTracks().map { tracks ->
         tracks.filter { track ->
             track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)

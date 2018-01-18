@@ -7,7 +7,9 @@ import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.functions.Function4
+import io.reactivex.schedulers.Schedulers
 
 
 object SplashPresenter : BasePresenter<IMvpView>() {
@@ -23,21 +25,27 @@ object SplashPresenter : BasePresenter<IMvpView>() {
                                     Function4
                                     { tracks: List<TrackModel>, channel: List<ChannelModel>, favouriteTrack: List<FavouriteTracksModel>, followingChannels: List<FollowingChannelModel> ->
                                         LanguageViewModel(tracks, channel, favouriteTrack, followingChannels)
-                                    }),
-                            onNextNonContext = { model ->
-                                val extendTrackList: List<ExtendTrackModel> = model.tracks.map {
-                                    val id = it.stationId
-                                    ExtendTrackModel(it.id, it, model.channel.find { it.id == id },
-                                            model.favouriteTrack.find { it.id?.toInt() == id })
-                                }
-                                TrackManager.updateExtendTrackModel(extendTrackList)
-                                val extendChannelList: List<ExtendChannelModel> = model.channel.map {
-                                    val id = it.id
-                                    ExtendChannelModel(it.id, it, model.followingChannels.find { it.id == id }
-                                    )
-                                }
-                                ChannelManager.updateExtendChannel(extendChannelList)
+                                    })
+                                    .observeOn(Schedulers.io())
+                                    .doOnNext {
+                                        model ->
+                                        val extendTrackList: List<ExtendTrackModel> = model.tracks.map {
+                                            val stationId = it.stationId
+                                            val trackId = it.id
+                                            ExtendTrackModel(trackId, it, model.channel.find { it.id == stationId },
+                                                    model.favouriteTrack.find { it.id == trackId })
+                                        }
+                                        TrackManager.updateExtendTrackModel(extendTrackList)
+                                        val extendChannelList: List<ExtendChannelModel> = model.channel.map {
+                                            val id = it.id
+                                            ExtendChannelModel(it.id, it, model.followingChannels.find { it.id == id }
+                                            )
+                                        }
+                                        ChannelManager.updateExtendChannel(extendChannelList)
+                                    },
+                            onNextNonContext = {
                             },
+                            triggerProgress = false,
                             onCompleteWithContext = onComplete
                     )
             )

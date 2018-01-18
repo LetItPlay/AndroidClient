@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 
 
-class SplashFragment : BaseFragment<SplashPresenter>(R.layout.language_fragment, SplashPresenter) {
+class SplashFragment : BaseFragment<SplashPresenter>(R.layout.splash_fragment, SplashPresenter) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

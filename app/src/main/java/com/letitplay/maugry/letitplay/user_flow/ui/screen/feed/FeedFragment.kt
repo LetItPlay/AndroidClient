@@ -46,13 +46,8 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         if (isLiked) like = LikeModel(-1, 1, 1)
         else like = LikeModel(1, 1, 1)
         extendTrack.track?.id?.let {
-            presenter?.updateFavouriteTracks(it.toInt(), like) {
+            presenter?.updateFavouriteTracks(extendTrack, like) {
                 presenter.updatedTrack?.let {
-                    var track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", extendTrack.track?.id) }.first()
-                    track.likeCounts = it.likeCount
-                    track.isLiked = !isLiked
-                    track.save()
-                    extendTrack.like = track
                     feedListAdapter.notifyItemChanged(position)
                 }
             }
@@ -64,7 +59,6 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
-
         presenter?.playlist?.let {
             feedRepo = MusicRepo(it)
         }

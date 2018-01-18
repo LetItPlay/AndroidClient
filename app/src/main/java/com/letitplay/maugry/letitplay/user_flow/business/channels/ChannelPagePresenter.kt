@@ -28,6 +28,7 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
                             BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->
                                 Pair(channels.firstOrNull(), tracks)
                             }),
+                    triggerProgress = false,
                     onNextNonContext = { (channel, tracks) ->
                         extendTrackList = tracks
                         extendChannel = channel
