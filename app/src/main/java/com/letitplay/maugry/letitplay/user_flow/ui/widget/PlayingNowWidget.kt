@@ -33,14 +33,22 @@ class PlayingNowWidget : MusicPlayer {
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
         if (metadata.description.mediaUri.toString() == trackUrl) {
-            playing_now.visibility = View.VISIBLE
-            listener_count.visibility = View.INVISIBLE
+            showNowPlaying()
         }
         else {
-            listener_count.visibility = View.VISIBLE
-            playing_now.visibility = View.INVISIBLE
-            listener_count.text = trackListenerCount.toString()
+            showListenCount()
         }
+    }
+
+    fun showNowPlaying() {
+        playing_now.visibility = View.VISIBLE
+        listener_count.visibility = View.INVISIBLE
+    }
+
+    fun showListenCount() {
+        listener_count.visibility = View.VISIBLE
+        playing_now.visibility = View.INVISIBLE
+        listener_count.text = trackListenerCount.toString()
     }
 
     override fun updateDuration(durationMs: Long) {

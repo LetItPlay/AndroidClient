@@ -2,21 +2,18 @@ package com.letitplay.maugry.letitplay.user_flow.business.channels
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.gsfoxpro.musicservice.service.MusicService
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.channel_page_item.view.*
-import kotlinx.android.synthetic.main.feed_item.view.*
 
 
 class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageItemHolder>() {
 
     private var data: List<ExtendTrackModel> = ArrayList()
     var onClickItem: ((Long) -> Unit)? = null
-    var musicService: MusicService? = null
 
     override fun onBindViewHolder(holder: ChannelPageAdapter.ChannelPageItemHolder, position: Int) {
         holder.update(data[position])
@@ -38,7 +35,6 @@ class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageIt
                     onClickItem?.invoke(data[adapterPosition].track?.id!!)
                 }
             }
-            itemView.channel_page_playing_now.mediaSession = musicService?.mediaSession
         }
     }
 
@@ -46,9 +42,9 @@ class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageIt
 
         fun update(extendTrack: ExtendTrackModel) {
             itemView.apply {
-                channel_page_playing_now.trackListenerCount = extendTrack.track?.listenCount
-                channel_page_playing_now.trackUrl = "${GL_MEDIA_SERVICE_URL}${extendTrack.track?.audio?.fileUrl}"
+                channel_page_playing_now.text = extendTrack.track?.listenCount?.toString() ?: "0"
                 channel_page_track_title.text = extendTrack.track?.name
+                channel_page_last_update.text = DateHelper.getShortPastDate(extendTrack.track?.publishedAt, context)
                 channel_page_track_preview.loadImage(extendTrack.track?.image)
             }
         }

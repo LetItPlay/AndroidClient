@@ -7,7 +7,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
@@ -43,10 +43,10 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
         fun update(track: AudioTrack) {
             itemView.apply {
-                track_last_seen.text = DataHelper.getData(track.publishedAt, context)
+                track_last_seen.text = DateHelper.getLongPastDate(track.publishedAt, context)
                 channel_name.text = track.channelTitle
                 track_name.text = track.title
-                track_time.text = DataHelper.getTime(track.length)
+                track_time.text = DateHelper.getTime(track.length)
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackUrl = track.url
                 track_logo.loadImage(track.imageUrl, prefix = "")

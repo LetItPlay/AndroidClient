@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.business.channels
 
 import com.gsfoxpro.musicservice.model.AudioTrack
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -10,11 +9,10 @@ import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
-import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
+import com.letitplay.maugry.letitplay.utils.toAudioTrack
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-
 
 object ChannelPagePresenter : BasePresenter<IMvpView>() {
 
@@ -22,6 +20,9 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
     var extendChannel: ExtendChannelModel? = null
     var updatedChannel: ChannelModel? = null
     var playlist: List<AudioTrack>? = null
+
+    val recentTracks: List<ExtendTrackModel>
+        get() = extendTrackList?.sortedByDescending { it.track!!.publishedAt } ?: emptyList()
 
     fun loadTracks(id: Int, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
@@ -36,17 +37,7 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
                         extendTrackList = tracks
                         extendChannel = channel
                         playlist = tracks.map {
-                            AudioTrack(
-                                    id = it.track?.id!!,
-                                    url = "${GL_MEDIA_SERVICE_URL}${it.track?.audio?.fileUrl}",
-                                    title = it.track?.name,
-                                    subtitle = it.channel?.name,
-                                    imageUrl = "${GL_MEDIA_SERVICE_URL}${it.track?.image}",
-                                    channelTitle = it.channel?.name,
-                                    length = it.track?.audio?.lengthInSeconds,
-                                    listenCount = it.track?.listenCount,
-                                    publishedAt = it.track?.publishedAt
-                            )
+                            (channel?.channel to it.track).toAudioTrack()
                         }
                     },
                     onCompleteWithContext = onComplete

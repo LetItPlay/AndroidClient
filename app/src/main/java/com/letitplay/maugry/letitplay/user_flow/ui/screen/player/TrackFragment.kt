@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DataHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import kotlinx.android.synthetic.main.track_fragment.*
 
 class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, TrackPresenter) {
@@ -32,7 +32,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
         header.attachTo(tracks_list)
         trackList?.let {
             track_playlist_count.text = it.size.toString()
-            track_playlist_time.text = DataHelper.getTime(it.sumBy { it.length ?: 0 })
+            track_playlist_time.text = DateHelper.getTime(it.sumBy { it.length ?: 0 })
             trackAdapter.musicService = musicService
             trackAdapter.onClickItem = { playTrack(it) }
             trackAdapter.data = it
