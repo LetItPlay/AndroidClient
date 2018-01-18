@@ -104,24 +104,19 @@
                 android:textColor="#020202"
                 android:textSize="14dp"
                 android:textStyle="normal"
-                app:layout_constraintBottom_toTopOf="@+id/channel_page_teg_container"
+                app:layout_constraintBottom_toTopOf="@+id/channel_page_tag_container"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/channel_page_title" />
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/channel_page_teg_container"
+            <com.letitplay.maugry.letitplay.user_flow.ui.widget.TagCloudView
+                android:id="@+id/channel_page_tag_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                app:alignContent="flex_start"
-                app:alignItems="flex_start"
-                app:flexDirection="row"
-                app:flexWrap="wrap"
-                app:justifyContent="flex_start"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -141,7 +136,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/channel_page_teg_container" />
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_tag_container" />
 
             <TextView
                 android:id="@+id/channel_page_recent_added"

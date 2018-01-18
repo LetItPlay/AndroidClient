@@ -14,6 +14,7 @@ typealias Tag = String
 
 class TagCloudView : FrameLayout {
     private var tags: List<Tag> = emptyList()
+    var removeNotFullVisible: Boolean = false
 
     init {
         LayoutInflater.from(context).inflate(R.layout.tag_cloud, this)
@@ -24,11 +25,13 @@ class TagCloudView : FrameLayout {
 
     override fun dispatchDraw(canvas: Canvas?) {
         super.dispatchDraw(canvas)
-        for (i in 0 until tag_cloud_flex.childCount) {
-            val child = tag_cloud_flex.getChildAt(i)
-            val childBottom = child.bottom
-            if (childBottom >= height) {
-                child.visibility = View.GONE
+        if (removeNotFullVisible) {
+            for (i in 0 until tag_cloud_flex.childCount) {
+                val child = tag_cloud_flex.getChildAt(i)
+                val childBottom = child.bottom
+                if (childBottom >= height) {
+                    child.visibility = View.GONE
+                }
             }
         }
     }

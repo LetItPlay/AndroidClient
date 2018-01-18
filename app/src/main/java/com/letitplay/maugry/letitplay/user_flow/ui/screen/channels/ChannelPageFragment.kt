@@ -2,9 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
@@ -15,6 +13,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAda
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
+import com.letitplay.maugry.letitplay.utils.splitTags
 import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_page_fragment, ChannelPagePresenter) {
@@ -36,18 +35,15 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
             Glide.with(context)
                     .load("${GL_MEDIA_SERVICE_URL}${presenter.extendChannel?.channel?.imageUrl}")
                     .into(channel_page_preview)
-            val tags = presenter.extendChannel?.channel?.tags?.split(",")
+            val tags = presenter.extendChannel?.channel?.tags?.splitTags()
 
             channel_page_follow.data = presenter.extendChannel?.following
             channel_page_follow.setOnClickListener {
                 updateFollowers(presenter.extendChannel, channel_page_follow.isFollow())
             }
 
-            tags?.forEach {
-                val view: TextView = LayoutInflater.from(context).inflate(R.layout.channel_tag, channel_page_teg_container, false) as TextView
-                view.text = it
-                channel_page_teg_container.addView(view)
-            }
+            if (tags != null)
+                channel_page_tag_container.setTagList(tags)
             channel_page_followers.text = presenter.extendChannel?.channel?.subscriptionCount.toString()
 
             channel_page_title.text = presenter.extendChannel?.channel?.name
