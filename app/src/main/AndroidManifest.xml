@@ -20,7 +20,7 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <activity android:name=".user_flow.ui.screen.Splash.SplashActivity">
+        <activity android:name=".user_flow.ui.screen.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

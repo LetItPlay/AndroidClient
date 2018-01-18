@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.Splash
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.splash
 
 import android.content.Intent
 import android.os.Bundle
