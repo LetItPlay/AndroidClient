@@ -47,5 +47,4 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
         }
         (activity as NavigationActivity).updateRepo(trackId, profileRepo)
     }
-
 }
