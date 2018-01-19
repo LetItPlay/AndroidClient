@@ -5,19 +5,16 @@
     <string name="menu_item_search">Search</string>
     <string name="menu_item_feed">Feed</string>
     <string name="menu_item_profile">Profile</string>
-    <string name="menu_item_profile_gggg">Profile</string>
 
     <!--CHANNELS-->
     <string name="channels_following">Following</string>
     <string name="channels_unfollowing">Follow</string>
     <string name="channel_page_description">No description</string>
     <string name="channel_page_recent_added">Recent added</string>
-    <string name="channel_page_most_listened">Most listened</string>
-    <string name="channel_page_with_guest">With guest</string>
 
     <!--FEED-->
     <string name="playing_now">playing now</string>
-    <string name="feed_no_tracks">Пока здесь нет треков.\nПодпишитесь на один из каналов во вкладке «Каналы».</string>
+    <string name="feed_no_tracks">There are no tracks here. Please subscribe on one of the channels in Channel tab</string>
 
     <!--TRACK-->
     <string name="track_recent_added">Recent added</string>
@@ -26,7 +23,7 @@
     <string name="profile_change_language_to_ru">Поменять язык на русский</string>
     <string name="profile_change_language_to_en">Switch to English</string>
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
-    <string name="profile_user_name">ваш будущий про...</string>
+    <string name="profile_user_name">Your future profile</string>
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>

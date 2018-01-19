@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">LetItPlay</string>
+    <string name="menu_item_channels">Каналы</string>
+    <string name="menu_item_trends">Тренды</string>
+    <string name="menu_item_search">Поиск</string>
+    <string name="menu_item_feed">Новое</string>
+    <string name="menu_item_profile">Профиль</string>
+
+    <!--CHANNELS-->
+    <string name="channels_following">Слушаю</string>
+    <string name="channels_unfollowing">Слушать</string>
+    <string name="channel_page_description">Нет описания</string>
+    <string name="channel_page_recent_added">Недавно добавленные</string>
+
+    <!--FEED-->
+    <string name="playing_now">играет сейчас</string>
+    <string name="feed_no_tracks">Пока здесь нет треков.\nПодпишитесь на один из каналов во вкладке «Каналы».</string>
+
+    <!--TRACK-->
+    <string name="track_recent_added">Недавно добавленные</string>
+
+    <!--PROFILE-->
+    <string name="profile_change_language_to_ru">Поменять язык на русский</string>
+    <string name="profile_change_language_to_en">Switch to English</string>
+    <string name="profile_favourite_tracks">Треки, понравивишиеся вам</string>
+    <string name="profile_user_name">Ваш будущий профиль</string>
+
+    <!-- SEARCH -->
+    <string name="search_title">Search</string>
+
+    <!--LANGUAGE-->
+    <string name="language_select_language">Select\nyour language</string>
+    <string name="language_logo_text">let it play</string>
+    <string name="language_en">English</string>
+    <string name="language_ru">Русский</string>
+
+    <plurals name="years_long">
+        <item quantity="one">%d год</item>
+        <item quantity="few">%d года</item>
+        <item quantity="many">%d лет</item>
+        <item quantity="other">%d лет</item>
+    </plurals>
+    <plurals name="months_long">
+        <item quantity="one">%d месяц</item>
+        <item quantity="few">%d месяца</item>
+        <item quantity="many">%d месяцев</item>
+        <item quantity="other">%d месяцев</item>
+    </plurals>
+    <plurals name="days_long">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%d дня</item>
+        <item quantity="other">%d дней</item>
+    </plurals>
+    <plurals name="hours_long">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
+        <item quantity="other">%d часов</item>
+    </plurals>
+    <plurals name="minutes_long">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
+    <plurals name="seconds_long">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
+        <item quantity="other">%d секунд</item>
+    </plurals>
+
+    <string name="years_short">%dy. назад</string>
+    <string name="months_short">%dm. назад</string>
+    <string name="days_short">%dd. назад</string>
+    <string name="hours_short">%dh. назад</string>
+    <string name="minutes_short">%dmin. назад</string>
+    <string name="seconds_short">%dsec. назад</string>
+</resources>
