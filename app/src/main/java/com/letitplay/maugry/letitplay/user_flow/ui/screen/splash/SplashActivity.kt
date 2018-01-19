@@ -16,4 +16,11 @@ class SplashActivity : AppCompatActivity() {
                 .replace(R.id.splash_fragment_container, SplashFragment())
                 .commit()
     }
+
+    fun showSelectLanguage() {
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.language_container, SelectLanguageFragment())
+                .commit()
+    }
 }

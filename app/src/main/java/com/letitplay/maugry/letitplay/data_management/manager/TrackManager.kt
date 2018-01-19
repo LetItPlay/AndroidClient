@@ -67,20 +67,33 @@ object TrackManager : BaseManager() {
 
 
 
-    fun queryTracks(query: String): Observable<List<AudioTrack>> =
-            Observable.zip(ChannelManager.getExtendChannel(),
-                    getExtendTrack().map { tracks ->
-                        tracks.filter {
-                            val track = it.track!!
-                            track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)
-                        }
+    fun queryTracks(query: String, contentLanguage: ContentLanguage?): Observable<List<AudioTrack>> =
+            Observable.zip(
+                    ChannelManager.getExtendChannel()
+                            .map { channels ->
+                                channels.filter {
+                                    val lang = it.channel?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
+                                    contentLanguage == lang
+                                }
+                            },
+                    getExtendTrack()
+                            .map { tracks ->
+                                tracks.filter {
+                                    val track = it.track!!
+                                    val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
+                                    (track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)) && contentLanguage == lang
+                                }
                     },
                     BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->
-                        tracks.map {
+                        val trackList: MutableList<AudioTrack> = ArrayList()
+                        tracks.forEach {
                             val track = it.track!!
-                            val channel = channels.first { it.id == track.stationId }
-                            (channel.channel!! to track).toAudioTrack()
+                            val channel = channels.firstOrNull { it.id == track.stationId }
+                            if (channel != null) {
+                                trackList.add((channel.channel!! to track).toAudioTrack())
+                            }
                         }
+                       return@BiFunction trackList
                     })
 
     infix fun Boolean?.or(other: Boolean?) = (other ?: false) || (this ?: false)

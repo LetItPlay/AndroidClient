@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.business.trends
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
+import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
@@ -25,8 +26,13 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     asyncObservable = TrackManager.getExtendTrack(),
                     onErrorWithContext = onError,
                     onNextNonContext = {
-                        extendTrackList = it.sortedByDescending { it.like?.likeCounts }
-                        playlist = it.map {
+                        val sortedTracks = it.sortedByDescending { it.like?.likeCounts }
+                                .filter {
+                                    val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
+                                    return@filter currentContentLang == lang
+                                }
+                        extendTrackList = sortedTracks
+                        playlist = sortedTracks.map {
                             AudioTrack(
                                     id = it.track?.id!!,
                                     url = "${GL_MEDIA_SERVICE_URL}${it.track?.audio?.fileUrl}",

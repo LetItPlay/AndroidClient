@@ -19,7 +19,7 @@ class PreferenceHerlper(context: Context) {
 
     var contentLanguage: ContentLanguage
         get() {
-            val language = sharedPreferences.getString(APP_SETTINGS_CONTENT_LANG, ContentLanguage.RU.name)
+            val language = sharedPreferences.getString(APP_SETTINGS_CONTENT_LANG, ContentLanguage.UNKNOWN.name)
             return ContentLanguage.getLanguage(language)
         }
         set(value) {

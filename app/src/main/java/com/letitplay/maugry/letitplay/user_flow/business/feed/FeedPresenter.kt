@@ -4,10 +4,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.LikeModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
@@ -31,13 +28,15 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                             ChannelManager.getFollowingChannels(),
                             TrackManager.getExtendTrack(),
                             BiFunction { followingChannels: List<FollowingChannelModel>, tracks: List<ExtendTrackModel> ->
-                                Pair(followingChannels, tracks)
+                                val newTracks = tracks.filter {
+                                    val idStation = it.track?.stationId
+                                    val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
+                                    followingChannels.find { it.id == idStation && it.isFollowing } != null && currentContentLang == lang
+                                }
+                                newTracks
                             }),
-                    onNextNonContext = { (followingChannels, track) ->
-                        extendTrackList = track.filter {
-                            val idStation = it.track?.stationId
-                            followingChannels.find { it.id == idStation && it.isFollowing } != null
-                        }
+                    onNextNonContext = { tracks ->
+                        extendTrackList = tracks
                         playlist = extendTrackList?.map {
                             AudioTrack(
                                     id = it.track?.id!!,

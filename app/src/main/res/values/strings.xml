@@ -23,7 +23,8 @@
     <string name="track_recent_added">Recent added</string>
 
     <!--PROFILE-->
-    <string name="profile_change_language">Поменять язык на русский</string>
+    <string name="profile_change_language_to_ru">Поменять язык на русский</string>
+    <string name="profile_change_language_to_en">Switch to English</string>
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
     <string name="profile_user_name">ваш будущий про...</string>
 
@@ -31,10 +32,10 @@
     <string name="search_title">Search</string>
 
     <!--LANGUAGE-->
-    <string name="language_select_language">Select your language</string>
+    <string name="language_select_language">Select\nyour language</string>
     <string name="language_logo_text">let it play</string>
     <string name="language_en">English</string>
-    <string name="language_ru">Russia</string>
+    <string name="language_ru">Русский</string>
 
     <plurals name="years_long">
         <item quantity="one">%d year</item>

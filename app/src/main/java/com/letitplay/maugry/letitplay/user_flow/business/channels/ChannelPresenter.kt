@@ -27,7 +27,10 @@ object ChannelPresenter : BasePresenter<IMvpView>() {
                     asyncObservable = ChannelManager.getExtendChannel(),
                     onErrorWithContext = onError,
                     onNextNonContext = {
-                        extendChannelList = it
+                        extendChannelList = it.filter {
+                            val lang = it.channel?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
+                            return@filter currentContentLang == lang
+                        }
                     },
                     onCompleteWithContext = onComplete
 
