@@ -106,6 +106,7 @@
                 android:lineSpacingExtra="9sp"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
+                android:textAlignment="center"
                 android:textColor="#020202"
                 android:textSize="18dp"
                 android:textStyle="bold"

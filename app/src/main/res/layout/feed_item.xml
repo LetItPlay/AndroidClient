@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="340dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/feed_channel_logo"
@@ -85,7 +86,7 @@
     <TextView
         android:id="@+id/feed_track_title"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
@@ -97,9 +98,8 @@
         android:textColor="@color/colorBlack"
         android:textSize="16dp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/feed_time_icon"
+        app:layout_constraintBottom_toTopOf="@+id/feed_like"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/feed_track_image"
         tools:text="Выпуск 75. Blade Runner 2049, новый «Физрук», Shadow of War и Divinity Original Sin 2" />
@@ -109,9 +109,9 @@
         android:id="@+id/feed_time_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/time_ic"
+        app:layout_constraintTop_toBottomOf="@+id/feed_track_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -119,11 +119,11 @@
         android:id="@+id/feed_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"
         android:textColor="#4a4a4a"
         android:textStyle="normal"
         android:textSize="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/feed_track_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/feed_time_icon"
         tools:text="13:35:15" />
@@ -133,7 +133,8 @@
         android:id="@+id/feed_playing_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/feed_track_title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/feed_time" />
 
@@ -144,7 +145,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feed_track_title" />
 
     <View
         android:layout_width="match_parent"
