@@ -26,17 +26,21 @@ object DateHelper {
     }
 
     fun getTime(timeInSeconds: Int?): String {
-        var seconds = 0
-        var minutes = 0
-        var hours = 0
+        var secondsStr = "00"
+        var minutesStr = "00"
         timeInSeconds?.let {
-            val cal = Calendar.getInstance()
-            cal.time = Date(timeInSeconds.toLong() * 1000)
-            seconds = cal.get(Calendar.SECOND)
-            minutes = cal.get(Calendar.MINUTE)
-            hours = cal.get(Calendar.HOUR)
+            val seconds = it % 60
+            val minutes = (timeInSeconds / 60) % 60
+            val hours = timeInSeconds / 60 / 60
+
+            secondsStr = "${if (seconds < 10) "0" else ""}$seconds"
+            minutesStr = "${if (minutes < 10) "0" else ""}$minutes"
+
+            if (hours > 0) {
+                return "$hours:$minutesStr:$secondsStr"
+            }
         }
-        return hours.toString() + ":" + minutes.toString() + ":" + seconds.toString()
+        return "$minutesStr:$secondsStr"
     }
 
     fun getLongPastDate(eventDay: Date?, ctx: Context): String {
