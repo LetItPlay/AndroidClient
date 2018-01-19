@@ -15,6 +15,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.widget.LikeWidget
 import kotlinx.android.synthetic.main.trends_fragment.*
 
 

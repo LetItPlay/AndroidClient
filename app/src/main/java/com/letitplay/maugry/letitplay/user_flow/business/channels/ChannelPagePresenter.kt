@@ -48,6 +48,7 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
     fun updateChannelFollowers(channel: ExtendChannelModel, body: FollowersModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = ChannelManager.updateChannelFollowers(channel.id!!, body),
+                    triggerProgress = false,
                     onNextNonContext = {
                         channel.following?.let {
                             it.isFollowing = !it.isFollowing

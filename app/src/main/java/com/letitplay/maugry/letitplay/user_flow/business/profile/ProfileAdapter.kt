@@ -43,7 +43,7 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() 
 
         fun update(extendTrack: ExtendTrackModel) {
             itemView.apply {
-                track_last_seen.text = DateHelper.getLongPastDate(extendTrack.track?.publishedAt!!, context)
+                track_last_seen.text = DateHelper.getLongPastDate(extendTrack.track?.publishedAt, context)
                 track_playing_now.trackListenerCount = extendTrack.track?.listenCount
                 track_playing_now.trackUrl = "${GL_MEDIA_SERVICE_URL}${extendTrack.track?.audio?.fileUrl}"
                 channel_name.text = extendTrack.channel?.name
@@ -51,8 +51,6 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() 
                 track_name.text = extendTrack.track?.name
                 track_logo.loadImage(extendTrack.track?.image)
             }
-
         }
-
     }
 }
