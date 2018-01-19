@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -35,6 +36,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (channels_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         channels_list.setHasFixedSize(true)
         presenter?.loadChannels {
             presenter.extendChannelList?.let {

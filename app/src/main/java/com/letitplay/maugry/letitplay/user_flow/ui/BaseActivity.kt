@@ -123,16 +123,15 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     fun collapsePlayer() {
-        navigationMenu?.visibility = View.VISIBLE
-        appbar?.visibility = View.VISIBLE
-
         val set = ConstraintSet()
         set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
         set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
         set.connect(R.id.main_player, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
         TransitionManager.beginDelayedTransition(root_constraint)
         set.applyTo(root_constraint)
-        main_player.releaseViewPager()
+        navigationMenu?.visibility = View.VISIBLE
+        appbar?.visibility = View.VISIBLE
+      //  main_player.releaseViewPager()
     }
 
     fun expandPlayer() {

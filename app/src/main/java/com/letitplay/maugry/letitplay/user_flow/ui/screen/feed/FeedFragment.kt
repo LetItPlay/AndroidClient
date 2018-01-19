@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
@@ -11,6 +12,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
+import com.letitplay.maugry.letitplay.user_flow.ui.widget.LikeWidget
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
@@ -20,6 +22,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (feed_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         feed_list.apply {
             adapter = feedListAdapter.apply {
                 musicService = this@FeedFragment.musicService
@@ -65,7 +68,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(extendTrack, like) {
                 presenter.updatedTrack?.let {
-                    feedListAdapter.notifyItemChanged(position)
+                   feedListAdapter.notifyItemChanged(position)
                 }
             }
         }
