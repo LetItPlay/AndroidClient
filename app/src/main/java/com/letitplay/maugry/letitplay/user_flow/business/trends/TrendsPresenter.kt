@@ -60,6 +60,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
     fun updateFavouriteTracks(id: Int, body: LikeModel, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = TrackManager.updateFavouriteTrack(id, body),
+                    triggerProgress = false,
                     onNextNonContext = {
                         updatedTrack = it
                     },

@@ -8,8 +8,8 @@
     <string name="menu_item_profile_gggg">Profile</string>
 
     <!--CHANNELS-->
-    <string name="channels_unfollowing">Following</string>
-    <string name="channels_following">Follow</string>
+    <string name="channels_following">Following</string>
+    <string name="channels_unfollowing">Follow</string>
     <string name="channel_page_description">No description</string>
     <string name="channel_page_recent_added">Recent added</string>
     <string name="channel_page_most_listened">Most listened</string>

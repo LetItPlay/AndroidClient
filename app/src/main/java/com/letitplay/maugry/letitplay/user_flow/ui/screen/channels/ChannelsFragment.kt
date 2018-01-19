@@ -65,8 +65,8 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     }
 
     private fun updateFollowers(extendChannel: ExtendChannelModel, isFollow: Boolean, position: Int) {
-        val followerModel: FollowersModel = if (isFollow) FollowersModel(1)
-        else FollowersModel(-1)
+        val followerModel: FollowersModel = if (isFollow) FollowersModel(-1)
+        else FollowersModel(1)
 
         extendChannel.channel?.id?.let {
             presenter?.updateChannelFollowers(extendChannel, followerModel) {

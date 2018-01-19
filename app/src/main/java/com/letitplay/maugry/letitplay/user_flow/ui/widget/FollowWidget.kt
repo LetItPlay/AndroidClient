@@ -38,11 +38,11 @@ class FollowWidget : FrameLayout {
             if (it.isFollowing) {
                 follow_button.setBackgroundResource(R.drawable.following_bg)
                 follow_button.text = context.getString(R.string.channels_following)
-                follow_button.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+                follow_button.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
             } else {
                 follow_button.setBackgroundResource(R.drawable.unfollowing_bg)
                 follow_button.text = context.getString(R.string.channels_unfollowing)
-                follow_button.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                follow_button.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
             }
         }
     }
