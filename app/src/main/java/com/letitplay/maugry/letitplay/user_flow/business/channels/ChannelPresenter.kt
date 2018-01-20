@@ -30,7 +30,7 @@ object ChannelPresenter : BasePresenter<IMvpView>() {
                         extendChannelList = it.filter {
                             val lang = it.channel?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
                             return@filter currentContentLang == lang
-                        }
+                        }.sortedByDescending { it.channel?.subscriptionCount }
                     },
                     onCompleteWithContext = onComplete
 

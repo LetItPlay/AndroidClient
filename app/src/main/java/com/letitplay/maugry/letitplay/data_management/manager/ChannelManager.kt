@@ -14,7 +14,7 @@ object ChannelManager : BaseManager() {
     fun getChannels() = get(
             local = { ChannelModel().queryAll() },
             remote = ServiceController.getChannels(),
-            remoteWhen = { local -> local.isEmpty() },
+            remoteWhen = { REMOTE_ALWAYS },
             update = { remote ->
                 ChannelModel().deleteAll()
                 remote.saveAll()

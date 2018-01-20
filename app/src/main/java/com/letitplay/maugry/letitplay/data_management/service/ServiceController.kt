@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.data_management.service
 
 
-import android.util.Log
 import com.github.salomonbrys.kotson.DeserializerArg
 import com.github.salomonbrys.kotson.registerTypeAdapter
 import com.google.gson.GsonBuilder
@@ -13,6 +12,7 @@ import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,6 +20,11 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import timber.log.Timber
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.util.concurrent.TimeoutException
 
 
 private fun <T> response(): (DeserializerArg) -> T? = {
@@ -41,6 +46,7 @@ private val service = Retrofit.Builder()
         .create(Service::class.java)
 
 interface Service {
+
     @GET("stations")
     fun channels(): Observable<List<ChannelModel>>
 
@@ -82,10 +88,20 @@ object ServiceController : BaseServiceController() {
 
 
 abstract class BaseServiceController {
+
     protected fun <T> get(observable: Observable<T>): Observable<T> = observable
             .subscribeOn(GL_SCHEDULER_IO)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
-                Log.d("ServiceController", "Something go wrong")
+                when (it) {
+                    is TimeoutException,
+                    is HttpException,
+                    is IOException,
+                    is SocketTimeoutException,
+                    is UnknownHostException -> {
+                        Timber.e("Service related error!")
+                    }
+                    else -> Timber.e("Unknown error (possibly parsing)!")
+                }
             }
 }

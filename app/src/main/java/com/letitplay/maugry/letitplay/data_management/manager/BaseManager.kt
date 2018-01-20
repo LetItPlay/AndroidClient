@@ -9,6 +9,8 @@ import timber.log.Timber
 import java.util.concurrent.Callable
 
 
+const val REMOTE_ALWAYS = true
+
 abstract class BaseManager {
 
     /**

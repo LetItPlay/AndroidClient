@@ -62,7 +62,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:text="ago"
+        android:text="@string/time_published_ago"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/feed_track_last_update"

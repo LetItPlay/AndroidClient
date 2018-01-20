@@ -1,12 +1,12 @@
 package com.letitplay.maugry.letitplay.data_management.manager
 
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import com.letitplay.maugry.letitplay.utils.toAudioTrack
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import com.gsfoxpro.musicservice.model.AudioTrack
 
 
 object TrackManager : BaseManager() {
@@ -14,7 +14,7 @@ object TrackManager : BaseManager() {
     fun getTracks() = get(
             local = { TrackModel().queryAll() },
             remote = ServiceController.getTracks(),
-            remoteWhen = {local -> local.isEmpty() },
+            remoteWhen = { REMOTE_ALWAYS },
             update = { remote ->
                 TrackModel().deleteAll()
                 remote.saveAll()
@@ -58,13 +58,12 @@ object TrackManager : BaseManager() {
     )
 
     fun getPieceExtendTrack(id: Int) = get(
-            local = {ExtendTrackModel().query { it.equalTo("track.stationId", id) }}
+            local = { ExtendTrackModel().query { it.equalTo("track.stationId", id) } }
     )
 
     fun getFavouriteExtendTrack() = get(
-            local = {ExtendTrackModel().query {it.equalTo("like.isLiked", true)  }}
+            local = { ExtendTrackModel().query { it.equalTo("like.isLiked", true) } }
     )
-
 
 
     fun queryTracks(query: String, contentLanguage: ContentLanguage?): Observable<List<AudioTrack>> =
@@ -83,7 +82,7 @@ object TrackManager : BaseManager() {
                                     val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
                                     (track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)) && contentLanguage == lang
                                 }
-                    },
+                            },
                     BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->
                         val trackList: MutableList<AudioTrack> = ArrayList()
                         tracks.forEach {
@@ -93,7 +92,7 @@ object TrackManager : BaseManager() {
                                 trackList.add((channel.channel!! to track).toAudioTrack())
                             }
                         }
-                       return@BiFunction trackList
+                        return@BiFunction trackList
                     })
 
     infix fun Boolean?.or(other: Boolean?) = (other ?: false) || (this ?: false)

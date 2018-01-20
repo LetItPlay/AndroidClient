@@ -36,7 +36,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                                 newTracks
                             }),
                     onNextNonContext = { tracks ->
-                        extendTrackList = tracks
+                        extendTrackList = tracks.sortedByDescending { it.track?.publishedAt }
                         playlist = extendTrackList?.map {
                             AudioTrack(
                                     id = it.track?.id!!,
