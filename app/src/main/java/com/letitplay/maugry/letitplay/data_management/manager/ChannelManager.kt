@@ -35,6 +35,10 @@ object ChannelManager : BaseManager() {
         extendChannelList.saveAll()
     }
 
+    fun updateExtendChannel(extendChannel: ExtendChannelModel) {
+        extendChannel.save()
+    }
+
     fun updateFollowingChannels(followingChannel: FollowingChannelModel) {
         followingChannel.save()
 

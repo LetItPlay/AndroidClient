@@ -35,6 +35,7 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
             }
             itemView.channel_follow.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
+                    it.isEnabled = false
                     onFollowClick?.invoke(data[adapterPosition], it.channel_follow.isFollow(), adapterPosition)
                 }
             }
@@ -45,6 +46,7 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
 
         fun update(extendChannelModel: ExtendChannelModel) {
             itemView.apply {
+                channel_follow.isEnabled = true
                 channel_follow.data = extendChannelModel.following
                 channel_title.text = extendChannelModel.channel?.name
                 follower_count.text = extendChannelModel.channel?.subscriptionCount.toString()

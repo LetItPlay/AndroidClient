@@ -59,12 +59,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:layout_marginStart="5dp"
-                tools:text="345 567"
-                android:textColor="#4a4a4a"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
-                app:layout_constraintStart_toEndOf="@+id/channel_preview_followers_icon" />
+                app:layout_constraintStart_toEndOf="@+id/channel_preview_followers_icon"
+                tools:text="345 567" />
+
+            <ImageView
+                android:id="@+id/track_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/track_ic"
+                app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
+                app:layout_constraintStart_toEndOf="@+id/channel_page_followers" />
+
+            <TextView
+                android:id="@+id/track_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
+                app:layout_constraintStart_toEndOf="@+id/track_icon"
+                tools:text="237" />
 
             <com.letitplay.maugry.letitplay.user_flow.ui.widget.FollowWidget
                 android:id="@+id/channel_page_follow"

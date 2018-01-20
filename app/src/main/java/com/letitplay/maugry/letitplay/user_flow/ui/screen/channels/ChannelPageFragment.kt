@@ -49,6 +49,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
 
                     channel_page_follow.data = following
                     channel_page_follow.setOnClickListener {
+                        channel_page_follow.isEnabled = false
                         updateFollowers(channelInfo, channel_page_follow.isFollow())
                     }
 
@@ -58,6 +59,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                 }
             }
             if (presenter.recentTracks.isNotEmpty()) {
+                track_count.text = presenter.recentTracks.size.toString()
                 recentAddedListAdapter.setData(presenter.recentTracks)
                 channel_page_recent_added.visibility = View.VISIBLE
             }
@@ -68,13 +70,15 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
 
     private fun updateFollowers(extendedChannel: ExtendChannelModel?, isFollow: Boolean) {
 
-        val followerModel: FollowersModel = if (isFollow) FollowersModel(1)
-        else FollowersModel(-1)
+        val followerModel: FollowersModel = if (isFollow) FollowersModel(-1)
+        else FollowersModel(1)
 
         extendedChannel?.channel?.id?.let {
             presenter?.updateChannelFollowers(extendedChannel, followerModel) {
                 presenter.updatedChannel?.let {
                     channel_page_follow.data = extendedChannel.following
+                    channel_page_followers.text = extendedChannel.channel?.subscriptionCount.toString()
+                    channel_page_follow.isEnabled = true
                 }
             }
         }

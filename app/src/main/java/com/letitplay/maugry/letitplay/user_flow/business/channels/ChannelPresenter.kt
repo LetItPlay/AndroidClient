@@ -67,11 +67,13 @@ object ChannelPresenter : BasePresenter<IMvpView>() {
                     asyncObservable = ChannelManager.updateChannelFollowers(channel.id!!, body),
                     triggerProgress = false,
                     onNextNonContext = {
+                        updatedChannel = it
+                        channel.channel?.subscriptionCount = it.subscriptionCount
+                        ChannelManager.updateExtendChannel(channel)
                         channel.following?.let{
                             it.isFollowing = !it.isFollowing
                             ChannelManager.updateFollowingChannels(it)
                         }
-                        updatedChannel = it
                     },
                     onCompleteWithContext = onComplete
             )
