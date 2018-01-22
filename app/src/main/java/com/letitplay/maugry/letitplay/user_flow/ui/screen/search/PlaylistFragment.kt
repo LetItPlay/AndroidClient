@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.data_management.model.PlaylistModel
 import com.letitplay.maugry.letitplay.user_flow.business.search.PlaylistAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.search.PlaylistPresenter
@@ -32,9 +33,16 @@ class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragm
             adapter = playlistAdapter
             layoutManager = LinearLayoutManager(context)
         }
-        presenter?.getPlaylists {
-            presenter?.playlists?.let {
-                playlistAdapter.setData(it)
+        var tag = "новости"
+        if (presenter?.currentContentLang == ContentLanguage.EN) tag = "news"
+
+        presenter?.getPlaylists(tag) {
+            presenter.playlists?.let {
+                if (it.firstOrNull { it.tracks.isNotEmpty() } != null) {
+                    playlistAdapter.data = it
+                } else {
+                    playlist_no_recommendations.visibility = View.VISIBLE
+                }
             }
         }
     }

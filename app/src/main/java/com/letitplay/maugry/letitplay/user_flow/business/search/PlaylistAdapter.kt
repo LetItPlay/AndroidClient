@@ -11,18 +11,15 @@ import kotlinx.android.synthetic.main.playlist_item.view.*
 
 class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>() {
 
-    private var data: List<PlaylistModel> = ArrayList()
+     var data: List<PlaylistModel> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     var onClick: ((PlaylistModel) -> Unit)? = null
 
     override fun onBindViewHolder(holder: PlaylistItemHolder, position: Int) {
-        holder.update(data[position])
-    }
 
-    fun setData(channelList: List<PlaylistModel>) {
-        channelList.let {
-            data = it
-            notifyDataSetChanged()
-        }
     }
 
     override fun getItemCount(): Int = data.size
@@ -37,13 +34,5 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>
         }
     }
 
-    class PlaylistItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.playlist_item) {
-
-        fun update(playlist: PlaylistModel) {
-            itemView.apply {
-                playlist_title.text = playlist.name
-                playlist_description.text = playlist.description
-            }
-        }
-    }
+    class PlaylistItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.playlist_item)
 }

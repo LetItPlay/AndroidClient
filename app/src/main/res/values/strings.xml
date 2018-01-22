@@ -28,6 +28,9 @@
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>
+    <string name="search_no_recommendation">There are no recommendations</string>
+    <string name="search_actual_news">Fresh news in 30 minutes</string>
+    <string name="search_compilation">A compilation of fresh news in one 30-minute playlist</string>
 
     <!--LANGUAGE-->
     <string name="language_select_language">Select\nyour language</string>

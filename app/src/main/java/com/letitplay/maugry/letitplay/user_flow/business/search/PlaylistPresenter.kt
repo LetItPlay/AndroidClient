@@ -13,19 +13,20 @@ import io.reactivex.functions.BiFunction
 
 
 object PlaylistPresenter : BasePresenter<IMvpView>() {
-    var playlists: List<PlaylistModel> = emptyList()
+    var playlists: List<PlaylistModel>? = null
 
-    fun getPlaylists(onComplete: ((IMvpView?) -> Unit)) = execute(
+    fun getPlaylists(tag: String, onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
                             ChannelManager.getExtendChannel(),
-                            TrackManager.getLastTracksWithTag("новости"),
+                            TrackManager.getLastTracksWithTag(tag),
                             BiFunction { channels: List<ExtendChannelModel>, extTracks: List<ExtendTrackModel> ->
                                 var totalTime = 0
                                 val tracksInPlaylist: MutableList<TrackModel> = mutableListOf()
                                 for (extTrack in extTracks) {
+                                    val lang = extTrack.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
                                     val trackDuration = extTrack.track?.audio!!.lengthInSeconds!!
-                                    if (trackDuration == 0) continue
+                                    if (trackDuration == 0 || currentContentLang != lang) continue
                                     if (trackDuration + totalTime <= PLAYLIST_DURATION) {
                                         tracksInPlaylist.add(extTrack.track!!)
                                         totalTime += trackDuration

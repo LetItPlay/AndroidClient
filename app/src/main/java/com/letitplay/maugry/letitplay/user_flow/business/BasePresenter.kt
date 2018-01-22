@@ -41,7 +41,7 @@ abstract class BasePresenter<V>(
         val service: BaseServiceController? = null) where V : IMvpView {
 
     
-    protected val currentContentLang: ContentLanguage?
+      val currentContentLang: ContentLanguage?
         get() = context?.let { PreferenceHerlper(it).contentLanguage }
 
     /*

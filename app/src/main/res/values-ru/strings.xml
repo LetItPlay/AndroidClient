@@ -28,6 +28,9 @@
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>
+    <string name="search_no_recommendation">Рекомендации отсутствуют</string>
+    <string name="search_actual_news">Актуальные новости за 30 минут</string>
+    <string name="search_compilation">Подборка актуальных новостей в виде 30-минутного плейлиста</string>
 
     <!--LANGUAGE-->
     <string name="language_select_language">Select\nyour language</string>
