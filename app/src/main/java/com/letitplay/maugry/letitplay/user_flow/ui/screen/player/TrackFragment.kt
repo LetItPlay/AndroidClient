@@ -21,7 +21,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val trackList: List<AudioTrack>? = musicService?.musicRepo?.playlist
-        playListRepo = musicService?.musicRepo
+
         tracks_list.apply {
             setHasFixedSize(true)
             adapter = trackAdapter
@@ -40,7 +40,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
     }
 
     private fun playTrack(trackId: Long) {
-        if (playListRepo != null) {
+        if (musicService?.musicRepo != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }

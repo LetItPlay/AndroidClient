@@ -21,14 +21,13 @@ class PlayerWidget : ConstraintLayout {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.player_container_fragment, this)
+
     }
 
+
+    var isExpanded: Boolean = false
     fun setViewPager(fm: FragmentManager) {
         player_tabs.setupWithViewPager(player_pager)
         player_pager.adapter = PlayerContainerAdapter(fm)
-    }
-
-    fun releaseViewPager(){
-        player_pager.adapter = null
     }
 }

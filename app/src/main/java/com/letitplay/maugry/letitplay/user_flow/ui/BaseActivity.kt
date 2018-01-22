@@ -1,6 +1,8 @@
 package com.letitplay.maugry.letitplay.user_flow.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.constraint.ConstraintSet
 import android.support.design.widget.BottomNavigationView
 import android.support.transition.TransitionManager
@@ -94,10 +96,27 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         backstackDelegate.backstack.setHistory(HistoryBuilder.single(rootKey), StateChange.REPLACE)
     }
 
+
     override fun onBackPressed() {
-        if (!backstackDelegate.onBackPressed()) {
-            super.onBackPressed()
+        if (main_player.isExpanded) {
+            collapsePlayer()
+        } else {
+            if (!backstackDelegate.onBackPressed()) {
+                val intent = Intent(Intent.ACTION_MAIN).apply {
+                    addCategory(Intent.CATEGORY_HOME)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                this.startActivity(intent)
+            }
         }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     private fun setBackNavigationIcon(key: BaseKey) {
@@ -123,6 +142,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     fun collapsePlayer() {
+        main_player.isExpanded = false
         val set = ConstraintSet()
         set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
         set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
@@ -131,10 +151,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         set.applyTo(root_constraint)
         navigationMenu?.visibility = View.VISIBLE
         appbar?.visibility = View.VISIBLE
-      //  main_player.releaseViewPager()
+        //  main_player.releaseViewPager()
     }
 
     fun expandPlayer() {
+        main_player.isExpanded = true
         main_player.setViewPager(supportFragmentManager)
         val set = ConstraintSet()
         set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
