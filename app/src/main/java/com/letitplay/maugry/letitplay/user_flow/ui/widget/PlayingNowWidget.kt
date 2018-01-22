@@ -42,12 +42,12 @@ class PlayingNowWidget : MusicPlayer {
 
     fun showNowPlaying() {
         playing_now.visibility = View.VISIBLE
-        listener_count.visibility = View.INVISIBLE
+        listener_count.visibility = View.GONE
     }
 
     fun showListenCount() {
         listener_count.visibility = View.VISIBLE
-        playing_now.visibility = View.INVISIBLE
+        playing_now.visibility = View.GONE
         listener_count.text = trackListenerCount.toString()
     }
 
