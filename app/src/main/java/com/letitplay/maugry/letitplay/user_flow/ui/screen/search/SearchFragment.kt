@@ -139,6 +139,6 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     }
 
     private fun goBack() {
-        navigationActivity.backstackDelegate.onBackPressed()
+        navigationActivity.onBackPressed()
     }
 }

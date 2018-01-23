@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.RealmDB
@@ -25,7 +26,7 @@ const val GL_PRESENTER_ACTION_RETRY_DELAY: Long = 300 // in ms
 const val GL_PRESENTER_ACTION_RETRY_COUNT: Int = 3 // > 1
 const val GL_ALERT_DIALOG_DELAY: Long = 1
 
-class App : Application() {
+class App : MultiDexApplication(){
 
     private var _musicService: MusicService? = null
 
