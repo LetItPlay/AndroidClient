@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="19dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/feed_playing_now_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/plays_ic" />
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/feed_playing_now_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content">
 
         <TextView
@@ -22,7 +27,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textColor="#ff6666"
-            android:paddingBottom="3dp"
+            android:paddingBottom="1dp"
             android:textSize="12dp"
             android:textStyle="normal"
             android:text="@string/playing_now" />
@@ -38,4 +43,4 @@
             android:textStyle="normal"
             tools:text="112" />
     </FrameLayout>
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
