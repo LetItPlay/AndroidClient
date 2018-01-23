@@ -60,6 +60,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     }
 
     private fun gotoChannelPage(id: Int?) {
+        if (swipe_refresh.isRefreshing) return
         id?.let {
             ChannelPagePresenter.extendChannel = presenter?.extendChannelList?.first { it.id == id }
             navigationActivity.navigateTo(ChannelPageKey(id))
@@ -67,6 +68,7 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
     }
 
     private fun updateFollowers(extendChannel: ExtendChannelModel, isFollow: Boolean, position: Int) {
+        if (swipe_refresh.isRefreshing) return
         val followerModel: FollowersModel = if (isFollow) FollowersModel(-1)
         else FollowersModel(1)
 
