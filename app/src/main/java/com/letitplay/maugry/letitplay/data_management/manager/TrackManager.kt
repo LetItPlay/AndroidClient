@@ -75,11 +75,13 @@ object TrackManager : BaseManager() {
                             },
                     getExtendTrack()
                             .map { tracks ->
-                                tracks.filter {
-                                    val track = it.track!!
-                                    val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
-                                    (track.name?.contains(query) or track.description?.contains(query) or track.tags?.contains(query)) && contentLanguage == lang
-                                }
+                                tracks.filterLang(contentLanguage)
+                                        .filter {
+                                            val track = it.track!!
+                                            (track.name?.contains(query, true)
+                                                    or track.description?.contains(query, true)
+                                                    or track.tags?.contains(query, true))
+                                        }
                             },
                     BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->
                         val trackList: MutableList<AudioTrack> = ArrayList()
@@ -94,4 +96,11 @@ object TrackManager : BaseManager() {
                     })
 
     infix fun Boolean?.or(other: Boolean?) = (other ?: false) || (this ?: false)
+
+    private fun List<ExtendTrackModel>.filterLang(lang: ContentLanguage?): List<ExtendTrackModel> {
+        return this.filter {
+            val trackLanguage = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
+            trackLanguage == lang
+        }
+    }
 }

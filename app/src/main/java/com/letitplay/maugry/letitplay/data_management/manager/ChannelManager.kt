@@ -55,7 +55,7 @@ object ChannelManager : BaseManager() {
     fun queryChannels(query: String): Observable<List<ExtendChannelModel>> = getExtendChannel().map { channels ->
         channels.filter {
             val channel = it.channel!!
-            channel.name!!.contains(query) || channel.tags?.contains(query) ?: false
+            channel.name!!.contains(query, true) || channel.tags?.contains(query, true) ?: false
         }
     }
 
