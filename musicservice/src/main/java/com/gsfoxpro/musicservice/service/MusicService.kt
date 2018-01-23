@@ -46,6 +46,7 @@ class MusicService : Service() {
     var musicRepo: MusicRepo? = null
         set(value) {
             field = value
+            notifyRepoChangedListeners(value)
             initTrack(value?.currentAudioTrack)
         }
 
@@ -60,6 +61,7 @@ class MusicService : Service() {
     private val updateIntervalMs = 1000L
     private val progressHandler = Handler()
     private var needUpdateProgress = false
+    private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
 
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
          .setActions(
@@ -126,6 +128,12 @@ class MusicService : Service() {
 
         override fun onSkipToQueueItem(id: Long) {
             play(musicRepo?.getAudioTrackAtId(id))
+        }
+    }
+
+    private fun notifyRepoChangedListeners(repo: MusicRepo?) {
+        repoListeners.forEach {
+            it.onRepoChanged(repo)
         }
     }
 
@@ -365,5 +373,13 @@ class MusicService : Service() {
         mediaSession?.sendSessionEvent(PLAYLIST_INFO_EVENT, bundle)
     }
 
+    fun addRepoChangesListener(listener: RepoChangesListener) = repoListeners.add(listener)
+    fun removeRepoChangesListener(listener: RepoChangesListener) = repoListeners.remove(listener)
+
     inner class LocalBinder(val musicService: MusicService = this@MusicService) : Binder()
+
+
+    interface RepoChangesListener {
+        fun onRepoChanged(repo: MusicRepo?)
+    }
 }
