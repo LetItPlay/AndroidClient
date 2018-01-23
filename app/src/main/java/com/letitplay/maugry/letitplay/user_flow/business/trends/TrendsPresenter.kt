@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.business.trends
 
 import com.gsfoxpro.musicservice.model.AudioTrack
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
 import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
@@ -11,6 +10,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
+import com.letitplay.maugry.letitplay.utils.toAudioTrack
 
 object TrendsPresenter : BasePresenter<IMvpView>() {
 
@@ -33,17 +33,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                                 }
                         extendTrackList = sortedTracks
                         playlist = sortedTracks.map {
-                            AudioTrack(
-                                    id = it.track?.id!!,
-                                    url = "${GL_MEDIA_SERVICE_URL}${it.track?.audio?.fileUrl}",
-                                    title = it.track?.name,
-                                    subtitle = it.channel?.name,
-                                    imageUrl = "${GL_MEDIA_SERVICE_URL}${it.track?.image}",
-                                    channelTitle = it.channel?.name,
-                                    length = it.track?.audio?.lengthInSeconds,
-                                    listenCount = it.track?.listenCount,
-                                    publishedAt = it.track?.publishedAt
-                            )
+                            (it.channel to it.track).toAudioTrack()
                         }
                     },
                     onCompleteWithContext = onComplete

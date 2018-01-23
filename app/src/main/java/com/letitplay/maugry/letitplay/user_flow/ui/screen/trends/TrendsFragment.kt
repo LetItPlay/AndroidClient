@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
-import com.gsfoxpro.musicservice.model.AudioTrack
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
@@ -15,6 +13,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.utils.toAudioTrack
 import kotlinx.android.synthetic.main.trends_fragment.*
 
 
@@ -81,17 +80,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
             return
         }
         val playlist = presenter?.extendTrackList?.map {
-            AudioTrack(
-                    id = it.track?.id!!,
-                    url = "${GL_MEDIA_SERVICE_URL}${it.track?.audio?.fileUrl}",
-                    title = it.track?.name,
-                    subtitle = it.channel?.name,
-                    imageUrl = "${GL_MEDIA_SERVICE_URL}${it.track?.image}",
-                    channelTitle = it.track?.name,
-                    length = it.track?.audio?.lengthInSeconds,
-                    listenCount = it.track?.listenCount,
-                    publishedAt = it.track?.publishedAt
-            )
+            (it.channel to it.track).toAudioTrack()
         } ?: return
 
         trendsRepo = MusicRepo(playlist)
