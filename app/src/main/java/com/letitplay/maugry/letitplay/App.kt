@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.crashlytics.android.Crashlytics
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.RealmDB
+import io.fabric.sdk.android.Fabric
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -51,6 +53,7 @@ class App : Application() {
         realmDb.init(this)
         bindMusicService()
         Timber.plant(Timber.DebugTree())
+        Fabric.with(this, Crashlytics())
     }
 
     private fun bindMusicService() {
