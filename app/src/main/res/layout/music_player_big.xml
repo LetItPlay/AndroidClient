@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/player_track_image_container" />
 
     <TextView
-        android:id="@+id/player_current_position"
+        android:id="@+id/player_time_left"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/player_big_progress" />
 
     <TextView
-        android:id="@+id/player_duration"
+        android:id="@+id/player_current_time"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -69,7 +69,7 @@
             app:layout_constraintBottom_toTopOf="@+id/player_track_title_wrapper"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_duration">
+            app:layout_constraintTop_toBottomOf="@+id/player_current_time">
 
             <TextView
                 android:id="@+id/player_channel_title"

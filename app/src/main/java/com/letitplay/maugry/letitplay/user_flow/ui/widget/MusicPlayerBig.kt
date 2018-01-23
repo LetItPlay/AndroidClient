@@ -13,6 +13,8 @@ import kotlinx.android.synthetic.main.music_player_big.view.*
 
 class MusicPlayerBig : MusicPlayer {
 
+    private var trackDurationMs: Long = 0
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -51,10 +53,11 @@ class MusicPlayerBig : MusicPlayer {
     }
 
     override fun updateDuration(durationMs: Long) {
-        player_duration.text = getUserFriendlyTime(durationMs)
+        trackDurationMs = durationMs
     }
 
     override fun updateCurrentPosition(positionMs: Long) {
-        player_current_position.text = getUserFriendlyTime(positionMs)
+        player_current_time.text = getUserFriendlyTime(positionMs)
+        player_time_left.text = "-${getUserFriendlyTime(trackDurationMs - positionMs)}"
     }
 }

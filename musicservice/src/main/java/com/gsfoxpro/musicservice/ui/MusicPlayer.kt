@@ -1,5 +1,6 @@
 package com.gsfoxpro.musicservice.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
@@ -11,7 +12,8 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.SeekBar
 import com.gsfoxpro.musicservice.service.MusicService
-import java.util.concurrent.TimeUnit
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 abstract class MusicPlayer : FrameLayout {
@@ -159,16 +161,16 @@ abstract class MusicPlayer : FrameLayout {
 
     abstract fun updateCurrentPosition(positionMs: Long)
 
+    @SuppressLint("SimpleDateFormat")
     protected fun getUserFriendlyTime(timeMs: Long): String {
-        if (timeMs < 0) {
-            return "0:00"
-        }
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeMs) % 60
-        if (seconds < 10) {
-            return "${TimeUnit.MILLISECONDS.toMinutes(timeMs)}:0$seconds"
-        }
-
-        return "${TimeUnit.MILLISECONDS.toMinutes(timeMs)}:$seconds"
+        val formatWithHours = "H:mm:ss"
+        val formatWithoutHours = "mm:ss"
+        val date = Date(timeMs)
+        val cal = Calendar.getInstance()
+        cal.time = date
+        val hours = cal.get(Calendar.HOUR_OF_DAY)
+        val df = SimpleDateFormat(if (hours != 0) formatWithHours else formatWithoutHours)
+        return df.format(date)
     }
 
     private fun registerCallback() {
