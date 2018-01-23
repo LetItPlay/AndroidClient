@@ -61,6 +61,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
         setSupportActionBar(toolbar)
+        main_player.setViewPager(supportFragmentManager)
     }
 
     fun updateRepo(trackId: Long, repo: MusicRepo?) {
@@ -156,7 +157,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun expandPlayer() {
         main_player.isExpanded = true
-        main_player.setViewPager(supportFragmentManager)
         val set = ConstraintSet()
         set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
         set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)

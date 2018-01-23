@@ -15,6 +15,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePre
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.utils.loadImage
 import com.letitplay.maugry.letitplay.utils.splitTags
+import com.letitplay.maugry.letitplay.utils.toAudioTrack
 import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_page_fragment, ChannelPagePresenter) {
@@ -89,9 +90,10 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
-        presenter?.playlist?.let {
-            channelPageRepo = MusicRepo(it)
-        }
+        // FIXME: pass new repository as argument
+        channelPageRepo = MusicRepo(presenter!!.recentTracks.map {
+            (it.channel to it.track).toAudioTrack()
+        })
         navigationActivity.updateRepo(trackId, channelPageRepo)
     }
 

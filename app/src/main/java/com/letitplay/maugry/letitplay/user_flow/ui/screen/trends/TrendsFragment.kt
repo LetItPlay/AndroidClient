@@ -15,7 +15,6 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.widget.LikeWidget
 import kotlinx.android.synthetic.main.trends_fragment.*
 
 
@@ -57,6 +56,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     }
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position:Int) {
+        if (swipe_refresh.isRefreshing) return
         val like: LikeModel = if (isLiked) LikeModel(-1, 1, 1)
         else LikeModel(1, 1, 1)
         extendTrack.track?.id?.let {
@@ -75,6 +75,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     }
 
     private fun playTrack(trackId: Long) {
+        if (swipe_refresh.isRefreshing) return
         if (trendsRepo != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return

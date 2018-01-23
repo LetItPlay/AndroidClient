@@ -12,7 +12,6 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
-import com.letitplay.maugry.letitplay.user_flow.ui.widget.LikeWidget
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
@@ -63,6 +62,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
     }
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {
+        if (swipe_refresh.isRefreshing) return
         val like: LikeModel = if (isLiked) LikeModel(-1, 1, 1)
         else LikeModel(1, 1, 1)
         extendTrack.track?.id?.let {
@@ -75,6 +75,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
     }
 
     private fun playTrack(trackId: Long) {
+        if (swipe_refresh.isRefreshing) return
         if (feedRepo != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
