@@ -35,8 +35,13 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
             layoutManager = LinearLayoutManager(context)
         }
         presenter?.loadTracks {
-            presenter.extendTrackList?.let {
-                trendsListAdapter.data = it
+            if (presenter.extendTrackList?.size != 0) {
+                presenter.extendTrackList?.let {
+                    trendsListAdapter.data = it
+                }
+            } else {
+                swipe_refresh.isEnabled = false
+                trends_no_tracks.visibility = View.VISIBLE
             }
         }
 

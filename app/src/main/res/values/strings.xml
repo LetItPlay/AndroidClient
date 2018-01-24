@@ -19,6 +19,7 @@
     <!--TRACK-->
     <string name="track_recent_added">Recent added</string>
     <string name="time_published_ago">ago</string>
+    <string name="no_trends">There are no tracks</string>
 
     <!--PROFILE-->
     <string name="profile_change_language_to_ru">Поменять язык на русский</string>
