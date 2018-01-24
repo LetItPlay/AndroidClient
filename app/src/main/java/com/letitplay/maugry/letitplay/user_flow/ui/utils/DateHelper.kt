@@ -18,7 +18,7 @@ object DateHelper {
         return PassedDateTime(
                 years = cal.get(Calendar.YEAR) - 1970,
                 months = cal.get(Calendar.MONTH),
-                days = cal.get(Calendar.DAY_OF_MONTH),
+                days = cal.get(Calendar.DAY_OF_MONTH)-1,
                 hours = cal.get(Calendar.HOUR),
                 minutes = cal.get(Calendar.MINUTE),
                 seconds = cal.get(Calendar.SECOND)
