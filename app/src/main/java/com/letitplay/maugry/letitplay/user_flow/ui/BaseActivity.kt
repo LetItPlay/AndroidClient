@@ -143,7 +143,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     fun collapsePlayer() {
-        main_player.isExpanded = false
+        main_player.onCollapse()
         val set = ConstraintSet()
         set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
         set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
@@ -152,11 +152,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         set.applyTo(root_constraint)
         navigationMenu?.visibility = View.VISIBLE
         appbar?.visibility = View.VISIBLE
-        //  main_player.releaseViewPager()
     }
 
     fun expandPlayer() {
-        main_player.isExpanded = true
+        main_player.onExpand(musicService)
         val set = ConstraintSet()
         set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
         set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)

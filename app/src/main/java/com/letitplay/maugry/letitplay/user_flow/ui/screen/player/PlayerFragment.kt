@@ -12,8 +12,8 @@ class PlayerFragment : BaseFragment<PlayerPresenter>(R.layout.player_fragment, P
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        music_player_big.apply {
-            mediaSession = musicService?.mediaSession
-        }
+//        music_player_big.apply {
+//            mediaSession = musicService?.mediaSession
+//        }
     }
 }

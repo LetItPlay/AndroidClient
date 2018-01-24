@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.updateText
 import kotlinx.android.synthetic.main.music_player_big.view.*
 
@@ -57,7 +58,7 @@ class MusicPlayerBig : MusicPlayer {
     }
 
     override fun updateCurrentPosition(positionMs: Long) {
-        player_current_time.text = getUserFriendlyTime(positionMs)
-        player_time_left.text = "-${getUserFriendlyTime(trackDurationMs - positionMs)}"
+        player_current_time.text = DateHelper.getTime((positionMs/1000).toInt())
+        player_time_left.text = "-${DateHelper.getTime(((trackDurationMs - positionMs)/1000).toInt())}"
     }
 }

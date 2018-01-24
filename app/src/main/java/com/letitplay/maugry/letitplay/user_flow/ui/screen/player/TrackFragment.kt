@@ -22,18 +22,11 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
         }
     }
 
-    private val tracksLayoutManager by lazy {
-        LinearLayoutManager(context).apply {
-            isAutoMeasureEnabled = true
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tracks_list.apply {
-            setHasFixedSize(true)
             adapter = trackAdapter
-            layoutManager = tracksLayoutManager
+            layoutManager = LinearLayoutManager(context)
         }
         if (musicService?.musicRepo != null) {
             onRepoChanged(musicService?.musicRepo)

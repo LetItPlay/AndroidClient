@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
+import timber.log.Timber
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 

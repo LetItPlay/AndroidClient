@@ -34,7 +34,6 @@
         android:textSize="14dp"
         android:textStyle="normal"
         app:layout_constraintEnd_toStartOf="@+id/feed_track_last_update"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/feed_channel_logo"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Disgusting man" />
@@ -48,7 +47,6 @@
         android:layout_marginEnd="4dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/feed_channels_ago"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/feed_channel_title"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="18 hours" />
@@ -61,7 +59,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/time_published_ago"
+        tools:text="@string/time_published_ago"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/feed_track_last_update"
@@ -86,7 +84,7 @@
         android:id="@+id/feed_track_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="52dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -97,7 +95,7 @@
         android:textColor="@color/colorBlack"
         android:textSize="16dp"
         android:textStyle="normal"
-        app:layout_constraintBottom_toTopOf="@+id/feed_like"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/feed_track_image"
@@ -143,10 +141,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View
+        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:alpha="0.2"
