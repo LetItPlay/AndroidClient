@@ -68,7 +68,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/feed_track_last_update"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/time_published_ago" />
+            android:text="@string/time_published_ago" />
     </android.support.constraint.ConstraintLayout>
 
     <ImageView
