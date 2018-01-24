@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
@@ -24,6 +25,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (trend_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         trend_list.apply {
             adapter = trendsListAdapter.apply {
                 onClickItem = { playTrack(it) }
@@ -54,7 +56,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         }
     }
 
-    private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position:Int) {
+    private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {
         if (swipe_refresh.isRefreshing) return
         val like: LikeModel = if (isLiked) LikeModel(-1, 1, 1)
         else LikeModel(1, 1, 1)
