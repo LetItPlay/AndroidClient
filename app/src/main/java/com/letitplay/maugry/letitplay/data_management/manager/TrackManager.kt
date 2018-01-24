@@ -42,13 +42,16 @@ object TrackManager : BaseManager() {
                 val like = FavouriteTracksModel(it.track?.id, it.track?.likeCount, false)
                 updateFavouriteTrack(like)
                 it.like = like
+            } else{
+                it.like?.likeCounts =  it.track?.likeCount
+                updateFavouriteTrack(it.like)
             }
         }
         extendTrackList.saveAll()
     }
 
-    fun updateFavouriteTrack(like: FavouriteTracksModel) {
-        like.save()
+    fun updateFavouriteTrack(like: FavouriteTracksModel?) {
+        like?.save()
     }
 
     fun getExtendTrack() = get(
