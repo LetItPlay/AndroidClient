@@ -28,6 +28,7 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelViewHolder {
         return ChannelViewHolder(parent).apply {
+            itemView.tag_container.removeNotFullVisible = true
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
                     onClick?.invoke(data[adapterPosition].channel?.id)
@@ -51,10 +52,8 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
                 channel_title.text = extendChannelModel.channel?.name
                 follower_count.text = extendChannelModel.channel?.subscriptionCount.toString()
                 channel_logo.loadImage(extendChannelModel.channel?.imageUrl)
-                tag_container.removeNotFullVisible = true
                 val tags = extendChannelModel.channel?.tags?.splitTags()
-                if (tags != null)
-                    tag_container.setTagList(tags)
+                tag_container.setTagList(tags ?: emptyList())
             }
         }
 
