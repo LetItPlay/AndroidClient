@@ -102,6 +102,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:layout_marginBottom="8dp"
                 android:lineSpacingExtra="9sp"
                 android:marqueeRepeatLimit="marquee_forever"
@@ -110,7 +112,7 @@
                 android:textColor="#020202"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                tools:text="75. Blade Runner 2049, новый «Физрук», Shadow of War и Divinity… Original Sin 2" />
+                tools:text="75. Bljjjjow of War bbbbDibbbvinity… Original Sin 2" />
         </LinearLayout>
 
     <ImageView
