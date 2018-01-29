@@ -66,7 +66,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         mBottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    main_player.onCollapse()
+                    collapsePlayer()
                 }
             }
 
