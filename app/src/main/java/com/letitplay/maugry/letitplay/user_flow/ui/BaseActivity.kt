@@ -3,9 +3,8 @@ package com.letitplay.maugry.letitplay.user_flow.ui
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.constraint.ConstraintSet
 import android.support.design.widget.BottomNavigationView
-import android.support.transition.TransitionManager
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
@@ -27,12 +26,13 @@ import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
-import kotlinx.android.synthetic.main.player_container_fragment.view.*
 
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
+    lateinit var mBottomSheetBehavior: BottomSheetBehavior<View>
     lateinit var backstackDelegate: BackstackDelegate
     lateinit var fragmentStateChanger: FragmentStateChanger
+
     var navigationMenu: BottomNavigationView? = null
 
     protected val musicService: MusicService?
@@ -61,13 +61,26 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
         setSupportActionBar(toolbar)
+        mBottomSheetBehavior = BottomSheetBehavior.from(main_player)
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        mBottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    main_player.onCollapse()
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
         main_player.setViewPager(supportFragmentManager)
     }
 
     fun updateRepo(trackId: Long, repo: MusicRepo?) {
         musicService?.musicRepo = repo
         musicPlayerSmall?.apply {
-            setOnClickListener { expandPlayer() }
+            setOnClickListener {
+                expandPlayer()
+            }
             visibility = View.VISIBLE
             skipToQueueItem(trackId)
         }
@@ -144,30 +157,12 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun collapsePlayer() {
         main_player.onCollapse()
-        val set = ConstraintSet()
-        set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-        set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-        set.connect(R.id.main_player, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-        TransitionManager.beginDelayedTransition(root_constraint)
-        set.applyTo(root_constraint)
-        navigationMenu?.visibility = View.VISIBLE
-        appbar?.visibility = View.VISIBLE
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     fun expandPlayer() {
         main_player.onExpand(musicService)
-        val set = ConstraintSet()
-        set.connect(R.id.main_player, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
-        set.connect(R.id.main_player, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
-        set.connect(R.id.main_player, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-        set.connect(R.id.main_player, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-        navigationMenu?.visibility = View.INVISIBLE
-        appbar?.visibility = View.INVISIBLE
-        TransitionManager.beginDelayedTransition(root_constraint)
-        set.applyTo(root_constraint)
-        main_player.collapse.setOnClickListener {
-            collapsePlayer()
-        }
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     fun navigateTo(key: Any) {
