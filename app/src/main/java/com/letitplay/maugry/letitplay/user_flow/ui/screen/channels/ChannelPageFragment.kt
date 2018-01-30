@@ -13,9 +13,9 @@ import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.utils.loadImage
-import com.letitplay.maugry.letitplay.utils.splitTags
-import com.letitplay.maugry.letitplay.utils.toAudioTrack
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.splitTags
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_page_fragment, ChannelPagePresenter) {

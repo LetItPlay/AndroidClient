@@ -10,7 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
-import com.letitplay.maugry.letitplay.utils.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.channels_item_small.view.*
 import kotlinx.android.synthetic.main.track_item.view.track_playing_now
 

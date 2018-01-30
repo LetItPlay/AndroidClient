@@ -6,7 +6,7 @@ import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
-import com.letitplay.maugry.letitplay.utils.toAudioTrack
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 
 
 object ProfilePresenter : BasePresenter<IMvpView>() {

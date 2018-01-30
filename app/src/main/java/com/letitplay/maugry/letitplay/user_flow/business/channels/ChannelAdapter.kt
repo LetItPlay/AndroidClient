@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import com.letitplay.maugry.letitplay.utils.loadImage
-import com.letitplay.maugry.letitplay.utils.splitTags
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.splitTags
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 

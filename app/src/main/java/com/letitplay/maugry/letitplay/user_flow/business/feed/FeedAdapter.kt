@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.utils.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.feed_item.view.*
 import java.util.*
 
@@ -67,5 +67,13 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedItemViewHolder>() {
                 feed_track_image.loadImage(extendTrackModel.track?.image)
             }
         }
+    }
+
+    fun addItemToTop(viewHolder: RecyclerView.ViewHolder) {
+
+    }
+
+    fun addItemToBottom(viewHolder: RecyclerView.ViewHolder) {
+
     }
 }
