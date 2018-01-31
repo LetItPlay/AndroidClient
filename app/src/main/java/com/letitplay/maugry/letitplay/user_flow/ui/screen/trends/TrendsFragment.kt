@@ -14,24 +14,22 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.utils.toAudioTrack
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.trends_fragment.*
 
 
 class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, TrendsPresenter) {
 
-    private val trendsListAdapter = FeedAdapter()
+    private val trendsListAdapter by lazy {
+        FeedAdapter(musicService, ::playTrack, ::onLikeClick)
+    }
     private var trendsRepo: MusicRepo? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (trend_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         trend_list.apply {
-            adapter = trendsListAdapter.apply {
-                onClickItem = { playTrack(it) }
-                onLikeClick = this@TrendsFragment::onLikeClick
-                musicService = this@TrendsFragment.musicService
-            }
+            adapter = trendsListAdapter
             layoutManager = LinearLayoutManager(context)
         }
         presenter?.loadTracks {

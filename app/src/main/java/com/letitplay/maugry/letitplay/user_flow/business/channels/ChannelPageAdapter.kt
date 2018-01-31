@@ -6,14 +6,15 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.utils.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.channel_page_item.view.*
 
 
-class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageItemHolder>() {
+class ChannelPageAdapter(
+        private val onClickItem: ((Long) -> Unit)
+) : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageItemHolder>() {
 
     private var data: List<ExtendTrackModel> = ArrayList()
-    var onClickItem: ((Long) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ChannelPageAdapter.ChannelPageItemHolder, position: Int) {
         holder.update(data[position])
@@ -32,7 +33,7 @@ class ChannelPageAdapter : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageIt
         return ChannelPageItemHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onClickItem?.invoke(data[adapterPosition].track?.id!!)
+                    onClickItem(data[adapterPosition].track?.id!!)
                 }
             }
         }

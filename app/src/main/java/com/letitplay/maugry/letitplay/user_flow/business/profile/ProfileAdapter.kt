@@ -8,19 +8,20 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.utils.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
 
-class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() {
+class ProfileAdapter(
+        private val musicService: MusicService? = null,
+        private val onClickItem: ((Long) -> Unit)
+) : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() {
 
     var data: List<ExtendTrackModel> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    var musicService: MusicService? = null
-    var onClickItem: ((Long) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ProfileItemHolder?, position: Int) {
         holder?.update(data[position])
@@ -33,7 +34,7 @@ class ProfileAdapter : RecyclerView.Adapter<ProfileAdapter.ProfileItemHolder>() 
             itemView.track_playing_now.mediaSession = musicService?.mediaSession
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onClickItem?.invoke(data[adapterPosition].track?.id!!)
+                    onClickItem(data[adapterPosition].track?.id!!)
                 }
             }
         }

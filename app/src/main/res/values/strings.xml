@@ -65,4 +65,8 @@
     <string name="hours_short">%dh. ago</string>
     <string name="minutes_short">%dm. ago</string>
     <string name="seconds_short">%dsec. ago</string>
+
+    <string name="track_added">Track added</string>
+    <string name="add_down_the_playlist">Add down the playlist</string>
+    <string name="add_up_the_playlist">Add up the playlist</string>
 </resources>

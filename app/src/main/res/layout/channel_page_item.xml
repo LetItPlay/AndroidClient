@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:alpha="0.7"
-        android:background="@color/colorWhite"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/channel_page_track_preview"
         app:layout_constraintEnd_toEndOf="@+id/channel_page_track_preview"
         app:layout_constraintStart_toStartOf="@+id/channel_page_track_preview" />

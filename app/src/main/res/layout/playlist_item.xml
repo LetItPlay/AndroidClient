@@ -43,7 +43,7 @@
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.01"
             android:maxLines="1"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/black"
             android:textSize="20dp"
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/playlist_description"

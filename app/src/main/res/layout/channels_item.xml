@@ -24,7 +24,7 @@
         android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="3"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/black"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -101,15 +101,6 @@
             tools:text="237" />
 
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha="0.1"
-        android:background="@color/colorBlack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

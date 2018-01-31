@@ -8,20 +8,19 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.utils.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
-import timber.log.Timber
 
-class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
+class TrackAdapter(
+        private val musicService: MusicService? = null,
+        private val onClickItem: ((Long) -> Unit)
+) : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
     var data: List<AudioTrack> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    var onClickItem: ((Long) -> Unit)? = null
-    var musicService: MusicService? = null
 
     override fun onBindViewHolder(holder: TrackItemHolder?, position: Int) {
         holder?.update(data[position])
@@ -33,7 +32,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
         return TrackItemHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
-                    onClickItem?.invoke(data[adapterPosition].id)
+                    onClickItem(data[adapterPosition].id)
                 }
             }
             itemView.track_playing_now.mediaSession = musicService?.mediaSession

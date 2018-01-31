@@ -2,7 +2,10 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
@@ -10,24 +13,27 @@ import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.track_fragment.*
 import timber.log.Timber
 
 class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, TrackPresenter), MusicService.RepoChangesListener {
 
-    private val trackAdapter by lazy {
-        TrackAdapter().apply {
-            musicService = this@TrackFragment.musicService
-            onClickItem = this@TrackFragment::playTrack
-        }
+    private lateinit var trackAdapter: TrackAdapter
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val tracksRecycler = view.findViewById<RecyclerView>(R.id.tracks_list)
+        trackAdapter = TrackAdapter(musicService, ::playTrack)
+        tracksRecycler.adapter = trackAdapter
+        tracksRecycler.layoutManager = LinearLayoutManager(context)
+        val divider = listDivider(tracksRecycler.context, R.drawable.list_divider)
+        tracksRecycler.addItemDecoration(divider)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tracks_list.apply {
-            adapter = trackAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
         if (musicService?.musicRepo != null) {
             onRepoChanged(musicService?.musicRepo)
         }

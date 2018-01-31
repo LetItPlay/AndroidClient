@@ -2,10 +2,8 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.support.v7.widget.RecyclerView
+import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
@@ -19,20 +17,24 @@ import timber.log.Timber
 
 class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragment, PlaylistPresenter) {
 
-    private val playlistAdapter = PlaylistAdapter()
+    private lateinit var playlistAdapter: PlaylistAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val recycler = view.findViewById<RecyclerView>(R.id.search_list)
+        playlistAdapter = PlaylistAdapter(::onPlaylistClick)
+        recycler.adapter = playlistAdapter
+        recycler.layoutManager = LinearLayoutManager(context)
+        return view
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlistAdapter.onClick = this::onPlaylistClick
-        search_list.apply {
-            adapter = playlistAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
         var tag = "новости"
         if (presenter?.currentContentLang == ContentLanguage.EN) tag = "news"
 

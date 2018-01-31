@@ -75,4 +75,6 @@
     <string name="hours_short">%dчас. назад</string>
     <string name="minutes_short">%dмин. назад</string>
     <string name="seconds_short">%dсек. назад</string>
+
+    <string name="track_added">Трек добавлен</string>
 </resources>

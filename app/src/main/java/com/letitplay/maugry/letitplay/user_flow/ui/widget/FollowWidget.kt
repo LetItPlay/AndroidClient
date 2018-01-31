@@ -42,7 +42,7 @@ class FollowWidget : FrameLayout {
             } else {
                 follow_button.setBackgroundResource(R.drawable.unfollowing_bg)
                 follow_button.text = context.getString(R.string.channels_unfollowing)
-                follow_button.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+                follow_button.setTextColor(ContextCompat.getColor(context, R.color.white))
             }
         }
     }

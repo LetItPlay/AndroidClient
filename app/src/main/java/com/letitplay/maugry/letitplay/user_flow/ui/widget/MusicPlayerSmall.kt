@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.utils.updateText
+import com.letitplay.maugry.letitplay.utils.ext.updateText
 import kotlinx.android.synthetic.main.music_player_small.view.*
 
 class MusicPlayerSmall : MusicPlayer {
