@@ -35,6 +35,7 @@ abstract class SwipeLayout @JvmOverloads constructor(context: Context, attrs: At
     protected var velocityTracker: VelocityTracker? = null
     protected var scaledMinimumFlingVelocity: Int = 0
     protected var scaledMaximumFlingVelocity: Int = 0
+    protected var swipeMenuMaxWidth: Float = 0f
 
     protected var isSwipeEnabled = true
 
@@ -47,6 +48,7 @@ abstract class SwipeLayout @JvmOverloads constructor(context: Context, attrs: At
             translationDuration = array.getInteger(R.styleable.SwipeLayout_swipe_menu_duration, DEFAULT_ANIMATION_DURATION)
             isSwipeToActionEnabled = array.getBoolean(R.styleable.SwipeLayout_swipe_to_action_enabled, true)
             swipeToActionPercent = array.getFloat(R.styleable.SwipeLayout_swipe_to_action_percent, DEFAULT_SWIPE_TO_DISMISS_PERCENT)
+            swipeMenuMaxWidth = array.getDimension(R.styleable.SwipeLayout_swipe_menu_max_width, 0f)
             array.recycle()
         }
         init()

@@ -4,5 +4,6 @@
         <attr name="swipe_menu_duration" format="integer"/>
         <attr name="swipe_to_action_enabled" format="boolean"/>
         <attr name="swipe_to_action_percent" format="float"/>
+        <attr name="swipe_menu_max_width" format="dimension"/>
     </declare-styleable>
 </resources>

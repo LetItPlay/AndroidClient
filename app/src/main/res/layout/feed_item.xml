@@ -5,257 +5,37 @@
     android:id="@+id/feed_swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:swipe_to_action_enabled="true"
-    app:swipe_to_action_percent="0.4">
+    app:swipe_menu_max_width="164dp"
+    app:swipe_to_action_enabled="true">
 
     <FrameLayout
         android:id="@+id/left_menu"
-        android:layout_width="180dp"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/feed_item_menu_left_background">
 
-        <ImageView
-            android:layout_width="58dp"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="71dp"
-            android:src="@drawable/ic_bottom_active" />
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="161dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_horizontal"
-            android:text="Add up the playlist"
-            android:textColor="#b4c0c0"
-            android:textSize="24sp"
-            android:textStyle="normal" />
+        <include
+            android:id="@+id/left_menu_content"
+            layout="@layout/view_swipe_menu_left"
+            android:layout_width="164dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/right_menu"
-        android:layout_width="180dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="end">
+        android:layout_gravity="end"
+        android:background="@drawable/feed_item_menu_right_background">
 
-        <ImageView
-            android:layout_width="58dp"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="71dp"
-            android:src="@drawable/ic_bottom_active" />
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="161dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_horizontal"
-            android:text="Add down the playlist"
-            android:textColor="#b4c0c0"
-            android:textSize="24sp"
-            android:textStyle="normal" />
+        <include
+            android:id="@+id/right_menu_content"
+            layout="@layout/view_swipe_menu_right"
+            android:layout_width="164dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start" />
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/feed_channel_logo"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/feed_channel_title"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/feed_preview_placeholder" />
-
-            <TextView
-                android:id="@+id/feed_channel_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/channel_logo"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif-medium"
-                android:maxLines="1"
-                android:textColor="@color/colorBlack"
-                android:textSize="14dp"
-                android:textStyle="normal"
-                app:layout_constraintEnd_toStartOf="@+id/feed_track_last_update"
-                app:layout_constraintStart_toEndOf="@+id/feed_channel_logo"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Disgusting man" />
-
-            <TextView
-                android:id="@+id/feed_track_last_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="4dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/feed_channels_ago"
-                app:layout_constraintStart_toEndOf="@+id/feed_channel_title"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="18 hours" />
-
-            <TextView
-                android:id="@+id/feed_channels_ago"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/time_published_ago"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/feed_track_last_update"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="184dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/feed_track_title"
-            app:layout_constraintTop_toBottomOf="@+id/feed_channel_logo">
-
-            <ImageView
-                android:id="@+id/feed_track_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorWhite"
-                android:scaleType="centerCrop"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:src="@drawable/feed_channel_placeholder" />
-
-            <FrameLayout
-                android:id="@+id/track_added_overlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible"
-                android:background="@color/colorWhite">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:drawableEnd="@drawable/ic_check_red_24dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:letterSpacing="0.01"
-                    android:text="@string/track_added"
-                    android:textColor="#000000"
-                    android:textSize="24sp" />
-            </FrameLayout>
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/feed_track_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:fontFamily="sans-serif-medium"
-            android:lineSpacingExtra="6dp"
-            android:maxLines="3"
-            android:textColor="@color/colorBlack"
-            android:textSize="16dp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feed_track_image"
-            tools:text="Выпуск 75. Blade Runner 2049, новый «Физрук», Shadow of War и Divinity Original Sin 2" />
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/feed_time_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/time_ic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/feed_time"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/feed_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="sans-serif"
-                android:textColor="#4a4a4a"
-                android:textSize="12dp"
-                android:textStyle="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/feed_playing_now"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/feed_time_icon"
-                tools:text="13:35:15" />
-
-
-            <com.letitplay.maugry.letitplay.user_flow.ui.widget.PlayingNowWidget
-                android:id="@+id/feed_playing_now"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/feed_like"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/feed_time" />
-
-            <com.letitplay.maugry.letitplay.user_flow.ui.widget.LikeWidget
-                android:id="@+id/feed_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:alpha="0.2"
-                android:background="@color/colorBlack"
-                app:layout_constraintBottom_toBottomOf="parent" />
-        </android.support.constraint.ConstraintLayout>
-
-    </LinearLayout>
+    <include layout="@layout/view_feed_card" />
 </com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout>

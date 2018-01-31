@@ -7,6 +7,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
+import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.show
@@ -19,11 +20,11 @@ class SwipeHorizontalLayout : SwipeLayout {
 
     private var translationAnimator: ValueAnimator? = null
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {}
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (!isSwipeEnabled) {
@@ -101,15 +102,19 @@ class SwipeHorizontalLayout : SwipeLayout {
                 }
                 if (dragging) {
                     val translationX = contentView!!.translationX - disX
-                    if (Math.abs(translationX) > 0 && isSwipeToActionEnabled && Math.abs(translationX) < contentView!!.width) {
-                        if (translationX > 0) {       // Swiping from left to right
-                            rightMenuView!!.gone()
-                            leftMenuView!!.show()
-                        } else {                      // Swiping from right to left
-                            leftMenuView!!.gone()
-                            rightMenuView!!.show()
+                    val absTranslationX = Math.abs(translationX)
+                    val signTranslationX = Math.signum(translationX)
+                    if (absTranslationX > 0 && isSwipeToActionEnabled && absTranslationX < contentView!!.width) {
+                        val translation = signTranslationX * Math.min(absTranslationX, swipeMenuMaxWidth)
+                        contentView!!.translationX = translation
+                        val (showMenu: View, hideMenu: View) = when {
+                            translationX > 0 -> leftMenuView!! to rightMenuView!!
+                            else -> rightMenuView!! to leftMenuView!!
                         }
-                        contentView!!.translationX = Math.signum(translationX) * Math.min(Math.abs(translationX), leftMenuView!!.width.toFloat())
+                        showMenu.show()
+                        hideMenu.gone()
+                        showMenu.layoutParams.width = Math.abs(translation).toInt()
+                        showMenu.requestLayout()
                         if (swipeCallback != null) {
                             swipeCallback!!.onSwipeChanged(translationX.toInt())
                         }
@@ -124,8 +129,7 @@ class SwipeHorizontalLayout : SwipeLayout {
                 dx = (downX - event.x).toInt()
                 dy = (downY - event.y).toInt()
                 dragging = false
-                val menu = if (contentView!!.translationX > 0) leftMenuView!! else rightMenuView!!
-                if (isSwipeToActionEnabled && Math.abs(Math.abs(contentView!!.translationX) - menu.width.toFloat()) < menu.width / 4) {
+                if (isSwipeToActionEnabled && Math.abs(Math.abs(contentView!!.translationX) - swipeMenuMaxWidth) < swipeMenuMaxWidth / 4) {
                     if (contentView!!.translationX > 0) {
                         smoothSwipeLeftItem(true)
                     } else {

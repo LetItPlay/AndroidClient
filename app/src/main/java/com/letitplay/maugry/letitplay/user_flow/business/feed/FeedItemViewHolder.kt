@@ -11,7 +11,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout
 import com.letitplay.maugry.letitplay.utils.ext.ifTrue
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
-import kotlinx.android.synthetic.main.feed_item.view.*
+import kotlinx.android.synthetic.main.view_feed_card.view.*
 
 class FeedItemViewHolder(parent: ViewGroup?, playlistActionsListener: OnPlaylistActionsListener?) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var extendTrackModel: ExtendTrackModel

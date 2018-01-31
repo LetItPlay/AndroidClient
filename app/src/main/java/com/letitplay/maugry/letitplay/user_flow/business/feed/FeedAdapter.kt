@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
-import kotlinx.android.synthetic.main.feed_item.view.*
+import kotlinx.android.synthetic.main.view_feed_card.view.*
 import java.util.*
 
 class FeedAdapter(
