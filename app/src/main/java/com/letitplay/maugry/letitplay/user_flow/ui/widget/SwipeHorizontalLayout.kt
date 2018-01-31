@@ -10,6 +10,7 @@ import android.view.VelocityTracker
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.show
+import timber.log.Timber
 
 /**
  * @author Artur Vasilov
@@ -102,13 +103,13 @@ class SwipeHorizontalLayout : SwipeLayout {
                     val translationX = contentView!!.translationX - disX
                     if (Math.abs(translationX) > 0 && isSwipeToActionEnabled && Math.abs(translationX) < contentView!!.width) {
                         if (translationX > 0) {       // Swiping from left to right
-                            rightMenuView?.gone()
-                            leftMenuView?.show()
+                            rightMenuView!!.gone()
+                            leftMenuView!!.show()
                         } else {                      // Swiping from right to left
-                            leftMenuView?.gone()
-                            rightMenuView?.show()
+                            leftMenuView!!.gone()
+                            rightMenuView!!.show()
                         }
-                        contentView!!.translationX = translationX
+                        contentView!!.translationX = Math.signum(translationX) *Math.min(Math.abs(translationX), leftMenuView!!.width.toFloat())
                         if (swipeCallback != null) {
                             swipeCallback!!.onSwipeChanged(translationX.toInt())
                         }
@@ -127,15 +128,13 @@ class SwipeHorizontalLayout : SwipeLayout {
                 val velocityX = velocityTracker!!.xVelocity.toInt()
                 val velocity = Math.abs(velocityX)
                 if (velocity > scaledMinimumFlingVelocity) {
-                    if (isSwipeToActionEnabled && Math.abs(contentView!!.translationX) > contentView!!.width / 3) {
-                        val performAction = velocityX > 0
+                    if (isSwipeToActionEnabled && Math.abs(Math.abs(contentView!!.translationX) - leftMenuView!!.width.toFloat()) < 20) {
                         if (contentView!!.translationX > 0) {
-                            smoothSwipeLeftItem(performAction)
+                            smoothSwipeLeftItem(true)
                         } else {
-                            smoothSwipeRightItem(performAction)
+                            smoothSwipeRightItem(true)
                         }
                     } else {
-                        //not clearly determined case, just judge what to do with swiped content
                         judgeOpenClose(dx, dy)
                     }
                 } else {
@@ -178,8 +177,9 @@ class SwipeHorizontalLayout : SwipeLayout {
         }
         translateContentView(duration, contentView!!.translationX, 0f,
                 Runnable {
-                    if (swipeCallback != null) {
-                        swipeCallback!!.onSwipeToRight()
+                    if (swipeCallback != null && performAction) {
+                        Timber.d("OnSwipeToLeft")
+                        swipeCallback!!.onSwipeToLeft()
                     }
                 })
     }
@@ -192,7 +192,12 @@ class SwipeHorizontalLayout : SwipeLayout {
         if (duration < translationDuration / 3) {
             duration = translationDuration / 3
         }
-        translateContentView(duration, contentView!!.translationX, 0f, null)
+        translateContentView(duration, contentView!!.translationX, 0f, Runnable {
+            if (swipeCallback != null && performAction) {
+                Timber.d("OnSwipeToRight")
+                swipeCallback!!.onSwipeToRight()
+            }
+        })
     }
 
     private fun judgeOpenClose(dx: Int, dy: Int) {
