@@ -11,7 +11,8 @@ import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.letitplay.maugry.letitplay.utils.toAudioTrack
-import java.util.*
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 object TrendsPresenter : BasePresenter<IMvpView>() {
 
@@ -27,7 +28,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     asyncObservable = TrackManager.getExtendTrack(),
                     onErrorWithContext = onError,
                     onNextNonContext = {
-                        val now = Date(System.currentTimeMillis())
+                        val now = DateTime.now()
                         val sortedTracks = it
                                 .filter {
                                     val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
@@ -68,18 +69,15 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
 
     )
 
-    private fun List<ExtendTrackModel>.takeLastDate(now: Date): List<ExtendTrackModel> =
+    private fun List<ExtendTrackModel>.takeLastDate(now: DateTime): List<ExtendTrackModel> =
             sortedByDescending {
                 it.track?.publishedAt
             }.filter {
                 it.track?.publishedAt != null
             }.takeWhile {
-                val diff = now.time - it.track?.publishedAt?.time!!
-                val diffDate = Date(diff)
-                val cal = Calendar.getInstance()
-                cal.time = diffDate
-                val days = cal.get(Calendar.DAY_OF_MONTH)
-                days < 8
+                val publish = DateTime(it.track?.publishedAt?.time!!)
+                val days = Days.daysBetween(publish, now).days
+                 days in 0..8
             }
 
 

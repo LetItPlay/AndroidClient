@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.utils
 
 import android.support.v4.app.Fragment
-import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 import com.letitplay.maugry.letitplay.user_flow.ui.MenuType
 import com.zhuinden.simplestack.StateChange

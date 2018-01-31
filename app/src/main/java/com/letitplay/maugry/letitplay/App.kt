@@ -13,6 +13,7 @@ import com.letitplay.maugry.letitplay.data_management.RealmDB
 import io.fabric.sdk.android.Fabric
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
+import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
 import java.util.concurrent.Executors
 
@@ -54,7 +55,8 @@ class App : MultiDexApplication(){
         realmDb.init(this)
         bindMusicService()
         Timber.plant(Timber.DebugTree())
-        Fabric.with(this, Crashlytics())
+        JodaTimeAndroid.init(this)
+        //Fabric.with(this, Crashlytics())
     }
 
     private fun bindMusicService() {

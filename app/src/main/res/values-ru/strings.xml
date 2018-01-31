@@ -39,47 +39,40 @@
     <string name="language_en">English</string>
     <string name="language_ru">Русский</string>
 
-    <plurals name="years_long">
-        <item quantity="one">%d год</item>
-        <item quantity="few">%d года</item>
-        <item quantity="many">%d лет</item>
-        <item quantity="other">%d лет</item>
-    </plurals>
-    <plurals name="months_long">
-        <item quantity="one">%d месяц</item>
-        <item quantity="few">%d месяца</item>
-        <item quantity="many">%d месяцев</item>
-        <item quantity="other">%d месяцев</item>
+    <plurals name="weeks_long">
+        <item quantity="one">%d нед.</item>
+        <item quantity="few">%d нед.</item>
+        <item quantity="many">%d нед.</item>
+        <item quantity="other">%d нед.</item>
     </plurals>
     <plurals name="days_long">
-        <item quantity="one">%d день</item>
-        <item quantity="few">%d дня</item>
-        <item quantity="many">%d дня</item>
-        <item quantity="other">%d дней</item>
+        <item quantity="one">%d дн.</item>
+        <item quantity="few">%d дн.</item>
+        <item quantity="many">%d дн.</item>
+        <item quantity="other">%d дн.</item>
     </plurals>
     <plurals name="hours_long">
         <item quantity="one">%d час</item>
-        <item quantity="few">%d часа</item>
-        <item quantity="many">%d часов</item>
-        <item quantity="other">%d часов</item>
+        <item quantity="few">%d час.</item>
+        <item quantity="many">%d час.</item>
+        <item quantity="other">%d час.</item>
     </plurals>
     <plurals name="minutes_long">
-        <item quantity="one">%d минута</item>
-        <item quantity="few">%d минуты</item>
-        <item quantity="many">%d минут</item>
-        <item quantity="other">%d минут</item>
+        <item quantity="one">%d мин.</item>
+        <item quantity="few">%d мин.</item>
+        <item quantity="many">%d мин.</item>
+        <item quantity="other">%d мин.</item>
     </plurals>
     <plurals name="seconds_long">
-        <item quantity="one">%d секунда</item>
-        <item quantity="few">%d секунды</item>
-        <item quantity="many">%d секунд</item>
-        <item quantity="other">%d секунд</item>
+        <item quantity="one">%d сек.</item>
+        <item quantity="few">%d сек.</item>
+        <item quantity="many">%d сек.</item>
+        <item quantity="other">%d сек.</item>
     </plurals>
 
-    <string name="years_short">%dy. назад</string>
-    <string name="months_short">%dm. назад</string>
-    <string name="days_short">%dd. назад</string>
-    <string name="hours_short">%dh. назад</string>
-    <string name="minutes_short">%dmin. назад</string>
-    <string name="seconds_short">%dsec. назад</string>
+    <string name="weeks_short">%dнед. назад</string>
+    <string name="days_short">%dдн. назад</string>
+    <string name="hours_short">%dчас. назад</string>
+    <string name="minutes_short">%dмин. назад</string>
+    <string name="seconds_short">%dсек. назад</string>
 </resources>
