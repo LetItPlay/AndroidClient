@@ -11,7 +11,6 @@ import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.show
-import timber.log.Timber
 
 /**
  * @author Artur Vasilov
@@ -113,8 +112,7 @@ class SwipeHorizontalLayout : SwipeLayout {
                         }
                         showMenu.show()
                         hideMenu.gone()
-                        showMenu.layoutParams.width = Math.abs(translation).toInt()
-                        showMenu.requestLayout()
+                        showMenu.requestLayout(Math.abs(translation))
                         if (swipeCallback != null) {
                             swipeCallback!!.onSwipeChanged(translationX.toInt())
                         }
@@ -172,7 +170,6 @@ class SwipeHorizontalLayout : SwipeLayout {
         translateContentView(duration, contentView!!.translationX, 0f,
                 Runnable {
                     if (swipeCallback != null && performAction) {
-                        Timber.d("OnSwipeToLeft")
                         swipeCallback!!.onSwipeToLeft()
                     }
                 })
@@ -188,7 +185,6 @@ class SwipeHorizontalLayout : SwipeLayout {
         }
         translateContentView(duration, contentView!!.translationX, 0f, Runnable {
             if (swipeCallback != null && performAction) {
-                Timber.d("OnSwipeToRight")
                 swipeCallback!!.onSwipeToRight()
             }
         })
@@ -223,12 +219,20 @@ class SwipeHorizontalLayout : SwipeLayout {
         })
         translationAnimator!!.addUpdateListener { animation ->
             val translationX = animation.animatedValue as Float
-            contentView!!.translationX = translationX
+            shiftContent(translationX)
             if (swipeCallback != null) {
                 swipeCallback!!.onSwipeChanged(translationX.toInt())
             }
         }
         translationAnimator!!.setDuration(duration.toLong()).start()
+    }
+
+    private fun shiftContent(translationX: Float) {
+        contentView!!.translationX = translationX
+        if (translationX > 0)
+            leftMenuView?.requestLayout(translationX)
+        else
+            rightMenuView?.requestLayout(-translationX)
     }
 
     override fun onFinishInflate() {
@@ -251,5 +255,10 @@ class SwipeHorizontalLayout : SwipeLayout {
     override fun getMoveLen(event: MotionEvent): Int {
         val translationX = contentView!!.translationX
         return (event.x - translationX).toInt()
+    }
+
+    private fun View.requestLayout(width: Float) {
+        this.layoutParams.width = width.toInt()
+        requestLayout()
     }
 }
