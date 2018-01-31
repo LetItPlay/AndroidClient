@@ -22,17 +22,18 @@ sealed class ResultItem {
     class TrackItem(val track: com.gsfoxpro.musicservice.model.AudioTrack) : ResultItem()
 }
 
-class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchResultsAdapter(
+        private val musicService: MusicService?,
+        private val onChannelClick: ((ChannelModel) -> Unit),
+        private val onTrackClick: ((AudioTrack) -> Unit),
+        private var onFollowClick: ((ExtendChannelModel, Boolean, Int) -> Unit)
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     var data: List<ResultItem> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    var onChannelClick: ((ChannelModel) -> Unit)? = null
-    var onTrackClick: ((AudioTrack) -> Unit)? = null
-    var onFollowClick: ((ExtendChannelModel, Boolean, Int) -> Unit)? = null
-    var musicService: MusicService? = null
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -48,12 +49,12 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             CHANNEL_ITEM_TYPE -> ChannelVH(parent).apply {
                 itemView.setOnClickListener {
                     if (adapterPosition != NO_POSITION) {
-                        onChannelClick?.invoke((data[adapterPosition] as ResultItem.ChannelItem).channelItemModel.channel!!)
+                        onChannelClick((data[adapterPosition] as ResultItem.ChannelItem).channelItemModel.channel!!)
                     }
                 }
                 itemView.channel_follow.setOnClickListener {
                     if (adapterPosition != NO_POSITION) {
-                        onFollowClick?.invoke(
+                        onFollowClick(
                                 (data[adapterPosition] as ResultItem.ChannelItem).channelItemModel,
                                 it.channel_follow.isFollow(),
                                 adapterPosition
@@ -64,7 +65,7 @@ class SearchResultsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             TRACK_ITEM_TYPE -> TrackVH(parent).apply {
                 itemView.setOnClickListener {
                     if (adapterPosition != NO_POSITION) {
-                        onTrackClick?.invoke((data[adapterPosition] as ResultItem.TrackItem).track)
+                        onTrackClick((data[adapterPosition] as ResultItem.TrackItem).track)
                     }
                 }
                 itemView.track_playing_now.mediaSession = musicService?.mediaSession

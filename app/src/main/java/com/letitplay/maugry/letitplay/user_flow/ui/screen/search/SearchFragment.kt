@@ -25,7 +25,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKe
 
 class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter) {
 
-    private val resultsAdapter = SearchResultsAdapter()
+    private lateinit var resultsAdapter: SearchResultsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,17 +33,12 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)?.also {
-            resultsAdapter.onChannelClick = this::toChannel
-            resultsAdapter.onTrackClick = this::playTrack
-            resultsAdapter.onFollowClick = this::updateFollowers
-            resultsAdapter.musicService = musicService
-            val resultsRecyclerView = it.findViewById<RecyclerView>(R.id.results_recycler)
-            resultsRecyclerView?.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = resultsAdapter
-            }
-        }
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        resultsAdapter = SearchResultsAdapter(musicService, ::toChannel, ::playTrack, ::updateFollowers)
+        val resultsRecycler = view.findViewById<RecyclerView>(R.id.results_recycler)
+        resultsRecycler.adapter = resultsAdapter
+        resultsRecycler.layoutManager = LinearLayoutManager(context)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

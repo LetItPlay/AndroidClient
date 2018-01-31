@@ -9,15 +9,18 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackFragment
 
 class PlayerContainerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    private val PAGE_COUNT = 2
+    enum class PlayerTabs {
+        PLAYER,
+        TRACKS
+    }
 
     override fun getItem(position: Int): Fragment? {
         return when (position) {
-            0 -> PlayerFragment()
-            1 -> TrackFragment()
+            PlayerTabs.PLAYER.ordinal -> PlayerFragment()
+            PlayerTabs.TRACKS.ordinal -> TrackFragment()
             else -> null
         }
     }
 
-    override fun getCount(): Int = PAGE_COUNT
+    override fun getCount(): Int = PlayerTabs.values().size
 }

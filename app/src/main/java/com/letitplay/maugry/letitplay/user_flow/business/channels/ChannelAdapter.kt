@@ -11,14 +11,15 @@ import com.letitplay.maugry.letitplay.utils.ext.splitTags
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 
-class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
+class ChannelAdapter(
+        private val onClick: ((Int?) -> Unit),
+        private val onFollowClick: ((ExtendChannelModel, Boolean, Int) -> Unit)
+) : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
     var data: List<ExtendChannelModel> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    var onClick: ((Int?) -> Unit)? = null
-    var onFollowClick: ((ExtendChannelModel, Boolean, Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ChannelViewHolder?, position: Int) {
         holder?.update(data[position])
@@ -31,13 +32,13 @@ class ChannelAdapter : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() 
             itemView.tag_container.removeNotFullVisible = true
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
-                    onClick?.invoke(data[adapterPosition].channel?.id)
+                    onClick(data[adapterPosition].channel?.id)
                 }
             }
             itemView.channel_follow.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
                     it.isEnabled = false
-                    onFollowClick?.invoke(data[adapterPosition], it.channel_follow.isFollow(), adapterPosition)
+                    onFollowClick(data[adapterPosition], it.channel_follow.isFollow(), adapterPosition)
                 }
             }
         }

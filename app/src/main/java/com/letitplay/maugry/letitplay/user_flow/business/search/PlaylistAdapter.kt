@@ -6,17 +6,17 @@ import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.PlaylistModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import kotlinx.android.synthetic.main.playlist_item.view.*
 
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>() {
+class PlaylistAdapter(
+        private val onClick: ((PlaylistModel) -> Unit)
+) : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>() {
 
      var data: List<PlaylistModel> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    var onClick: ((PlaylistModel) -> Unit)? = null
 
     override fun onBindViewHolder(holder: PlaylistItemHolder, position: Int) {
 
@@ -28,7 +28,7 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>
         return PlaylistItemHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
-                    onClick?.invoke(data[adapterPosition])
+                    onClick(data[adapterPosition])
                 }
             }
         }

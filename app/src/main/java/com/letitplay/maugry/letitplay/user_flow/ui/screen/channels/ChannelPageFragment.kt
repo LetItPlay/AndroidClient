@@ -20,18 +20,16 @@ import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_page_fragment, ChannelPagePresenter) {
 
-    private var recentAddedListAdapter = ChannelPageAdapter()
+    private lateinit var recentAddedListAdapter: ChannelPageAdapter
     private var channelPageRepo: MusicRepo? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState).also {
-            val recentAddedRecycler = it?.findViewById<RecyclerView>(R.id.recent_added_list)
-            recentAddedRecycler?.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = recentAddedListAdapter
-            }
-            recentAddedListAdapter.onClickItem = this::playTrack
-        }
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val recentAddedRecycler = view.findViewById<RecyclerView>(R.id.recent_added_list)
+        recentAddedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recentAddedListAdapter = ChannelPageAdapter(::playTrack)
+        recentAddedRecycler.adapter = recentAddedListAdapter
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="85dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="85dp">
 
     <ImageView
         android:id="@+id/track_logo"
@@ -11,9 +11,9 @@
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        tools:src="@drawable/track_placeholder"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/track_placeholder" />
 
 
     <TextView
@@ -24,10 +24,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:alpha="0.6"
-        android:textColor="@color/colorBlack"
-        android:textSize="14dp"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        android:textSize="14dp"
         app:layout_constraintEnd_toStartOf="@+id/track_last_seen"
         app:layout_constraintStart_toEndOf="@+id/track_logo"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,10 +41,10 @@
         android:layout_marginTop="8dp"
         android:alpha="0.6"
         android:text="6h"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/black"
         android:textSize="14dp"
-        app:layout_constraintEnd_toStartOf="@+id/track_last_seen_ago"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/track_last_seen_ago"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -55,7 +55,7 @@
         android:layout_marginTop="8dp"
         android:text="ago"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/track_name"
@@ -64,13 +64,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:maxLines="1"
-        tools:text="Выпуск 76. Солнышко в руках"
         android:textColor="#000000"
         android:textSize="14dp"
         app:layout_constraintBottom_toTopOf="@+id/track_time_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/track_logo"
-        app:layout_constraintTop_toBottomOf="@id/channel_name" />
+        app:layout_constraintTop_toBottomOf="@id/channel_name"
+        tools:text="Выпуск 76. Солнышко в руках" />
 
     <ImageView
         android:id="@+id/track_time_icon"
@@ -87,11 +87,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        tools:text="01:00:25"
         android:textColor="#4a4a4a"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/track_time_icon" />
+        app:layout_constraintStart_toEndOf="@+id/track_time_icon"
+        tools:text="01:00:25" />
 
     <com.letitplay.maugry.letitplay.user_flow.ui.widget.PlayingNowWidget
         android:id="@+id/track_playing_now"
@@ -101,15 +101,5 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/track_time" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha="0.1"
-        android:background="@color/colorBlack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -14,24 +14,24 @@ import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.channels_fragment.*
 
 
 class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragment, ChannelPresenter) {
 
-    private var channelsListAdapter = ChannelAdapter()
+    private lateinit var channelsListAdapter: ChannelAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState).also {
-            val recycler = it?.findViewById<RecyclerView>(R.id.channels_list)
-            recycler?.apply {
-                adapter = channelsListAdapter.apply {
-                    onClick = this@ChannelsFragment::gotoChannelPage
-                    onFollowClick = this@ChannelsFragment::updateFollowers
-                }
-                layoutManager = LinearLayoutManager(context)
-            }
-        }
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val channelRecycler = view.findViewById<RecyclerView>(R.id.channels_list)
+        channelsListAdapter = ChannelAdapter(::gotoChannelPage, ::updateFollowers)
+        val layoutManager = LinearLayoutManager(context)
+        channelRecycler.adapter = channelsListAdapter
+        channelRecycler.layoutManager = layoutManager
+        val listDivider = listDivider(channelRecycler.context, R.drawable.list_divider)
+        channelRecycler.addItemDecoration(listDivider)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
