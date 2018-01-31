@@ -2,9 +2,14 @@ package com.letitplay.maugry.letitplay.user_flow.business.feed
 
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
+import android.transition.TransitionManager
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
+import com.letitplay.maugry.letitplay.utils.ext.gone
+import com.letitplay.maugry.letitplay.utils.ext.isVisible
+import com.letitplay.maugry.letitplay.utils.ext.show
+import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
 import java.util.*
 
@@ -31,8 +36,18 @@ class FeedAdapter(
         return FeedItemViewHolder(parent, playlistActionsListener).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
-                    onClickItem?.invoke(data[adapterPosition].track?.id!!)
+                    if (itemView.feed_card_info.isVisible()) {
+                        TransitionManager.beginDelayedTransition(itemView as ViewGroup)
+                        itemView.feed_card_info.gone()
+                    } else {
+                        onClickItem?.invoke(data[adapterPosition].track?.id!!)
+                    }
                 }
+            }
+            itemView.setOnLongClickListener {
+                TransitionManager.beginDelayedTransition(itemView as ViewGroup)
+                itemView.feed_card_info.show()
+                true
             }
             itemView.feed_like.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
