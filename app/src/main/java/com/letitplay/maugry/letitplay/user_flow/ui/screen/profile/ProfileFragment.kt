@@ -47,7 +47,7 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
         presenter?.loadFavouriteTracks {
             presenter.extendTrackList?.let {
                 profile_track_count.text = it.count().toString()
-                profile_tracks_time.text = DateHelper.getTime(it.sumBy { it.track?.audio?.lengthInSeconds ?: 0 })
+                profile_tracks_time.text = DateHelper.getTime(it.sumBy { it.track?.totalLengthInSeconds ?: 0 })
                 profileListAdapter.data = it
             }
         }

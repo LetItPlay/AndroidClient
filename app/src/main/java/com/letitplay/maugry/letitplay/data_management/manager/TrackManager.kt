@@ -24,7 +24,7 @@ object TrackManager : BaseManager() {
     fun updateFavouriteTrack(id: Int, body: LikeModel) = ServiceController.updateFavouriteTracks(id, body)
 
     fun getLastTracksWithTag(tag: String) = get(
-            local = { ExtendTrackModel().query { it.contains("channel.tags", tag) }.sortedByDescending { it.track?.publishedAt } }
+            local = { ExtendTrackModel().query { contains("channel.tags", tag) }.sortedByDescending { it.track?.publishedAt } }
     )
 
     fun getFavouriteTracks() = get(
@@ -32,7 +32,7 @@ object TrackManager : BaseManager() {
     )
 
     fun getPieceTracks(id: Int) = get(
-            local = { TrackModel().query { it.equalTo("id", id) } }
+            local = { TrackModel().query { equalTo("id", id) } }
     )
 
     fun updateExtendTrackModel(extendTrackList: List<ExtendTrackModel>) {
@@ -59,11 +59,11 @@ object TrackManager : BaseManager() {
     )
 
     fun getPieceExtendTrack(id: Int) = get(
-            local = { ExtendTrackModel().query { it.equalTo("track.stationId", id) } }
+            local = { ExtendTrackModel().query { equalTo("track.stationId", id) } }
     )
 
     fun getFavouriteExtendTrack() = get(
-            local = { ExtendTrackModel().query { it.equalTo("like.isLiked", true) } }
+            local = { ExtendTrackModel().query { equalTo("like.isLiked", true) } }
     )
 
 
@@ -81,9 +81,9 @@ object TrackManager : BaseManager() {
                                 tracks.filterLang(contentLanguage)
                                         .filter {
                                             val track = it.track!!
-                                            (track.name?.contains(query, true)
+                                            (track.title?.contains(query, true)
                                                     or track.description?.contains(query, true)
-                                                    or track.tags?.contains(query, true))
+                                                    or track.tags?.any { it.contains(query, true)} )
                                         }
                             },
                     BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->

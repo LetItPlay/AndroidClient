@@ -7,7 +7,6 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
-import com.letitplay.maugry.letitplay.utils.ext.splitTags
 import kotlinx.android.synthetic.main.channels_item.view.*
 
 
@@ -53,7 +52,7 @@ class ChannelAdapter(
                 channel_title.text = extendChannelModel.channel?.name
                 follower_count.text = extendChannelModel.channel?.subscriptionCount.toString()
                 channel_logo.loadImage(extendChannelModel.channel?.imageUrl)
-                val tags = extendChannelModel.channel?.tags?.splitTags()
+                val tags = extendChannelModel.channel?.tags
                 tag_container.setTagList(tags ?: emptyList())
             }
         }

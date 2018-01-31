@@ -1,8 +1,7 @@
 package com.letitplay.maugry.letitplay.data_management.service
 
 
-import com.github.salomonbrys.kotson.DeserializerArg
-import com.github.salomonbrys.kotson.registerTypeAdapter
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
@@ -26,22 +25,14 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
-
-private fun <T> response(): (DeserializerArg) -> T? = {
-    // todo: error?
-    GsonBuilder()
-            .create()
-            .fromJson<T>(it.json.asJsonObject.get("response"), it.type)
-}
-
 private val gson = GsonBuilder()
-        .registerTypeAdapter<List<ChannelModel>> { deserialize(response()) }
+        .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
         .create()
 
 private val service = Retrofit.Builder()
         .baseUrl(GL_DATA_SERVICE_URL)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
         .create(Service::class.java)
 

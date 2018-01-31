@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.model.AudioTrack
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 
@@ -25,10 +24,10 @@ fun ViewGroup.inflateHolder(layoutId: Int): View =
 @Suppress("UNCHECKED_CAST")
 fun <T> inflate(layoutId: Int, context: Context) = LayoutInflater.from(context).inflate(layoutId, null) as T
 
-fun ImageView.loadImage(url: String?, context: Context? = null, prefix: String = GL_MEDIA_SERVICE_URL) {
+fun ImageView.loadImage(url: String?, context: Context? = null) {
     if (url != null) {
         Glide.with(context ?: this.context)
-                .load("$prefix$url")
+                .load(url)
                 .into(this)
     }
 }
@@ -43,19 +42,13 @@ fun Pair<ChannelModel?, TrackModel?>.toAudioTrack(): AudioTrack {
     val (channel, track) = this
     return AudioTrack(
             id = track?.id!!,
-            url = "$GL_MEDIA_SERVICE_URL${track.audio?.fileUrl}",
-            title = track.name,
+            url = track.audioUrl ?: "",
+            title = track.title,
             subtitle = channel?.name,
-            imageUrl = "$GL_MEDIA_SERVICE_URL${track.image}",
+            imageUrl = track.coverUrl ?: "",
             channelTitle = channel?.name,
-            length = track.audio?.lengthInSeconds,
+            length = track.totalLengthInSeconds,
             listenCount = track.listenCount,
             publishedAt = track.publishedAt
     )
-}
-
-fun String.splitTags(): List<String> {
-    return this.split(",")
-            .map(String::trim)
-            .filter(String::isNotEmpty)
 }

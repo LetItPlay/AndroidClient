@@ -66,7 +66,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(it.toInt(), like) {
                 presenter.updatedTrack?.let {
-                    val track: FavouriteTracksModel = FavouriteTracksModel().query { it.equalTo("id", extendTrack.track?.id) }.first()
+                    val track: FavouriteTracksModel = FavouriteTracksModel().query { equalTo("id", extendTrack.track?.id) }.first()
                     track.likeCounts = it.likeCount
                     track.isLiked = !isLiked
                     track.save()
