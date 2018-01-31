@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.Toast
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
@@ -13,7 +12,6 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter), OnPlaylistActionsListener {
@@ -83,16 +81,16 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         presenter?.playlist?.let {
             feedRepo = MusicRepo(it)
         }
-        (activity as NavigationActivity).updateRepo(trackId, feedRepo)
+        navigationActivity.updateRepo(trackId, feedRepo)
     }
 
-    override fun performPushToTop(feedItem: ExtendTrackModel) {
+    override fun performPushToTop(feedItem: ExtendTrackModel): Boolean {
         // TODO: Call presenter method
-        Toast.makeText(context, "Push to top", Toast.LENGTH_SHORT).show()
+        return true
     }
 
-    override fun performPushToBottom(feedItem: ExtendTrackModel) {
+    override fun performPushToBottom(feedItem: ExtendTrackModel): Boolean {
         // TODO: Call presenter method
-        Toast.makeText(context, "Push to bottom", Toast.LENGTH_SHORT).show()
+        return true
     }
 }

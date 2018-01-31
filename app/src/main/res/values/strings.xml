@@ -70,4 +70,6 @@
     <string name="hours_short">%dh. ago</string>
     <string name="minutes_short">%dmin. ago</string>
     <string name="seconds_short">%dsec. ago</string>
+
+    <string name="track_added">Track added</string>
 </resources>

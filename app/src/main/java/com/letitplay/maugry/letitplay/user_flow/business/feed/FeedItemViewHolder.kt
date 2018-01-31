@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
@@ -8,6 +9,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout
+import com.letitplay.maugry.letitplay.utils.ext.ifTrue
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.feed_item.view.*
 
@@ -22,10 +24,12 @@ class FeedItemViewHolder(parent: ViewGroup?, playlistActionsListener: OnPlaylist
 
             override fun onSwipeToRight() {
                 playlistActionsListener?.performPushToTop(extendTrackModel)
+                        ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
 
             override fun onSwipeToLeft() {
                 playlistActionsListener?.performPushToBottom(extendTrackModel)
+                        ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
         }
     }
@@ -45,5 +49,10 @@ class FeedItemViewHolder(parent: ViewGroup?, playlistActionsListener: OnPlaylist
             feed_channel_logo.loadImage(extendTrackModel.channel?.imageUrl)
             feed_track_image.loadImage(extendTrackModel.track?.image)
         }
+    }
+
+    fun showOverlay() {
+        val animation = AnimationUtils.loadAnimation(itemView.context, R.anim.overlay_with_delay)
+        itemView.track_added_overlay.startAnimation(animation)
     }
 }
