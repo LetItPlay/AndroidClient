@@ -109,7 +109,7 @@ class SwipeHorizontalLayout : SwipeLayout {
                             leftMenuView!!.gone()
                             rightMenuView!!.show()
                         }
-                        contentView!!.translationX = Math.signum(translationX) *Math.min(Math.abs(translationX), leftMenuView!!.width.toFloat())
+                        contentView!!.translationX = Math.signum(translationX) * Math.min(Math.abs(translationX), leftMenuView!!.width.toFloat())
                         if (swipeCallback != null) {
                             swipeCallback!!.onSwipeChanged(translationX.toInt())
                         }
@@ -124,26 +124,16 @@ class SwipeHorizontalLayout : SwipeLayout {
                 dx = (downX - event.x).toInt()
                 dy = (downY - event.y).toInt()
                 dragging = false
-                velocityTracker!!.computeCurrentVelocity(1000, scaledMaximumFlingVelocity.toFloat())
-                val velocityX = velocityTracker!!.xVelocity.toInt()
-                val velocity = Math.abs(velocityX)
-                if (velocity > scaledMinimumFlingVelocity) {
-                    if (isSwipeToActionEnabled && Math.abs(Math.abs(contentView!!.translationX) - leftMenuView!!.width.toFloat()) < 20) {
-                        if (contentView!!.translationX > 0) {
-                            smoothSwipeLeftItem(true)
-                        } else {
-                            smoothSwipeRightItem(true)
-                        }
+                val menu = if (contentView!!.translationX > 0) leftMenuView!! else rightMenuView!!
+                if (isSwipeToActionEnabled && Math.abs(Math.abs(contentView!!.translationX) - menu.width.toFloat()) < menu.width / 4) {
+                    if (contentView!!.translationX > 0) {
+                        smoothSwipeLeftItem(true)
                     } else {
-                        judgeOpenClose(dx, dy)
+                        smoothSwipeRightItem(true)
                     }
                 } else {
-                    //swipe is slow, just judge what to do with swiped content
                     judgeOpenClose(dx, dy)
                 }
-                velocityTracker!!.clear()
-                velocityTracker!!.recycle()
-                velocityTracker = null
                 if (Math.abs(dx) > scaledTouchSlop
                         || Math.abs(dy) > scaledTouchSlop) { // ignore click listener, cancel this event
                     val motionEvent = MotionEvent.obtain(event)

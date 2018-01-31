@@ -38,7 +38,7 @@ abstract class SwipeLayout @JvmOverloads constructor(context: Context, attrs: At
 
     protected var isSwipeEnabled = true
 
-    protected var swipeCallback: SwipeCallback? = null
+    var swipeCallback: SwipeCallback? = null
 
     init {
 
