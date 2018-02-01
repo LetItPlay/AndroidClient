@@ -11,10 +11,22 @@ import io.reactivex.functions.BiFunction
 
 object TrackManager : BaseManager() {
 
-    fun getTracks() = get(
+    fun getTracks(): Observable<List<TrackModel>> = get(
             local = { TrackModel().queryAll() },
-            remote = ServiceController.getTracks(),
             remoteWhen = { REMOTE_ALWAYS },
+            remote = ServiceController.getChannels()
+                    .concatMap {
+                        Observable.concat(it.map { channel ->
+                            ServiceController.getTracks(channel.id!!)
+                                    .map { it.map { it.stationId = channel.id; it } }
+                        })
+                    }
+                    .reduce(mutableListOf<TrackModel>(), { old, new ->
+                        old.addAll(new)
+                        old
+                    })
+                    .map(MutableList<TrackModel>::toList)
+                    .toObservable(),
             update = { remote ->
                 TrackModel().deleteAll()
                 remote.saveAll()
@@ -42,8 +54,8 @@ object TrackManager : BaseManager() {
                 val like = FavouriteTracksModel(it.track?.id, it.track?.likeCount, false)
                 updateFavouriteTrack(like)
                 it.like = like
-            } else{
-                it.like?.likeCounts =  it.track?.likeCount
+            } else {
+                it.like?.likeCounts = it.track?.likeCount
                 updateFavouriteTrack(it.like)
             }
         }
@@ -83,7 +95,7 @@ object TrackManager : BaseManager() {
                                             val track = it.track!!
                                             (track.title?.contains(query, true)
                                                     or track.description?.contains(query, true)
-                                                    or track.tags?.any { it.contains(query, true)} )
+                                                    or track.tags?.any { it.contains(query, true) })
                                         }
                             },
                     BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->

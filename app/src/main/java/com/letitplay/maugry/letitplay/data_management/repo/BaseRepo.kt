@@ -241,7 +241,7 @@ fun <T : RealmObject> T.deleteAll() {
 /**
  * Delete all entries returned by the specified query
  */
-fun <T : RealmObject> T.delete(myQuery: (RealmQuery<T>) -> Unit) {
+fun <T : RealmObject> T.delete(myQuery: Query<T>) {
     Realm.getDefaultInstance().transaction {
         it.where(this.javaClass).withQuery(myQuery).findAll().deleteAllFromRealm()
     }

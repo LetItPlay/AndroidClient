@@ -2,7 +2,10 @@ package com.letitplay.maugry.letitplay.data_management.service
 
 
 import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
+import com.google.gson.reflect.TypeToken
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -11,7 +14,9 @@ import com.letitplay.maugry.letitplay.data_management.model.LikeModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import retrofit2.HttpException
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -47,8 +52,8 @@ interface Service {
     @POST("tracks/{id}/counts/")
     fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: LikeModel): Observable<TrackModel>
 
-    @GET("tracks/stations/{id}")
-    fun getPieceTracks(@Path("id") idStation: Int): Observable<List<TrackModel>>
+    @GET("stations/{id}/tracks")
+    fun getChannelTracks(@Path("id") idStation: Int): Observable<Response<List<TrackModel>>>
 
     @GET("tracks")
     fun getTracks(): Observable<List<TrackModel>>
@@ -72,27 +77,32 @@ object ServiceController : BaseServiceController() {
         return get(service.getTracks())
     }
 
-    fun getPieceTracks(id: Int): Observable<List<TrackModel>> {
-        return get(service.getPieceTracks(id))
+    fun getTracks(id: Int): Observable<List<TrackModel>> {
+        // https://github.com/square/retrofit/issues/2242#issuecomment-300850574
+        return get(service.getChannelTracks(id).map {
+            if (it.body() != null) it.body() else emptyList()
+        })
     }
 }
 
 
 abstract class BaseServiceController {
 
+    protected val errorConsumer = Consumer<Throwable> { it ->
+        when (it) {
+            is TimeoutException,
+            is HttpException,
+            is IOException,
+            is SocketTimeoutException,
+            is UnknownHostException -> {
+                Timber.e("Service related error!")
+            }
+            else -> Timber.e("Unknown error (possibly parsing)!")
+        }
+    }
+
     protected fun <T> get(observable: Observable<T>): Observable<T> = observable
             .subscribeOn(GL_SCHEDULER_IO)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                when (it) {
-                    is TimeoutException,
-                    is HttpException,
-                    is IOException,
-                    is SocketTimeoutException,
-                    is UnknownHostException -> {
-                        Timber.e("Service related error!")
-                    }
-                    else -> Timber.e("Unknown error (possibly parsing)!")
-                }
-            }
+            .doOnError(errorConsumer)
 }
