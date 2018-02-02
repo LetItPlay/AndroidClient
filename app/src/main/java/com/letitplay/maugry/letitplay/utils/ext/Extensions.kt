@@ -41,9 +41,17 @@ fun TextView.updateText(text: CharSequence?) {
 
 fun Pair<ChannelModel?, TrackModel?>.toAudioTrack(): AudioTrack {
     val (channel, track) = this
+    var url: String
+
+    url = when (track?.audio?.fileUrl?.startsWith("https", false)) {
+        true -> track.audio?.fileUrl ?: ""
+        false -> "$GL_MEDIA_SERVICE_URL${track.audio?.fileUrl}"
+        else -> ""
+    }
+
     return AudioTrack(
             id = track?.id!!,
-            url = "$GL_MEDIA_SERVICE_URL${track.audio?.fileUrl}",
+            url = url,
             title = track.name,
             subtitle = channel?.name,
             imageUrl = "$GL_MEDIA_SERVICE_URL${track.image}",
