@@ -3,15 +3,19 @@ package com.letitplay.maugry.letitplay.data_management.service
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import com.letitplay.maugry.letitplay.BuildConfig
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
+import com.letitplay.maugry.letitplay.GL_POST_REQUEST_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
-import com.letitplay.maugry.letitplay.data_management.model.LikeModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.*
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequest
+import com.letitplay.maugry.letitplay.data_management.model.remote.responses.UpdatedChannelResponse
+import com.letitplay.maugry.letitplay.data_management.model.remote.responses.UpdatedTrackResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -27,33 +31,51 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 
+private val logInterceptor = HttpLoggingInterceptor().apply {
+    level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+}
+
+private val httpClient = OkHttpClient.Builder()
+        .addInterceptor(logInterceptor)
+        .build()
+
 private val gson = GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
         .create()
 
-private val service = Retrofit.Builder()
-        .baseUrl(GL_DATA_SERVICE_URL)
+private val serviceBuilder = Retrofit.Builder()
+        .client(httpClient)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
+
+private val service = serviceBuilder
+        .baseUrl(GL_DATA_SERVICE_URL)
         .build()
         .create(Service::class.java)
+
+private val postService = serviceBuilder
+        .baseUrl(GL_POST_REQUEST_SERVICE_URL)
+        .build()
+        .create(PostService::class.java)
 
 interface Service {
 
     @GET("stations")
     fun channels(): Observable<List<ChannelModel>>
 
-    @POST("stations/{id}/counts/")
-    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: FollowersModel): Observable<ChannelModel>
-
-    @POST("tracks/{id}/counts/")
-    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: LikeModel): Observable<TrackModel>
-
     @GET("stations/{id}/tracks")
     fun getChannelTracks(@Path("id") idStation: Int): Observable<Response<List<TrackModel>>>
 
     @GET("tracks")
     fun getTracks(): Observable<List<TrackModel>>
+}
+
+interface PostService {
+    @POST("stations/{id}/counts/")
+    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: FollowersModel): Observable<UpdatedChannelResponse>
+
+    @POST("tracks/{id}/counts/")
+    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequest): Observable<UpdatedTrackResponse>
 }
 
 object ServiceController : BaseServiceController() {
@@ -63,11 +85,11 @@ object ServiceController : BaseServiceController() {
     }
 
     fun updateChannelFollowers(id: Int, body: FollowersModel): Observable<ChannelModel> {
-        return get(service.updateChannelFollowers(id, body))
+        return get(postService.updateChannelFollowers(id, body).map(::toChannelModel))
     }
 
-    fun updateFavouriteTracks(id: Int, body: LikeModel): Observable<TrackModel> {
-        return get(service.updateFavouriteTracks(id, body))
+    fun updateFavouriteTracks(id: Int, body: UpdateRequest): Observable<TrackModel> {
+        return get(postService.updateFavouriteTracks(id, body).map(::toTrackModel))
     }
 
     fun getTracks(): Observable<List<TrackModel>> {
@@ -78,7 +100,7 @@ object ServiceController : BaseServiceController() {
 
 abstract class BaseServiceController {
 
-    protected val errorConsumer = Consumer<Throwable> { it ->
+    private val errorConsumer = Consumer<Throwable> { it ->
         when (it) {
             is TimeoutException,
             is HttpException,

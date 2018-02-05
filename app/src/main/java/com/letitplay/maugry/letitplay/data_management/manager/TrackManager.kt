@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.data_management.manager
 
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.model.*
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequest
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
@@ -21,7 +22,7 @@ object TrackManager : BaseManager() {
             }
     )
 
-    fun updateFavouriteTrack(id: Int, body: LikeModel) = ServiceController.updateFavouriteTracks(id, body)
+    fun updateFavouriteTrack(id: Int, body: UpdateRequest) = ServiceController.updateFavouriteTracks(id, body)
 
     fun getLastTracksWithTag(tag: String) = get(
             local = { ExtendTrackModel().query { contains("channel.tags", tag) }.sortedByDescending { it.track?.publishedAt } }

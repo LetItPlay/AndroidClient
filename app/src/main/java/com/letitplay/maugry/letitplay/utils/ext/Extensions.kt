@@ -32,6 +32,11 @@ fun ImageView.loadImage(url: String?, context: Context? = null) {
     }
 }
 
+fun String.splitTags(): List<String> =
+    this.split(",")
+            .map(String::trim)
+            .filter(String::isNotEmpty)
+
 fun TextView.updateText(text: CharSequence?) {
     if (this.text != text) {
         this.text = text

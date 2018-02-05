@@ -8,7 +8,7 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
-import com.letitplay.maugry.letitplay.data_management.model.LikeModel
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequest
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
@@ -61,8 +61,8 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {
         if (swipe_refresh.isRefreshing) return
-        val like: LikeModel = if (isLiked) LikeModel(-1, 1, 1)
-        else LikeModel(1, 1, 1)
+        val like: UpdateRequest = if (isLiked) UpdateRequest.unlikeRequest()
+        else UpdateRequest.likeRequest()
         extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(it.toInt(), like) {
                 presenter.updatedTrack?.let {
