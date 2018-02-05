@@ -2,7 +2,6 @@ package com.letitplay.maugry.letitplay.user_flow.business.feed
 
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
@@ -42,19 +41,19 @@ class FeedItemViewHolder(parent: ViewGroup?, playlistActionsListener: OnPlaylist
         itemView.apply {
             val data = DateHelper.getLongPastDate(extendTrackModel.track?.publishedAt, context)
             feed_card_info.gone()
-            feed_track_info_title.text = extendTrackModel.track?.name
+            feed_track_info_title.text = extendTrackModel.track?.title
             feed_track_info_description.text = extendTrackModel.track?.description ?: ""
             feed_like.like = extendTrackModel.like
             feed_like.isEnabled = true
             feed_playing_now.trackListenerCount = extendTrackModel.track?.listenCount
-            feed_playing_now.trackUrl = "${GL_MEDIA_SERVICE_URL}${extendTrackModel.track?.audio?.fileUrl}"
-            feed_time.text = DateHelper.getTime(extendTrackModel.track?.audio?.lengthInSeconds)
-            feed_track_title.text = extendTrackModel.track?.name
+            feed_playing_now.trackUrl = extendTrackModel.track?.audioUrl
+            feed_time.text = DateHelper.getTime(extendTrackModel.track?.totalLengthInSeconds)
+            feed_track_title.text = extendTrackModel.track?.title
             feed_channel_title.text = extendTrackModel.channel?.name
             feed_track_last_update.text = data
             feed_channel_logo.loadImage(extendTrackModel.channel?.imageUrl)
-            feed_track_image.loadImage(extendTrackModel.track?.image)
-            feed_track_info_logo.loadImage(extendTrackModel.track?.image)
+            feed_track_image.loadImage(extendTrackModel.track?.coverUrl)
+            feed_track_info_logo.loadImage(extendTrackModel.track?.coverUrl)
         }
     }
 

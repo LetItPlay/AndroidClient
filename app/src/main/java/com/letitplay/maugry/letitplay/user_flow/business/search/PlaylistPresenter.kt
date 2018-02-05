@@ -25,7 +25,7 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
                                 val tracksInPlaylist: MutableList<TrackModel> = mutableListOf()
                                 for (extTrack in extTracks) {
                                     val lang = extTrack.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
-                                    val trackDuration = extTrack.track?.audio!!.lengthInSeconds!!
+                                    val trackDuration = extTrack.track?.totalLengthInSeconds!!
                                     if (trackDuration == 0 || currentContentLang != lang) continue
                                     if (trackDuration + totalTime <= PLAYLIST_DURATION) {
                                         tracksInPlaylist.add(extTrack.track!!)

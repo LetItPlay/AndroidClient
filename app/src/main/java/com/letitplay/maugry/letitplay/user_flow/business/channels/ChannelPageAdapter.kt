@@ -44,9 +44,9 @@ class ChannelPageAdapter(
         fun update(extendTrack: ExtendTrackModel) {
             itemView.apply {
                 channel_page_playing_now.text = extendTrack.track?.listenCount?.toString() ?: "0"
-                channel_page_track_title.text = extendTrack.track?.name
+                channel_page_track_title.text = extendTrack.track?.title
                 channel_page_last_update.text = DateHelper.getShortPastDate(extendTrack.track?.publishedAt, context)
-                channel_page_track_preview.loadImage(extendTrack.track?.image)
+                channel_page_track_preview.loadImage(extendTrack.track?.coverUrl)
             }
         }
 

@@ -21,8 +21,8 @@ object RealmDB {
 //                                    ChannelModel(
 //                                            id = "0",
 //                                            lang = "ru",
-//                                            name = "name",
-//                                            image = "image_value",
+//                                            title = "title",
+//                                            coverUrl = "image_value",
 //                                            subscription_count = "1",
 //                                            tags = ""
 //                                    )

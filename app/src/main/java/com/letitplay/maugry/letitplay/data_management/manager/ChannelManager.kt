@@ -49,13 +49,13 @@ object ChannelManager : BaseManager() {
     )
 
     fun getExtendChannelPiece(id: Int) = get(
-            local = { ExtendChannelModel().query { it.equalTo("id", id) } }
+            local = { ExtendChannelModel().query { equalTo("id", id) } }
     )
 
     fun queryChannels(query: String): Observable<List<ExtendChannelModel>> = getExtendChannel().map { channels ->
         channels.filter {
             val channel = it.channel!!
-            channel.name!!.contains(query, true) || channel.tags?.contains(query, true) ?: false
+            channel.name!!.contains(query, true) || channel.tags?.any { it.contains(query, true) } ?: false
         }
     }
 

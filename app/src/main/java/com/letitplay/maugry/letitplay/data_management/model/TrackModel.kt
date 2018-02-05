@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.data_management.model
 
 import com.google.gson.annotations.SerializedName
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.*
@@ -9,26 +10,18 @@ import java.util.*
 open class TrackModel(
         @PrimaryKey
         var id: Long? = null,
-        var state: String? = null,
         var lang: String? = null,
-        @SerializedName("review_failed_reason")
-        var reviewFailedReason: String? = null,
-        @SerializedName("station")
+        @SerializedName("StationID")
         var stationId: Int? = null,
-        @SerializedName("audio_file")
-        var audio: AudioTrack? = null,
-        var name: String? = null,
-        var url: String? = null,
+        var title: String? = null,
         var description: String? = null,
-        var image: String? = null,
-        @SerializedName("like_count")
+        @SerializedName("CoverURL")
+        var coverUrl: String? = null,
+        @SerializedName("AudioURL")
+        var audioUrl: String? = null,
+        var totalLengthInSeconds: Int? = null,
         var likeCount: Int? = null,
-        @SerializedName("report_count")
-        var reportCount: Int? = null,
-        var tags: String? = null,
-        @SerializedName("listen_count")
+        var tags: RealmList<String>? = null,
         var listenCount: Int? = null,
-        @SerializedName("published_at")
         var publishedAt: Date? = null
-
 ) : RealmObject()

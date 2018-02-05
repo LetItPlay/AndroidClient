@@ -56,7 +56,7 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         channelItem.channel?.id?.let {
             presenter?.updateChannelFollowers(it, followerModel) {
                 presenter.updatedChannel?.let {
-                    val channel: FollowingChannelModel = FollowingChannelModel().query { it.equalTo("id", channelItem.channel?.id) }.first()
+                    val channel: FollowingChannelModel = FollowingChannelModel().query { equalTo("id", channelItem.channel?.id) }.first()
                     channel.isFollowing = !isFollow
                     channel.save()
                     channelItem.following = channel

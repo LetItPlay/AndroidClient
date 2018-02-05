@@ -49,7 +49,7 @@ class TrackAdapter(
                 track_time.text = DateHelper.getTime(track.length)
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackUrl = track.url
-                track_logo.loadImage(track.imageUrl, prefix = "")
+                track_logo.loadImage(track.imageUrl)
             }
         }
 
