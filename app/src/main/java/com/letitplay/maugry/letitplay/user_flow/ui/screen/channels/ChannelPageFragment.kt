@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -68,8 +68,8 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
 
     private fun updateFollowers(extendedChannel: ExtendChannelModel?, isFollow: Boolean) {
 
-        val followerModel: FollowersModel = if (isFollow) FollowersModel(-1)
-        else FollowersModel(1)
+        val followerModel: UpdateFollowersRequestBody = if (isFollow) UpdateFollowersRequestBody.buildUnFollowRequest()
+        else UpdateFollowersRequestBody.buildFollowRequest()
 
         extendedChannel?.channel?.id?.let {
             presenter?.updateChannelFollowers(extendedChannel, followerModel) {

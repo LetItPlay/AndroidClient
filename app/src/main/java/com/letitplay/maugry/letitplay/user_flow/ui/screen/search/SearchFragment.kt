@@ -12,8 +12,8 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.repo.query
 import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
@@ -50,8 +50,8 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
 
     private fun updateFollowers(channelItem: ExtendChannelModel, isFollow: Boolean, position: Int) {
 
-        val followerModel: FollowersModel = if (isFollow) FollowersModel(1)
-        else FollowersModel(-1)
+        val followerModel: UpdateFollowersRequestBody = if (isFollow) UpdateFollowersRequestBody.buildUnFollowRequest()
+        else UpdateFollowersRequestBody.buildFollowRequest()
 
         channelItem.channel?.id?.let {
             presenter?.updateChannelFollowers(it, followerModel) {

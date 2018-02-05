@@ -7,10 +7,14 @@ import com.letitplay.maugry.letitplay.BuildConfig
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_POST_REQUEST_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
-import com.letitplay.maugry.letitplay.data_management.model.*
-import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequest
+import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.data_management.model.remote.responses.UpdatedChannelResponse
 import com.letitplay.maugry.letitplay.data_management.model.remote.responses.UpdatedTrackResponse
+import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -72,10 +76,10 @@ interface Service {
 
 interface PostService {
     @POST("stations/{id}/counts/")
-    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: FollowersModel): Observable<UpdatedChannelResponse>
+    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: UpdateFollowersRequestBody): Observable<UpdatedChannelResponse>
 
     @POST("tracks/{id}/counts/")
-    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequest): Observable<UpdatedTrackResponse>
+    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Observable<UpdatedTrackResponse>
 }
 
 object ServiceController : BaseServiceController() {
@@ -84,11 +88,11 @@ object ServiceController : BaseServiceController() {
         return get(service.channels())
     }
 
-    fun updateChannelFollowers(id: Int, body: FollowersModel): Observable<ChannelModel> {
+    fun updateChannelFollowers(id: Int, body: UpdateFollowersRequestBody): Observable<ChannelModel> {
         return get(postService.updateChannelFollowers(id, body).map(::toChannelModel))
     }
 
-    fun updateFavouriteTracks(id: Int, body: UpdateRequest): Observable<TrackModel> {
+    fun updateFavouriteTracks(id: Int, body: UpdateRequestBody): Observable<TrackModel> {
         return get(postService.updateFavouriteTracks(id, body).map(::toTrackModel))
     }
 

@@ -2,8 +2,8 @@ package com.letitplay.maugry.letitplay.data_management.manager
 
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import io.reactivex.Observable
@@ -21,7 +21,7 @@ object ChannelManager : BaseManager() {
             }
     )
 
-    fun updateChannelFollowers(id: Int, body: FollowersModel) = ServiceController.updateChannelFollowers(id, body)
+    fun updateChannelFollowers(id: Int, body: UpdateFollowersRequestBody) = ServiceController.updateChannelFollowers(id, body)
 
     fun updateExtendChannel(extendChannelList: List<ExtendChannelModel>) {
         ExtendChannelModel().deleteAll()

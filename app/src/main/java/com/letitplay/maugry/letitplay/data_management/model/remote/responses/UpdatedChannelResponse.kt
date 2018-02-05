@@ -8,7 +8,7 @@ data class UpdatedChannelResponse(
         var id: Int,
         @SerializedName("lang")
         var lang: String,
-        @SerializedName("")
+        @SerializedName("name")
         var name: String,
         @SerializedName("image")
         var imageUrl: String,

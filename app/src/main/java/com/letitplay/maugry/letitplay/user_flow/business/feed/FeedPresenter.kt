@@ -7,7 +7,7 @@ import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
-import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequest
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
@@ -61,7 +61,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
             )
     )
 
-    fun updateFavouriteTracks(extendTrack: ExtendTrackModel, body: UpdateRequest, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun updateFavouriteTracks(extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),
                     triggerProgress = false,

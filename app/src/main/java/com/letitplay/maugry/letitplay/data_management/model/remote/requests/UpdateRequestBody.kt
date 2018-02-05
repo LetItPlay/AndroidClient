@@ -3,7 +3,7 @@ package com.letitplay.maugry.letitplay.data_management.model.remote.requests
 import com.google.gson.annotations.SerializedName
 
 
-open class UpdateRequest {
+open class UpdateRequestBody {
     @SerializedName("like_count")
     val likeCount: Byte
     @SerializedName("report_count")
@@ -18,8 +18,8 @@ open class UpdateRequest {
     }
 
     companion object {
-        fun likeRequest() = UpdateRequest(likeDiff = 1)
-        fun unlikeRequest() = UpdateRequest(likeDiff = -1)
-        fun listenRequest() = UpdateRequest(listenDiff = 1)
+        fun buildLikeRequest() = UpdateRequestBody(likeDiff = 1)
+        fun buildUnlikeRequest() = UpdateRequestBody(likeDiff = -1)
+        fun buildListenRequest() = UpdateRequestBody(listenDiff = 1)
     }
 }

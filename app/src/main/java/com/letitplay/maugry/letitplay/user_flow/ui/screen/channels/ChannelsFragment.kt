@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowersModel
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
@@ -69,8 +69,8 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
 
     private fun updateFollowers(extendChannel: ExtendChannelModel, isFollow: Boolean, position: Int) {
         if (swipe_refresh.isRefreshing) return
-        val followerModel: FollowersModel = if (isFollow) FollowersModel(-1)
-        else FollowersModel(1)
+        val followerModel: UpdateFollowersRequestBody = if (isFollow) UpdateFollowersRequestBody.buildUnFollowRequest()
+        else UpdateFollowersRequestBody.buildFollowRequest()
 
         extendChannel.channel?.id?.let {
             presenter?.updateChannelFollowers(extendChannel, followerModel) {
