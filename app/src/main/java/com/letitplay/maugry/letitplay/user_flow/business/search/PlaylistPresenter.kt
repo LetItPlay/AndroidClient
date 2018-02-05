@@ -19,7 +19,7 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
             ExecutionConfig(
                     asyncObservable = Observable.zip(
                             ChannelManager.getExtendChannel(),
-                            TrackManager.getLastTracksWithTag(tag),
+                            TrackManager.getLastTracksWithChannelTag(tag),
                             BiFunction { channels: List<ExtendChannelModel>, extTracks: List<ExtendTrackModel> ->
                                 var totalTime = 0
                                 val tracksInPlaylist: MutableList<TrackModel> = mutableListOf()

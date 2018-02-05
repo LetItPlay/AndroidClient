@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.realm.Sort
 
 
 object TrackManager : BaseManager() {
@@ -24,8 +25,15 @@ object TrackManager : BaseManager() {
 
     fun updateFavouriteTrack(id: Int, body: UpdateRequestBody) = ServiceController.updateFavouriteTracks(id, body)
 
-    fun getLastTracksWithTag(tag: String) = get(
-            local = { ExtendTrackModel().query { contains("channel.tags", tag) }.sortedByDescending { it.track?.publishedAt } }
+    fun getLastTracksWithChannelTag(tag: String) = get(
+            local = {
+                ExtendTrackModel()
+                        .query { sort("track.publishedAt", Sort.DESCENDING) }
+                        .filter { extendTrack ->
+                            val ret = extendTrack.channel?.tags?.any { it.contains(tag, true) } == true
+                            ret
+                        }
+            }
     )
 
     fun getFavouriteTracks() = get(
