@@ -21,6 +21,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchResultsAdapter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 
 
 class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter) {
@@ -38,6 +39,8 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         val resultsRecycler = view.findViewById<RecyclerView>(R.id.results_recycler)
         resultsRecycler.adapter = resultsAdapter
         resultsRecycler.layoutManager = LinearLayoutManager(context)
+        val dividerItemDecoration = listDivider(resultsRecycler.context, R.drawable.list_divider)
+        resultsRecycler.addItemDecoration(dividerItemDecoration)
         return view
     }
 
