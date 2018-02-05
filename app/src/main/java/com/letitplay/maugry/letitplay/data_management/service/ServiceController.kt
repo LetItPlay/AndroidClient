@@ -2,10 +2,7 @@ package com.letitplay.maugry.letitplay.data_management.service
 
 
 import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.reflect.TypeToken
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
@@ -75,13 +72,6 @@ object ServiceController : BaseServiceController() {
 
     fun getTracks(): Observable<List<TrackModel>> {
         return get(service.getTracks())
-    }
-
-    fun getTracks(id: Int): Observable<List<TrackModel>> {
-        // https://github.com/square/retrofit/issues/2242#issuecomment-300850574
-        return get(service.getChannelTracks(id).map {
-            if (it.body() != null) it.body() else emptyList()
-        })
     }
 }
 

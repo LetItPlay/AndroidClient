@@ -14,19 +14,7 @@ object TrackManager : BaseManager() {
     fun getTracks(): Observable<List<TrackModel>> = get(
             local = { TrackModel().queryAll() },
             remoteWhen = { REMOTE_ALWAYS },
-            remote = ServiceController.getChannels()
-                    .concatMap {
-                        Observable.concat(it.map { channel ->
-                            ServiceController.getTracks(channel.id!!)
-                                    .map { it.map { it.stationId = channel.id; it } }
-                        })
-                    }
-                    .reduce(mutableListOf<TrackModel>(), { old, new ->
-                        old.addAll(new)
-                        old
-                    })
-                    .map(MutableList<TrackModel>::toList)
-                    .toObservable(),
+            remote = ServiceController.getTracks(),
             update = { remote ->
                 TrackModel().deleteAll()
                 remote.saveAll()
