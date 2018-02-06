@@ -54,7 +54,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
                     },
                     {
                         presenter.extendTrackList?.let {
-                            trendsListAdapter.updateData(it, presenter.extendChannelList!!.map { it.channel!! })
+                            trendsListAdapter.updateData(it, presenter.extendChannelList?.mapNotNull { it.channel } ?: emptyList())
                         }
                         swipeRefreshLayout.isRefreshing = false
                     }
@@ -68,7 +68,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         presenter?.loadTracksAndChannels {
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {
-                    trendsListAdapter.updateData(it, presenter.extendChannelList!!.map { it.channel!! })
+                    trendsListAdapter.updateData(it, presenter.extendChannelList?.mapNotNull { it.channel } ?: emptyList())
                 }
             } else {
                 swipe_refresh.isEnabled = false
@@ -97,8 +97,8 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
 
     private fun onChannelClick(channel: ChannelModel) {
-        channel.id?.also {
-            navigationActivity.navigateTo(ChannelPageKey(channel.id!!))
+        channel.id?.let {
+            navigationActivity.navigateTo(ChannelPageKey(it))
         }
     }
 
