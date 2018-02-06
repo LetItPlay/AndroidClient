@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
-import com.letitplay.maugry.letitplay.utils.PreferenceHerlper
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.fragment_select_language.*
 
 class SelectLanguageFragment : Fragment() {
@@ -30,7 +30,7 @@ class SelectLanguageFragment : Fragment() {
 
     private fun saveLang(lang: ContentLanguage) {
         context?.let {
-            PreferenceHerlper(it).contentLanguage = lang
+            PreferenceHelper(it).contentLanguage = lang
             it.startActivity(Intent(it, NavigationActivity::class.java))
         }
     }

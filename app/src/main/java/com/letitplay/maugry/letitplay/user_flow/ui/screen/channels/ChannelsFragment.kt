@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,6 +15,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePre
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.channels_fragment.*
 
 
@@ -31,31 +32,32 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         channelRecycler.layoutManager = layoutManager
         val listDivider = listDivider(channelRecycler.context, R.drawable.list_divider)
         channelRecycler.addItemDecoration(listDivider)
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (channels_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-        channels_list.setHasFixedSize(true)
-        presenter?.loadChannels {
-            presenter.extendChannelList?.let {
-                channelsListAdapter.data = it
-            }
-        }
-        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
-        swipe_refresh.setOnRefreshListener {
+        channelRecycler.defaultItemAnimator.supportsChangeAnimations = false
+        channelRecycler.setHasFixedSize(true)
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
+        swipeRefreshLayout.setOnRefreshListener {
             presenter?.loadChannelsFromRemote(
                     { _, _ ->
-                        swipe_refresh.isRefreshing = false
+                        swipeRefreshLayout.isRefreshing = false
                     },
                     {
                         presenter.extendChannelList?.let {
                             channelsListAdapter.data = it
                         }
-                        swipe_refresh.isRefreshing = false
+                        swipeRefreshLayout.isRefreshing = false
                     }
             )
+        }
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter?.loadChannels {
+            presenter.extendChannelList?.let {
+                channelsListAdapter.data = it
+            }
         }
     }
 

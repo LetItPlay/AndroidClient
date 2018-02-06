@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,6 +15,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter), OnPlaylistActionsListener {
@@ -32,13 +32,12 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         feedRecycler.layoutManager = layoutManager
         val divider = listDivider(feedRecycler.context, R.drawable.list_divider)
         feedRecycler.addItemDecoration(divider)
-        (feedRecycler.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+        feedRecycler.defaultItemAnimator.supportsChangeAnimations = false
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (feed_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         presenter?.loadTracks {
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {

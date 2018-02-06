@@ -1,5 +1,7 @@
 package com.letitplay.maugry.letitplay.utils.ext
 
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.RecyclerView
 import android.view.View
 
 
@@ -22,3 +24,6 @@ fun View.gone() {
 }
 
 fun View.isVisible(): Boolean = visibility == View.VISIBLE
+
+inline val RecyclerView.defaultItemAnimator
+    get() = itemAnimator as DefaultItemAnimator

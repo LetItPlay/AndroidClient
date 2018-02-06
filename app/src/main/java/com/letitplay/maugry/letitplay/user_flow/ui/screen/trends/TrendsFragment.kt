@@ -1,9 +1,12 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
@@ -14,6 +17,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.trends_fragment.*
 
@@ -25,13 +29,32 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     }
     private var trendsRepo: MusicRepo? = null
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val trendsRecycler = view.findViewById<RecyclerView>(R.id.trend_list)
+        trendsRecycler.layoutManager = LinearLayoutManager(context)
+        trendsRecycler.adapter = trendsListAdapter
+        trendsRecycler.defaultItemAnimator.supportsChangeAnimations = false
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
+        swipeRefreshLayout.setOnRefreshListener {
+            presenter?.loadTracksFromRemote(
+                    { _, _ ->
+                        swipeRefreshLayout.isRefreshing = false
+                    },
+                    {
+                        presenter.extendTrackList?.let {
+                            trendsListAdapter.data = it
+                        }
+                        swipeRefreshLayout.isRefreshing = false
+                    }
+            )
+        }
+        return view
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (trend_list.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-        trend_list.apply {
-            adapter = trendsListAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
         presenter?.loadTracks {
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {
@@ -41,21 +64,6 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
                 swipe_refresh.isEnabled = false
                 trends_no_tracks.visibility = View.VISIBLE
             }
-        }
-
-        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
-        swipe_refresh.setOnRefreshListener {
-            presenter?.loadTracksFromRemote(
-                    { _, _ ->
-                        swipe_refresh.isRefreshing = false
-                    },
-                    {
-                        presenter.extendTrackList?.let {
-                            trendsListAdapter.data = it
-                        }
-                        swipe_refresh.isRefreshing = false
-                    }
-            )
         }
     }
 
