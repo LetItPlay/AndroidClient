@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.TrackModel
@@ -28,6 +29,15 @@ fun ImageView.loadImage(url: String?, context: Context? = null) {
     if (url != null) {
         Glide.with(context ?: this.context)
                 .load(url)
+                .into(this)
+    }
+}
+
+fun ImageView.loadCircularImage(url: String?, context: Context? = null) {
+    if (url != null) {
+        Glide.with(context ?: this.context)
+                .load(url)
+                .apply(RequestOptions.circleCropTransform())
                 .into(this)
     }
 }

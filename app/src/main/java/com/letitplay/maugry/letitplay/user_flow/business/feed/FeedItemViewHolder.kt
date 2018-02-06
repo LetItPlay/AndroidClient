@@ -1,26 +1,33 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
+import android.support.v7.widget.RecyclerView
+import android.transition.TransitionManager
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout
-import com.letitplay.maugry.letitplay.utils.ext.gone
-import com.letitplay.maugry.letitplay.utils.ext.ifTrue
-import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
 import kotlinx.android.synthetic.main.view_feed_card_info.view.*
 
-class FeedItemViewHolder(parent: ViewGroup?, playlistActionsListener: OnPlaylistActionsListener?) : BaseViewHolder(parent, R.layout.feed_item) {
+class FeedItemViewHolder(
+        parent: ViewGroup?,
+        playlistActionsListener: OnPlaylistActionsListener?,
+        onClick: ((Long) -> Unit)?,
+        onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit)?,
+        musicService: MusicService?
+) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var extendTrackModel: ExtendTrackModel
 
     init {
         val swipeLayout = itemView.findViewById<SwipeHorizontalLayout>(R.id.feed_swipe_layout)
-        swipeLayout.swipeCallback = object: SwipeCallback {
+        swipeLayout.swipeCallback = object : SwipeCallback {
             override fun onSwipeChanged(translationX: Int) {
             }
 
@@ -34,6 +41,28 @@ class FeedItemViewHolder(parent: ViewGroup?, playlistActionsListener: OnPlaylist
                         ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
         }
+        itemView.setOnClickListener {
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                if (itemView.feed_card_info.isVisible()) {
+                    TransitionManager.beginDelayedTransition(itemView as ViewGroup)
+                    itemView.feed_card_info.gone()
+                } else {
+                    onClick?.invoke(extendTrackModel.track?.id!!)
+                }
+            }
+        }
+        itemView.setOnLongClickListener {
+            TransitionManager.beginDelayedTransition(itemView as ViewGroup)
+            itemView.feed_card_info.show()
+            true
+        }
+        itemView.feed_like.setOnClickListener {
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                it.isEnabled = false
+                onLikeClick?.invoke(extendTrackModel, it.feed_like.isLiked(), adapterPosition)
+            }
+        }
+        itemView.feed_playing_now.mediaSession = musicService?.mediaSession
     }
 
     fun update(extendTrackModel: ExtendTrackModel) {
