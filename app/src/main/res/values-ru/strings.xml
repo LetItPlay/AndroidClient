@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">LetItPlay</string>
-    <string name="menu_item_channels">Каналы</string>
     <string name="menu_item_trends">Тренды</string>
     <string name="menu_item_search">Поиск</string>
     <string name="menu_item_feed">Новое</string>

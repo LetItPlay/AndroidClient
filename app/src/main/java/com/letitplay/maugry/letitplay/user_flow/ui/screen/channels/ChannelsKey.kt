@@ -22,7 +22,7 @@ class ChannelsKey : BaseKey(), StateKey {
 
     override fun menuType(): MenuType = MenuType.CHANNELS
 
-    override fun isRootFragment(): Boolean = true
+    override fun isRootFragment(): Boolean = false
 
     override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = ChannelsFragment()
 

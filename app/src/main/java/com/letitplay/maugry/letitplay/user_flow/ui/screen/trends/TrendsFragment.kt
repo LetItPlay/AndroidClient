@@ -18,6 +18,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
@@ -96,7 +97,9 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
 
     private fun onChannelClick(channel: ChannelModel) {
-
+        channel.id?.also {
+            navigationActivity.navigateTo(ChannelPageKey(channel.id!!))
+        }
     }
 
     private fun seeAllChannelsClick() {
