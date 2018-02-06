@@ -47,7 +47,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                                 .takeLastDate(now)
                                 .sortByListenCount()
 
-                        extendChannelList = it.first
+                        extendChannelList = it.first.sortedByDescending { it.channel?.subscriptionCount }
                         extendTrackList = sortedTracks
                         playlist = sortedTracks.map {
                             (it.channel to it.track).toAudioTrack()
