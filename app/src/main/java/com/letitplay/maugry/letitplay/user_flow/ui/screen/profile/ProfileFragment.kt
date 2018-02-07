@@ -12,7 +12,6 @@ import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfileAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfilePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
@@ -71,6 +70,6 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
         presenter?.playlist?.let {
             profileRepo = MusicRepo(it)
         }
-        (activity as NavigationActivity).updateRepo(trackId, profileRepo)
+        navigationActivity.updateRepo(trackId, profileRepo)
     }
 }

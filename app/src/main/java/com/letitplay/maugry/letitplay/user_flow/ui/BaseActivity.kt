@@ -18,8 +18,8 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.PlaylistKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
-import com.letitplay.maugry.letitplay.utils.active
-import com.letitplay.maugry.letitplay.utils.disableShiftMode
+import com.letitplay.maugry.letitplay.utils.ext.active
+import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
