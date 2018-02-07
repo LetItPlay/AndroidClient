@@ -52,6 +52,9 @@ class FeedItemViewHolder(
             }
         }
         itemView.setOnLongClickListener {
+            if ((itemView as SwipeHorizontalLayout).isDragging()) {
+                return@setOnLongClickListener false
+            }
             TransitionManager.beginDelayedTransition(itemView as ViewGroup)
             itemView.feed_card_info.show()
             true

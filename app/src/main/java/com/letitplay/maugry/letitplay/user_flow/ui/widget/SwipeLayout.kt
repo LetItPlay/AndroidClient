@@ -37,6 +37,8 @@ abstract class SwipeLayout @JvmOverloads constructor(context: Context, attrs: At
     protected var scaledMaximumFlingVelocity: Int = 0
     protected var swipeMenuMaxWidth: Float = 0f
 
+    fun isDragging(): Boolean = dragging
+
     protected var isSwipeEnabled = true
 
     var swipeCallback: SwipeCallback? = null
