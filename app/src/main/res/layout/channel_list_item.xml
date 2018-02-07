@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/channelsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:paddingBottom="10dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="16dp"
+        android:paddingTop="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/allChannelsText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/channel_small_item" />
+
+    <TextView
+        android:id="@+id/allChannelsText"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:letterSpacing="0.01"
+        android:text="@string/all"
+        android:textColor="@color/accent2"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/channelsRecyclerView" />
+</android.support.constraint.ConstraintLayout>

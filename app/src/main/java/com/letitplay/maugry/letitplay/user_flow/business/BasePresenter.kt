@@ -10,7 +10,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.data_management.service.BaseServiceController
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
-import com.letitplay.maugry.letitplay.utils.PreferenceHerlper
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -42,7 +42,7 @@ abstract class BasePresenter<V>(
 
     
       val currentContentLang: ContentLanguage?
-        get() = context?.let { PreferenceHerlper(it).contentLanguage }
+        get() = context?.let { PreferenceHelper(it).contentLanguage }
 
     /*
     *       VIEW REF & SHORTHANDS

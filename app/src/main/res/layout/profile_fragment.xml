@@ -9,6 +9,7 @@
         android:id="@+id/profile_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:listitem="@layout/track_item"
         android:paddingTop="4dp"
         />
 
@@ -195,7 +196,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_time_icon"
                 app:layout_constraintTop_toTopOf="@+id/profile_time_icon"
-                tools:text="23:07:18" />
+                tools:text="@tools:sample/date/hhmmss" />
 
         </android.support.constraint.ConstraintLayout>
     </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>

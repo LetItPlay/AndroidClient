@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">LetItPlay</string>
-    <string name="menu_item_channels">Каналы</string>
     <string name="menu_item_trends">Тренды</string>
     <string name="menu_item_search">Поиск</string>
     <string name="menu_item_feed">Новое</string>
@@ -77,4 +76,6 @@
     <string name="seconds_short">%dсек. назад</string>
 
     <string name="track_added">Трек добавлен</string>
+
+    <string name="all">все</string>
 </resources>

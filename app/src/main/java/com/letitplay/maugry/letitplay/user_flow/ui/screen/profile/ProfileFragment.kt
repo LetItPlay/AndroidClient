@@ -12,10 +12,9 @@ import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfileAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfilePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.PreferenceHerlper
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 
@@ -24,8 +23,8 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
     private lateinit var profileListAdapter: ProfileAdapter
     private var profileRepo: MusicRepo? = null
 
-    private val prefHelper: PreferenceHerlper?
-            get() = context?.let { PreferenceHerlper(it) }
+    private val prefHelper: PreferenceHelper?
+            get() = context?.let { PreferenceHelper(it) }
 
     private val currentContentLanguage: ContentLanguage?
             get() = prefHelper?.contentLanguage
@@ -71,6 +70,6 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
         presenter?.playlist?.let {
             profileRepo = MusicRepo(it)
         }
-        (activity as NavigationActivity).updateRepo(trackId, profileRepo)
+        navigationActivity.updateRepo(trackId, profileRepo)
     }
 }

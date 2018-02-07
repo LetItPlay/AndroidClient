@@ -13,10 +13,6 @@
         android:icon="@drawable/search_menu_item"
         android:title="@string/menu_item_search"/>
     <item
-        android:id="@+id/action_channels"
-        android:icon="@drawable/channels_menu_item"
-        android:title="@string/menu_item_channels" />
-    <item
         android:id="@+id/action_profile"
         android:icon="@drawable/profile_menu_item"
         android:title="@string/menu_item_profile"/>

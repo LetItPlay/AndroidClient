@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.support.multidex.MultiDexApplication
+import com.crashlytics.android.Crashlytics
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.RealmDB
+import io.fabric.sdk.android.Fabric
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import net.danlew.android.joda.JodaTimeAndroid
@@ -54,7 +56,9 @@ class App : MultiDexApplication(){
         bindMusicService()
         Timber.plant(Timber.DebugTree())
         JodaTimeAndroid.init(this)
-        //Fabric.with(this, Crashlytics())
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, Crashlytics())
+        }
     }
 
     private fun bindMusicService() {

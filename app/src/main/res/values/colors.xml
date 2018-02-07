@@ -3,8 +3,9 @@
     <color name="colorPrimary">#ff0000</color>
     <color name="colorPrimaryDark">#33000000</color>
     <color name="colorAccent">#ff0000</color>
-    <color name="colorFeedChannelItem">#ff6666</color>
+    <color name="colorFeedChannelItem">@color/accent2</color>
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="red">#ff0000</color>
+    <color name="accent2">#ff6666</color>
 </resources>

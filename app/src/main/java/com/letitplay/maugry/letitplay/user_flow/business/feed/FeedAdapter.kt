@@ -15,7 +15,7 @@ import java.util.*
 
 class FeedAdapter(
         private val musicService: MusicService? = null,
-        private val onClickItem: ((ExtendTrackModel, Int) -> Unit)? = null,
+        private val onClickItem: ((Long) -> Unit)? = null,
         private val onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit)? = null,
         private val playlistActionsListener: OnPlaylistActionsListener? = null
 ) : RecyclerView.Adapter<FeedItemViewHolder>() {
@@ -33,30 +33,12 @@ class FeedAdapter(
     override fun getItemCount(): Int = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedItemViewHolder {
-        return FeedItemViewHolder(parent, playlistActionsListener).apply {
-            itemView.setOnClickListener {
-                if (adapterPosition != NO_POSITION) {
-                    if (itemView.feed_card_info.isVisible()) {
-                        TransitionManager.beginDelayedTransition(itemView as ViewGroup)
-                        itemView.feed_card_info.gone()
-                    } else {
-                        onClickItem?.invoke(data[adapterPosition], adapterPosition)
-                    }
-                }
-            }
-            itemView.setOnLongClickListener {
-                TransitionManager.beginDelayedTransition(itemView as ViewGroup)
-                itemView.feed_card_info.show()
-                true
-            }
-            itemView.feed_like.setOnClickListener {
-                if (adapterPosition != NO_POSITION) {
-                    it.isEnabled = false
-                    onLikeClick?.invoke(data[adapterPosition], it.feed_like.isLiked(), adapterPosition)
-                }
-            }
-
-            itemView.feed_playing_now.mediaSession = musicService?.mediaSession
-        }
+        return FeedItemViewHolder(
+                parent,
+                playlistActionsListener,
+                onClickItem,
+                onLikeClick,
+                musicService
+        )
     }
 }

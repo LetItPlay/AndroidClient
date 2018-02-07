@@ -13,6 +13,8 @@ import com.letitplay.maugry.letitplay.data_management.model.remote.requests.Upda
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.channel_page_fragment.*
@@ -25,9 +27,12 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val recentAddedRecycler = view.findViewById<RecyclerView>(R.id.recent_added_list)
-        recentAddedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val listDivider = listDivider(recentAddedRecycler.context, R.drawable.list_transparent_divider_16dp, layoutManager.orientation)
         recentAddedListAdapter = ChannelPageAdapter(::playTrack)
+        recentAddedRecycler.layoutManager = layoutManager
         recentAddedRecycler.adapter = recentAddedListAdapter
+        recentAddedRecycler.addItemDecoration(listDivider)
         return view
     }
 
@@ -41,7 +46,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                 val channel = channel ?: return@loadTracks
                 with(channel) {
                     channel_page_banner.loadImage(imageUrl)
-                    channel_page_preview.loadImage(imageUrl)
+                    channel_page_preview.loadCircularImage(imageUrl)
                     channel_page_title.text = name
                     channel_page_followers.text = subscriptionCount.toString()
 
@@ -57,7 +62,6 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                 }
             }
             if (presenter.recentTracks.isNotEmpty()) {
-                track_count.text = presenter.recentTracks.size.toString()
                 recentAddedListAdapter.setData(presenter.recentTracks)
                 channel_page_recent_added.visibility = View.VISIBLE
             }

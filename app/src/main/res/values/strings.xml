@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">LetItPlay</string>
-    <string name="menu_item_channels">Channels</string>
     <string name="menu_item_trends">Trends</string>
     <string name="menu_item_search">Search</string>
     <string name="menu_item_feed">Feed</string>
@@ -69,4 +68,6 @@
     <string name="track_added">Track added</string>
     <string name="add_down_the_playlist">Add down the playlist</string>
     <string name="add_up_the_playlist">Add up the playlist</string>
+
+    <string name="all">all</string>
 </resources>

@@ -26,7 +26,7 @@ class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragm
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
-        val recycler = view.findViewById<RecyclerView>(R.id.search_list)
+        val recycler = view.findViewById<RecyclerView>(R.id.playlist_list)
         playlistAdapter = PlaylistAdapter(::onPlaylistClick)
         recycler.adapter = playlistAdapter
         recycler.layoutManager = LinearLayoutManager(context)

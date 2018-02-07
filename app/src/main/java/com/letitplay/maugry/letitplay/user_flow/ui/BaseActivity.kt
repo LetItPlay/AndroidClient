@@ -12,15 +12,14 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.PlaylistKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
-import com.letitplay.maugry.letitplay.utils.active
-import com.letitplay.maugry.letitplay.utils.disableShiftMode
+import com.letitplay.maugry.letitplay.utils.ext.active
+import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
@@ -96,7 +95,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         when (item.itemId) {
             R.id.action_feed -> replaceHistory(FeedKey())
             R.id.action_trands -> replaceHistory(TrendsKey())
-            R.id.action_channels -> replaceHistory(ChannelsKey())
             R.id.action_search -> replaceHistory(PlaylistKey())
             R.id.action_profile -> replaceHistory(ProfileKey())
         }

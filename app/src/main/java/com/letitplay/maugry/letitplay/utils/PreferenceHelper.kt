@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 
-class PreferenceHerlper(context: Context) {
+class PreferenceHelper(context: Context) {
 
     companion object {
         private const val APP_SETTINGS = "APP_SETTINGS"

@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="130dp"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="4dp"
-    android:layout_marginStart="4dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/channel_page_track_preview"
@@ -13,11 +11,11 @@
         android:layout_height="130dp"
         android:layout_marginBottom="8dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/track_placeholder"
         app:layout_constraintBottom_toTopOf="@+id/channel_page_track_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
 
     <RelativeLayout
         android:id="@+id/channel_page_info_container"
@@ -65,7 +63,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        tools:text="2d."
         android:textColor="#4a4a4a"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/channel_page_info_container"
@@ -74,19 +71,20 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/channel_page_track_preview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/channel_page_info_container" />
+        app:layout_constraintTop_toTopOf="@+id/channel_page_info_container"
+        tools:text="2d." />
 
     <TextView
         android:id="@+id/channel_page_track_title"
         android:layout_width="0dp"
         android:layout_height="36dp"
-        android:ellipsize="none"
+        android:ellipsize="end"
         android:maxLines="2"
-        android:text="Выпуск 76."
         android:textColor="#252525"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@tools:sample/lorem/random" />
 
 </android.support.constraint.ConstraintLayout>
