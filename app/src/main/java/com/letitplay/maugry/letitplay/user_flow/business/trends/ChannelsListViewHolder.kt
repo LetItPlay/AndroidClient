@@ -23,7 +23,7 @@ class ChannelsListViewHolder(
             val linearLayoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
             layoutManager = linearLayoutManager
             adapter = ChannelsAdapter()
-            addItemDecoration(listDivider(itemView.context, R.drawable.channels_icons_divider, linearLayoutManager.orientation))
+            addItemDecoration(listDivider(itemView.context, R.drawable.list_transparent_divider_16dp, linearLayoutManager.orientation))
         }
         itemView.allChannelsText.setOnClickListener {
             seeAllClick()

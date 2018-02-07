@@ -10,6 +10,7 @@ android:layout_height="wrap_content">
     android:background="@drawable/following_bg"
     android:paddingBottom="6dp"
     android:paddingEnd="16dp"
+    android:textSize="16sp"
     android:paddingStart="16dp"
     android:paddingTop="6dp"
     android:text="@string/channels_following"

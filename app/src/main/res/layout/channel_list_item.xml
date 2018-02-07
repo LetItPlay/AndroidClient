@@ -9,7 +9,6 @@
         android:id="@+id/channelsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:clipChildren="true"
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:overScrollMode="never"
