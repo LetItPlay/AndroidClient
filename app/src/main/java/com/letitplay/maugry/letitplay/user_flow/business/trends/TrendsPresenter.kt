@@ -107,7 +107,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
             }.takeWhile {
                         val publish = DateTime(it.track?.publishedAt?.time!!)
                         val days = Days.daysBetween(publish, now).days
-                        days in 0..8
+                        days in 0..7
                     }
 
 

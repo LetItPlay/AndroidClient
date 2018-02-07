@@ -77,6 +77,8 @@
     <string name="seconds_short">%dсек. назад</string>
 
     <string name="track_added">Трек добавлен</string>
+    <string name="add_down_the_playlist">Add down the playlist</string>
+    <string name="add_up_the_playlist">Add up the playlist</string>
 
     <string name="all">все</string>
 </resources>
