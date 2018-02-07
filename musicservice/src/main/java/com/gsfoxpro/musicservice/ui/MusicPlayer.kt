@@ -23,7 +23,8 @@ abstract class MusicPlayer : FrameLayout {
     var mediaSession: MediaSessionCompat? = null
         set(value) {
             field = value
-            registerCallback()
+            if (value == null) unregisterCallback()
+            else registerCallback()
         }
 
     protected val mediaController: MediaControllerCompat?
@@ -100,8 +101,7 @@ abstract class MusicPlayer : FrameLayout {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        mediaController?.unregisterCallback(mediaControllerCallback)
-        callbackRegistered=false
+        unregisterCallback()
     }
 
     protected fun playPause() {
@@ -173,6 +173,11 @@ abstract class MusicPlayer : FrameLayout {
         return df.format(date)
     }
 
+
+    private fun unregisterCallback(){
+        mediaController?.unregisterCallback(mediaControllerCallback)
+        callbackRegistered=false
+    }
     private fun registerCallback() {
         if (callbackRegistered) {
             return
