@@ -25,23 +25,20 @@ object ChannelManager : BaseManager() {
 
     fun updateExtendChannel(extendChannelList: List<ExtendChannelModel>) {
         ExtendChannelModel().deleteAll()
+        val followingChannelModels = mutableListOf<FollowingChannelModel>()
         extendChannelList.forEach {
             if (it.following == null) {
                 val followingChannel = FollowingChannelModel(it.id, false)
-                updateFollowingChannels(followingChannel)
+                followingChannelModels.add(followingChannel)
                 it.following = followingChannel
             }
         }
+        followingChannelModels.saveAll()
         extendChannelList.saveAll()
     }
 
     fun updateExtendChannel(extendChannel: ExtendChannelModel) {
         extendChannel.save()
-    }
-
-    fun updateFollowingChannels(followingChannel: FollowingChannelModel) {
-        followingChannel.save()
-
     }
 
     fun getExtendChannel() = get(
@@ -63,4 +60,8 @@ object ChannelManager : BaseManager() {
     fun getFollowingChannels() = get(
             local = { FollowingChannelModel().queryAll() }
     )
+
+    fun updateFollowingChannels(followingChannelModel: FollowingChannelModel) {
+        followingChannelModel.save()
+    }
 }

@@ -44,39 +44,29 @@ object TrackManager : BaseManager() {
             local = { ListenedTrackModel().queryAll() }
     )
 
-    fun updateExtendTrackModel(extendTrack: ExtendTrackModel?){
-        extendTrack?.save()
-
-    }
-
     fun updateExtendTrackModel(extendTrackList: List<ExtendTrackModel>) {
         ExtendTrackModel().deleteAll()
+        val favouriteTracksModels = mutableListOf<FavouriteTracksModel>()
+        val listenedTracks = mutableListOf<ListenedTrackModel>()
         extendTrackList.forEach {
             if (it.like == null) {
                 val like = FavouriteTracksModel(it.track?.id, it.track?.likeCount, false)
-                updateFavouriteTrack(like)
                 it.like = like
+                favouriteTracksModels.add(like)
             } else {
                 it.like?.likeCounts = it.track?.likeCount
-                updateFavouriteTrack(it.like)
+                favouriteTracksModels.add(it.like!!)
             }
 
             if (it.listened == null) {
                 val listenedTrack = ListenedTrackModel(it.id, false)
-                updateListenedTrack(listenedTrack)
                 it.listened = listenedTrack
+                listenedTracks.add(listenedTrack)
             }
         }
+        favouriteTracksModels.saveAll()
+        listenedTracks.saveAll()
         extendTrackList.saveAll()
-    }
-
-
-    fun updateListenedTrack(listened: ListenedTrackModel) {
-        listened.save()
-    }
-
-    fun updateFavouriteTrack(like: FavouriteTracksModel?) {
-        like?.save()
     }
 
     fun getExtendTrack() = get(
@@ -130,5 +120,17 @@ object TrackManager : BaseManager() {
             val trackLanguage = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
             trackLanguage == lang
         }
+    }
+
+    fun updateExtendTrackModel(extendTrackList: ExtendTrackModel) {
+        extendTrackList.save()
+    }
+
+    fun updateListenedTrack(listenedTrackModel: ListenedTrackModel) {
+        listenedTrackModel.save()
+    }
+
+    fun updateFavouriteTrack(favouriteTracksModel: FavouriteTracksModel) {
+        favouriteTracksModel.save()
     }
 }
