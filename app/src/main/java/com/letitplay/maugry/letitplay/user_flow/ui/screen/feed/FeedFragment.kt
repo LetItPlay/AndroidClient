@@ -14,6 +14,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.feed_fragment.*
@@ -48,6 +49,9 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                 feed_no_tracks.visibility = View.VISIBLE
             }
         }
+        go_to_channels.setOnClickListener {
+            seeAllChannelsClick()
+        }
         swipe_refresh.setColorSchemeResources(R.color.colorAccent)
         swipe_refresh.setOnRefreshListener {
             presenter?.loadTracksFromRemote(
@@ -67,6 +71,10 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
                     }
             )
         }
+    }
+
+    private fun seeAllChannelsClick() {
+        navigationActivity.navigateTo(ChannelsKey())
     }
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {

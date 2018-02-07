@@ -13,7 +13,8 @@
 
     <!--FEED-->
     <string name="playing_now">playing now</string>
-    <string name="feed_no_tracks">There are no tracks here. Please subscribe on one of the channels in Channel tab</string>
+    <string name="feed_no_tracks">There are no tracks here yet.\nSubscribe to one of the channels first</string>
+    <string name="feed_go_to_channels">Browse channels list</string>
 
     <!--TRACK-->
     <string name="track_recent_added">Recent added</string>

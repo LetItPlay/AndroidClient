@@ -39,8 +39,16 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
                                     val channel = channels.first { it.id == track.stationId }
                                     (channel.channel!! to track).toAudioTrack()
                                 }
-                                PlaylistModel("Актуальные новости за 30 минут",
-                                        "Подборка актуальных новостей в виде 30-минутного плейлиста",
+                                var title = "Актуальные новости за 30 минут"
+                                var subTitle = "Подборка актуальных новостей в виде 30-минутного плейлиста"
+
+                                if (currentContentLang == ContentLanguage.EN) {
+                                    title = "Fresh news in 30 minutes"
+                                    subTitle = "A compilation of fresh news in one 30-minute playlist"
+                                }
+
+                                PlaylistModel(title,
+                                        subTitle,
                                         tracksWithChannels)
                             }),
                     onNextNonContext = { playlists = listOf(it) },

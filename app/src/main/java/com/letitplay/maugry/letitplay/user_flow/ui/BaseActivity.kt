@@ -25,6 +25,7 @@ import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
+import kotlinx.android.synthetic.main.player_container_fragment.view.*
 
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
@@ -71,6 +72,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+        main_player.apply {
+            collapse.setOnClickListener {
+                collapsePlayer()
+            }
+        }
         main_player.setViewPager(supportFragmentManager)
     }
 
