@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.view_feed_card_info.view.*
 class FeedItemViewHolder(
         parent: ViewGroup?,
         playlistActionsListener: OnPlaylistActionsListener?,
-        onClick: ((Long) -> Unit)?,
+        onClick: ((ExtendTrackModel, Int) -> Unit)?,
         onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit)?,
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
@@ -47,7 +47,7 @@ class FeedItemViewHolder(
                     TransitionManager.beginDelayedTransition(itemView as ViewGroup)
                     itemView.feed_card_info.gone()
                 } else {
-                    onClick?.invoke(extendTrackModel.track?.id!!)
+                    onClick?.invoke(extendTrackModel, adapterPosition)
                 }
             }
         }

@@ -11,7 +11,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsL
 
 class TrendsAdapter(
         private val musicService: MusicService?,
-        private val onClickItem: ((Long) -> Unit),
+        private val onClickItem: ((ExtendTrackModel, Int) -> Unit),
         private val onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit),
         private val playlistActionsListener: OnPlaylistActionsListener? = null,
         private val onChannelClick: ((ChannelModel) -> Unit),

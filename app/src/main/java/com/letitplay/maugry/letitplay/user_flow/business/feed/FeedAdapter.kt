@@ -15,7 +15,7 @@ import java.util.*
 
 class FeedAdapter(
         private val musicService: MusicService? = null,
-        private val onClickItem: ((Long) -> Unit)? = null,
+        private val onClickItem: ((ExtendTrackModel, Int) -> Unit)? = null,
         private val onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit)? = null,
         private val playlistActionsListener: OnPlaylistActionsListener? = null
 ) : RecyclerView.Adapter<FeedItemViewHolder>() {

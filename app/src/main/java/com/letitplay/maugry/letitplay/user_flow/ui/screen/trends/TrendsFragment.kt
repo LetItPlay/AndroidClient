@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -75,21 +76,6 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
                 trends_no_tracks.visibility = View.VISIBLE
             }
         }
-
-        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
-        swipe_refresh.setOnRefreshListener {
-            presenter?.loadTracksFromRemote(
-                    { _, _ ->
-                        swipe_refresh.isRefreshing = false
-                    },
-                    {
-                        presenter.extendTrackList?.let {
-                            trendsListAdapter.data = it
-                        }
-                        swipe_refresh.isRefreshing = false
-                    }
-            )
-        }
     }
 
     private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {
@@ -107,6 +93,8 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
                     trendsListAdapter.notifyItemChanged(position)
                 }
             }
+        }
+    }
 
 
     private fun onChannelClick(channel: ChannelModel) {
