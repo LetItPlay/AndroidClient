@@ -101,7 +101,6 @@ object ServiceController : BaseServiceController() {
     }
 }
 
-
 abstract class BaseServiceController {
 
     private val errorConsumer = Consumer<Throwable> { it ->
@@ -116,6 +115,7 @@ abstract class BaseServiceController {
             else -> Timber.e("Unknown error (possibly parsing)!")
         }
     }
+
 
     protected fun <T> get(observable: Observable<T>): Observable<T> = observable
             .subscribeOn(GL_SCHEDULER_IO)

@@ -24,7 +24,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
     private var feedRepo: MusicRepo? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view =  super.onCreateView(inflater, container, savedInstanceState)!!
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val feedRecycler = view.findViewById<RecyclerView>(R.id.feed_list)
         val layoutManager = LinearLayoutManager(context)
         feedListAdapter = FeedAdapter(musicService, ::playTrack, ::onLikeClick, this)
@@ -77,22 +77,32 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
         extendTrack.track?.id?.let {
             presenter?.updateFavouriteTracks(extendTrack, like) {
                 presenter.updatedTrack?.let {
-                   feedListAdapter.notifyItemChanged(position)
+                    feedListAdapter.notifyItemChanged(position)
                 }
             }
         }
     }
 
-    private fun playTrack(trackId: Long) {
+    private fun playTrack(extendTrack: ExtendTrackModel, position: Int) {
         if (swipe_refresh.isRefreshing) return
+
+        extendTrack.listened?.let {
+            if (!it.isListened) {
+                val newListener: UpdateRequestBody = UpdateRequestBody.buildListenRequest()
+                presenter?.updateListenersTracks(extendTrack, newListener) {
+                    feedListAdapter.notifyItemChanged(position)
+                }
+            }
+        }
+
         if (feedRepo != null) {
-            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(extendTrack.track?.id!!)
             return
         }
         presenter?.playlist?.let {
             feedRepo = MusicRepo(it)
         }
-        navigationActivity.updateRepo(trackId, feedRepo)
+        navigationActivity.updateRepo(extendTrack.track?.id!!, feedRepo)
     }
 
     override fun performPushToTop(feedItem: ExtendTrackModel): Boolean {

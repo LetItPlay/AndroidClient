@@ -16,7 +16,7 @@ fun toChannelModel(updatedChannelResponse: UpdatedChannelResponse): ChannelModel
             name = updatedChannelResponse.name,
             imageUrl = updatedChannelResponse.imageUrl.fixServerPrefix(),
             subscriptionCount = updatedChannelResponse.subscriptionCount,
-            tags = updatedChannelResponse.tags.splitTags().mapTo(RealmList(), ::identity)
+            tags = updatedChannelResponse.tags?.splitTags()?.mapTo(RealmList(), ::identity)
     )
 }
 

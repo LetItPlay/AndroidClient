@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.model.remote.requests.Upda
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
+import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import org.joda.time.DateTime
@@ -67,6 +68,24 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     onCompleteWithContext = onComplete
             )
 
+    )
+
+    fun updateListenersTracks(extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+            ExecutionConfig(
+                    asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),
+                    triggerProgress = false,
+                    onNextNonContext = {
+                        updatedTrack = it
+                        extendTrack.track?.listenCount = it.listenCount
+                        TrackManager.updateExtendTrackModel(extendTrack)
+                        extendTrack.listened?.let {
+                            it.isListened = true
+                            TrackManager.updateListenedTrack(it)
+                        }
+
+                    },
+                    onCompleteWithContext = onComplete
+            )
     )
 
     private fun List<ExtendTrackModel>.takeLastDate(now: DateTime): List<ExtendTrackModel> =

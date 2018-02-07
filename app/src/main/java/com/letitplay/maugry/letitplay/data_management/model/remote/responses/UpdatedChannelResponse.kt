@@ -15,7 +15,7 @@ data class UpdatedChannelResponse(
         @SerializedName("subscription_count")
         var subscriptionCount: Int,
         @SerializedName("tags")
-        var tags: String,
+        var tags: String?,
         @SerializedName("youtube_url")
         var youtubeUrl: String?
 )

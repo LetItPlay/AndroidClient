@@ -9,5 +9,6 @@ open class ExtendTrackModel(
         var id: Long? = null,
         var track: TrackModel? = null,
         var channel: ChannelModel? = null,
-        var like: FavouriteTracksModel? = null
+        var like: FavouriteTracksModel? = null,
+        var listened: ListenedTrackModel? = null
 ) : RealmObject()

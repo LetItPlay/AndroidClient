@@ -61,6 +61,24 @@ object FeedPresenter : BasePresenter<IMvpView>() {
             )
     )
 
+    fun updateListenersTracks(extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+            ExecutionConfig(
+                    asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),
+                    triggerProgress = false,
+                    onNextNonContext = {
+                        updatedTrack = it
+                        extendTrack.track?.listenCount = it.listenCount
+                        TrackManager.updateExtendTrackModel(extendTrack)
+                        extendTrack.listened?.let {
+                            it.isListened = true
+                            TrackManager.updateListenedTrack(it)
+                        }
+
+                    },
+                    onCompleteWithContext = onComplete
+            )
+    )
+
     fun updateFavouriteTracks(extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),

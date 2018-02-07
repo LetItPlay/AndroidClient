@@ -40,9 +40,14 @@ object TrackManager : BaseManager() {
             local = { FavouriteTracksModel().queryAll() }
     )
 
-    fun getPieceTracks(id: Int) = get(
-            local = { TrackModel().query { equalTo("id", id) } }
+    fun getListenedTracks() = get(
+            local = { ListenedTrackModel().queryAll() }
     )
+
+    fun updateExtendTrackModel(extendTrack: ExtendTrackModel?){
+        extendTrack?.save()
+
+    }
 
     fun updateExtendTrackModel(extendTrackList: List<ExtendTrackModel>) {
         ExtendTrackModel().deleteAll()
@@ -55,8 +60,19 @@ object TrackManager : BaseManager() {
                 it.like?.likeCounts = it.track?.likeCount
                 updateFavouriteTrack(it.like)
             }
+
+            if (it.listened == null) {
+                val listenedTrack = ListenedTrackModel(it.id, false)
+                updateListenedTrack(listenedTrack)
+                it.listened = listenedTrack
+            }
         }
         extendTrackList.saveAll()
+    }
+
+
+    fun updateListenedTrack(listened: ListenedTrackModel) {
+        listened.save()
     }
 
     fun updateFavouriteTrack(like: FavouriteTracksModel?) {
