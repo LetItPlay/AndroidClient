@@ -13,6 +13,7 @@ import io.fabric.sdk.android.Fabric
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import net.danlew.android.joda.JodaTimeAndroid
+import org.joda.time.DateTime
 import timber.log.Timber
 import java.util.concurrent.Executors
 
@@ -55,6 +56,7 @@ class App : MultiDexApplication(){
         realmDb.init(this)
         bindMusicService()
         Timber.plant(Timber.DebugTree())
+        Timber.d("APP DASHA"+DateTime.now())
         JodaTimeAndroid.init(this)
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, Crashlytics())

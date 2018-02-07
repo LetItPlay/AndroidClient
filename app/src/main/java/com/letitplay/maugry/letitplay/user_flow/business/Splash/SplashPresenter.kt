@@ -9,6 +9,8 @@ import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import io.reactivex.Observable
 import io.reactivex.functions.Function5
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
+import kotlin.system.measureTimeMillis
 
 
 object SplashPresenter : BasePresenter<IMvpView>() {
@@ -26,20 +28,23 @@ object SplashPresenter : BasePresenter<IMvpView>() {
             })
             .observeOn(Schedulers.io())
             .doOnNext { model ->
-                val extendTrackList: List<ExtendTrackModel> = model.tracks.map {
-                    val stationId = it.stationId
-                    val trackId = it.id
-                    ExtendTrackModel(trackId, it, model.channel.find { it.id == stationId },
-                            model.favouriteTrack.find { it.id == trackId },
-                            model.listenedTracks.find { it.id == trackId })
+                measureTimeMillis {
+                    val extendTrackList: List<ExtendTrackModel> = model.tracks.map {
+                        val stationId = it.stationId
+                        val trackId = it.id
+                        ExtendTrackModel(trackId, it, model.channel.find { it.id == stationId })
+                    }
+               // TrackManager.updateExtendTrackModel(extendTrackList)
+                    val extendChannelList: List<ExtendChannelModel> = model.channel.map {
+                        val id = it.id
+                        ExtendChannelModel(it.id, it, model.followingChannels.find { it.id == id }
+                        )
+                    }
+               // ChannelManager.updateExtendChannel(extendChannelList)
+                }.also {
+                    Timber.d("DASHA"+it.toString())
+
                 }
-                TrackManager.updateExtendTrackModel(extendTrackList)
-                val extendChannelList: List<ExtendChannelModel> = model.channel.map {
-                    val id = it.id
-                    ExtendChannelModel(it.id, it, model.followingChannels.find { it.id == id }
-                    )
-                }
-                ChannelManager.updateExtendChannel(extendChannelList)
             }
 
     fun loadData(onComplete: ((IMvpView?) -> Unit)? = null) =
