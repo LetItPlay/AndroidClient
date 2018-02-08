@@ -2,55 +2,61 @@ package com.letitplay.maugry.letitplay.user_flow.business.trends
 
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
+import com.letitplay.maugry.letitplay.data_management.manager.FeedManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
-import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
-import com.letitplay.maugry.letitplay.user_flow.business.Splash.SplashPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function5
+import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
 import org.joda.time.Days
 
 object TrendsPresenter : BasePresenter<IMvpView>() {
 
     var extendTrackList: List<ExtendTrackModel>? = null
-    var extendChannelList: List<ExtendChannelModel>? = null
+    var extendChannelList: List<ChannelModel>? = null
     var playlist: List<AudioTrack>? = null
     var updatedTrack: TrackModel? = null
 
-    fun loadTracksAndChannels(triggerProgress: Boolean = true,
-                              onError: ((IMvpView?, Throwable) -> Unit)? = null,
-                              onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun loadTracksAndChannels(
+            lang: String,
+            triggerProgress: Boolean = true,
+            onError: ((IMvpView?, Throwable) -> Unit)? = null,
+            onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     triggerProgress = triggerProgress,
                     asyncObservable = Observable.zip(
-                            ChannelManager.getExtendChannel(),
-                            TrackManager.getExtendTrack(),
-                            BiFunction { channels: List<ExtendChannelModel>, tracks: List<ExtendTrackModel> ->
-                                channels to tracks
-                            }),
+                            FeedManager.getTrends(lang),
+                            ChannelManager.getChannels(),
+                            TrackManager.getFavouriteTracks(),
+                            ChannelManager.getFollowingChannels(),
+                            TrackManager.getListenedTracks(),
+                            Function5
+                            { feed: FeedModel, channels: List<ChannelModel>,
+                              favouriteTracks: List<FavouriteTracksModel>, followingChannels: List<FollowingChannelModel>, listenedTracks: List<ListenedTrackModel> ->
+                                TrendsViewModel(feed, channels, favouriteTracks, followingChannels, listenedTracks)
+                            })
+                            .observeOn(Schedulers.io())
+                            .doOnNext { model ->
+                                extendTrackList = model.feed.tracks?.map {
+                                    val stationId = it.stationId
+                                    val trackId = it.id
+                                    ExtendTrackModel(it.id, it, model.feed.channels?.find { it.id == stationId },
+                                            model.favouriteTrack.find { it.id == trackId },
+                                            model.listenedTracks.find { it.id == trackId })
+                                }
+
+                                extendChannelList = model.channels.filter { it.lang?.toUpperCase() == currentContentLang?.name }
+                            },
                     onErrorWithContext = onError,
                     onNextNonContext = {
-                        val now = DateTime.now()
-                        val sortedTracks = it.second
-                                .filter {
-                                    val lang = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
-                                    return@filter currentContentLang == lang
-                                }
-                                .takeLastDate(now)
-                                .sortByListenCount()
-
-                        extendChannelList = it.first.sortedByDescending { it.channel?.subscriptionCount }
-                        extendTrackList = sortedTracks
-                        playlist = sortedTracks.map {
+                        playlist = extendTrackList?.map {
                             (it.channel to it.track).toAudioTrack()
                         }
                     },
@@ -58,23 +64,35 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
             )
     )
 
-    fun loadTracksAndChannelsFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
-            ExecutionConfig(
-                    asyncObservable = SplashPresenter.allUpdateObservable,
-                    triggerProgress = false,
-                    onErrorWithContext = onError,
-                    onCompleteWithContext = {
-                        loadTracksAndChannels(false, onError, onComplete)
-                    }
-            )
-    )
+//    fun loadTracksAndChannelsFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+//            ExecutionConfig(
+//                    asyncObservable = SplashPresenter.allUpdateObservable,
+//                    triggerProgress = false,
+//                    onErrorWithContext = onError,
+//                    onCompleteWithContext = {
+//                        loadTracksAndChannels(false, onError, onComplete)
+//                    }
+//            )
+//    )
 
-    fun updateFavouriteTracks(id: Int, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun updateFavouriteTracks(id: Int, extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = TrackManager.updateFavouriteTrack(id, body),
                     triggerProgress = false,
                     onNextNonContext = {
                         updatedTrack = it
+                        if (extendTrack.like == null) {
+                            val like = FavouriteTracksModel(extendTrack.id, true)
+                            TrackManager.updateFavouriteTrack(like)
+                            extendTrack.like = like
+                        } else {
+                            extendTrack.like?.let {
+                                it.isLiked = !it.isLiked
+                                TrackManager.updateFavouriteTrack(it)
+                            }
+                        }
+                        extendTrack.track?.likeCount = it.likeCount
+                        TrackManager.updateExtendTrackModel(extendTrack)
                     },
                     onCompleteWithContext = onComplete
             )
@@ -105,15 +123,22 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
             }.filter {
                 it.track?.publishedAt != null
             }.takeWhile {
-                        val publish = DateTime(it.track?.publishedAt?.time!!)
-                        val days = Days.daysBetween(publish, now).days
-                        days in 0..7
-                    }
+                val publish = DateTime(it.track?.publishedAt?.time!!)
+                val days = Days.daysBetween(publish, now).days
+                days in 0..7
+            }
 
 
     private fun List<ExtendTrackModel>.sortByListenCount(): List<ExtendTrackModel> =
             sortedByDescending {
                 it.track?.listenCount
             }
+
+    class TrendsViewModel(var feed: FeedModel,
+                          var channels: List<ChannelModel>,
+                          var favouriteTrack: List<FavouriteTracksModel>,
+                          var followingChannels: List<FollowingChannelModel>,
+                          var listenedTracks: List<ListenedTrackModel>
+    )
 
 }

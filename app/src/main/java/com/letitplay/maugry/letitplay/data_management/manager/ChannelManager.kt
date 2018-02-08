@@ -16,7 +16,6 @@ object ChannelManager : BaseManager() {
             remote = ServiceController.getChannels(),
             remoteWhen = { REMOTE_ALWAYS },
             update = { remote ->
-                ChannelModel().deleteAll()
                 remote.saveAll()
             }
     )

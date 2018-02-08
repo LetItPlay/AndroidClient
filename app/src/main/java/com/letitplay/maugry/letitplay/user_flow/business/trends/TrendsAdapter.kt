@@ -31,7 +31,7 @@ class TrendsAdapter(
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = tracks.size
+    override fun getItemCount(): Int = tracks.size+1
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {

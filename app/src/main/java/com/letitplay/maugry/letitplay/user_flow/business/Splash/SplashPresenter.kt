@@ -29,17 +29,17 @@ object SplashPresenter : BasePresenter<IMvpView>() {
             .observeOn(Schedulers.io())
             .doOnNext { model ->
                 measureTimeMillis {
-                    val extendTrackList: List<ExtendTrackModel> = model.tracks.map {
-                        val stationId = it.stationId
-                        val trackId = it.id
-                        ExtendTrackModel(trackId, it, model.channel.find { it.id == stationId })
-                    }
-               // TrackManager.updateExtendTrackModel(extendTrackList)
-                    val extendChannelList: List<ExtendChannelModel> = model.channel.map {
-                        val id = it.id
-                        ExtendChannelModel(it.id, it, model.followingChannels.find { it.id == id }
-                        )
-                    }
+//                    val extendTrackList: List<ExtendTrackModel> = model.tracks.map {
+//                        val stationId = it.stationId
+//                        val trackId = it.id
+//                        ExtendTrackModel(trackId, it, model.channel.find { it.id == stationId })
+//                    }
+//               // TrackManager.updateExtendTrackModel(extendTrackList)
+//                    val extendChannelList: List<ExtendChannelModel> = model.channel.map {
+//                        val id = it.id
+//                        ExtendChannelModel(it.id, it, model.followingChannels.find { it.id == id }
+//                        )
+//                    }
                // ChannelManager.updateExtendChannel(extendChannelList)
                 }.also {
                     Timber.d("DASHA"+it.toString())

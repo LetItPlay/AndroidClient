@@ -22,8 +22,14 @@ class LikeWidget : LinearLayout {
 
     var like: FavouriteTracksModel? = null
         set(value) {
-            field  = value
+            field = value
             updateState(value)
+        }
+
+    var likeCount: Int? = 0
+        set(value) {
+            field = value
+            feed_like_count.text = likeCount.toString()
         }
 
     init {
@@ -32,12 +38,19 @@ class LikeWidget : LinearLayout {
     }
 
     private fun updateState(like: FavouriteTracksModel?) {
-        like?.let {
-            if (it.isLiked)
-                feed_like_icon.setImageResource(R.drawable.like_ic)
-            else feed_like_icon.setImageResource(R.drawable.dislike)
-            feed_like_count.text = it.likeCounts.toString()
+        when (like?.isLiked) {
+            true -> setLiked()
+            false -> setUnliked()
+            null -> setUnliked()
         }
+    }
+
+    fun setLiked() {
+        feed_like_icon.setImageResource(R.drawable.like_ic)
+    }
+
+    fun setUnliked() {
+        feed_like_icon.setImageResource(R.drawable.dislike)
     }
 
     fun isLiked() = like?.isLiked ?: false

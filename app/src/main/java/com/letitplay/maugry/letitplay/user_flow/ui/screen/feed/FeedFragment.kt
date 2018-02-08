@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
+import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
+import com.letitplay.maugry.letitplay.data_management.repo.query
+import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
@@ -39,7 +42,9 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter?.loadTracks {
+        presenter?.loadTracks(
+
+        ) {
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {
                     feedListAdapter.data = it
@@ -53,24 +58,24 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
             seeAllChannelsClick()
         }
         swipe_refresh.setColorSchemeResources(R.color.colorAccent)
-        swipe_refresh.setOnRefreshListener {
-            presenter?.loadTracksFromRemote(
-                    { _, _ ->
-                        swipe_refresh.isRefreshing = false
-                    },
-                    {
-                        if (presenter.extendTrackList?.size != 0) {
-                            presenter.extendTrackList?.let {
-                                feedListAdapter.data = it
-                            }
-                        } else {
-                            swipe_refresh.isEnabled = false
-                            feed_no_tracks.visibility = View.VISIBLE
-                        }
-                        swipe_refresh.isRefreshing = false
-                    }
-            )
-        }
+//        swipe_refresh.setOnRefreshListener {
+//            presenter?.loadTracksFromRemote(
+//                    { _, _ ->
+//                        swipe_refresh.isRefreshing = false
+//                    },
+//                    {
+//                        if (presenter.extendTrackList?.size != 0) {
+//                            presenter.extendTrackList?.let {
+//                                feedListAdapter.data = it
+//                            }
+//                        } else {
+//                            swipe_refresh.isEnabled = false
+//                            feed_no_tracks.visibility = View.VISIBLE
+//                        }
+//                        swipe_refresh.isRefreshing = false
+//                    }
+//            )
+//        }
     }
 
     private fun seeAllChannelsClick() {

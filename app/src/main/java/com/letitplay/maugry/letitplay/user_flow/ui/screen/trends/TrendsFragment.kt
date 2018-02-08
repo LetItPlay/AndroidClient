@@ -2,7 +2,6 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -48,28 +47,28 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         trendsRecycler.defaultItemAnimator.supportsChangeAnimations = false
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
-        swipeRefreshLayout.setOnRefreshListener {
-            presenter?.loadTracksAndChannelsFromRemote(
-                    { _, _ ->
-                        swipeRefreshLayout.isRefreshing = false
-                    },
-                    {
-                        presenter.extendTrackList?.let {
-                            trendsListAdapter.updateData(it, presenter.extendChannelList?.mapNotNull { it.channel } ?: emptyList())
-                        }
-                        swipeRefreshLayout.isRefreshing = false
-                    }
-            )
-        }
+//        swipeRefreshLayout.setOnRefreshListener {
+//            presenter?.loadTracksAndChannelsFromRemote(
+//                    { _, _ ->
+//                        swipeRefreshLayout.isRefreshing = false
+//                    },
+//                    {
+//                        presenter.extendTrackList?.let {
+//                            trendsListAdapter.updateData(it, presenter.extendChannelList?.mapNotNull { it.channel } ?: emptyList())
+//                        }
+//                        swipeRefreshLayout.isRefreshing = false
+//                    }
+//            )
+//        }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter?.loadTracksAndChannels {
+        presenter?.loadTracksAndChannels(presenter.currentContentLang?.name?.toLowerCase() ?: "ru") {
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {
-                    trendsListAdapter.updateData(it, presenter.extendChannelList?.mapNotNull { it.channel } ?: emptyList())
+                    trendsListAdapter.updateData(it, presenter.extendChannelList ?: emptyList())
                 }
             } else {
                 swipe_refresh.isEnabled = false
@@ -83,13 +82,8 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         val like: UpdateRequestBody = if (isLiked) UpdateRequestBody.buildUnlikeRequest()
         else UpdateRequestBody.buildLikeRequest()
         extendTrack.track?.id?.let {
-            presenter?.updateFavouriteTracks(it.toInt(), like) {
+            presenter?.updateFavouriteTracks(it.toInt(),extendTrack, like) {
                 presenter.updatedTrack?.let {
-                    val track: FavouriteTracksModel = FavouriteTracksModel().query { equalTo("id", extendTrack.track?.id) }.first()
-                    track.likeCounts = it.likeCount
-                    track.isLiked = !isLiked
-                    track.save()
-                    extendTrack.like = track
                     trendsListAdapter.notifyItemChanged(position)
                 }
             }

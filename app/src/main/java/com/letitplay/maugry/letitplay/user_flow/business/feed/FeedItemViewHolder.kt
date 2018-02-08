@@ -75,6 +75,7 @@ class FeedItemViewHolder(
             feed_card_info.gone()
             feed_track_info_title.text = extendTrackModel.track?.title
             feed_track_info_description.text = extendTrackModel.track?.description ?: ""
+            feed_like.likeCount = extendTrackModel.track?.likeCount
             feed_like.like = extendTrackModel.like
             feed_like.isEnabled = true
             feed_playing_now.trackListenerCount = extendTrackModel.track?.listenCount

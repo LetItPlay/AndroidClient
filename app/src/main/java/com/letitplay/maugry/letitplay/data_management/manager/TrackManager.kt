@@ -18,7 +18,6 @@ object TrackManager : BaseManager() {
             remoteWhen = { REMOTE_ALWAYS },
             remote = ServiceController.getTracks(),
             update = { remote ->
-                TrackModel().deleteAll()
                 remote.saveAll()
             }
     )
@@ -43,31 +42,6 @@ object TrackManager : BaseManager() {
     fun getListenedTracks() = get(
             local = { ListenedTrackModel().queryAll() }
     )
-
-    fun updateExtendTrackModel(extendTrackList: List<ExtendTrackModel>) {
-        ExtendTrackModel().deleteAll()
-        val favouriteTracksModels = mutableListOf<FavouriteTracksModel>()
-        val listenedTracks = mutableListOf<ListenedTrackModel>()
-        extendTrackList.forEach {
-            if (it.like == null) {
-                val like = FavouriteTracksModel(it.track?.id, it.track?.likeCount, false)
-                it.like = like
-                favouriteTracksModels.add(like)
-            } else {
-                it.like?.likeCounts = it.track?.likeCount
-                favouriteTracksModels.add(it.like!!)
-            }
-
-            if (it.listened == null) {
-                val listenedTrack = ListenedTrackModel(it.id, false)
-                it.listened = listenedTrack
-                listenedTracks.add(listenedTrack)
-            }
-        }
-        favouriteTracksModels.saveAll()
-        listenedTracks.saveAll()
-        extendTrackList.saveAll()
-    }
 
     fun getExtendTrack() = get(
             local = { ExtendTrackModel().queryAll() }

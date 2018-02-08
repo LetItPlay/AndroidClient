@@ -15,14 +15,11 @@ class SplashFragment : BaseFragment<SplashPresenter>(R.layout.splash_fragment, S
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val prefHelper = context?.let { PreferenceHelper(it) }
-        presenter?.loadData {
             if (prefHelper?.contentLanguage == ContentLanguage.UNKNOWN) {
                 (activity as SplashActivity).showSelectLanguage()
             } else {
                 context?.startActivity(Intent(context, NavigationActivity::class.java))
             }
-        }
     }
 }
