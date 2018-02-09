@@ -24,7 +24,7 @@
     <!--PROFILE-->
     <string name="profile_change_language_to_ru">Поменять язык на русский</string>
     <string name="profile_change_language_to_en">Switch to English</string>
-    <string name="profile_favourite_tracks">Треки, понравивишиеся вам</string>
+    <string name="profile_favourite_tracks">Треки, понравившиеся вам</string>
     <string name="profile_user_name">Ваш будущий профиль</string>
 
     <!-- SEARCH -->
