@@ -28,6 +28,7 @@
 
         <activity
             android:name=".user_flow.ui.screen.splash.SplashActivity"
+            android:theme="@style/SplashTheme"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>

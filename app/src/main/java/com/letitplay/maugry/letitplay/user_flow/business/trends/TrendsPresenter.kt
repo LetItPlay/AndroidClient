@@ -31,7 +31,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
             ExecutionConfig(
                     triggerProgress = triggerProgress,
                     asyncObservable = Observable.zip(
-                            FeedManager.getTrends(FeedPresenter.currentContentLang?.name?.toLowerCase() ?: "ru"),
+                            FeedManager.getTrends(currentContentLang?.name?.toLowerCase() ?: "ru"),
                             ChannelManager.getChannels(),
                             TrackManager.getFavouriteTracks(),
                             ChannelManager.getFollowingChannels(),

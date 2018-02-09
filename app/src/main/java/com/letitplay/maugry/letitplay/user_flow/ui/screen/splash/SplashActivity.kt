@@ -15,15 +15,11 @@ import java.util.concurrent.TimeUnit
 
 class SplashActivity : AppCompatActivity() {
 
-    private var navigatePromise: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_activity)
-        Observable.just(Any())
-                .delay(1000, TimeUnit.MILLISECONDS)
-                .subscribeBy(onComplete = { navigate() })
-
+        navigate()
     }
 
     fun navigate() {
@@ -35,8 +31,4 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        navigatePromise?.dispose()
-    }
 }
