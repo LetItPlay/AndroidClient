@@ -4,7 +4,10 @@ import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
-import com.letitplay.maugry.letitplay.data_management.repo.*
+import com.letitplay.maugry.letitplay.data_management.repo.query
+import com.letitplay.maugry.letitplay.data_management.repo.queryAll
+import com.letitplay.maugry.letitplay.data_management.repo.save
+import com.letitplay.maugry.letitplay.data_management.repo.saveAll
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import io.reactivex.Observable
 
@@ -22,19 +25,9 @@ object ChannelManager : BaseManager() {
 
     fun updateChannelFollowers(id: Int, body: UpdateFollowersRequestBody) = ServiceController.updateChannelFollowers(id, body)
 
-    fun updateExtendChannel(extendChannelList: List<ExtendChannelModel>) {
-        ExtendChannelModel().deleteAll()
-        val followingChannelModels = mutableListOf<FollowingChannelModel>()
-        extendChannelList.forEach {
-            if (it.following == null) {
-                val followingChannel = FollowingChannelModel(it.id, false)
-                followingChannelModels.add(followingChannel)
-                it.following = followingChannel
-            }
-        }
-        followingChannelModels.saveAll()
-        extendChannelList.saveAll()
-    }
+    fun getChannelPiece(id: Int) = get(
+            local = { ChannelModel().query { equalTo("id", id) } }
+    )
 
     fun updateExtendChannel(extendChannel: ExtendChannelModel) {
         extendChannel.save()
@@ -42,10 +35,6 @@ object ChannelManager : BaseManager() {
 
     fun getExtendChannel() = get(
             local = { ExtendChannelModel().queryAll() }
-    )
-
-    fun getExtendChannelPiece(id: Int) = get(
-            local = { ExtendChannelModel().query { equalTo("id", id) } }
     )
 
     fun queryChannels(query: String): Observable<List<ExtendChannelModel>> = getExtendChannel().map { channels ->
@@ -58,6 +47,10 @@ object ChannelManager : BaseManager() {
 
     fun getFollowingChannels() = get(
             local = { FollowingChannelModel().queryAll() }
+    )
+
+    fun getFollowingChannelPiece(id: Int) = get(
+            local = { FollowingChannelModel().query { equalTo("id", id) } }
     )
 
     fun updateFollowingChannels(followingChannelModel: FollowingChannelModel) {

@@ -22,6 +22,8 @@ object TrackManager : BaseManager() {
             }
     )
 
+    fun getTrackPiece(idStation:Int) = ServiceController.getChannelTracks(idStation)
+
     fun updateFavouriteTrack(id: Int, body: UpdateRequestBody) = ServiceController.updateFavouriteTracks(id, body)
 
     fun getLastTracksWithChannelTag(tag: String) = get(

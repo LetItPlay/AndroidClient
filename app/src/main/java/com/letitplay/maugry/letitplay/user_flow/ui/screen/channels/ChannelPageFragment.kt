@@ -93,7 +93,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
         }
         // FIXME: pass new repository as argument
         channelPageRepo = MusicRepo(presenter!!.recentTracks.map {
-            (it.channel to it.track).toAudioTrack()
+            (presenter.extendChannel?.channel to it).toAudioTrack()
         })
         navigationActivity.updateRepo(trackId, channelPageRepo)
     }
