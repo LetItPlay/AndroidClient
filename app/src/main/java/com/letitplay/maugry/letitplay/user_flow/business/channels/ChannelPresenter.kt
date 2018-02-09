@@ -46,31 +46,6 @@ object ChannelPresenter : BasePresenter<IMvpView>() {
             )
     )
 
-    fun loadChannelsFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
-            ExecutionConfig(
-                    asyncObservable = Observable.zip(
-                            ChannelManager.getChannels(),
-                            ChannelManager.getFollowingChannels(),
-                            BiFunction { channels: List<ChannelModel>, followingChannels: List<FollowingChannelModel> ->
-                                Pair(channels, followingChannels)
-                            })
-                            .observeOn(Schedulers.io())
-                            .doOnNext { pair ->
-                                val extendChannelList: List<ExtendChannelModel> = pair.first.map {
-                                    val id = it.id
-                                    ExtendChannelModel(it.id, it, pair.second.find { it.id == id }
-                                    )
-                                }
-                                ChannelManager.updateExtendChannel(extendChannelList)
-                            },
-                    triggerProgress = false,
-                    onErrorWithContext = onError,
-                    onCompleteWithContext = {
-                        loadChannels(false, onError, onComplete)
-                    }
-            )
-    )
-
     fun updateChannelFollowers(channel: ExtendChannelModel, body: UpdateFollowersRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     asyncObservable = ChannelManager.updateChannelFollowers(channel.id!!, body),

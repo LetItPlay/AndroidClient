@@ -28,13 +28,19 @@
 
         <activity
             android:name=".user_flow.ui.screen.splash.SplashActivity"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".user_flow.ui.screen.splash.LanguageActivity"
+            android:screenOrientation="portrait" />
+
 
         <service
             android:name="com.gsfoxpro.musicservice.service.MusicService"

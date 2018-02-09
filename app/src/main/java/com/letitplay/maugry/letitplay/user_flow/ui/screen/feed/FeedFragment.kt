@@ -42,9 +42,7 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter?.loadTracks(
-
-        ) {
+        presenter?.loadTracks{
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {
                     feedListAdapter.data = it
@@ -58,24 +56,25 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
             seeAllChannelsClick()
         }
         swipe_refresh.setColorSchemeResources(R.color.colorAccent)
-//        swipe_refresh.setOnRefreshListener {
-//            presenter?.loadTracksFromRemote(
-//                    { _, _ ->
-//                        swipe_refresh.isRefreshing = false
-//                    },
-//                    {
-//                        if (presenter.extendTrackList?.size != 0) {
-//                            presenter.extendTrackList?.let {
-//                                feedListAdapter.data = it
-//                            }
-//                        } else {
-//                            swipe_refresh.isEnabled = false
-//                            feed_no_tracks.visibility = View.VISIBLE
-//                        }
-//                        swipe_refresh.isRefreshing = false
-//                    }
-//            )
-//        }
+        swipe_refresh.setOnRefreshListener {
+            presenter?.loadTracks(
+                    false,
+                    { _, _ ->
+                        swipe_refresh.isRefreshing = false
+                    },
+                    {
+                        if (presenter.extendTrackList?.size != 0) {
+                            presenter.extendTrackList?.let {
+                                feedListAdapter.data = it
+                            }
+                        } else {
+                            swipe_refresh.isEnabled = false
+                            feed_no_tracks.visibility = View.VISIBLE
+                        }
+                        swipe_refresh.isRefreshing = false
+                    }
+            )
+        }
     }
 
     private fun seeAllChannelsClick() {

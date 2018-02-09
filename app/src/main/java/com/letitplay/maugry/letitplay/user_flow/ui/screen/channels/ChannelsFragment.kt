@@ -37,7 +37,8 @@ class ChannelsFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragme
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
-            presenter?.loadChannelsFromRemote(
+            presenter?.loadChannels (
+                    false,
                     { _, _ ->
                         swipeRefreshLayout.isRefreshing = false
                     },

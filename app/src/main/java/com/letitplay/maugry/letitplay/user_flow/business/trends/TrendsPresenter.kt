@@ -25,14 +25,13 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
     var updatedTrack: TrackModel? = null
 
     fun loadTracksAndChannels(
-            lang: String,
             triggerProgress: Boolean = true,
             onError: ((IMvpView?, Throwable) -> Unit)? = null,
             onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
                     triggerProgress = triggerProgress,
                     asyncObservable = Observable.zip(
-                            FeedManager.getTrends(lang),
+                            FeedManager.getTrends(FeedPresenter.currentContentLang?.name?.toLowerCase() ?: "ru"),
                             ChannelManager.getChannels(),
                             TrackManager.getFavouriteTracks(),
                             ChannelManager.getFollowingChannels(),
@@ -63,17 +62,6 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     onCompleteWithContext = onComplete
             )
     )
-
-//    fun loadTracksAndChannelsFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
-//            ExecutionConfig(
-//                    asyncObservable = SplashPresenter.allUpdateObservable,
-//                    triggerProgress = false,
-//                    onErrorWithContext = onError,
-//                    onCompleteWithContext = {
-//                        loadTracksAndChannels(false, onError, onComplete)
-//                    }
-//            )
-//    )
 
     fun updateFavouriteTracks(id: Int, extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(

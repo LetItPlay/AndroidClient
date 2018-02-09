@@ -23,7 +23,6 @@ object FeedPresenter : BasePresenter<IMvpView>() {
     var followingCount: String = ""
 
     fun loadTracks(triggerProgress: Boolean = true,
-                   limit: Int = 1000,
                    onError: ((IMvpView?, Throwable) -> Unit)? = null,
                    onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
@@ -32,7 +31,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                         followingCount = model.map { it.id }.joinToString(",")
                     }.concatMap {
                         Observable.zip(
-                                FeedManager.getFeed(followingCount, limit, currentContentLang?.name?.toLowerCase() ?: "ru"),
+                                FeedManager.getFeed(followingCount, 1000, currentContentLang?.name?.toLowerCase() ?: "ru"),
                                 TrackManager.getFavouriteTracks(),
                                 ChannelManager.getFollowingChannels(),
                                 TrackManager.getListenedTracks(),
@@ -60,17 +59,6 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                     onCompleteWithContext = onComplete
             )
     )
-
-//    fun loadTracksFromRemote(onError: ((IMvpView?, Throwable) -> Unit)? = null, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
-//            ExecutionConfig(
-//                    asyncObservable = SplashPresenter.allUpdateObservable,
-//                    triggerProgress = false,
-//                    onErrorWithContext = onError,
-//                    onCompleteWithContext = {
-//                        loadTracks(false, onError, onComplete)
-//                    }
-//            )
-//    )
 
     fun updateListenersTracks(extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(

@@ -11,10 +11,7 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
-import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
-import com.letitplay.maugry.letitplay.data_management.repo.query
-import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -47,25 +44,26 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         trendsRecycler.defaultItemAnimator.supportsChangeAnimations = false
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
-//        swipeRefreshLayout.setOnRefreshListener {
-//            presenter?.loadTracksAndChannelsFromRemote(
-//                    { _, _ ->
-//                        swipeRefreshLayout.isRefreshing = false
-//                    },
-//                    {
-//                        presenter.extendTrackList?.let {
-//                            trendsListAdapter.updateData(it, presenter.extendChannelList?.mapNotNull { it.channel } ?: emptyList())
-//                        }
-//                        swipeRefreshLayout.isRefreshing = false
-//                    }
-//            )
-//        }
+        swipeRefreshLayout.setOnRefreshListener {
+            presenter?.loadTracksAndChannels(
+                    false,
+                    { _, _ ->
+                        swipeRefreshLayout.isRefreshing = false
+                    },
+                    {
+                        presenter.extendTrackList?.let {
+                            trendsListAdapter.updateData(it, presenter.extendChannelList ?: emptyList())
+                        }
+                        swipeRefreshLayout.isRefreshing = false
+                    }
+            )
+        }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter?.loadTracksAndChannels(presenter.currentContentLang?.name?.toLowerCase() ?: "ru") {
+        presenter?.loadTracksAndChannels {
             if (presenter.extendTrackList?.size != 0) {
                 presenter.extendTrackList?.let {
                     trendsListAdapter.updateData(it, presenter.extendChannelList ?: emptyList())
@@ -82,7 +80,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         val like: UpdateRequestBody = if (isLiked) UpdateRequestBody.buildUnlikeRequest()
         else UpdateRequestBody.buildLikeRequest()
         extendTrack.track?.id?.let {
-            presenter?.updateFavouriteTracks(it.toInt(),extendTrack, like) {
+            presenter?.updateFavouriteTracks(it.toInt(), extendTrack, like) {
                 presenter.updatedTrack?.let {
                     trendsListAdapter.notifyItemChanged(position)
                 }
