@@ -62,7 +62,7 @@ interface Service {
     fun channels(): Observable<List<ChannelModel>>
 
     @GET("stations/{id}/tracks")
-    fun getChannelTracks(@Path("id") idStation: Int): Observable<List<TrackModel>>
+    fun getChannelTracks(@Path("id") idStation: Int): Observable<Response<List<TrackModel>>>
 
     @GET("tracks")
     fun getTracks(): Observable<List<TrackModel>>
@@ -100,15 +100,17 @@ object ServiceController : BaseServiceController() {
         return get(service.getTracks())
     }
 
-    fun getChannelTracks(idStation:Int): Observable<List<TrackModel>>{
-        return get(service.getChannelTracks(idStation))
+    fun getChannelTracks(idStation: Int): Observable<List<TrackModel>> {
+        return get(service.getChannelTracks(idStation)).map {
+            if (it.body() != null) it.body() else emptyList()
+        }
     }
 
     fun getFeed(stIds: String, limit: Int, lang: String): Observable<FeedModel> {
         return get(service.getFeed(stIds, limit, lang))
     }
 
-    fun getTrends(lang: String): Observable<FeedModel>{
+    fun getTrends(lang: String): Observable<FeedModel> {
         return get(service.getTrends(lang))
     }
 }
