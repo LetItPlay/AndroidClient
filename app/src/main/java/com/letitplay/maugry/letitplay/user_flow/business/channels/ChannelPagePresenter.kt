@@ -3,13 +3,12 @@ package com.letitplay.maugry.letitplay.user_flow.business.channels
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
+import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import io.reactivex.Observable
@@ -21,6 +20,7 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
     var extendChannel: ExtendChannelModel? = null
     var updatedChannel: ChannelModel? = null
     var playlist: List<AudioTrack>? = null
+    var updatedTrack: TrackModel? = null
 
     val recentTracks: List<TrackModel>
         get() = extendTrackList?.sortedByDescending { it.publishedAt } ?: emptyList()
@@ -45,6 +45,22 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
                     },
                     onCompleteWithContext = onComplete
 
+            )
+    )
+
+    fun updateListenersTracks(extendTrack: ExtendTrackModel, body: UpdateRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+            ExecutionConfig(
+                    asyncObservable = TrackManager.updateFavouriteTrack(extendTrack.id?.toInt()!!, body),
+                    triggerProgress = false,
+                    onNextNonContext = {
+                        updatedTrack = it
+                        val listened = ListenedTrackModel(extendTrack.id, true)
+                        TrackManager.updateListenedTrack(listened)
+                        extendTrack.listened = listened
+                        extendTrack.track?.listenCount = it.listenCount
+                        TrackManager.updateExtendTrackModel(extendTrack)
+                    },
+                    onCompleteWithContext = onComplete
             )
     )
 

@@ -97,13 +97,11 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
     private fun playTrack(extendTrack: ExtendTrackModel, position: Int) {
         if (swipe_refresh.isRefreshing) return
 
-        extendTrack.listened?.let {
-            if (!it.isListened) {
+        if (extendTrack.listened == null){
                 val newListener: UpdateRequestBody = UpdateRequestBody.buildListenRequest()
                 presenter?.updateListenersTracks(extendTrack, newListener) {
                     feedListAdapter.notifyItemChanged(position)
                 }
-            }
         }
 
         if (feedRepo != null) {

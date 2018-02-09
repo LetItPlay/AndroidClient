@@ -18,17 +18,23 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
     fun getPlaylists(tag: String, onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
-                            ChannelManager.getExtendChannel(),
-                            TrackManager.getLastTracksWithChannelTag(tag),
-                            BiFunction { channels: List<ExtendChannelModel>, extTracks: List<ExtendTrackModel> ->
+                            TrackManager.getTracks(),
+                            ChannelManager.getChannels(),
+                            BiFunction { tracks: List<TrackModel>, channels: List<ChannelModel> ->
+                                val extTracks = tracks.map {
+                                    val stationId = it.stationId
+                                    ExtendTrackModel(it.id, it, channels.find { it.id == stationId })
+                                }.filter { extendTrack ->
+                                    val ret = extendTrack.channel?.tags?.any { it.contains(tag, true) } == true
+                                    ret
+                                }.filter { it.track?.lang == currentContentLang?.name?.toLowerCase() }
                                 var totalTime = 0
-                                val tracksInPlaylist: MutableList<TrackModel> = mutableListOf()
+                                val tracksInPlaylist: MutableList<ExtendTrackModel> = mutableListOf()
                                 for (extTrack in extTracks) {
-                                    val lang = extTrack.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
                                     val trackDuration = extTrack.track?.totalLengthInSeconds!!
-                                    if (trackDuration == 0 || currentContentLang != lang) continue
+                                    if (trackDuration == 0 || trackDuration>=240) continue
                                     if (trackDuration + totalTime <= PLAYLIST_DURATION) {
-                                        tracksInPlaylist.add(extTrack.track!!)
+                                        tracksInPlaylist.add(extTrack)
                                         totalTime += trackDuration
                                     }
                                     if (totalTime >= PLAYLIST_DURATION) {
@@ -36,8 +42,7 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
                                     }
                                 }
                                 val tracksWithChannels: List<AudioTrack> = tracksInPlaylist.map { track ->
-                                    val channel = channels.first { it.id == track.stationId }
-                                    (channel.channel!! to track).toAudioTrack()
+                                    (track.channel!! to track.track).toAudioTrack()
                                 }
                                 var title = "Актуальные новости за 30 минут"
                                 var subTitle = "Подборка актуальных новостей в виде 30-минутного плейлиста"

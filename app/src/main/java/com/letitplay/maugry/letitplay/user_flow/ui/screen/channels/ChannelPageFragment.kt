@@ -10,6 +10,7 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
+import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPageAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment

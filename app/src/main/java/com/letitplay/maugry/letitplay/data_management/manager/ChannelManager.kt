@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.data_management.repo.saveAll
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 
 object ChannelManager : BaseManager() {
@@ -37,12 +38,20 @@ object ChannelManager : BaseManager() {
             local = { ExtendChannelModel().queryAll() }
     )
 
-    fun queryChannels(query: String): Observable<List<ExtendChannelModel>> = getExtendChannel().map { channels ->
-        channels.filter {
-            val channel = it.channel!!
-            channel.name!!.contains(query, true) || channel.tags?.any { it.contains(query, true) } ?: false
-        }
-    }
+    fun queryChannels(query: String, contentLang: String): Observable<List<ExtendChannelModel>> = Observable.zip(
+            getChannels(),
+            getFollowingChannels(),
+            BiFunction { channels: List<ChannelModel>, followingChannels: List<FollowingChannelModel> ->
+                channels.filter {
+                    it.name!!.contains(query, true) || it.tags?.any { it.contains(query, true) } ?: false
+                }
+                        .filter { it.lang == contentLang }
+                        .map {
+                            val stationId = it.id
+                            ExtendChannelModel(it.id, it, followingChannels.find { it.id == stationId })
+                        }
+            }
+    )
 
 
     fun getFollowingChannels() = get(

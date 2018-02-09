@@ -66,13 +66,11 @@ object FeedPresenter : BasePresenter<IMvpView>() {
                     triggerProgress = false,
                     onNextNonContext = {
                         updatedTrack = it
+                        val listened = ListenedTrackModel(extendTrack.id, true)
+                        TrackManager.updateListenedTrack(listened)
+                        extendTrack.listened = listened
                         extendTrack.track?.listenCount = it.listenCount
                         TrackManager.updateExtendTrackModel(extendTrack)
-                        extendTrack.listened?.let {
-                            it.isListened = true
-                            TrackManager.updateListenedTrack(it)
-                        }
-
                     },
                     onCompleteWithContext = onComplete
             )

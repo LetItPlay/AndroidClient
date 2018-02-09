@@ -102,13 +102,11 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     private fun playTrack(extendTrack: ExtendTrackModel, position: Int) {
         if (swipe_refresh.isRefreshing) return
 
-        extendTrack.listened?.let {
-            if (!it.isListened) {
+        if(extendTrack.listened == null) {
                 val newListener: UpdateRequestBody = UpdateRequestBody.buildListenRequest()
                 presenter?.updateListenersTracks(extendTrack, newListener) {
                     trendsListAdapter.notifyItemChanged(position)
                 }
-            }
         }
 
         if (trendsRepo != null) {

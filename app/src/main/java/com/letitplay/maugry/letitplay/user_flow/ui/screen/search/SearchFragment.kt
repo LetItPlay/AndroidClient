@@ -12,10 +12,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
-import com.letitplay.maugry.letitplay.data_management.repo.query
-import com.letitplay.maugry.letitplay.data_management.repo.save
 import com.letitplay.maugry.letitplay.user_flow.business.search.ResultItem
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.business.search.SearchResultsAdapter
@@ -57,12 +54,8 @@ class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, S
         else UpdateFollowersRequestBody.buildFollowRequest()
 
         channelItem.channel?.id?.let {
-            presenter?.updateChannelFollowers(it, followerModel) {
+            presenter?.updateChannelFollowers(channelItem, followerModel) {
                 presenter.updatedChannel?.let {
-                    val channel: FollowingChannelModel = FollowingChannelModel().query { equalTo("id", channelItem.channel?.id) }.first()
-                    channel.isFollowing = !isFollow
-                    channel.save()
-                    channelItem.following = channel
                     resultsAdapter.notifyItemChanged(position)
                 }
             }

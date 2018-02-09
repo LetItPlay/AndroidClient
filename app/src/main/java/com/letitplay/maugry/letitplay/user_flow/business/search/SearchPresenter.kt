@@ -4,8 +4,8 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.manager.ChannelManager
 import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
@@ -22,14 +22,8 @@ object SearchPresenter : BasePresenter<IMvpView>() {
     fun executeQuery(query: String, onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
-                            ChannelManager.queryChannels(query)
-                                    .map {  channels ->
-                                        channels.filter {
-                                            val lang = it.channel?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
-                                            currentContentLang == lang
-                                        }
-                                    },
-                            TrackManager.queryTracks(query, currentContentLang),
+                            ChannelManager.queryChannels(query, currentContentLang?.name?.toLowerCase() ?: "ru"),
+                            TrackManager.queryTracks(query, currentContentLang?.name?.toLowerCase() ?: "ru"),
                             BiFunction
                             { foundedChannels: List<ExtendChannelModel>, foundedTracks: List<AudioTrack> ->
 
@@ -40,11 +34,23 @@ object SearchPresenter : BasePresenter<IMvpView>() {
             )
     )
 
-    fun updateChannelFollowers(id: Int, body: UpdateFollowersRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
+    fun updateChannelFollowers(channel: ExtendChannelModel, body: UpdateFollowersRequestBody, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
             ExecutionConfig(
-                    asyncObservable = ChannelManager.updateChannelFollowers(id, body),
+                    asyncObservable = ChannelManager.updateChannelFollowers(channel.id!!, body),
                     onNextNonContext = {
                         updatedChannel = it
+                        if (channel.following == null) {
+                            val following = FollowingChannelModel(channel.id, true)
+                            ChannelManager.updateFollowingChannels(following)
+                            channel.following = following
+                        } else {
+                            channel.following?.let {
+                                it.isFollowing = !it.isFollowing
+                                ChannelManager.updateFollowingChannels(it)
+                            }
+                        }
+                        channel.channel?.subscriptionCount = it.subscriptionCount
+                        ChannelManager.updateExtendChannel(channel)
                     },
                     onCompleteWithContext = onComplete
             )
