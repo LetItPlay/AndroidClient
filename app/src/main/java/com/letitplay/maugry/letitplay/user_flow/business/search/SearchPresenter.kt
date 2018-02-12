@@ -6,10 +6,12 @@ import com.letitplay.maugry.letitplay.data_management.manager.TrackManager
 import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
+import com.letitplay.maugry.letitplay.data_management.model.TrackModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.user_flow.business.BasePresenter
 import com.letitplay.maugry.letitplay.user_flow.business.ExecutionConfig
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
@@ -22,12 +24,16 @@ object SearchPresenter : BasePresenter<IMvpView>() {
     fun executeQuery(query: String, onComplete: ((IMvpView?) -> Unit)) = execute(
             ExecutionConfig(
                     asyncObservable = Observable.zip(
-                            ChannelManager.queryChannels(query, currentContentLang?.name?.toLowerCase() ?: "ru"),
                             TrackManager.queryTracks(query, currentContentLang?.name?.toLowerCase() ?: "ru"),
+                            ChannelManager.getFollowingChannels(),
                             BiFunction
-                            { foundedChannels: List<ExtendChannelModel>, foundedTracks: List<AudioTrack> ->
-
-                                foundedChannels to foundedTracks
+                            { foundedTrackAndChannels: List<Pair<ChannelModel, TrackModel>>, followingChannels: List<FollowingChannelModel> ->
+                                val trackList: List<AudioTrack> = foundedTrackAndChannels.map { it.toAudioTrack() }
+                                val extendChanelsList: List<ExtendChannelModel> = foundedTrackAndChannels.map {
+                                    val stationId = it.first.id
+                                    ExtendChannelModel(stationId, it.first, followingChannels.find { it.id == stationId })
+                                }
+                                extendChanelsList to trackList
                             }),
                     onNextNonContext = { queryResult = it },
                     onCompleteWithContext = onComplete

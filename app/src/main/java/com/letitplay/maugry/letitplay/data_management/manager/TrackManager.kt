@@ -1,11 +1,9 @@
 package com.letitplay.maugry.letitplay.data_management.manager
 
-import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.model.*
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
-import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.realm.Sort
@@ -18,24 +16,14 @@ object TrackManager : BaseManager() {
             remoteWhen = { REMOTE_ALWAYS },
             remote = ServiceController.getTracks(),
             update = { remote ->
+                TrackModel().deleteAll()
                 remote.saveAll()
             }
     )
 
-    fun getTrackPiece(idStation:Int) = ServiceController.getChannelTracks(idStation)
+    fun getTrackPiece(idStation: Int) = ServiceController.getChannelTracks(idStation)
 
     fun updateFavouriteTrack(id: Int, body: UpdateRequestBody) = ServiceController.updateFavouriteTracks(id, body)
-
-    fun getLastTracksWithChannelTag(tag: String) = get(
-            local = {
-                ExtendTrackModel()
-                        .query { sort("track.publishedAt", Sort.DESCENDING) }
-                        .filter { extendTrack ->
-                            val ret = extendTrack.channel?.tags?.any { it.contains(tag, true) } == true
-                            ret
-                        }
-            }
-    )
 
     fun getFavouriteTracks() = get(
             local = { FavouriteTracksModel().queryAll() }
@@ -45,20 +33,12 @@ object TrackManager : BaseManager() {
             local = { ListenedTrackModel().queryAll() }
     )
 
-    fun getExtendTrack() = get(
-            local = { ExtendTrackModel().queryAll() }
-    )
-
-    fun getPieceExtendTrack(id: Int) = get(
-            local = { ExtendTrackModel().query { equalTo("track.stationId", id) } }
-    )
-
     fun getFavouriteExtendTrack() = get(
             local = { ExtendTrackModel().query { equalTo("like.isLiked", true) } }
     )
 
 
-    fun queryTracks(query: String, contentLanguage: String): Observable<List<AudioTrack>> =
+    fun queryTracks(query: String, contentLanguage: String): Observable<List<Pair<ChannelModel, TrackModel>>> =
             Observable.zip(
                     ChannelManager.getChannels()
                             .map { channels ->
@@ -75,25 +55,18 @@ object TrackManager : BaseManager() {
                                         }
                             },
                     BiFunction { channels: List<ChannelModel>, tracks: List<TrackModel> ->
-                        val trackList: MutableList<AudioTrack> = ArrayList()
+                        val trackList: MutableList<Pair<ChannelModel, TrackModel>> = ArrayList()
                         tracks.forEach {
                             val track = it
                             val channel = channels.firstOrNull { it.id == track.stationId }
                             if (channel != null) {
-                                trackList.add((channel to track).toAudioTrack())
+                                trackList.add(channel to track)
                             }
                         }
                         return@BiFunction trackList
                     })
 
     infix fun Boolean?.or(other: Boolean?) = (other ?: false) || (this ?: false)
-
-    private fun List<ExtendTrackModel>.filterLang(lang: ContentLanguage?): List<ExtendTrackModel> {
-        return this.filter {
-            val trackLanguage = it.track?.lang?.let { lang -> ContentLanguage.getLanguage(lang) }
-            trackLanguage == lang
-        }
-    }
 
     fun updateExtendTrackModel(extendTrackList: ExtendTrackModel) {
         extendTrackList.save()

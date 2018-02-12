@@ -70,6 +70,9 @@ interface Service {
     @GET("feed?")
     fun getFeed(@Query("stIds") stIds: String, @Query("limit") limit: Int, @Query("lang") lang: String): Observable<FeedModel>
 
+    @GET("abrakadabra?")
+    fun getSearch(@Query("lang") lang: String): Observable<FeedModel>
+
     @GET("trends/7?")
     fun getTrends(@Query("lang") lang: String): Observable<FeedModel>
 }
@@ -112,6 +115,10 @@ object ServiceController : BaseServiceController() {
 
     fun getTrends(lang: String): Observable<FeedModel> {
         return get(service.getTrends(lang))
+    }
+
+    fun getSearch(lang: String): Observable<FeedModel> {
+        return get(service.getSearch(lang))
     }
 }
 

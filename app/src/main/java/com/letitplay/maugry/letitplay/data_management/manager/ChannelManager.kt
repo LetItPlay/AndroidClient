@@ -4,13 +4,8 @@ import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.ExtendChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
-import com.letitplay.maugry.letitplay.data_management.repo.query
-import com.letitplay.maugry.letitplay.data_management.repo.queryAll
-import com.letitplay.maugry.letitplay.data_management.repo.save
-import com.letitplay.maugry.letitplay.data_management.repo.saveAll
+import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.service.ServiceController
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 
 
 object ChannelManager : BaseManager() {
@@ -20,6 +15,7 @@ object ChannelManager : BaseManager() {
             remote = ServiceController.getChannels(),
             remoteWhen = { REMOTE_ALWAYS },
             update = { remote ->
+                ChannelModel().deleteAll()
                 remote.saveAll()
             }
     )
@@ -33,25 +29,6 @@ object ChannelManager : BaseManager() {
     fun updateExtendChannel(extendChannel: ExtendChannelModel) {
         extendChannel.save()
     }
-
-    fun getExtendChannel() = get(
-            local = { ExtendChannelModel().queryAll() }
-    )
-
-    fun queryChannels(query: String, contentLang: String): Observable<List<ExtendChannelModel>> = Observable.zip(
-            getChannels(),
-            getFollowingChannels(),
-            BiFunction { channels: List<ChannelModel>, followingChannels: List<FollowingChannelModel> ->
-                channels.filter {
-                    it.name!!.contains(query, true) || it.tags?.any { it.contains(query, true) } ?: false
-                }
-                        .filter { it.lang == contentLang }
-                        .map {
-                            val stationId = it.id
-                            ExtendChannelModel(it.id, it, followingChannels.find { it.id == stationId })
-                        }
-            }
-    )
 
 
     fun getFollowingChannels() = get(

@@ -38,7 +38,7 @@ class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragm
         var tag = "новости"
         if (presenter?.currentContentLang == ContentLanguage.EN) tag = "news"
 
-        presenter?.getPlaylists(tag) {
+        presenter?.getPlaylists {
             presenter.playlists?.let {
                 if (it.firstOrNull { it.tracks.isNotEmpty() } != null) {
                     playlistAdapter.data = it
