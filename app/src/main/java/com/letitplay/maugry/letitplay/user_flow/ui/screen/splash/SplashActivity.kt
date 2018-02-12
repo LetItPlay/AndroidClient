@@ -30,5 +30,4 @@ class SplashActivity : AppCompatActivity() {
             this.startActivity(Intent(this, NavigationActivity::class.java))
         }
     }
-
 }

@@ -51,7 +51,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                                             model.listenedTracks.find { it.id == trackId })
                                 }
 
-                                extendChannelList = model.channels.filter { it.lang?.toUpperCase() == currentContentLang?.name }
+                                extendChannelList = model.channels.filter { it.lang?.toUpperCase() == currentContentLang?.name }.sortedByDescending { it.subscriptionCount }
                             },
                     onErrorWithContext = onError,
                     onNextNonContext = {
@@ -102,23 +102,6 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
                     onCompleteWithContext = onComplete
             )
     )
-
-    private fun List<ExtendTrackModel>.takeLastDate(now: DateTime): List<ExtendTrackModel> =
-            sortedByDescending {
-                it.track?.publishedAt
-            }.filter {
-                it.track?.publishedAt != null
-            }.takeWhile {
-                val publish = DateTime(it.track?.publishedAt?.time!!)
-                val days = Days.daysBetween(publish, now).days
-                days in 0..7
-            }
-
-
-    private fun List<ExtendTrackModel>.sortByListenCount(): List<ExtendTrackModel> =
-            sortedByDescending {
-                it.track?.listenCount
-            }
 
     class TrendsViewModel(var feed: FeedModel,
                           var channels: List<ChannelModel>,
