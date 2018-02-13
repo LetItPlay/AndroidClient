@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.data_management
 
 import android.app.Application
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -18,7 +17,7 @@ object RealmDB {
                 .initialData { realm ->
 //                    realm.insert(
 //                            mutableListOf(
-//                                    ChannelModel(
+//                                    Channel(
 //                                            id = "0",
 //                                            lang = "ru",
 //                                            title = "title",

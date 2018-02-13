@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.business.player.TrackAdapter
 import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
@@ -41,7 +40,7 @@ class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, Trac
         header.attachTo(tracks_list)
     }
 
-    private fun playTrack(trackId: Long) {
+    private fun playTrack(trackId: Int) {
         if (musicService?.musicRepo != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return

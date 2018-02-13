@@ -1,13 +1,14 @@
-package com.letitplay.maugry.letitplay.data_management.model.remote.responses
+package com.letitplay.maugry.letitplay.data_management.api.responses
 
 import com.google.gson.annotations.SerializedName
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 
 
 data class UpdatedChannelResponse(
         @SerializedName("id")
         var id: Int,
         @SerializedName("lang")
-        var lang: String,
+        var lang: Language,
         @SerializedName("name")
         var name: String,
         @SerializedName("image")

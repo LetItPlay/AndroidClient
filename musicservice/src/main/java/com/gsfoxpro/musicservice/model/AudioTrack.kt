@@ -3,7 +3,7 @@ package com.gsfoxpro.musicservice.model
 import java.util.*
 
 open class AudioTrack(
-        open val id: Long,
+        open val id: Int,
         open val url: String,
         open val title: String? = null,
         open val subtitle: String? = null,

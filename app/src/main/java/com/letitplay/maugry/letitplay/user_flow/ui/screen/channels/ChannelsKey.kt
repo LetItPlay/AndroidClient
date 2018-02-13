@@ -24,6 +24,6 @@ class ChannelsKey : BaseKey(), StateKey {
 
     override fun isRootFragment(): Boolean = false
 
-    override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = ChannelsFragment()
+    override fun createFragment(): BaseFragment<BasePresenter<IMvpView>> = ChannelFragment()
 
 }

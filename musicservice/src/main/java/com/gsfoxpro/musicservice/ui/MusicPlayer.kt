@@ -121,8 +121,8 @@ abstract class MusicPlayer : FrameLayout {
         mediaController?.transportControls?.skipToPrevious()
     }
 
-    public fun skipToQueueItem(id: Long) {
-        mediaController?.transportControls?.skipToQueueItem(id)
+    public fun skipToQueueItem(id: Int) {
+        mediaController?.transportControls?.skipToQueueItem(id.toLong())
     }
 
     protected fun initSeekBar(seekBar: SeekBar) {

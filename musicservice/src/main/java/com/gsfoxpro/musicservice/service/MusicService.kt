@@ -127,7 +127,7 @@ class MusicService : Service() {
         }
 
         override fun onSkipToQueueItem(id: Long) {
-            play(musicRepo?.getAudioTrackAtId(id))
+            play(musicRepo?.getAudioTrackAtId(id.toInt()))
         }
     }
 

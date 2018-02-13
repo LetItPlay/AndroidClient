@@ -2,14 +2,9 @@ package com.letitplay.maugry.letitplay.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 
 class PreferenceHelper(context: Context) {
-
-    companion object {
-        private const val APP_SETTINGS = "APP_SETTINGS"
-        private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
-    }
 
     private val sharedPreferences: SharedPreferences
 
@@ -17,15 +12,23 @@ class PreferenceHelper(context: Context) {
         sharedPreferences = context.getSharedPreferences(APP_SETTINGS, Context.MODE_PRIVATE)
     }
 
-    var contentLanguage: ContentLanguage
+    var contentLanguage: Language?
         get() {
-            val language = sharedPreferences.getString(APP_SETTINGS_CONTENT_LANG, ContentLanguage.UNKNOWN.name)
-            return ContentLanguage.getLanguage(language)
+            val language = sharedPreferences.getString(APP_SETTINGS_CONTENT_LANG, NO_VALUE)
+            return if (language != NO_VALUE) Language.valueOf(language) else null
         }
         set(value) {
-            sharedPreferences
-                    .edit()
-                    .putString(APP_SETTINGS_CONTENT_LANG, value.name)
-                    .apply()
+            if (value != null) {
+                sharedPreferences
+                        .edit()
+                        .putString(APP_SETTINGS_CONTENT_LANG, value.name)
+                        .apply()
+            }
         }
+
+    companion object {
+        private const val APP_SETTINGS = "APP_SETTINGS"
+        private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
+        private const val NO_VALUE = "NO_VALUE"
+    }
 }

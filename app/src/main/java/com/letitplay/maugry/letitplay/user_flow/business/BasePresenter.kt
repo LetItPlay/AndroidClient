@@ -7,11 +7,10 @@ import com.letitplay.maugry.letitplay.GL_ALERT_DIALOG_DELAY
 import com.letitplay.maugry.letitplay.GL_PRESENTER_ACTION_RETRY_COUNT
 import com.letitplay.maugry.letitplay.GL_PRESENTER_ACTION_RETRY_DELAY
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
-import com.letitplay.maugry.letitplay.data_management.service.BaseServiceController
+import com.letitplay.maugry.letitplay.data_management.api.BaseServiceController
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
-
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -41,7 +40,7 @@ abstract class BasePresenter<V>(
         val service: BaseServiceController? = null) where V : IMvpView {
 
     
-      val currentContentLang: ContentLanguage?
+      val currentContentLang: Language?
         get() = context?.let { PreferenceHelper(it).contentLanguage }
 
     /*

@@ -80,7 +80,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         main_player.setViewPager(supportFragmentManager)
     }
 
-    fun updateRepo(trackId: Long, repo: MusicRepo?) {
+    fun updateRepo(trackId: Int, repo: MusicRepo?) {
         musicService?.musicRepo = repo
         musicPlayerSmall?.apply {
             setOnClickListener {

@@ -1,31 +1,32 @@
-package com.letitplay.maugry.letitplay.user_flow.business.trends
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.ExtendTrackModel
+import com.letitplay.maugry.letitplay.data_management.model.Channel
+import com.letitplay.maugry.letitplay.data_management.model.Track
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
+import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
 
 
 class TrendsAdapter(
         private val musicService: MusicService?,
-        private val onClickItem: ((ExtendTrackModel, Int) -> Unit),
-        private val onLikeClick: ((ExtendTrackModel, Boolean, Int) -> Unit),
+        private val onClickItem: ((Track, Int) -> Unit),
+        private val onLikeClick: ((Track, Boolean, Int) -> Unit),
         private val playlistActionsListener: OnPlaylistActionsListener? = null,
-        private val onChannelClick: ((ChannelModel) -> Unit),
+        private val onChannelClick: ((Channel) -> Unit),
         private val seeAllChannelClick: (() -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var tracks: List<ExtendTrackModel> = emptyList()
-    var channels: List<ChannelModel> = emptyList()
+    var tracks: List<Track> = emptyList()
+    var channels: List<Channel> = emptyList()
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) CHANNELS_TYPE else TRACK_TYPE
     }
 
-    fun updateData(tracks: List<ExtendTrackModel>, channels: List<ChannelModel>) {
+    fun updateData(tracks: List<Track>, channels: List<Channel>) {
         this.tracks = tracks
         this.channels = channels
         notifyDataSetChanged()

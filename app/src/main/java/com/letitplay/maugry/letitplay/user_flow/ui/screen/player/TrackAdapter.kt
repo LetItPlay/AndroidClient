@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.business.player
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.track_item.view.*
 
 class TrackAdapter(
         private val musicService: MusicService? = null,
-        private val onClickItem: ((Long) -> Unit)
+        private val onClickItem: ((Int) -> Unit)
 ) : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
     var data: List<AudioTrack> = ArrayList()

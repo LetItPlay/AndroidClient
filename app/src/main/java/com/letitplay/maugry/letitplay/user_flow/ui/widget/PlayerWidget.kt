@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.business.player.PlayerContainerAdapter
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerContainerAdapter
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
 

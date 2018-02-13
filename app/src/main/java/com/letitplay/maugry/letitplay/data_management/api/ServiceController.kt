@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.data_management.service
+package com.letitplay.maugry.letitplay.data_management.api
 
 
 import com.google.gson.FieldNamingPolicy
@@ -7,12 +7,16 @@ import com.letitplay.maugry.letitplay.BuildConfig
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_POST_REQUEST_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_SCHEDULER_IO
-import com.letitplay.maugry.letitplay.data_management.model.*
-import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateFollowersRequestBody
-import com.letitplay.maugry.letitplay.data_management.model.remote.requests.UpdateRequestBody
-import com.letitplay.maugry.letitplay.data_management.model.remote.responses.UpdatedChannelResponse
-import com.letitplay.maugry.letitplay.data_management.model.remote.responses.UpdatedTrackResponse
+import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
+import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
+import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.TrendResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChannelResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import okhttp3.OkHttpClient
@@ -46,7 +50,7 @@ private val serviceBuilder = Retrofit.Builder()
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
 
-private val service = serviceBuilder
+val serviceImpl = serviceBuilder
         .baseUrl(GL_DATA_SERVICE_URL)
         .build()
         .create(Service::class.java)
@@ -59,22 +63,22 @@ private val postService = serviceBuilder
 interface Service {
 
     @GET("stations")
-    fun channels(): Observable<List<ChannelModel>>
+    fun channels(): Single<List<Channel>>
 
     @GET("stations/{id}/tracks")
-    fun getChannelTracks(@Path("id") idStation: Int): Observable<Response<List<TrackModel>>>
+    fun getChannelTracks(@Path("id") idStation: Int): Observable<Response<List<Track>>>
 
     @GET("tracks")
-    fun getTracks(): Observable<List<TrackModel>>
+    fun getTracks(): Observable<List<Track>>
 
     @GET("feed?")
-    fun getFeed(@Query("stIds") stIds: String, @Query("limit") limit: Int, @Query("lang") lang: String): Observable<FeedModel>
+    fun getFeed(@Query("stIds") stIds: String, @Query("limit") limit: Int, @Query("lang") lang: String): Single<FeedResponse>
 
     @GET("abrakadabra?")
-    fun getSearch(@Query("lang") lang: String): Observable<FeedModel>
+    fun getSearch(@Query("lang") lang: String): Observable<TrendResponse>
 
     @GET("trends/7?")
-    fun getTrends(@Query("lang") lang: String): Observable<FeedModel>
+    fun trends(@Query("lang") lang: String): Single<TrendResponse>
 }
 
 interface PostService {
@@ -85,43 +89,43 @@ interface PostService {
     fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Observable<UpdatedTrackResponse>
 }
 
-object ServiceController : BaseServiceController() {
-
-    fun getChannels(): Observable<List<ChannelModel>> {
-        return get(service.channels())
-    }
-
-    fun updateChannelFollowers(id: Int, body: UpdateFollowersRequestBody): Observable<ChannelModel> {
-        return get(postService.updateChannelFollowers(id, body).map(::toChannelModel))
-    }
-
-    fun updateFavouriteTracks(id: Int, body: UpdateRequestBody): Observable<TrackModel> {
-        return get(postService.updateFavouriteTracks(id, body).map(::toTrackModel))
-    }
-
-    fun getTracks(): Observable<List<TrackModel>> {
-        return get(service.getTracks())
-    }
-
-    fun getChannelTracks(idStation: Int): Observable<List<TrackModel>> {
-        return get(service.getChannelTracks(idStation)).map {
-            if (it.body() != null) it.body() else emptyList()
-        }
-    }
-
-    fun getFeed(stIds: String, limit: Int, lang: String): Observable<FeedModel> {
-        return get(service.getFeed(stIds, limit, lang))
-    }
-
-    fun getTrends(lang: String): Observable<FeedModel> {
-        return get(service.getTrends(lang))
-    }
-
-    fun getSearch(lang: String): Observable<FeedModel> {
-        return get(service.getSearch(lang))
-    }
-}
-
+//object ServiceController : BaseServiceController() {
+//
+//    fun getChannels(): Observable<List<Channel>> {
+//        return get(service.channels())
+//    }
+//
+//    fun updateChannelFollowers(id: Int, body: UpdateFollowersRequestBody): Observable<Channel> {
+//        return get(postService.updateChannelFollowers(id, body).map(::toChannelModel))
+//    }
+//
+//    fun updateFavouriteTracks(id: Int, body: UpdateRequestBody): Observable<Track> {
+//        return get(postService.updateFavouriteTracks(id, body).map(::toTrackModel))
+//    }
+//
+//    fun getTracks(): Observable<List<Track>> {
+//        return get(service.getTracks())
+//    }
+//
+//    fun getChannelTracks(idStation: Int): Observable<List<Track>> {
+//        return get(service.getChannelTracks(idStation)).map {
+//            if (it.body() != null) it.body() else emptyList()
+//        }
+//    }
+//
+//    fun getFeed(stIds: String, limit: Int, lang: String): Observable<TrendResponse> {
+//        return get(service.getFeed(stIds, limit, lang))
+//    }
+//
+//    fun getTrends(lang: String): Observable<TrendResponse> {
+//        return get(service.getTrends(lang))
+//    }
+//
+//    fun getSearch(lang: String): Observable<TrendResponse> {
+//        return get(service.getSearch(lang))
+//    }
+//}
+//
 abstract class BaseServiceController {
 
     private val errorConsumer = Consumer<Throwable> { it ->

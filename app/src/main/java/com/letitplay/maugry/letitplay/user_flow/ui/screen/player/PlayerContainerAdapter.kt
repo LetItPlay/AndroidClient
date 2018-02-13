@@ -1,10 +1,8 @@
-package com.letitplay.maugry.letitplay.user_flow.business.player
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackFragment
 
 
 class PlayerContainerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

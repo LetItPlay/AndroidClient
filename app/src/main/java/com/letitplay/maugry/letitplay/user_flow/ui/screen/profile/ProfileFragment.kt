@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.ContentLanguage
-import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfileAdapter
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfilePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.profile_fragment.*
@@ -20,20 +18,20 @@ import kotlinx.android.synthetic.main.profile_fragment.*
 
 class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment, ProfilePresenter) {
 
-    private lateinit var profileListAdapter: ProfileAdapter
+//    private lateinit var profileListAdapter: ProfileAdapter
     private var profileRepo: MusicRepo? = null
 
     private val prefHelper: PreferenceHelper?
             get() = context?.let { PreferenceHelper(it) }
 
-    private val currentContentLanguage: ContentLanguage?
+    private val currentContentLanguage: Language?
             get() = prefHelper?.contentLanguage
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val profileRecycler = view.findViewById<RecyclerView>(R.id.profile_list)
-        profileListAdapter = ProfileAdapter(musicService, ::playTrack)
-        profileRecycler.adapter = profileListAdapter
+//        profileListAdapter = ProfileAdapter(musicService, ::playTrack)
+//        profileRecycler.adapter = profileListAdapter
         profileRecycler.layoutManager = LinearLayoutManager(context)
         val divider = listDivider(profileRecycler.context, R.drawable.list_divider)
         profileRecycler.addItemDecoration(divider)
@@ -43,33 +41,33 @@ class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profile_header.attachTo(profile_list)
-        presenter?.loadFavouriteTracks {
-            presenter.extendTrackList?.let {
-                profile_track_count.text = it.count().toString()
-                profile_tracks_time.text = DateHelper.getTime(it.sumBy { it.track?.totalLengthInSeconds ?: 0 })
-                profileListAdapter.data = it
-            }
-        }
+//        presenter?.loadFavouriteTracks {
+//            presenter.extendTrackList?.let {
+//                profile_track_count.text = it.count().toString()
+//                profile_tracks_time.text = DateHelper.getTime(it.sumBy { it.track?.totalLengthInSeconds ?: 0 })
+//                profileListAdapter.data = it
+//            }
+//        }
 
         val switchToRu = getString(R.string.profile_change_language_to_ru)
         val switchToEn = getString(R.string.profile_change_language_to_en)
 
-        change_content_language_text.text = if (currentContentLanguage == ContentLanguage.EN) switchToRu else switchToEn
+        change_content_language_text.text = if (currentContentLanguage == Language.EN) switchToRu else switchToEn
 
         change_content_language.setOnClickListener {
-            prefHelper?.contentLanguage = if (currentContentLanguage == ContentLanguage.EN) ContentLanguage.RU else ContentLanguage.EN
-            change_content_language_text.text = if (currentContentLanguage == ContentLanguage.EN) switchToRu else switchToEn
+            prefHelper?.contentLanguage = if (currentContentLanguage == Language.EN) Language.RU else Language.EN
+            change_content_language_text.text = if (currentContentLanguage == Language.EN) switchToRu else switchToEn
         }
     }
 
-    private fun playTrack(trackId: Long) {
+    private fun playTrack(trackId: Int) {
         if (profileRepo != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
             return
         }
-        presenter?.playlist?.let {
-            profileRepo = MusicRepo(it)
-        }
+//        presenter?.playlist?.let {
+//            profileRepo = MusicRepo(it)
+//        }
         navigationActivity.updateRepo(trackId, profileRepo)
     }
 }

@@ -26,7 +26,7 @@ open class MusicRepo(val playlist: List<AudioTrack>) {
             else -> null
         }
 
-    open fun getAudioTrackAtId(id: Long): AudioTrack? {
+    open fun getAudioTrackAtId(id: Int): AudioTrack? {
         val index =  playlist.indexOfFirst { it.id == id }
         if (index != -1) {
             currentTrackIndex = index

@@ -1,15 +1,16 @@
 package com.letitplay.maugry.letitplay.utils.ext
 
 import com.gsfoxpro.musicservice.model.AudioTrack
-import com.letitplay.maugry.letitplay.data_management.model.ChannelModel
-import com.letitplay.maugry.letitplay.data_management.model.TrackModel
+import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 
 fun String.splitTags(): List<String> =
-    this.split(",")
-            .map(String::trim)
-            .filter(String::isNotEmpty)
+        this.split(",")
+                .map(String::trim)
+                .filter(String::isNotEmpty)
 
-fun Pair<ChannelModel?, TrackModel?>.toAudioTrack(): AudioTrack {
+fun Pair<Channel?, Track?>.toAudioTrack(): AudioTrack {
     val (channel, track) = this
 
     return AudioTrack(
@@ -24,3 +25,9 @@ fun Pair<ChannelModel?, TrackModel?>.toAudioTrack(): AudioTrack {
             publishedAt = track.publishedAt
     )
 }
+
+fun String.fixServerPrefix(): String =
+        when {
+            this.startsWith("http") -> this
+            else -> GL_MEDIA_SERVICE_URL + this
+        }

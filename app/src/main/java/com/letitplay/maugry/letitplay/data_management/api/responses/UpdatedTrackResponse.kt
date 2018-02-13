@@ -1,11 +1,12 @@
-package com.letitplay.maugry.letitplay.data_management.model.remote.responses
+package com.letitplay.maugry.letitplay.data_management.api.responses
 
 import com.google.gson.annotations.SerializedName
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import java.util.*
 
 data class AudioFile(
         @SerializedName("id")
-        var id: Long,
+        var id: Int,
         @SerializedName("file")
         var filePath: String,
         @SerializedName("length_seconds")
@@ -14,9 +15,9 @@ data class AudioFile(
 
 data class UpdatedTrackResponse(
         @SerializedName("id")
-        var id: Long,
+        var id: Int,
         @SerializedName("lang")
-        var lang: String,
+        var lang: Language,
         @SerializedName("station")
         var stationId: Int,
         @SerializedName("audio_file")
