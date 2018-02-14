@@ -1,6 +1,5 @@
 package com.letitplay.maugry.letitplay
 
-import android.arch.persistence.room.Room
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -10,7 +9,6 @@ import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.RealmDB
-import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import io.fabric.sdk.android.Fabric
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
@@ -32,11 +30,6 @@ const val GL_ALERT_DIALOG_DELAY: Long = 1
 
 
 class App : MultiDexApplication() {
-    val db by lazy {
-        Room.databaseBuilder(this, LetItPlayDb::class.java, "letitplay.db")
-                .fallbackToDestructiveMigration()
-                .build()
-    }
 
     private var _musicService: MusicService? = null
 
@@ -62,6 +55,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         realmDb.init(this)
+        ServiceLocator.applicationContext = this
         bindMusicService()
         Timber.plant(Timber.DebugTree())
         Timber.d("APP DASHA" + DateTime.now())
