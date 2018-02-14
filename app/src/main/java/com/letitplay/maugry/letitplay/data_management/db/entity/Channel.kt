@@ -1,20 +1,20 @@
 package com.letitplay.maugry.letitplay.data_management.db.entity
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.SerializedName
-import com.letitplay.maugry.letitplay.data_management.db.LanguageConverter
 
 @Entity(tableName = "channels")
 data class Channel(
-        @PrimaryKey
+        @PrimaryKey @ColumnInfo(name = "channel_id")
         val id: Int,
-        @TypeConverters(LanguageConverter::class)
+        @ColumnInfo(name = "channel_lang")
         val lang: Language,
         val name: String,
         @SerializedName("ImageURL")
         val imageUrl: String,
         val subscriptionCount: Int = 0,
+        @ColumnInfo(name = "channel_tags")
         val tags: List<String>?
 )

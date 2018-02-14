@@ -1,17 +1,25 @@
 package com.letitplay.maugry.letitplay.data_management.db.entity
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
 import com.google.gson.annotations.SerializedName
-import com.letitplay.maugry.letitplay.data_management.db.LanguageConverter
 import java.util.*
 
-@Entity(tableName = "tracks")
+@Entity(tableName = "tracks",
+        foreignKeys = [
+            ForeignKey(
+                    entity = Channel::class,
+                    parentColumns = ["channel_id"],
+                    childColumns = ["stationId"]
+            )
+        ]
+)
 data class Track(
-        @PrimaryKey
+        @PrimaryKey @ColumnInfo(name = "track_id")
         val id: Int,
-        @TypeConverters(LanguageConverter::class)
+        @ColumnInfo(name = "track_lang")
         val lang: Language,
         @SerializedName("StationID")
         val stationId: Int,
@@ -23,6 +31,7 @@ data class Track(
         val audioUrl: String? = null,
         val totalLengthInSeconds: Int,
         val likeCount: Int,
+        @ColumnInfo(name = "track_tags")
         val tags: List<String>? = null,
         val listenCount: Int,
         val publishedAt: Date

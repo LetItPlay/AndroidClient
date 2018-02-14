@@ -1,20 +1,25 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
-import com.letitplay.maugry.letitplay.data_management.repo.TrackRepositoryImpl
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.DbTrendRepository
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.ViewModelFactory
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
+import java.util.concurrent.Executors
 
 
 class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, TrendsPresenter) {
@@ -29,20 +34,23 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     }
 //    private var trendsRepo: MusicRepo? = null
 
-    private val vm by lazy {
-        TrendViewModel(TrackRepositoryImpl(serviceImpl))
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val ioExecutor = Executors.newSingleThreadExecutor()
+        val vm = ViewModelProviders.of(this, ViewModelFactory(DbTrendRepository((navigationActivity.application as App).db, serviceImpl, ioExecutor)))
+                .get(TrendViewModel::class.java)
+        vm.trends.observe(this, Observer<PagedList<TrackWithChannel>> {
+            trendsListAdapter.setList(it)
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val trendsRecycler = view.findViewById<RecyclerView>(R.id.trend_list)
-        trendsRecycler.layoutManager = LinearLayoutManager(context)
         trendsRecycler.adapter = trendsListAdapter
         trendsRecycler.addItemDecoration(listDivider(trendsRecycler.context, R.drawable.list_divider))
-        trendsRecycler.defaultItemAnimator.supportsChangeAnimations = false
-        vm.trends.subscribe({
-            trendsListAdapter.updateData(it, emptyList())
-        }, {})
+
+//        trendsRecycler.defaultItemAnimator.supportsChangeAnimations = false
 //        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
 //        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
 //        swipeRefreshLayout.setOnRefreshListener {

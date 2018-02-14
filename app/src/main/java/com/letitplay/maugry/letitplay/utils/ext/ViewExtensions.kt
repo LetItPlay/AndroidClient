@@ -86,6 +86,9 @@ fun ImageView.loadImage(url: String?, context: Context? = null) {
         Glide.with(context ?: this.context)
                 .load(url)
                 .into(this)
+    } else {
+        Glide.with(context)
+                .clear(this)
     }
 }
 

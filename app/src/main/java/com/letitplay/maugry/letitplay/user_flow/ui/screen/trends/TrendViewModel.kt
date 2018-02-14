@@ -1,14 +1,14 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import com.letitplay.maugry.letitplay.data_management.model.FeedData
-import com.letitplay.maugry.letitplay.data_management.repo.TrackRepository
-import io.reactivex.Single
+import android.arch.paging.PagedList
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.TrendRepository
 
 
 class TrendViewModel(
-        private val trackRepository: TrackRepository
+        private val trendRepository: TrendRepository
 ) : ViewModel() {
-    val trends: Single<List<FeedData>> = trackRepository.trends()
-
+    val trends: LiveData<PagedList<TrackWithChannel>> = trendRepository.trends()
 }

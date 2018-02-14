@@ -53,14 +53,14 @@ private val serviceBuilder = Retrofit.Builder()
 val serviceImpl = serviceBuilder
         .baseUrl(GL_DATA_SERVICE_URL)
         .build()
-        .create(Service::class.java)
+        .create(LetItPlayApi::class.java)
 
 private val postService = serviceBuilder
         .baseUrl(GL_POST_REQUEST_SERVICE_URL)
         .build()
-        .create(PostService::class.java)
+        .create(LetItPlayPostApi::class.java)
 
-interface Service {
+interface LetItPlayApi {
 
     @GET("stations")
     fun channels(): Single<List<Channel>>
@@ -81,7 +81,7 @@ interface Service {
     fun trends(@Query("lang") lang: String): Single<TrendResponse>
 }
 
-interface PostService {
+interface LetItPlayPostApi {
     @POST("stations/{id}/counts/")
     fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: UpdateFollowersRequestBody): Observable<UpdatedChannelResponse>
 
@@ -135,7 +135,7 @@ abstract class BaseServiceController {
             is IOException,
             is SocketTimeoutException,
             is UnknownHostException -> {
-                Timber.e("Service related error!")
+                Timber.e("LetItPlayApi related error!")
             }
             else -> Timber.e("Unknown error (possibly parsing)!")
         }

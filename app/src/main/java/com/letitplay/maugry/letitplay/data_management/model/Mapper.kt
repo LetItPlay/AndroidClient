@@ -10,7 +10,8 @@ private fun <T> identity(x: T): T = x
 fun toTrackModel(trackEntity: Track, channelEntity: Channel): TrackWithChannel {
     return TrackWithChannel(
             trackEntity,
-            channelEntity
+            channelEntity,
+            likeId = null
     )
 }
 

@@ -1,11 +1,14 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
+import android.arch.paging.PagedListAdapter
+import android.support.v7.recyclerview.extensions.DiffCallback
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
+import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
-import com.letitplay.maugry.letitplay.data_management.model.FeedData
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
@@ -18,46 +21,56 @@ class TrendsAdapter(
         private val playlistActionsListener: OnPlaylistActionsListener? = null,
         private val onChannelClick: ((Channel) -> Unit),
         private val seeAllChannelClick: (() -> Unit)
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : PagedListAdapter<TrackWithChannel, RecyclerView.ViewHolder>(TRACK_WITH_CHANNEL_COMPARATOR) {
 
-    var tracks: List<FeedData> = emptyList()
     var channels: List<Channel> = emptyList()
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == 0) CHANNELS_TYPE else TRACK_TYPE
-    }
-
-    fun updateData(tracks: List<FeedData>, channels: List<Channel>) {
-        this.tracks = tracks
+    fun updateChannels(channels: List<Channel>) {
         this.channels = channels
-        notifyDataSetChanged()
+        notifyItemChanged(CHANNEL_ROW)
     }
 
-    override fun getItemCount(): Int = tracks.size+1
+    override fun getItemViewType(position: Int): Int {
+        return if (position == CHANNEL_ROW) R.layout.channel_list_item else R.layout.feed_item
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount() + if (super.getItemCount() != 0) 1 else 0
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CHANNELS_TYPE -> ChannelsListViewHolder(parent, onChannelClick, seeAllChannelClick)
-            TRACK_TYPE -> FeedItemViewHolder(
+            R.layout.channel_list_item -> ChannelsListViewHolder(parent, onChannelClick, seeAllChannelClick)
+            R.layout.feed_item -> FeedItemViewHolder(
                     parent,
                     playlistActionsListener,
                     onClickItem,
                     onLikeClick,
                     musicService
             )
-            else -> throw IllegalArgumentException("")
+            else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }
 
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is FeedItemViewHolder -> holder.update(tracks[position-1])
+            is FeedItemViewHolder -> holder.update(getItem(position-1))
             is ChannelsListViewHolder -> holder.update(channels)
         }
     }
 
     companion object {
-        const val CHANNELS_TYPE = 0
-        const val TRACK_TYPE = 1
+        const val CHANNEL_ROW = 0
+
+        val TRACK_WITH_CHANNEL_COMPARATOR = object: DiffCallback<TrackWithChannel>() {
+            override fun areItemsTheSame(oldItem: TrackWithChannel, newItem: TrackWithChannel) =
+                oldItem.track.id == newItem.track.id
+
+
+            override fun areContentsTheSame(oldItem: TrackWithChannel, newItem: TrackWithChannel) =
+                    oldItem == newItem
+
+        }
     }
 }

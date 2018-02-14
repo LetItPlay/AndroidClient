@@ -7,7 +7,7 @@ import android.view.animation.AnimationUtils
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
-import com.letitplay.maugry.letitplay.data_management.model.FeedData
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
@@ -24,7 +24,7 @@ class FeedItemViewHolder(
         onLikeClick: ((Track, Boolean, Int) -> Unit),
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
-    lateinit var feedData: FeedData
+    lateinit var feedData: TrackWithChannel
 
     init {
         val swipeLayout = itemView.findViewById<SwipeHorizontalLayout>(R.id.feed_swipe_layout)
@@ -69,7 +69,10 @@ class FeedItemViewHolder(
         itemView.feed_playing_now.mediaSession = musicService?.mediaSession
     }
 
-    fun update(feedData: FeedData) {
+    fun update(feedData: TrackWithChannel?) {
+        if (feedData == null) {
+            return
+        }
         this.feedData = feedData
         itemView.apply {
             val data = DateHelper.getLongPastDate(feedData.track.publishedAt, context)
@@ -77,7 +80,7 @@ class FeedItemViewHolder(
             feed_track_info_title.text = feedData.track.title
             feed_track_info_description.text = feedData.track.description ?: ""
             feed_like.likeCount = feedData.track.likeCount
-//            feed_like.like = feedData.like
+//            feed_like.like = feedData.isLiked
             feed_like.isEnabled = true
             feed_playing_now.trackListenerCount = feedData.track.listenCount
             feed_playing_now.trackUrl = feedData.track.audioUrl
