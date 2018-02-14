@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
-import com.letitplay.maugry.letitplay.data_management.model.Channel
-import com.letitplay.maugry.letitplay.data_management.model.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.repo.TrackRepositoryImpl
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -80,7 +80,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 //        if (swipe_refresh.isRefreshing) return
 //        val like: UpdateRequestBody = if (isLiked) UpdateRequestBody.UNLIKE()
 //        else UpdateRequestBody.LIKE()
-//        extendTrack.track?.id?.let {
+//        extendTrack.feedData?.id?.let {
 //            presenter?.updateFavouriteTracks(it.toInt(), extendTrack, like) {
 //                presenter.updatedTrack?.let {
 //                    trendsListAdapter.notifyItemChanged(position)
@@ -111,15 +111,15 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 //        }
 //
 //        if (trendsRepo != null) {
-//            navigationActivity.musicPlayerSmall?.skipToQueueItem(extendTrack.track?.id!!)
+//            navigationActivity.musicPlayerSmall?.skipToQueueItem(extendTrack.feedData?.id!!)
 //            return
 //        }
 //        val playlist = presenter?.extendTrackList?.map {
-//            (it.channel to it.track).toAudioTrack()
+//            (it.channel to it.feedData).toAudioTrack()
 //        } ?: return
 //
 //        trendsRepo = MusicRepo(playlist)
-//        navigationActivity.updateRepo(extendTrack.track?.id!!, trendsRepo)
+//        navigationActivity.updateRepo(extendTrack.feedData?.id!!, trendsRepo)
     }
 
 }

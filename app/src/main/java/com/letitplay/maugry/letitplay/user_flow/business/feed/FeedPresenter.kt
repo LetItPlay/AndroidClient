@@ -8,7 +8,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
 
 //    var extendTrackList: List<ExtendTrackModel>? = null
 //    var playlist: List<AudioTrack>? = null
-//    var updatedTrack: Track? = null
+//    var updatedTrack: TrackWithChannel? = null
 //    var followingCount: String = ""
 //
 //    fun loadTracks(triggerProgress: Boolean = true,

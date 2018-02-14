@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.model.FeedData
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
@@ -23,7 +24,7 @@ class FeedItemViewHolder(
         onLikeClick: ((Track, Boolean, Int) -> Unit),
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
-    lateinit var track: Track
+    lateinit var feedData: FeedData
 
     init {
         val swipeLayout = itemView.findViewById<SwipeHorizontalLayout>(R.id.feed_swipe_layout)
@@ -32,12 +33,12 @@ class FeedItemViewHolder(
             }
 
             override fun onSwipeToRight() {
-                playlistActionsListener?.performPushToTop(track)
+                playlistActionsListener?.performPushToTop(feedData.track)
                         ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
 
             override fun onSwipeToLeft() {
-                playlistActionsListener?.performPushToBottom(track)
+                playlistActionsListener?.performPushToBottom(feedData.track)
                         ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
         }
@@ -47,7 +48,7 @@ class FeedItemViewHolder(
                     TransitionManager.beginDelayedTransition(itemView as ViewGroup)
                     itemView.feed_card_info.gone()
                 } else {
-                    onClick(track, adapterPosition)
+                    onClick(feedData.track, adapterPosition)
                 }
             }
         }
@@ -62,31 +63,31 @@ class FeedItemViewHolder(
         itemView.feed_like.setOnClickListener {
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 it.isEnabled = false
-                onLikeClick(track, it.feed_like.isLiked(), adapterPosition)
+                onLikeClick(feedData.track, it.feed_like.isLiked(), adapterPosition)
             }
         }
         itemView.feed_playing_now.mediaSession = musicService?.mediaSession
     }
 
-    fun update(track: Track) {
-        this.track = track
+    fun update(feedData: FeedData) {
+        this.feedData = feedData
         itemView.apply {
-            val data = DateHelper.getLongPastDate(track.publishedAt, context)
+            val data = DateHelper.getLongPastDate(feedData.track.publishedAt, context)
             feed_card_info.gone()
-            feed_track_info_title.text = track.title
-            feed_track_info_description.text = track.description ?: ""
-            feed_like.likeCount = track.likeCount
-//            feed_like.like = track.like
+            feed_track_info_title.text = feedData.track.title
+            feed_track_info_description.text = feedData.track.description ?: ""
+            feed_like.likeCount = feedData.track.likeCount
+//            feed_like.like = feedData.like
             feed_like.isEnabled = true
-            feed_playing_now.trackListenerCount = track.listenCount
-            feed_playing_now.trackUrl = track.audioUrl
-            feed_time.text = DateHelper.getTime(track.totalLengthInSeconds)
-            feed_track_title.text = track.title
-            feed_channel_title.text = track.channel.name
+            feed_playing_now.trackListenerCount = feedData.track.listenCount
+            feed_playing_now.trackUrl = feedData.track.audioUrl
+            feed_time.text = DateHelper.getTime(feedData.track.totalLengthInSeconds)
+            feed_track_title.text = feedData.track.title
+            feed_channel_title.text = feedData.channel.name
             feed_track_last_update.text = data
-            feed_channel_logo.loadImage(track.channel.imageUrl)
-            feed_track_image.loadImage(track.coverUrl)
-            feed_track_info_logo.loadImage(track.coverUrl)
+            feed_channel_logo.loadImage(feedData.channel.imageUrl)
+            feed_track_image.loadImage(feedData.track.coverUrl)
+            feed_track_info_logo.loadImage(feedData.track.coverUrl)
         }
     }
 

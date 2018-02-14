@@ -3,7 +3,7 @@ package com.letitplay.maugry.letitplay.data_management.repo
 import com.letitplay.maugry.letitplay.data_management.api.Service
 import com.letitplay.maugry.letitplay.data_management.api.responses.TrendResponse
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.data_management.model.Track
+import com.letitplay.maugry.letitplay.data_management.model.FeedData
 import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,13 +11,13 @@ import io.reactivex.schedulers.Schedulers
 
 
 interface TrackRepository {
-    fun trends(): Single<List<Track>>
+    fun trends(): Single<List<FeedData>>
 }
 
 class TrackRepositoryImpl(
         private val api: Service
 ) : TrackRepository {
-    override fun trends(): Single<List<Track>> {
+    override fun trends(): Single<List<FeedData>> {
         return api
                 .trends("ru")
                 .map(TrendResponse::toTracks)
@@ -26,7 +26,7 @@ class TrackRepositoryImpl(
     }
 }
 
-internal fun TrendResponse.toTracks(): List<Track> {
+internal fun TrendResponse.toTracks(): List<FeedData> {
     if (tracks == null || channels == null)
         return emptyList()
     val channelsHashMap = this.channels.associateBy(Channel::id)
@@ -36,7 +36,7 @@ internal fun TrendResponse.toTracks(): List<Track> {
                 if (channel == null) {
                     null
                 } else {
-                    toTrackModel(track, channel)
+                    FeedData(toTrackModel(track, channel))
                 }
             }
 }

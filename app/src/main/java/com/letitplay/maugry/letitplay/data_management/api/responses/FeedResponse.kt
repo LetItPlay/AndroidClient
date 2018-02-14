@@ -6,6 +6,8 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 
 
 data class FeedResponse(
-        @SerializedName("Tracks") val tracks: List<Track>? = null,
-        @SerializedName("Stations") val channels: List<Channel>? = null
+        @SerializedName("Tracks")
+        val tracks: List<Track>? = null,
+        @SerializedName("Stations")
+        val channels: List<Channel>? = null
 )

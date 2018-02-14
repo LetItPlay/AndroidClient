@@ -8,7 +8,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
 //    var extendTrackList: List<ExtendTrackModel>? = null
 //    var extendChannelList: List<Channel>? = null
 //    var playlist: List<AudioTrack>? = null
-//    var updatedTrack: Track? = null
+//    var updatedTrack: TrackWithChannel? = null
 //
 //    fun loadTracksAndChannels(
 //            triggerProgress: Boolean = true,
@@ -42,7 +42,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
 //                    onErrorWithContext = onError,
 //                    onNextNonContext = {
 //                        playlist = extendTrackList?.map {
-//                            (it.channel to it.track).toAudioTrack()
+//                            (it.channel to it.feedData).toAudioTrack()
 //                        }
 //                    },
 //                    onCompleteWithContext = onComplete
@@ -65,7 +65,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
 //                                TrackManager.updateFavouriteTrack(it)
 //                            }
 //                        }
-//                        extendTrack.track?.likeCount = it.likeCount
+//                        extendTrack.feedData?.likeCount = it.likeCount
 //                        TrackManager.updateExtendTrackModel(extendTrack)
 //                    },
 //                    onCompleteWithContext = onComplete
@@ -82,7 +82,7 @@ object TrendsPresenter : BasePresenter<IMvpView>() {
 //                        val listened = ListenedTrackModel(extendTrack.id, true)
 //                        TrackManager.updateListenedTrack(listened)
 //                        extendTrack.listened = listened
-//                        extendTrack.track?.listenCount = it.listenCount
+//                        extendTrack.feedData?.listenCount = it.listenCount
 //                        TrackManager.updateExtendTrackModel(extendTrack)
 //                    },
 //                    onCompleteWithContext = onComplete

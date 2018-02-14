@@ -17,8 +17,8 @@ object PlaylistPresenter : BasePresenter<IMvpView>() {
 //                            val trackId = it.id
 //                            ExtendTrackModel(trackId, it, feedModel.channels?.find { it.id == stationId })
 //                        } ?: emptyList()
-//                        val tracksWithChannels: List<AudioTrack> = extendTracks.map { track ->
-//                            (track.channel!! to track.track).toAudioTrack()
+//                        val tracksWithChannels: List<AudioTrack> = extendTracks.map { feedData ->
+//                            (feedData.channel!! to feedData.feedData).toAudioTrack()
 //                        }
 //                        var title = "Актуальные новости за 30 минут"
 //                        var subTitle = "Подборка актуальных новостей в виде 30-минутного плейлиста"

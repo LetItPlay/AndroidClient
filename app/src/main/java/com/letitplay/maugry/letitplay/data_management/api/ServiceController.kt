@@ -99,15 +99,15 @@ interface PostService {
 //        return get(postService.updateChannelFollowers(id, body).map(::toChannelModel))
 //    }
 //
-//    fun updateFavouriteTracks(id: Int, body: UpdateRequestBody): Observable<Track> {
+//    fun updateFavouriteTracks(id: Int, body: UpdateRequestBody): Observable<TrackWithChannel> {
 //        return get(postService.updateFavouriteTracks(id, body).map(::toTrackModel))
 //    }
 //
-//    fun getTracks(): Observable<List<Track>> {
+//    fun getTracks(): Observable<List<TrackWithChannel>> {
 //        return get(service.getTracks())
 //    }
 //
-//    fun getChannelTracks(idStation: Int): Observable<List<Track>> {
+//    fun getChannelTracks(idStation: Int): Observable<List<TrackWithChannel>> {
 //        return get(service.getChannelTracks(idStation)).map {
 //            if (it.body() != null) it.body() else emptyList()
 //        }

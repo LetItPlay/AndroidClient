@@ -3,8 +3,9 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
-import com.letitplay.maugry.letitplay.data_management.model.Channel
-import com.letitplay.maugry.letitplay.data_management.model.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.model.FeedData
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
@@ -19,14 +20,14 @@ class TrendsAdapter(
         private val seeAllChannelClick: (() -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var tracks: List<Track> = emptyList()
+    var tracks: List<FeedData> = emptyList()
     var channels: List<Channel> = emptyList()
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) CHANNELS_TYPE else TRACK_TYPE
     }
 
-    fun updateData(tracks: List<Track>, channels: List<Channel>) {
+    fun updateData(tracks: List<FeedData>, channels: List<Channel>) {
         this.tracks = tracks
         this.channels = channels
         notifyDataSetChanged()

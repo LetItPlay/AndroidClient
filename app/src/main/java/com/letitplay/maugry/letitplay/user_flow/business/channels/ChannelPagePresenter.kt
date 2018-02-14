@@ -5,13 +5,13 @@ import com.letitplay.maugry.letitplay.user_flow.ui.IMvpView
 
 object ChannelPagePresenter : BasePresenter<IMvpView>() {
 
-//    var extendTrackList: List<Track>? = null
+//    var extendTrackList: List<TrackWithChannel>? = null
 //    var extendChannel: ExtendChannelModel? = null
 //    var updatedChannel: Channel? = null
 //    var playlist: List<AudioTrack>? = null
-//    var updatedTrack: Track? = null
+//    var updatedTrack: TrackWithChannel? = null
 //
-//    val recentTracks: List<Track>
+//    val recentTracks: List<TrackWithChannel>
 //        get() = extendTrackList?.sortedByDescending { it.publishedAt } ?: emptyList()
 //
 //    fun loadTracks(id: Int, onComplete: ((IMvpView?) -> Unit)? = null) = execute(
@@ -21,7 +21,7 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
 //                            ChannelManager.getFollowingChannelPiece(id),
 //                            TrackManager.getTrackPiece(id),
 //                            Function3
-//                            { channels: List<Channel>, followingChannles: List<FollowingChannelModel>, tracks: List<Track> ->
+//                            { channels: List<Channel>, followingChannles: List<FollowingChannelModel>, tracks: List<TrackWithChannel> ->
 //                                ChannelPageViewModel(channels.first(), followingChannles.firstOrNull(), tracks)
 //                            }),
 //                    triggerProgress = false,
@@ -78,6 +78,6 @@ object ChannelPagePresenter : BasePresenter<IMvpView>() {
 //
 //    class ChannelPageViewModel(var channel: Channel,
 //                               var followingChannel: FollowingChannelModel?,
-//                               var tracks: List<Track>
+//                               var tracks: List<TrackWithChannel>
 //    )
 }

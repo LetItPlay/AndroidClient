@@ -15,7 +15,7 @@ object ProfilePresenter : BasePresenter<IMvpView>() {
 //                    onNextNonContext = {
 //                        extendTrackList = it
 //                        playlist = extendTrackList?.map {
-//                            (it.channel to it.track).toAudioTrack()
+//                            (it.channel to it.feedData).toAudioTrack()
 //                        }
 //                    },
 //                    onCompleteWithContext = onComplete

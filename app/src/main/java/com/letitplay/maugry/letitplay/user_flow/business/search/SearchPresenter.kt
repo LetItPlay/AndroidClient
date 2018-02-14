@@ -15,7 +15,7 @@ object SearchPresenter : BasePresenter<IMvpView>() {
 //                            TrackManager.queryTracks(query, currentContentLang?.name?.toLowerCase() ?: "ru"),
 //                            ChannelManager.getFollowingChannels(),
 //                            BiFunction
-//                            { foundedTrackAndChannels: List<Pair<Channel, Track>>, followingChannels: List<FollowingChannelModel> ->
+//                            { foundedTrackAndChannels: List<Pair<Channel, TrackWithChannel>>, followingChannels: List<FollowingChannelModel> ->
 //                                val trackList: List<AudioTrack> = foundedTrackAndChannels.map { it.toAudioTrack() }
 //                                val extendChanelsList: List<ExtendChannelModel> = foundedTrackAndChannels.map {
 //                                    val stationId = it.first.id

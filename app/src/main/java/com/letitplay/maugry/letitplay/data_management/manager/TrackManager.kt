@@ -3,12 +3,12 @@ package com.letitplay.maugry.letitplay.data_management.manager
 
 object TrackManager : BaseManager() {
 
-//    fun getTracks(): Observable<List<Track>> = get(
-//            local = { Track().queryAll() },
+//    fun getTracks(): Observable<List<TrackWithChannel>> = get(
+//            local = { TrackWithChannel().queryAll() },
 //            remoteWhen = { REMOTE_ALWAYS },
 //            remote = ServiceController.getTracks(),
 //            update = { remote ->
-//                Track().deleteAll()
+//                TrackWithChannel().deleteAll()
 //                remote.saveAll()
 //            }
 //    )
@@ -30,7 +30,7 @@ object TrackManager : BaseManager() {
 //    )
 //
 //
-//    fun queryTracks(query: String, contentLanguage: String): Observable<List<Pair<Channel, Track>>> =
+//    fun queryTracks(query: String, contentLanguage: String): Observable<List<Pair<Channel, TrackWithChannel>>> =
 //            Observable.zip(
 //                    ChannelManager.getChannels()
 //                            .map { channels ->
@@ -46,8 +46,8 @@ object TrackManager : BaseManager() {
 //                                                    or track.tags?.any { it.contains(query, true) })
 //                                        }
 //                            },
-//                    BiFunction { channels: List<Channel>, tracks: List<Track> ->
-//                        val trackList: MutableList<Pair<Channel, Track>> = ArrayList()
+//                    BiFunction { channels: List<Channel>, tracks: List<TrackWithChannel> ->
+//                        val trackList: MutableList<Pair<Channel, TrackWithChannel>> = ArrayList()
 //                        tracks.forEach {
 //                            val track = it
 //                            val channel = channels.firstOrNull { it.id == track.stationId }
