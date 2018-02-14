@@ -16,6 +16,7 @@ import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.DbChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.DbTrendRepository
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -40,10 +41,16 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val ioExecutor = Executors.newSingleThreadExecutor()
-        val vm = ViewModelProviders.of(this, ViewModelFactory(DbTrendRepository((navigationActivity.application as App).db, serviceImpl, ioExecutor, MainThreadExecutor())))
+        val vm = ViewModelProviders.of(this, ViewModelFactory(
+                DbTrendRepository((navigationActivity.application as App).db, serviceImpl, ioExecutor, MainThreadExecutor()),
+                DbChannelRepository(serviceImpl)))
                 .get(TrendViewModel::class.java)
         vm.trends.observe(this, Observer<PagedList<TrackWithChannel>> {
             trendsListAdapter.setList(it)
+        })
+        vm.channels.observe(this, Observer<List<Channel>> {
+            if (it != null)
+                trendsListAdapter.updateChannels(it)
         })
     }
 
