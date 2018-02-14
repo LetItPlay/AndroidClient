@@ -15,6 +15,7 @@ import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChann
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -79,6 +80,9 @@ interface LetItPlayApi {
 
     @GET("trends/7?")
     fun trends(@Query("lang") lang: String): Single<TrendResponse>
+
+    @GET("stations/{id}")
+    fun getChannelPiece(@Path("id") channelId: Int): Maybe<Channel>
 }
 
 interface LetItPlayPostApi {

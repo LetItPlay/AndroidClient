@@ -1,5 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -8,14 +10,45 @@ import android.view.View
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_page_fragment, ChannelPagePresenter) {
 
     private lateinit var recentAddedListAdapter: ChannelPageAdapter
     private var channelPageRepo: MusicRepo? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val vm = ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+                .get(ChannelPageViewModel::class.java)
+        vm.channelPage(getKey()).observe(this, Observer<Channel> {
+            it?.let {
+                with(it) {
+                    channel_page_banner.loadImage(imageUrl)
+                    channel_page_preview.loadCircularImage(imageUrl)
+                    channel_page_title.text = name
+                    channel_page_followers.text = subscriptionCount.toString()
+
+//                    channel_page_follow.data = following
+//                    channel_page_follow.setOnClickListener {
+//                        channel_page_follow.isEnabled = false
+//                        updateFollowers(channelInfo, channel_page_follow.isFollow())
+//                    }
+
+                    val tags = tags
+                    if (tags != null)
+                        channel_page_tag_container.setTagList(tags)
+                }
+            }
+        })
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!

@@ -25,7 +25,7 @@ object ServiceLocator {
     }
 
     val trendRepository: TrendRepository by lazy { DbTrendRepository(db, serviceImpl, ioExecutor, mainThreadExecutor) }
-    val channelRepository: ChannelRepository by lazy { DbChannelRepository(serviceImpl) }
+    val channelRepository: ChannelRepository by lazy { DbChannelRepository(db, serviceImpl) }
 
     val db: LetItPlayDb by lazy {
         Room.databaseBuilder(applicationContext, LetItPlayDb::class.java, "letitplay.db")

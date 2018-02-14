@@ -7,9 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.data_management.repo.DbChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -19,9 +17,9 @@ import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragment, ChannelPresenter) {
 
     private lateinit var channelsListAdapter: ChannelAdapter
-    private val vm by lazy {
-        ChannelViewModel(DbChannelRepository(serviceImpl))
-    }
+//    private val vm by lazy {
+//        ChannelViewModel(DbChannelRepository(serviceImpl))
+//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
@@ -35,9 +33,9 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
         channelRecycler.defaultItemAnimator.supportsChangeAnimations = false
         channelRecycler.setHasFixedSize(true)
         // TODO: Move to onCreate
-        vm.channels.subscribe {
-            channelsListAdapter.data = it
-        }
+//        vm.channels.subscribe {
+//            channelsListAdapter.data = it
+//        }
 //        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
 //        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
 //        swipeRefreshLayout.setOnRefreshListener {
