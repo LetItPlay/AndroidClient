@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepositoryImpl
+import com.letitplay.maugry.letitplay.data_management.repo.DbChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -20,7 +20,7 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
 
     private lateinit var channelsListAdapter: ChannelAdapter
     private val vm by lazy {
-        ChannelViewModel(ChannelRepositoryImpl(serviceImpl))
+        ChannelViewModel(DbChannelRepository(serviceImpl))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

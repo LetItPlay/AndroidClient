@@ -179,7 +179,7 @@ fun <T : RealmObject> T.createOrUpdateManaged(realm: Realm): T {
 }
 
 /**
- * Creates a new entry in database or updates an existing one. If entity has no primary key, always create a new one.
+ * Creates a new entry in database or updates an existing one. If entity has no primary key, always build a new one.
  * If has primary key, it tries to updates an existing one.
  */
 fun <T : RealmObject> T.save() {
@@ -189,7 +189,7 @@ fun <T : RealmObject> T.save() {
 }
 
 /**
- * Creates a new entry in database or updates an existing one. If entity has no primary key, always create a new one.
+ * Creates a new entry in database or updates an existing one. If entity has no primary key, always build a new one.
  * If has primary key, it tries to update an existing one.
  * @return a managed version of a saved object
  */
