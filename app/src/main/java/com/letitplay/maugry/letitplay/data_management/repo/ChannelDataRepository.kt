@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollo
 import com.letitplay.maugry.letitplay.data_management.db.entity.Follow
 import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
 import com.letitplay.maugry.letitplay.utils.Optional
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
@@ -18,7 +19,8 @@ class ChannelDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val postApi: LetItPlayPostApi,
-        private val schedulerProvider: SchedulerProvider
+        private val schedulerProvider: SchedulerProvider,
+        private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
 
     override fun channel(channelId: Int): Flowable<ChannelWithFollow> {
@@ -30,7 +32,7 @@ class ChannelDataRepository(
                 .doOnSuccess { db.channelDao().insertChannels(it) }
                 .map { Optional.of(it) }
                 .onErrorReturnItem(Optional.none())
-                .flatMapPublisher { db.channelDao().getAllChannels() }
+                .flatMapPublisher { db.channelDao().getAllChannels(preferenceHelper.contentLanguage!!) }
     }
 
     override fun follow(channelData: ChannelWithFollow): Completable {
@@ -57,7 +59,7 @@ class ChannelDataRepository(
     }
 
     override fun channelsWithFollow(): Flowable<List<ChannelWithFollow>> {
-        return db.channelDao().getAllChannelsWithFollow()
+        return db.channelDao().getAllChannelsWithFollow(preferenceHelper.contentLanguage!!)
     }
 
     override fun loadChannels(): Completable {

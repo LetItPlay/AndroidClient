@@ -11,6 +11,7 @@ import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.user_flow.Router
 import com.letitplay.maugry.letitplay.user_flow.ui.ViewModelFactory
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.zhuinden.simplestack.BackstackDelegate
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
@@ -35,10 +36,12 @@ object ServiceLocator {
     }
 
     private val trendRepository: TrendRepository by lazy { TrendDataRepository(db, serviceImpl, schedulerProvider) }
-    private val channelRepository: ChannelRepository by lazy { ChannelDataRepository(db, serviceImpl, postServiceImpl, schedulerProvider) }
+    private val channelRepository: ChannelRepository by lazy { ChannelDataRepository(db, serviceImpl, postServiceImpl, schedulerProvider, preferenceHelper) }
     private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, postServiceImpl, schedulerProvider) }
     private val feedRepository: FeedRepository by lazy { FeedDataRepository(db, serviceImpl, schedulerProvider) }
     private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider) }
+
+    private val preferenceHelper: PreferenceHelper by lazy { PreferenceHelper(applicationContext) }
 
     val db: LetItPlayDb by lazy {
         Room.databaseBuilder(applicationContext, LetItPlayDb::class.java, "letitplay.db")
