@@ -20,7 +20,7 @@ class TrendDataRepository(
 ) : TrendRepository {
 
     override fun trends(): Flowable<List<TrackWithChannel>> {
-        return db.trackWithChannelDao().getAllTracks(preferenceHelper.contentLanguage!!)
+        return db.trackWithChannelDao().getAllTracksSortedByDate(preferenceHelper.contentLanguage!!)
     }
 
     override fun loadTrends(): Completable {

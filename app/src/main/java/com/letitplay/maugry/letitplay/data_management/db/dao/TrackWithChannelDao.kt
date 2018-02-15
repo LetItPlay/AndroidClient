@@ -12,7 +12,7 @@ import io.reactivex.Flowable
 abstract class TrackWithChannelDao {
     @Query("SELECT tracks.*, channels.*, likes.track_id as likeId FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +
-            "INNER JOIN follows ON follows.channelId = channels.channel_id " +
+            "LEFT JOIN follows ON follows.channelId = channels.channel_id " +
             "LEFT JOIN likes ON likes.track_id = tracks.track_id " +
             "WHERE tracks.track_lang = :lang")
     abstract fun getAllTracksWithFollowedChannels(lang: Language): DataSource.Factory<Int, TrackWithChannel>
@@ -20,8 +20,9 @@ abstract class TrackWithChannelDao {
     @Query("SELECT tracks.*, channels.*, likes.track_id as likeId FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +
             "LEFT JOIN likes ON likes.track_id = tracks.track_id " +
-            "WHERE tracks.track_lang = :lang")
-    abstract fun getAllTracks(lang: Language): Flowable<List<TrackWithChannel>>
+            "WHERE tracks.track_lang = :lang " +
+            "ORDER BY tracks.publishedAt DESC")
+    abstract fun getAllTracksSortedByDate(lang: Language): Flowable<List<TrackWithChannel>>
 
     @Query("SELECT tracks.*, channels.*, likes.track_id as likeId FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +

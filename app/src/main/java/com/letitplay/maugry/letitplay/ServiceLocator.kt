@@ -60,11 +60,10 @@ object ServiceLocator {
             private val mainThreadExecutor = MainThreadExecutor()
             private val mainThreadScheduler = Schedulers.from(mainThreadExecutor)
             private val ioExecutor = Executors.newSingleThreadExecutor()
-            private val ioScheduler = Schedulers.from(ioExecutor)
 
             override fun ui(): Scheduler = mainThreadScheduler
 
-            override fun io(): Scheduler = ioScheduler
+            override fun io(): Scheduler = Schedulers.io()
 
             override fun ioExecutor(): Executor = ioExecutor
 
