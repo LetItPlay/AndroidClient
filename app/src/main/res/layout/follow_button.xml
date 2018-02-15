@@ -7,13 +7,13 @@ android:layout_height="wrap_content">
     android:id="@+id/follow_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/following_bg"
+    android:background="@drawable/follow_background"
     android:paddingBottom="6dp"
     android:paddingEnd="16dp"
     android:textSize="16sp"
     android:paddingStart="16dp"
     android:paddingTop="6dp"
     android:text="@string/channels_following"
-    android:textColor="@color/colorPrimary" />
+    android:textColor="@color/follow_text" />
 
 </FrameLayout>

@@ -44,11 +44,7 @@ class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_
                         channel_page_tag_container.setTagList(tags)
                 }
                 channel_page_follow.isEnabled = true
-                if (!it.isFollowing) {
-                    channel_page_follow.setFollow()
-                } else {
-                    channel_page_follow.setUnfollow()
-                }
+                channel_page_follow.isFollowing = it.isFollowing
             }
         })
     }

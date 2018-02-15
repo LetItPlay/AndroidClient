@@ -15,6 +15,7 @@ class ChannelAdapter(
         private val onClick: (Channel) -> Unit,
         private val onFollowClick: (ChannelWithFollow) -> Unit
 ) : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
+
     private var channels: List<ChannelWithFollow> = emptyList()
 
     fun updateChannels(channels: List<ChannelWithFollow>) {
@@ -23,8 +24,8 @@ class ChannelAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun onBindViewHolder(holder: ChannelViewHolder?, position: Int) {
-        holder?.update(channels[position])
+    override fun onBindViewHolder(holder: ChannelViewHolder, position: Int) {
+        holder.update(channels[position])
     }
 
     override fun onBindViewHolder(holder: ChannelViewHolder, position: Int, payloads: List<Any>) {
@@ -43,9 +44,10 @@ class ChannelAdapter(
         return ChannelViewHolder(parent, onClick, onFollowClick)
     }
 
-    class ChannelViewHolder(val parent: ViewGroup?,
-                            onClick: (Channel) -> Unit,
-                            onFollowClick: (ChannelWithFollow) -> Unit
+    inner class ChannelViewHolder(
+            val parent: ViewGroup?,
+            onClick: (Channel) -> Unit,
+            onFollowClick: (ChannelWithFollow) -> Unit
     ) : BaseViewHolder(parent, R.layout.channels_item) {
         lateinit var channelData: ChannelWithFollow
 
@@ -80,11 +82,7 @@ class ChannelAdapter(
             this.channelData = channelData
             itemView.apply {
                 channel_follow.isEnabled = true
-                if (!channelData.isFollowing) {
-                    channel_follow.setFollow()
-                } else {
-                    channel_follow.setUnfollow()
-                }
+                channel_follow.isFollowing = channelData.isFollowing
                 follower_count.text = channelData.channel.subscriptionCount.toString()
             }
         }

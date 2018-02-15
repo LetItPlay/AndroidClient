@@ -7,10 +7,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import com.letitplay.maugry.letitplay.utils.toResult
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 
 
 class ChannelViewModel(
@@ -18,8 +16,6 @@ class ChannelViewModel(
         private val schedulerProvider: SchedulerProvider
 ) : ViewModel(), LifecycleObserver {
     private val compositeDisposable = CompositeDisposable()
-
-    val refreshState = MutableLiveData<Boolean>()
 
     val channels: LiveData<Result<List<ChannelWithFollow>>> by lazy {
         channelRepo.channelsWithFollow()
@@ -44,8 +40,6 @@ class ChannelViewModel(
 
     fun onFollowClick(channelData: ChannelWithFollow) {
         channelRepo.follow(channelData)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
                 .addTo(compositeDisposable)
     }

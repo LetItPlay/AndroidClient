@@ -1,57 +1,43 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.widget
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.FollowingChannelModel
 import kotlinx.android.synthetic.main.follow_button.view.*
+import kotlin.properties.Delegates
 
 
-class FollowWidget : FrameLayout {
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
-
-    var data: FollowingChannelModel? = null
-        set(value) {
-            field = value
-            updateState(value)
-        }
+class FollowWidget @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.follow_button, this)
+        updateState(false)
     }
 
+    var isFollowing: Boolean by Delegates.vetoable(false, { _, old, new ->
+        updateState(new)
+        old != new
+    })
 
-    private fun updateState(followerModel: FollowingChannelModel?) {
-        when(followerModel?.isFollowing) {
-            true -> setUnfollow()
-            false -> setFollow()
-            null -> setFollow()
+
+    private fun updateState(isFollowing: Boolean) {
+        if (isFollowing) {
+            setUnfollow()
+        } else {
+            setFollow()
         }
     }
 
-    fun setFollow(){
-        follow_button.setBackgroundResource(R.drawable.unfollowing_bg)
+    private fun setFollow() {
+        follow_button.isSelected = false
         follow_button.text = context.getString(R.string.channels_unfollowing)
-        follow_button.setTextColor(ContextCompat.getColor(context, R.color.white))
     }
 
-    fun setUnfollow(){
-        follow_button.setBackgroundResource(R.drawable.following_bg)
+    private fun setUnfollow() {
+        follow_button.isSelected = true
         follow_button.text = context.getString(R.string.channels_following)
-        follow_button.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
     }
-
-    fun isFollow() = data?.isFollowing ?: false
-
 }

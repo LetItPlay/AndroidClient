@@ -12,7 +12,6 @@ import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
 import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 
@@ -35,7 +34,7 @@ class DbChannelRepository(
                 .flatMapPublisher { db.channelDao().getAllChannels() }
     }
 
-    override fun follow(channelData: ChannelWithFollow): Single<Boolean> {
+    override fun follow(channelData: ChannelWithFollow): Completable {
         val followDao = db.followDao()
         val channel = channelData.channel
         val (request, handleFollowDb) = when {
@@ -45,21 +44,21 @@ class DbChannelRepository(
         return postApi.updateChannelFollowers(channel.id, request)
                 .map { Optional.of(toChannelModel(it)) }
                 .onErrorReturnItem(Optional.none())
-                .map {
+                .doOnSuccess {
                     if (it.value != null) {
-                        handleFollowDb()
-                        db.channelDao().updateChannel(it.value)
+                        db.runInTransaction {
+                            handleFollowDb()
+                            db.channelDao().updateChannel(it.value)
+                        }
                     }
-                    it.value != null
                 }
+                .observeOn(schedulerProvider.ui())
+                .subscribeOn(schedulerProvider.io())
+                .toCompletable()
     }
 
     override fun channelsWithFollow(): Flowable<List<ChannelWithFollow>> {
-        return api.channels()
-                .doOnSuccess { db.channelDao().insertChannels(it) }
-                .map { Optional.of(it) }
-                .onErrorReturnItem(Optional.none())
-                .flatMapPublisher { db.channelDao().getAllChannelsWithFollow() }
+        return db.channelDao().getAllChannelsWithFollow()
     }
 
     override fun loadChannels(): Completable {
