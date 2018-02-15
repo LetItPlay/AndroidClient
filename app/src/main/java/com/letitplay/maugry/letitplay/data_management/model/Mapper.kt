@@ -25,7 +25,7 @@ fun toTrackModel(updatedTrackResponse: UpdatedTrackResponse): Track {
             stationId = updatedTrackResponse.stationId,
             title = updatedTrackResponse.name,
             description = updatedTrackResponse.description,
-            coverUrl = updatedTrackResponse.imageUrl,
+            coverUrl = updatedTrackResponse.imageUrl?.fixMediaPrefix(),
             audioUrl = updatedTrackResponse.audioFile.filePath.fixMediaPrefix(),
             totalLengthInSeconds = updatedTrackResponse.audioFile.lengthInSeconds,
             likeCount = updatedTrackResponse.likeCount,

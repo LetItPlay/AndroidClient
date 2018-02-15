@@ -24,13 +24,21 @@ object ServiceLocator {
     lateinit var backstackDelegate: BackstackDelegate
 
     val viewModelFactory by lazy {
-        ViewModelFactory(trendRepository, channelRepository, trackRepository, feedRepository, schedulerProvider)
+        ViewModelFactory(
+                trendRepository,
+                channelRepository,
+                trackRepository,
+                feedRepository,
+                profileRepository,
+                schedulerProvider
+        )
     }
 
     private val trendRepository: TrendRepository by lazy { TrendDataRepository(db, serviceImpl, schedulerProvider) }
     private val channelRepository: ChannelRepository by lazy { ChannelDataRepository(db, serviceImpl, postServiceImpl, schedulerProvider) }
     private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, postServiceImpl, schedulerProvider) }
     private val feedRepository: FeedRepository by lazy { FeedDataRepository(db, serviceImpl, schedulerProvider) }
+    private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider) }
 
     val db: LetItPlayDb by lazy {
         Room.databaseBuilder(applicationContext, LetItPlayDb::class.java, "letitplay.db")
