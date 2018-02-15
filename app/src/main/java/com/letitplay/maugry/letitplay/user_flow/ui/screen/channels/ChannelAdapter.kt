@@ -60,7 +60,6 @@ class ChannelAdapter(
             }
             itemView.channel_follow.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {
-                    it.isEnabled = false
                     onFollowClick(channelData)
                 }
             }
@@ -81,7 +80,6 @@ class ChannelAdapter(
         fun updateFollow(channelData: ChannelWithFollow) {
             this.channelData = channelData
             itemView.apply {
-                channel_follow.isEnabled = true
                 channel_follow.isFollowing = channelData.isFollowing
                 follower_count.text = channelData.channel.subscriptionCount.toString()
             }

@@ -15,7 +15,9 @@ class ChannelViewModel(
         private val channelRepo: ChannelRepository,
         private val schedulerProvider: SchedulerProvider
 ) : ViewModel(), LifecycleObserver {
+
     private val compositeDisposable = CompositeDisposable()
+    private var inFollow: Boolean = false
 
     val channels: LiveData<Result<List<ChannelWithFollow>>> by lazy {
         channelRepo.channelsWithFollow()
@@ -39,9 +41,13 @@ class ChannelViewModel(
     }
 
     fun onFollowClick(channelData: ChannelWithFollow) {
-        channelRepo.follow(channelData)
-                .subscribe()
-                .addTo(compositeDisposable)
+        if (!inFollow) {
+            channelRepo.follow(channelData)
+                    .doOnSubscribe { inFollow = true }
+                    .doOnComplete { inFollow = false }
+                    .subscribe()
+                    .addTo(compositeDisposable)
+        }
     }
 
     override fun onCleared() {
