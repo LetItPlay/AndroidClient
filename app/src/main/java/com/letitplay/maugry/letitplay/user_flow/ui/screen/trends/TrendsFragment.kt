@@ -62,7 +62,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 //                    },
 //                    {
 //                        presenter.extendTrackList?.let {
-//                            trendsListAdapter.updateData(it, presenter.extendChannelList ?: emptyList())
+//                            trendsListAdapter.updateChannels(it, presenter.extendChannelList ?: emptyList())
 //                        }
 //                        swipeRefreshLayout.isRefreshing = false
 //                    }
@@ -77,7 +77,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 //        presenter?.loadTracksAndChannels {
 //            if (presenter.extendTrackList?.size != 0) {
 //                presenter.extendTrackList?.let {
-//                    trendsListAdapter.updateData(it, presenter.extendChannelList ?: emptyList())
+//                    trendsListAdapter.updateChannels(it, presenter.extendChannelList ?: emptyList())
 //                }
 //            } else {
 //                swipe_refresh.isEnabled = false

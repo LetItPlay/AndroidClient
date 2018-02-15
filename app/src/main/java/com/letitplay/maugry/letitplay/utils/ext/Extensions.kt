@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.utils.ext
 
 import com.gsfoxpro.musicservice.model.AudioTrack
-import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 
@@ -25,9 +24,3 @@ fun Pair<Channel?, Track?>.toAudioTrack(): AudioTrack {
             publishedAt = track.publishedAt
     )
 }
-
-fun String.fixServerPrefix(): String =
-        when {
-            this.startsWith("http") -> this
-            else -> GL_MEDIA_SERVICE_URL + this
-        }

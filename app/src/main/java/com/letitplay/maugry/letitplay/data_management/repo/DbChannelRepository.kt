@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Follow
+import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
 import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -31,20 +32,21 @@ class DbChannelRepository(
     }
 
     override fun follow(channelData: ChannelWithFollow): Single<Boolean> {
-        // Check for following
         val followDao = db.followDao()
         val channel = channelData.channel
-        val (request, dbAction) = when {
+        val (request, handleFollowDb) = when {
             channelData.isFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.followId!!) }
             else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channel.id)) }
         }
         return postApi.updateChannelFollowers(channel.id, request)
-                .map { true }
-                .onErrorReturnItem(false)
+                .map { Optional.of(toChannelModel(it)) }
+                .onErrorReturnItem(Optional.none())
                 .map {
-                    if (it)
-                        dbAction()
-                    it
+                    if (it.value != null) {
+                        handleFollowDb()
+                        db.channelDao().updateChannel(it.value)
+                    }
+                    it.value != null
                 }
     }
 

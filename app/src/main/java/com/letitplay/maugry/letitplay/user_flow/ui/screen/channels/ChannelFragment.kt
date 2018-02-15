@@ -32,7 +32,7 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
         super.onCreate(savedInstanceState)
         vm.channels.observe(this, Observer<List<ChannelWithFollow>> {
             it?.let {
-                channelsListAdapter.data = it
+                channelsListAdapter.updateChannels(it)
             }
         })
     }

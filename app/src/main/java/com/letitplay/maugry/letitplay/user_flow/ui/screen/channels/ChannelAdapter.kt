@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
@@ -14,17 +15,29 @@ class ChannelAdapter(
         private val onClick: (Channel) -> Unit,
         private val onFollowClick: (ChannelWithFollow) -> Unit
 ) : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
-    var data: List<ChannelWithFollow> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private var channels: List<ChannelWithFollow> = emptyList()
 
-    override fun onBindViewHolder(holder: ChannelViewHolder?, position: Int) {
-        holder?.update(data[position])
+    fun updateChannels(channels: List<ChannelWithFollow>) {
+        val diffResult = DiffUtil.calculateDiff(ChannelDiffer(this.channels, channels))
+        this.channels = channels
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun getItemCount(): Int = data.size
+    override fun onBindViewHolder(holder: ChannelViewHolder?, position: Int) {
+        holder?.update(channels[position])
+    }
+
+    override fun onBindViewHolder(holder: ChannelViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
+        }
+        if (FOLLOW_CHANGED in payloads) {
+            holder.updateFollow(channels[position])
+        }
+    }
+
+    override fun getItemCount(): Int = channels.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelViewHolder {
         return ChannelViewHolder(parent, onClick, onFollowClick)
@@ -54,20 +67,30 @@ class ChannelAdapter(
         fun update(channelData: ChannelWithFollow) {
             this.channelData = channelData
             itemView.apply {
+                with(channelData.channel) {
+                    channel_title.text = name
+                    channel_logo.loadImage(imageUrl)
+                    tag_container.setTagList(tags ?: emptyList())
+                }
+            }
+            updateFollow(channelData)
+        }
+
+        fun updateFollow(channelData: ChannelWithFollow) {
+            this.channelData = channelData
+            itemView.apply {
                 channel_follow.isEnabled = true
                 if (!channelData.isFollowing) {
                     channel_follow.setFollow()
                 } else {
                     channel_follow.setUnfollow()
                 }
-                with(channelData.channel) {
-                    channel_title.text = name
-                    follower_count.text = subscriptionCount.toString()
-                    channel_logo.loadImage(imageUrl)
-                    tag_container.setTagList(tags ?: emptyList())
-                }
+                follower_count.text = channelData.channel.subscriptionCount.toString()
             }
         }
+    }
 
+    companion object {
+        val FOLLOW_CHANGED = Any()
     }
 }
