@@ -35,8 +35,8 @@ class DbChannelRepository(
         val followDao = db.followDao()
         val channel = channelData.channel
         val (request, dbAction) = when {
-            channelData.isFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithId(channelData.followId!!) }
-            else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(0, channel.id)) }
+            channelData.isFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.followId!!) }
+            else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channel.id)) }
         }
         return postApi.updateChannelFollowers(channel.id, request)
                 .map { true }
@@ -46,5 +46,13 @@ class DbChannelRepository(
                         dbAction()
                     it
                 }
+    }
+
+    override fun channelsWithFollow(): Flowable<List<ChannelWithFollow>> {
+        return api.channels()
+                .doOnSuccess { db.channelDao().insertChannels(it) }
+                .map { Optional.of(it) }
+                .onErrorReturnItem(Optional.none())
+                .flatMapPublisher { db.channelDao().getAllChannelsWithFollow() }
     }
 }

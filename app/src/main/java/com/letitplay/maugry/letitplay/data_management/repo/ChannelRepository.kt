@@ -8,6 +8,7 @@ import io.reactivex.Single
 
 interface ChannelRepository {
     fun channels(): Flowable<List<Channel>>
+    fun channelsWithFollow(): Flowable<List<ChannelWithFollow>>
     fun channel(channelId: Int): Flowable<ChannelWithFollow>
     fun follow(channelData: ChannelWithFollow): Single<Boolean>
 }

@@ -33,7 +33,7 @@ class FollowWidget : FrameLayout {
 
 
     private fun updateState(followerModel: FollowingChannelModel?) {
-        when(followerModel?.isFollowing){
+        when(followerModel?.isFollowing) {
             true -> setUnfollow()
             false -> setFollow()
             null -> setFollow()

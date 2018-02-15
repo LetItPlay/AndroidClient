@@ -12,7 +12,6 @@ import android.arch.persistence.room.PrimaryKey
     )
 ])
 data class Follow(
-        @PrimaryKey(autoGenerate = true)
-        val id: Int,
+        @PrimaryKey
         val channelId: Int
 )
