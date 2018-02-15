@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import com.letitplay.maugry.letitplay.data_management.api.postServiceImpl
 import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
@@ -25,7 +26,7 @@ object ServiceLocator {
     }
 
     val trendRepository: TrendRepository by lazy { DbTrendRepository(db, serviceImpl, ioExecutor, mainThreadExecutor) }
-    val channelRepository: ChannelRepository by lazy { DbChannelRepository(db, serviceImpl) }
+    val channelRepository: ChannelRepository by lazy { DbChannelRepository(db, serviceImpl, postServiceImpl) }
 
     val db: LetItPlayDb by lazy {
         Room.databaseBuilder(applicationContext, LetItPlayDb::class.java, "letitplay.db")

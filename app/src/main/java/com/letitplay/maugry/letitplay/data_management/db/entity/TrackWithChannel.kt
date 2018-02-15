@@ -10,7 +10,7 @@ data class TrackWithChannel(
         val channel: Channel,
         val likeId: Int?
 ) {
-    val isLiked get() = likeId != null
+    val isLike get() = likeId != null
     @Ignore
     var index: Int = -1
 }

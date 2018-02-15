@@ -16,6 +16,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 
 
@@ -87,7 +88,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 //
     private fun onLikeClick(track: Track, isLiked: Boolean, position: Int) {
 //        if (swipe_refresh.isRefreshing) return
-//        val like: UpdateRequestBody = if (isLiked) UpdateRequestBody.UNLIKE()
+//        val like: UpdateRequestBody = if (isLike) UpdateRequestBody.UNLIKE()
 //        else UpdateRequestBody.LIKE()
 //        extendTrack.feedData?.id?.let {
 //            presenter?.updateFavouriteTracks(it.toInt(), extendTrack, like) {
@@ -106,7 +107,7 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
 
     //
     private fun seeAllChannelsClick() {
-//        navigationActivity.navigateTo(ChannelsKey())
+        navigationActivity.navigateTo(ChannelsKey())
     }
 
     //

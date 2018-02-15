@@ -80,7 +80,7 @@ class FeedItemViewHolder(
             feed_track_info_title.text = feedData.track.title
             feed_track_info_description.text = feedData.track.description ?: ""
             feed_like.likeCount = feedData.track.likeCount
-//            feed_like.like = feedData.isLiked
+//            feed_like.like = feedData.isLike
             feed_like.isEnabled = true
             feed_playing_now.trackListenerCount = feedData.track.listenCount
             feed_playing_now.trackUrl = feedData.track.audioUrl

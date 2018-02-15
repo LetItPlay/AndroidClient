@@ -56,7 +56,7 @@ val serviceImpl = serviceBuilder
         .build()
         .create(LetItPlayApi::class.java)
 
-private val postService = serviceBuilder
+val postServiceImpl = serviceBuilder
         .baseUrl(GL_POST_REQUEST_SERVICE_URL)
         .build()
         .create(LetItPlayPostApi::class.java)
@@ -87,7 +87,7 @@ interface LetItPlayApi {
 
 interface LetItPlayPostApi {
     @POST("stations/{id}/counts/")
-    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: UpdateFollowersRequestBody): Observable<UpdatedChannelResponse>
+    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: UpdateFollowersRequestBody): Single<UpdatedChannelResponse>
 
     @POST("tracks/{id}/counts/")
     fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Observable<UpdatedTrackResponse>

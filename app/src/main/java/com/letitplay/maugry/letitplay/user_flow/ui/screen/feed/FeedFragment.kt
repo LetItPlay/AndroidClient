@@ -63,9 +63,9 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 //        navigationActivity.navigateTo(ChannelsKey())
 //    }
 //
-//    private fun onLikeClick(extendTrack: ExtendTrackModel, isLiked: Boolean, position: Int) {
+//    private fun onLikeClick(extendTrack: ExtendTrackModel, isLike: Boolean, position: Int) {
 //        if (swipe_refresh.isRefreshing) return
-//        val like: UpdateRequestBody = if (isLiked) UpdateRequestBody.buildUnlikeRequest()
+//        val like: UpdateRequestBody = if (isLike) UpdateRequestBody.buildUnlikeRequest()
 //        else UpdateRequestBody.buildLikeRequest()
 //        extendTrack.track?.id?.let {
 //            presenter?.updateFavouriteTracks(extendTrack, like) {

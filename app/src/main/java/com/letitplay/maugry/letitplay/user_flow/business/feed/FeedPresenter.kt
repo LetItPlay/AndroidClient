@@ -77,7 +77,7 @@ object FeedPresenter : BasePresenter<IMvpView>() {
 //                            extendTrack.like = like
 //                        } else {
 //                            extendTrack.like?.let {
-//                                it.isLiked = !it.isLiked
+//                                it.isLike = !it.isLike
 //                                TrackManager.updateFavouriteTrack(it)
 //                            }
 //                        }
