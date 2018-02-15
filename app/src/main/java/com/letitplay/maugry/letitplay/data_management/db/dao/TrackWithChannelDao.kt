@@ -14,8 +14,9 @@ abstract class TrackWithChannelDao {
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +
             "LEFT JOIN follows ON follows.channelId = channels.channel_id " +
             "LEFT JOIN likes ON likes.track_id = tracks.track_id " +
-            "WHERE tracks.track_lang = :lang")
-    abstract fun getAllTracksWithFollowedChannels(lang: Language): DataSource.Factory<Int, TrackWithChannel>
+            "WHERE tracks.track_lang = :lang " +
+            "ORDER BY tracks.publishedAt DESC")
+    abstract fun getAllTracksWithFollowedChannelsSortedByDate(lang: Language): DataSource.Factory<Int, TrackWithChannel>
 
     @Query("SELECT tracks.*, channels.*, likes.track_id as likeId FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +

@@ -19,7 +19,7 @@ class FeedDataRepository(
 ) : FeedRepository {
     override fun feeds(): Flowable<PagedList<TrackWithChannel>> {
         val boundaryCallback = FeedBoundaryCallback(api, ::insertNewData, schedulerProvider.ioExecutor())
-        val dataSourceFactory = db.trackWithChannelDao().getAllTracksWithFollowedChannels(preferenceHelper.contentLanguage!!)
+        val dataSourceFactory = db.trackWithChannelDao().getAllTracksWithFollowedChannelsSortedByDate(preferenceHelper.contentLanguage!!)
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setPageSize(20)
