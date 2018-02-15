@@ -15,12 +15,13 @@ import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresent
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
+import kotlinx.android.synthetic.main.channels_fragment.*
 
 
 class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragment, ChannelPresenter) {
 
     private val channelsListAdapter: ChannelAdapter by lazy {
-        ChannelAdapter(::gotoChannelPage, ::onFollowClick)
+        ChannelAdapter(::onChannelClick, ::onFollowClick)
     }
 
     private val vm by lazy {
@@ -64,36 +65,14 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
         return view
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        presenter?.loadChannels {
-//            presenter.extendChannelList?.let {
-//                channelsListAdapter.data = it
-//            }
-//        }
-//    }
-//
-    private fun gotoChannelPage(channel: Channel) {
-//        if (swipe_refresh.isRefreshing) return
-//        id?.let {
-//            ChannelPagePresenter.extendChannel = presenter?.extendChannelList?.first { it.id == id }
-//            navigationActivity.navigateTo(ChannelPageKey(id))
-//        }
+    private fun onChannelClick(channel: Channel) {
+        if (swipe_refresh.isRefreshing) return
+        vm.onChannelClick(channel)
     }
 
     private fun onFollowClick(channel: ChannelWithFollow) {
+        if (swipe_refresh.isRefreshing) return
         vm.onFollowClick(channel)
-//        if (swipe_refresh.isRefreshing) return
-//        val followerModel: UpdateFollowersRequestBody = if (isFollow) UpdateFollowersRequestBody.UNFOLLOW()
-//        else UpdateFollowersRequestBody.buildFollowRequest()
-//
-//        extendChannel.channel?.id?.let {
-//            presenter?.updateChannelFollowers(extendChannel, followerModel) {
-//                presenter.updatedChannel?.let {
-//                    channelsListAdapter.notifyItemChanged(position)
-//                }
-//            }
-//        }
     }
 
 }

@@ -12,7 +12,9 @@ import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.DbChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.DbTrendRepository
 import com.letitplay.maugry.letitplay.data_management.repo.TrendRepository
+import com.letitplay.maugry.letitplay.user_flow.Router
 import com.letitplay.maugry.letitplay.user_flow.ui.ViewModelFactory
+import com.zhuinden.simplestack.BackstackDelegate
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -20,9 +22,10 @@ import java.util.concurrent.Executors
 @SuppressLint("StaticFieldLeak")
 object ServiceLocator {
     lateinit var applicationContext: Context
+    lateinit var backstackDelegate: BackstackDelegate
 
     val viewModelFactory by lazy {
-        ViewModelFactory(trendRepository, channelRepository)
+        ViewModelFactory(trendRepository, channelRepository, router)
     }
 
     val trendRepository: TrendRepository by lazy { DbTrendRepository(db, serviceImpl, ioExecutor, mainThreadExecutor) }
@@ -36,6 +39,11 @@ object ServiceLocator {
 
     val ioExecutor by lazy { Executors.newSingleThreadExecutor() }
 
+    val router = object : Router {
+        override fun navigateTo(key: Any) {
+            backstackDelegate.backstack.goTo(key)
+        }
+    }
 
     val mainThreadExecutor: Executor by lazy { MainThreadExecutor() }
 

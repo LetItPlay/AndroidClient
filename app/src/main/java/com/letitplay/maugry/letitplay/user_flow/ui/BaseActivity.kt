@@ -12,6 +12,7 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.PlaylistKey
@@ -49,6 +50,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
+        ServiceLocator.backstackDelegate = backstackDelegate
         backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, HistoryBuilder.single(FeedKey()))
         backstackDelegate.registerForLifecycleCallbacks(this)
         super.onCreate(savedInstanceState)
