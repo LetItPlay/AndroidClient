@@ -7,17 +7,19 @@ import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponse
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Flowable
 
 
 class FeedDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
-        private val schedulerProvider: SchedulerProvider
+        private val schedulerProvider: SchedulerProvider,
+        private val preferenceHelper: PreferenceHelper
 ) : FeedRepository {
     override fun feeds(): Flowable<PagedList<TrackWithChannel>> {
         val boundaryCallback = FeedBoundaryCallback(api, ::insertNewData, schedulerProvider.ioExecutor())
-        val dataSourceFactory = db.trackWithChannelDao().getAllTracksWithFollowedChannels()
+        val dataSourceFactory = db.trackWithChannelDao().getAllTracksWithFollowedChannels(preferenceHelper.contentLanguage!!)
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setPageSize(20)
