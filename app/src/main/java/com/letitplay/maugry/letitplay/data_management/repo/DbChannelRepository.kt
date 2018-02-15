@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.data_management.repo
 
+import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
@@ -9,14 +10,17 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollo
 import com.letitplay.maugry.letitplay.data_management.db.entity.Follow
 import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
 import com.letitplay.maugry.letitplay.utils.Optional
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 
 class DbChannelRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
-        private val postApi: LetItPlayPostApi
+        private val postApi: LetItPlayPostApi,
+        private val schedulerProvider: SchedulerProvider
 ) : ChannelRepository {
 
     override fun channel(channelId: Int): Flowable<ChannelWithFollow> {
@@ -56,5 +60,14 @@ class DbChannelRepository(
                 .map { Optional.of(it) }
                 .onErrorReturnItem(Optional.none())
                 .flatMapPublisher { db.channelDao().getAllChannelsWithFollow() }
+    }
+
+    override fun loadChannels(): Completable {
+        return api.channels()
+                .doOnSuccess {
+                    db.channelDao().insertChannels(it)
+                }
+                .subscribeOn(Schedulers.io())
+                .toCompletable()
     }
 }

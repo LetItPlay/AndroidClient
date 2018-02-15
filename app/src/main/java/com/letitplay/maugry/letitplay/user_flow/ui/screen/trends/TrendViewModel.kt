@@ -21,14 +21,16 @@ class TrendViewModel(
         trendRepository.trends()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .toLiveData(disposables)
+                .toLiveData()
     }
+
     val channels: LiveData<List<Channel>> by lazy {
         channelRepository.channels()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .toLiveData(disposables)
+                .toLiveData()
     }
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()

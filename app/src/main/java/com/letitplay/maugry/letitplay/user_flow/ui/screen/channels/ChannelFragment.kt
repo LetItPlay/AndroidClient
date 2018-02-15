@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +15,10 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollo
 import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.channels_fragment.*
+import timber.log.Timber
 
 
 class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragment, ChannelPresenter) {
@@ -24,6 +27,8 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
         ChannelAdapter(::onChannelClick, ::onFollowClick)
     }
 
+    private val router by lazy { ServiceLocator.router }
+
     private val vm by lazy {
         ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
                 .get(ChannelViewModel::class.java)
@@ -31,11 +36,13 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.channels.observe(this, Observer<List<ChannelWithFollow>> {
-            it?.let {
-                channelsListAdapter.updateChannels(it)
+        vm.channels.observe(this, Observer<Result<List<ChannelWithFollow>>> { result ->
+            when (result) {
+                is Result.Success -> channelsListAdapter.updateChannels(result.data)
+                is Result.Failure -> Timber.e(result.e)
             }
         })
+        lifecycle.addObserver(vm)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,28 +53,21 @@ class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragmen
         channelRecycler.addItemDecoration(listDivider)
         channelRecycler.defaultItemAnimator.supportsChangeAnimations = false
         channelRecycler.setHasFixedSize(true)
-//        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
-//        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
-//        swipeRefreshLayout.setOnRefreshListener {
-//            presenter?.loadChannels (
-//                    false,
-//                    { _, _ ->
-//                        swipeRefreshLayout.isRefreshing = false
-//                    },
-//                    {
-//                        presenter.extendChannelList?.let {
-//                            channelsListAdapter.data = it
-//                        }
-//                        swipeRefreshLayout.isRefreshing = false
-//                    }
-//            )
-//        }
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
+        swipeRefreshLayout.setOnRefreshListener {
+            vm.onRefreshChannels()
+
+            if (swipeRefreshLayout.isRefreshing) {
+                swipeRefreshLayout.isRefreshing = false
+            }
+        }
         return view
     }
 
     private fun onChannelClick(channel: Channel) {
         if (swipe_refresh.isRefreshing) return
-        vm.onChannelClick(channel)
+        router.navigateTo(ChannelPageKey(channel.id))
     }
 
     private fun onFollowClick(channel: ChannelWithFollow) {

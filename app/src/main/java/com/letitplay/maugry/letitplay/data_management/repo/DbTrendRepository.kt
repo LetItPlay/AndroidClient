@@ -2,22 +2,21 @@ package com.letitplay.maugry.letitplay.data_management.repo
 
 import android.arch.paging.PagedList
 import android.arch.paging.RxPagedListBuilder
+import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.api.responses.TrendResponse
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import io.reactivex.Flowable
-import java.util.concurrent.Executor
 
 
 class DbTrendRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
-        private val ioExecutor: Executor,
-        private val mainThreadExecutor: Executor
+        private val schedulerProvider: SchedulerProvider
 ) : TrendRepository {
     override fun trends(): Flowable<PagedList<TrackWithChannel>> {
-        val boundaryCallback = TrendBoundaryCallback(api, ::insertNewData, ioExecutor)
+        val boundaryCallback = TrendBoundaryCallback(api, ::insertNewData, schedulerProvider.ioExecutor())
         val dataSourceFactory = db.trackWithChannelDao().getAllTracks()
 
         val pagedListConfig = PagedList.Config.Builder()
@@ -30,8 +29,8 @@ class DbTrendRepository(
                 pagedListConfig,
                 boundaryCallback,
                 dataSourceFactory,
-                ioExecutor,
-                mainThreadExecutor
+                schedulerProvider.ioExecutor(),
+                schedulerProvider.uiExecutor()
         )
         return rxPagedListBuilder.build()
     }
