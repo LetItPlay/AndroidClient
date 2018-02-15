@@ -16,8 +16,9 @@ class ViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TrendViewModel::class.java)) {
             return TrendViewModel(trendRepository, channelRepository) as T
-        } else /*if (modelClass.isAssignableFrom(ChannelPageViewModel::class.java))*/ {
+        } else if (modelClass.isAssignableFrom(ChannelPageViewModel::class.java)) {
             return ChannelPageViewModel(channelRepository) as T
         }
+        throw IllegalArgumentException("Unknown type of view model")
     }
 }
