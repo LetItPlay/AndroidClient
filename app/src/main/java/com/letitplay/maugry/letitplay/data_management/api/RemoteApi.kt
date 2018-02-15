@@ -58,7 +58,7 @@ interface LetItPlayApi {
     fun channels(): Single<List<Channel>>
 
     @GET("stations/{id}/tracks")
-    fun getChannelTracks(@Path("id") idStation: Int): Observable<Response<List<Track>>>
+    fun getChannelTracks(@Path("id") idStation: Int): Single<List<Track>>
 
     @GET("tracks")
     fun getTracks(): Observable<List<Track>>

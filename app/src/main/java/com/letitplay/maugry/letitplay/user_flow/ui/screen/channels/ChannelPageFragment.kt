@@ -12,15 +12,20 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
-    private lateinit var recentAddedListAdapter: ChannelPageAdapter
+    private val recentAddedListAdapter by lazy {
+        ChannelPageAdapter(::onTrackClicked)
+    }
     private var channelPageRepo: MusicRepo? = null
 
     private val vm by lazy {
@@ -46,16 +51,19 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 channel_page_follow.isFollowing = it.isFollowing
             }
         })
+        vm.recentAddedTracks(getKey()).observe(this, Observer<List<Track>> {
+            it?.let {
+                recentAddedListAdapter.setData(it)
+                channel_page_recent_added.visibility = View.VISIBLE
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val recentAddedRecycler = view.findViewById<RecyclerView>(R.id.recent_added_list)
-        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val listDivider = listDivider(recentAddedRecycler.context, R.drawable.list_transparent_divider_16dp, layoutManager.orientation)
-//        recentAddedListAdapter = ChannelPageAdapter(::playTrack)
-        recentAddedRecycler.layoutManager = layoutManager
-//        recentAddedRecycler.adapter = recentAddedListAdapter
+        val listDivider = listDivider(recentAddedRecycler.context, R.drawable.list_transparent_divider_16dp, LinearLayoutManager.HORIZONTAL)
+        recentAddedRecycler.adapter = recentAddedListAdapter
         recentAddedRecycler.addItemDecoration(listDivider)
         val followButton = view.findViewById<View>(R.id.channel_page_follow)
         followButton.setOnClickListener {
@@ -65,66 +73,19 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val id: Int = getKey()
-//        presenter?.loadTracks(id) {
-//            val channelInfo = presenter.extendChannel ?: return@loadTracks
-//            with(channelInfo) {
-//                val channel = channel ?: return@loadTracks
-//                with(channel) {
-//                    channel_page_banner.loadImage(imageUrl)
-//                    channel_page_preview.loadCircularImage(imageUrl)
-//                    channel_page_title.text = name
-//                    channel_page_followers.text = subscriptionCount.toString()
-//
-//                    channel_page_follow.data = following
-//                    channel_page_follow.setOnClickListener {
-//                        channel_page_follow.isEnabled = false
-//                        updateFollowers(channelInfo, channel_page_follow.isFollow())
-//                    }
-//
-//                    val tags = tags
-//                    if (tags != null)
-//                        channel_page_tag_container.setTagList(tags)
-//                }
-//            }
-//            if (presenter.recentTracks.isNotEmpty()) {
-//                recentAddedListAdapter.setData(presenter.recentTracks)
-//                channel_page_recent_added.visibility = View.VISIBLE
-//            }
-//        }
-
-
+    private fun onTrackClicked(track: Track) {
+        if (channelPageRepo != null) {
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
+            return
+        }
+        val channel = vm.channelPage(getKey()).value
+        val tracks = vm.recentAddedTracks(getKey()).value
+        if (channel != null && tracks != null) {
+            channelPageRepo = MusicRepo(tracks.map {
+                TrackWithChannel(it, channel.channel, null).toAudioTrack()
+            })
+            navigationActivity.updateRepo(track.id, channelPageRepo)
+        }
     }
-
-//    private fun updateFollowers(extendedChannel: ExtendChannelModel?, isFollow: Boolean) {
-//
-//        val followerModel: UpdateFollowersRequestBody = if (isFollow) UpdateFollowersRequestBody.UNFOLLOW()
-//        else UpdateFollowersRequestBody.buildFollowRequest()
-//
-//        extendedChannel?.channel?.id?.let {
-//            presenter?.updateChannelFollowers(extendedChannel, followerModel) {
-//                presenter.updatedChannel?.let {
-//                    channel_page_follow.data = extendedChannel.following
-//                    channel_page_followers.text = extendedChannel.channel?.subscriptionCount.toString()
-//                    channel_page_follow.isEnabled = true
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun playTrack(trackId: Long) {
-//        if (channelPageRepo != null) {
-//            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
-//            return
-//        }
-//        // FIXME: pass new repository as argument
-//        channelPageRepo = MusicRepo(presenter!!.recentTracks.map {
-//            (presenter.extendChannel?.channel to it).toAudioTrack()
-//        })
-//        navigationActivity.updateRepo(trackId, channelPageRepo)
-//    }
 
 }

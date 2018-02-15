@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.channel_page_item.view.*
 
 
 class ChannelPageAdapter(
-        private val onClickItem: ((Int) -> Unit)
+        private val onClickItem: (Track) -> Unit
 ) : RecyclerView.Adapter<ChannelPageAdapter.ChannelPageItemHolder>() {
 
     private var data: List<Track> = ArrayList()
@@ -33,7 +33,7 @@ class ChannelPageAdapter(
         return ChannelPageItemHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onClickItem(data[adapterPosition].id)
+                    onClickItem(data[adapterPosition])
                 }
             }
         }
@@ -41,12 +41,12 @@ class ChannelPageAdapter(
 
     class ChannelPageItemHolder(val parent: ViewGroup?) : BaseViewHolder(parent, R.layout.channel_page_item) {
 
-        fun update(extendTrack: Track) {
+        fun update(track: Track) {
             itemView.apply {
-                channel_page_playing_now.text = extendTrack.listenCount?.toString() ?: "0"
-                channel_page_track_title.text = extendTrack.title
-                channel_page_last_update.text = DateHelper.getShortPastDate(extendTrack.publishedAt, context)
-                channel_page_track_preview.loadImage(extendTrack.coverUrl)
+                channel_page_playing_now.text = track.listenCount.toString()
+                channel_page_track_title.text = track.title
+                channel_page_last_update.text = DateHelper.getShortPastDate(track.publishedAt, context)
+                channel_page_track_preview.loadImage(track.coverUrl)
             }
         }
 

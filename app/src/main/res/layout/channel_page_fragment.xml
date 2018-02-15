@@ -179,7 +179,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/channel_page_recent_added"
-                tools:layoutManager="LinearLayoutManager"
+                app:layoutManager="LinearLayoutManager"
                 tools:listitem="@layout/channel_page_item" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>

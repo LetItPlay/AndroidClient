@@ -1,10 +1,8 @@
 package com.letitplay.maugry.letitplay.data_management.db.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import io.reactivex.Flowable
 
 @Dao
 abstract class TrackDao {
@@ -13,4 +11,9 @@ abstract class TrackDao {
 
     @Update
     abstract fun updateTrack(track: Track)
+
+    @Query("SELECT * FROM tracks " +
+            "WHERE tracks.stationId = :channelId " +
+            "ORDER BY tracks.publishedAt DESC")
+    abstract fun getChannelTracksByDate(channelId: Int): Flowable<List<Track>>
 }
