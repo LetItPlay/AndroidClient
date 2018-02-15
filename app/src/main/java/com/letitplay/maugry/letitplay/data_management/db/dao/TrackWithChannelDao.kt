@@ -11,8 +11,9 @@ import io.reactivex.Flowable
 abstract class TrackWithChannelDao {
     @Query("SELECT tracks.*, channels.*, likes.track_id as likeId FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +
-            "LEFT JOIN likes ON likes.track_id = tracks.track_id")
-    abstract fun getAllTracksFactory(): DataSource.Factory<Int, TrackWithChannel>
+            "INNER JOIN follows ON follows.channelId = channels.channel_id " +
+            "LEFT JOIN likes ON likes.track_id = tracks.track_id ")
+    abstract fun getAllTracksWithFollowedChannels(): DataSource.Factory<Int, TrackWithChannel>
 
     @Query("SELECT tracks.*, channels.*, likes.track_id as likeId FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +

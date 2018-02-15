@@ -35,7 +35,7 @@ class FeedAdapter(
             return super.onBindViewHolder(holder, position, payloads)
         }
         if (LIKE_CHANGED in payloads) {
-            getItem(position - 1)?.let {
+            getItem(position)?.let {
                 holder.updateLike(it)
             }
         }

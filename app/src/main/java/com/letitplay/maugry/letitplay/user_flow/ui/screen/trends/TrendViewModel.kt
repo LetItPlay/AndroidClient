@@ -38,6 +38,13 @@ class TrendViewModel(
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         refreshChannels()
+        refreshTrends()
+    }
+
+    private fun refreshTrends() {
+        trendRepository.loadTrends()
+                .subscribe({}, {})
+                .addTo(compositeDisposable)
     }
 
     private fun refreshChannels() {
