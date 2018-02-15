@@ -71,4 +71,10 @@ class TrendViewModel(
         super.onCleared()
         compositeDisposable.clear()
     }
+
+    fun sendListen() {
+        trendRepository.sendListen()
+                .subscribe()
+                .addTo(compositeDisposable)
+    }
 }

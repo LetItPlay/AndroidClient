@@ -8,22 +8,24 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.user_flow.business.trends.TrendsPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.channels_fragment.*
 import timber.log.Timber
 
 
-class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, TrendsPresenter) {
+class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
 
     private val trendsListAdapter by lazy {
         TrendAdapter(musicService,
@@ -37,7 +39,8 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
         ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
                 .get(TrendViewModel::class.java)
     }
-//    private var trendsRepo: MusicRepo? = null
+    private val preferenceHelper by lazy { PreferenceHelper(context!!) }
+    private var trendsRepo: MusicRepo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,25 +89,22 @@ class TrendsFragment : BaseFragment<TrendsPresenter>(R.layout.trends_fragment, T
     }
 
     private fun playTrack(trackData: TrackWithChannel) {
-//        if (swipe_refresh.isRefreshing) return
-//
-//        if(extendTrack.listened == null) {
-//                val newListener: UpdateRequestBody = UpdateRequestBody.LISTEN()
-//                presenter?.updateListenersTracks(extendTrack, newListener) {
-//                    trendsListAdapter.notifyItemChanged(position)
-//                }
-//        }
-//
-//        if (trendsRepo != null) {
-//            navigationActivity.musicPlayerSmall?.skipToQueueItem(extendTrack.feedData?.id!!)
-//            return
-//        }
-//        val playlist = presenter?.extendTrackList?.map {
-//            (it.channel to it.feedData).toAudioTrack()
-//        } ?: return
-//
-//        trendsRepo = MusicRepo(playlist)
-//        navigationActivity.updateRepo(extendTrack.feedData?.id!!, trendsRepo)
+        if (swipe_refresh.isRefreshing) return
+
+        if (!preferenceHelper.isListened(trackData.track.id)) {
+            vm.sendListen()
+            preferenceHelper.saveListened(trackData.track.id)
+        }
+
+        if (trendsRepo != null) {
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+            return
+        }
+        val playlist = (vm.trends.value as Result.Success).data.map {
+            it.toAudioTrack()
+        }
+        trendsRepo = MusicRepo(playlist)
+        navigationActivity.updateRepo(trackData.track.id, trendsRepo)
     }
 
 }

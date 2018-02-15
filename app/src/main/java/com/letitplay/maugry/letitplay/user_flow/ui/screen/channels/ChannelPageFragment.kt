@@ -12,14 +12,13 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
-import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPagePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.channel_page_fragment.*
 
-class ChannelPageFragment : BaseFragment<ChannelPagePresenter>(R.layout.channel_page_fragment, ChannelPagePresenter) {
+class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
     private lateinit var recentAddedListAdapter: ChannelPageAdapter
     private var channelPageRepo: MusicRepo? = null

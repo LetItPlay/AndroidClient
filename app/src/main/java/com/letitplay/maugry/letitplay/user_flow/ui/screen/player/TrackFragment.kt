@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.user_flow.business.player.TrackPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.track_fragment.*
 import timber.log.Timber
 
-class TrackFragment : BaseFragment<TrackPresenter>(R.layout.track_fragment, TrackPresenter), MusicService.RepoChangesListener {
+class TrackFragment : BaseFragment(R.layout.track_fragment), MusicService.RepoChangesListener {
 
     private lateinit var trackAdapter: TrackAdapter
 

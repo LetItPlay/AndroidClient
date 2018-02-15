@@ -6,14 +6,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.model.PlaylistModel
-import com.letitplay.maugry.letitplay.user_flow.business.search.PlaylistPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import timber.log.Timber
 
 
-class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragment, PlaylistPresenter) {
+class PlaylistFragment : BaseFragment(R.layout.playlist_fragment) {
 
     private lateinit var playlistAdapter: PlaylistAdapter
 
@@ -34,7 +32,7 @@ class PlaylistFragment : BaseFragment<PlaylistPresenter>(R.layout.playlist_fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var tag = "новости"
-        if (presenter?.currentContentLang == Language.EN) tag = "news"
+//        if (presenter?.currentContentLang == Language.EN) tag = "news"
 
 //        presenter?.getPlaylists {
 //            presenter.playlists?.let {

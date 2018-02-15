@@ -12,14 +12,13 @@ import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.feed_fragment.*
 
-class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter) {
+class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private val vm by lazy {
         ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
                 .get(FeedViewModel::class.java)

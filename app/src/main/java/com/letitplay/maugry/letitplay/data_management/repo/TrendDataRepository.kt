@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.data_management.repo
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
@@ -13,6 +14,7 @@ import io.reactivex.Flowable
 class TrendDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
+        private val postApi: LetItPlayPostApi,
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : TrendRepository {
@@ -33,5 +35,9 @@ class TrendDataRepository(
                 }
                 .subscribeOn(schedulerProvider.io())
                 .toCompletable()
+    }
+
+    override fun sendListen(): Completable {
+        return Completable.complete()
     }
 }

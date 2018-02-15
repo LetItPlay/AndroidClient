@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.user_flow.business.search.SearchPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 
 
-class SearchFragment : BaseFragment<SearchPresenter>(R.layout.search_fragment, SearchPresenter) {
+class SearchFragment : BaseFragment(R.layout.search_fragment) {
 
 //    private lateinit var resultsAdapter: SearchResultsAdapter
 

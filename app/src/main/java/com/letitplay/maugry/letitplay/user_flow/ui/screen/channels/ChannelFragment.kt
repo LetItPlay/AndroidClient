@@ -12,7 +12,6 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
-import com.letitplay.maugry.letitplay.user_flow.business.channels.ChannelPresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Result
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.channels_fragment.*
 import timber.log.Timber
 
 
-class ChannelFragment : BaseFragment<ChannelPresenter>(R.layout.channels_fragment, ChannelPresenter) {
+class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     private val channelsListAdapter: ChannelAdapter by lazy {
         ChannelAdapter(::onChannelClick, ::onFollowClick)

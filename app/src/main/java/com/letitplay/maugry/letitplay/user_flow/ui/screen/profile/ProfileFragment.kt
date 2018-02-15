@@ -13,7 +13,6 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.user_flow.business.profile.ProfilePresenter
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -21,7 +20,7 @@ import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 
-class ProfileFragment : BaseFragment<ProfilePresenter>(R.layout.profile_fragment, ProfilePresenter) {
+class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
     private val likedTracksListAdapter: LikedTracksAdapter by lazy {
         LikedTracksAdapter(musicService, ::playTrack)

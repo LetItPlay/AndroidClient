@@ -26,6 +26,17 @@ class PreferenceHelper(context: Context) {
             }
         }
 
+    fun isListened(trackId: Int): Boolean {
+        return sharedPreferences.getBoolean(trackId.toString(), false)
+    }
+
+    fun saveListened(trackId: Int) {
+        sharedPreferences
+                .edit()
+                .putBoolean(trackId.toString(), false)
+                .apply()
+    }
+
     companion object {
         private const val APP_SETTINGS = "APP_SETTINGS"
         private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
