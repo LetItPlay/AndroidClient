@@ -26,7 +26,7 @@ object TrackManager : BaseManager() {
 //    )
 //
 //    fun getFavouriteExtendTrack() = get(
-//            local = { ExtendTrackModel().query { equalTo("like.isLike", true) } }
+//            local = { ExtendTrackModel().query { equalTo("isLiked.isLike", true) } }
 //    )
 //
 //

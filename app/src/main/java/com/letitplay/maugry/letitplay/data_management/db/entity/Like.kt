@@ -15,8 +15,7 @@ import android.arch.persistence.room.PrimaryKey
         ]
 )
 data class Like(
-        @PrimaryKey(autoGenerate = true)
-        val id: Int,
+        @PrimaryKey
         @ColumnInfo(name = "track_id")
         val trackId: Int
 )

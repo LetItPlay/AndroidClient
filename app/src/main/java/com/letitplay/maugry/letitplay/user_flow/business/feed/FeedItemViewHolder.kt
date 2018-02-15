@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
@@ -20,8 +19,8 @@ import kotlinx.android.synthetic.main.view_feed_card_info.view.*
 class FeedItemViewHolder(
         parent: ViewGroup?,
         playlistActionsListener: OnPlaylistActionsListener?,
-        onClick: ((Track, Int) -> Unit),
-        onLikeClick: ((Track, Boolean, Int) -> Unit),
+        onClick: (TrackWithChannel) -> Unit,
+        onLikeClick: (TrackWithChannel) -> Unit,
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var feedData: TrackWithChannel
@@ -48,7 +47,7 @@ class FeedItemViewHolder(
                     TransitionManager.beginDelayedTransition(itemView as ViewGroup)
                     itemView.feed_card_info.gone()
                 } else {
-                    onClick(feedData.track, adapterPosition)
+                    onClick(feedData)
                 }
             }
         }
@@ -62,8 +61,7 @@ class FeedItemViewHolder(
         }
         itemView.feed_like.setOnClickListener {
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                it.isEnabled = false
-                onLikeClick(feedData.track, it.feed_like.isLiked(), adapterPosition)
+                onLikeClick(feedData)
             }
         }
         itemView.feed_playing_now.mediaSession = musicService?.mediaSession
@@ -79,9 +77,6 @@ class FeedItemViewHolder(
             feed_card_info.gone()
             feed_track_info_title.text = feedData.track.title
             feed_track_info_description.text = feedData.track.description ?: ""
-            feed_like.likeCount = feedData.track.likeCount
-//            feed_like.like = feedData.isLike
-            feed_like.isEnabled = true
             feed_playing_now.trackListenerCount = feedData.track.listenCount
             feed_playing_now.trackUrl = feedData.track.audioUrl
             feed_time.text = DateHelper.getTime(feedData.track.totalLengthInSeconds)
@@ -92,6 +87,12 @@ class FeedItemViewHolder(
             feed_track_image.loadImage(feedData.track.coverUrl)
             feed_track_info_logo.loadImage(feedData.track.coverUrl)
         }
+        updateLike(feedData)
+    }
+
+    fun updateLike(feedData: TrackWithChannel) {
+        itemView.feed_like.isLiked = feedData.isLike
+        itemView.feed_like.likeCount = feedData.track.likeCount
     }
 
     fun showOverlay() {

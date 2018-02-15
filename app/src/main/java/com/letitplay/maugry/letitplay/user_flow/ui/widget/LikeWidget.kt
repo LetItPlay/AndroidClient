@@ -5,22 +5,14 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.FavouriteTracksModel
 import kotlinx.android.synthetic.main.like_button.view.*
 
 
-class LikeWidget : LinearLayout {
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+class LikeWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : LinearLayout(context, attrs, defStyleAttr) {
 
 
-    var like: FavouriteTracksModel? = null
+    var isLiked: Boolean = false
         set(value) {
             field = value
             updateState(value)
@@ -37,21 +29,19 @@ class LikeWidget : LinearLayout {
 
     }
 
-    private fun updateState(like: FavouriteTracksModel?) {
-        when (like?.isLiked) {
-            true -> setLiked()
-            false -> setUnliked()
-            null -> setUnliked()
+    private fun updateState(isLiked: Boolean) {
+        if (isLiked) {
+            setLiked()
+        } else {
+            setUnliked()
         }
     }
 
-    fun setLiked() {
+    private fun setLiked() {
         feed_like_icon.setImageResource(R.drawable.like_ic)
     }
 
-    fun setUnliked() {
+    private fun setUnliked() {
         feed_like_icon.setImageResource(R.drawable.dislike)
     }
-
-    fun isLiked() = like?.isLiked ?: false
 }

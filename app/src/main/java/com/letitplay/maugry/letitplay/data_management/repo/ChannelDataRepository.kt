@@ -12,10 +12,9 @@ import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
 import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
 
 
-class DbChannelRepository(
+class ChannelDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val postApi: LetItPlayPostApi,
@@ -66,7 +65,7 @@ class DbChannelRepository(
                 .doOnSuccess {
                     db.channelDao().insertChannels(it)
                 }
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(schedulerProvider.io())
                 .toCompletable()
     }
 }

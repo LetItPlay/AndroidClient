@@ -8,10 +8,7 @@ import android.os.Looper
 import com.letitplay.maugry.letitplay.data_management.api.postServiceImpl
 import com.letitplay.maugry.letitplay.data_management.api.serviceImpl
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
-import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
-import com.letitplay.maugry.letitplay.data_management.repo.DbChannelRepository
-import com.letitplay.maugry.letitplay.data_management.repo.DbTrendRepository
-import com.letitplay.maugry.letitplay.data_management.repo.TrendRepository
+import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.user_flow.Router
 import com.letitplay.maugry.letitplay.user_flow.ui.ViewModelFactory
 import com.zhuinden.simplestack.BackstackDelegate
@@ -27,11 +24,12 @@ object ServiceLocator {
     lateinit var backstackDelegate: BackstackDelegate
 
     val viewModelFactory by lazy {
-        ViewModelFactory(trendRepository, channelRepository, schedulerProvider)
+        ViewModelFactory(trendRepository, channelRepository, trackRepository, schedulerProvider)
     }
 
-    val trendRepository: TrendRepository by lazy { DbTrendRepository(db, serviceImpl, schedulerProvider) }
-    val channelRepository: ChannelRepository by lazy { DbChannelRepository(db, serviceImpl, postServiceImpl, schedulerProvider) }
+    private val trendRepository: TrendRepository by lazy { TrendDataRepository(db, serviceImpl, schedulerProvider) }
+    private val channelRepository: ChannelRepository by lazy { ChannelDataRepository(db, serviceImpl, postServiceImpl, schedulerProvider) }
+    private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, postServiceImpl, schedulerProvider) }
 
     val db: LetItPlayDb by lazy {
         Room.databaseBuilder(applicationContext, LetItPlayDb::class.java, "letitplay.db")

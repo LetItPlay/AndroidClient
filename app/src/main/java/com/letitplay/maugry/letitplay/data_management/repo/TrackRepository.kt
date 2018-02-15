@@ -1,13 +1,9 @@
 package com.letitplay.maugry.letitplay.data_management.repo
 
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import io.reactivex.Completable
 
 
 interface TrackRepository {
-
-}
-
-class TrackRepositoryImpl(
-        private val api: LetItPlayApi
-) : TrackRepository {
+    fun like(track: Track, currentIsLiked: Boolean): Completable
 }

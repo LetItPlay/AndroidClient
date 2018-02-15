@@ -78,7 +78,7 @@ interface LetItPlayApi {
     @GET("abrakadabra?")
     fun getSearch(@Query("lang") lang: String): Observable<TrendResponse>
 
-    @GET("trends/7?")
+    @GET("feeds/7?")
     fun trends(@Query("lang") lang: String): Single<TrendResponse>
 
     @GET("stations/{id}")
@@ -90,7 +90,7 @@ interface LetItPlayPostApi {
     fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: UpdateFollowersRequestBody): Single<UpdatedChannelResponse>
 
     @POST("tracks/{id}/counts/")
-    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Observable<UpdatedTrackResponse>
+    fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Single<UpdatedTrackResponse>
 }
 
 //object ServiceController : BaseServiceController() {

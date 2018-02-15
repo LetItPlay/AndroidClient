@@ -98,5 +98,8 @@ fun ImageView.loadCircularImage(url: String?, context: Context? = null) {
                 .load(url)
                 .apply(RequestOptions.circleCropTransform())
                 .into(this)
+    } else {
+        Glide.with(context)
+                .clear(this)
     }
 }

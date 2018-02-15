@@ -71,12 +71,12 @@ object FeedPresenter : BasePresenter<IMvpView>() {
 //                    triggerProgress = false,
 //                    onNextNonContext = {
 //                        updatedTrack = it
-//                        if (extendTrack.like == null) {
-//                            val like = FavouriteTracksModel(extendTrack.id, true)
-//                            TrackManager.updateFavouriteTrack(like)
-//                            extendTrack.like = like
+//                        if (extendTrack.isLiked == null) {
+//                            val isLiked = FavouriteTracksModel(extendTrack.id, true)
+//                            TrackManager.updateFavouriteTrack(isLiked)
+//                            extendTrack.isLiked = isLiked
 //                        } else {
-//                            extendTrack.like?.let {
+//                            extendTrack.isLiked?.let {
 //                                it.isLike = !it.isLike
 //                                TrackManager.updateFavouriteTrack(it)
 //                            }

@@ -4,20 +4,20 @@ import android.arch.paging.PagedList
 import android.arch.paging.RxPagedListBuilder
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
-import com.letitplay.maugry.letitplay.data_management.api.responses.TrendResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponse
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import io.reactivex.Flowable
 
 
-class DbTrendRepository(
+class FeedDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val schedulerProvider: SchedulerProvider
-) : TrendRepository {
-    override fun trends(): Flowable<PagedList<TrackWithChannel>> {
-        val boundaryCallback = TrendBoundaryCallback(api, ::insertNewData, schedulerProvider.ioExecutor())
-        val dataSourceFactory = db.trackWithChannelDao().getAllTracks()
+) : FeedRepository {
+    override fun feeds(): Flowable<PagedList<TrackWithChannel>> {
+        val boundaryCallback = FeedBoundaryCallback(api, ::insertNewData, schedulerProvider.ioExecutor())
+        val dataSourceFactory = db.trackWithChannelDao().getAllTracksFactory()
 
         val pagedListConfig = PagedList.Config.Builder()
                 .setPageSize(20)
@@ -35,7 +35,7 @@ class DbTrendRepository(
         return rxPagedListBuilder.build()
     }
 
-    private fun insertNewData(trends: TrendResponse) {
+    private fun insertNewData(trends: FeedResponse) {
         if (trends.channels != null && trends.tracks != null) {
             db.runInTransaction {
                 db.channelDao().insertChannels(trends.channels)
@@ -43,5 +43,4 @@ class DbTrendRepository(
             }
         }
     }
-
 }

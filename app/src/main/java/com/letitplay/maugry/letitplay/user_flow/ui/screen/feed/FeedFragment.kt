@@ -6,14 +6,14 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 
 class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPresenter)/*, OnPlaylistActionsListener*/ {
 
-//    private lateinit var feedListAdapter: FeedAdapter
+//    private lateinit var feedListAdapter: TrackAdapter
 //    private var feedRepo: MusicRepo? = null
 //
 //    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 //        val view = super.onCreateView(inflater, container, savedInstanceState)!!
 //        val feedRecycler = view.findViewById<RecyclerView>(R.id.feed_list)
 //        val layoutManager = LinearLayoutManager(context)
-//        feedListAdapter = FeedAdapter(musicService, ::playTrack, ::onLikeClick, this)
+//        feedListAdapter = TrackAdapter(musicService, ::playTrack, ::onLikeClick, this)
 //        feedRecycler.adapter = feedListAdapter
 //        feedRecycler.layoutManager = layoutManager
 //        val divider = listDivider(feedRecycler.context, R.drawable.list_divider)
@@ -65,10 +65,10 @@ class FeedFragment : BaseFragment<FeedPresenter>(R.layout.feed_fragment, FeedPre
 //
 //    private fun onLikeClick(extendTrack: ExtendTrackModel, isLike: Boolean, position: Int) {
 //        if (swipe_refresh.isRefreshing) return
-//        val like: UpdateRequestBody = if (isLike) UpdateRequestBody.buildUnlikeRequest()
+//        val isLiked: UpdateRequestBody = if (isLike) UpdateRequestBody.buildUnlikeRequest()
 //        else UpdateRequestBody.buildLikeRequest()
 //        extendTrack.track?.id?.let {
-//            presenter?.updateFavouriteTracks(extendTrack, like) {
+//            presenter?.updateFavouriteTracks(extendTrack, isLiked) {
 //                presenter.updatedTrack?.let {
 //                    feedListAdapter.notifyItemChanged(position)
 //                }
