@@ -11,6 +11,6 @@ abstract class FollowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertFollow(follow: Follow)
 
-    @Query("DELETE FROM follows WHERE follows.channelId = :channelId")
+    @Query("DELETE FROM follows WHERE follows.channel_id = :channelId")
     abstract fun deleteFollowWithChannelId(channelId: Int)
 }

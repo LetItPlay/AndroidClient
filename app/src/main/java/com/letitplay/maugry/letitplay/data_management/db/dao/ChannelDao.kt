@@ -23,13 +23,17 @@ abstract class ChannelDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     abstract fun updateChannel(channel: Channel)
 
-    @Query("SELECT channels.*, follows.channelId as followId FROM channels " +
-            "LEFT JOIN follows ON follows.channelId = channels.channel_id " +
+    @Query("SELECT channels.*, follows.channel_id as followId FROM channels " +
+            "LEFT JOIN follows ON follows.channel_id = channels.channel_id " +
             "WHERE channels.channel_lang = :lang")
     abstract fun getAllChannelsWithFollow(lang: Language): Flowable<List<ChannelWithFollow>>
 
-    @Query("SELECT channels.*, follows.channelId as followId FROM channels " +
-            "LEFT JOIN follows ON follows.channelId = channels.channel_id " +
+    @Query("SELECT channels.*, follows.channel_id as followId FROM channels " +
+            "LEFT JOIN follows ON follows.channel_id = channels.channel_id " +
             "WHERE channels.channel_id = :channelId")
     abstract fun getChannelWithFollow(channelId: Int): Flowable<ChannelWithFollow>
+
+    @Query("SELECT channels.channel_id FROM channels " +
+            "INNER JOIN follows ON follows.channel_id = channels.channel_id")
+    abstract fun getFollowedChannelsId(): Flowable<List<Int>>
 }
