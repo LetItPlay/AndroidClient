@@ -33,19 +33,23 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
                 .get(ChannelViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        lifecycle.addObserver(vm)
         vm.channels.observe(this, Observer<Result<List<ChannelWithFollow>>> { result ->
             when (result) {
                 is Result.Success -> {
-                    hideProgress()
                     channelsListAdapter.updateChannels(result.data)
                 }
-                is Result.InProgress -> showProgress()
                 is Result.Failure -> Timber.e(result.e)
             }
         })
-        lifecycle.addObserver(vm)
+        vm.isLoading.observe(this, Observer<Boolean>{
+            when (it) {
+                true -> showProgress()
+                else -> hideProgress()
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

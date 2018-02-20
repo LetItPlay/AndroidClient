@@ -17,7 +17,6 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
@@ -39,7 +38,6 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
                 .get(TrendViewModel::class.java)
     }
-    private val preferenceHelper by lazy { PreferenceHelper(context!!) }
     private var trendsRepo: MusicRepo? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

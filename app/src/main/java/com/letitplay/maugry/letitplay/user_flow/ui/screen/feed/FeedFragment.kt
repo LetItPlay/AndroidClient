@@ -16,7 +16,6 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
@@ -37,19 +36,19 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     }
 
     private var feedRepo: MusicRepo? = null
-    private val preferenceHelper by lazy { PreferenceHelper(context!!) }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vm.feeds.observe(this, Observer<Result<PagedList<TrackWithChannel>>> {
             when (it) {
-                is Result.InProgress -> showProgress()
-                is Result.Success ->  {
-                    hideProgress()
-                    feedListAdapter.setList(it.data)
-                }
+                is Result.Success -> feedListAdapter.setList(it.data)
                 is Result.Failure -> Timber.d(it.e, it.errorMessage)
+            }
+        })
+        vm.isLoading.observe(this, Observer<Boolean> {
+            when (it) {
+                true -> showProgress()
+                else -> hideProgress()
             }
         })
     }

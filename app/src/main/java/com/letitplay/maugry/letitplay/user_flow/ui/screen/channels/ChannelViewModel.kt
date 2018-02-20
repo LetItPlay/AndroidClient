@@ -19,8 +19,12 @@ class ChannelViewModel(
     private val compositeDisposable = CompositeDisposable()
     private var inFollow: Boolean = false
 
+    val isLoading = MutableLiveData<Boolean>()
+
     val channels: LiveData<Result<List<ChannelWithFollow>>> by lazy {
         channelRepo.channelsWithFollow()
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doOnEach { isLoading.postValue(false) }
                 .toResult(schedulerProvider)
                 .toLiveData()
     }
@@ -43,8 +47,13 @@ class ChannelViewModel(
     fun onFollowClick(channelData: ChannelWithFollow) {
         if (!inFollow) {
             channelRepo.follow(channelData)
-                    .doOnSubscribe { inFollow = true }
-                    .doOnComplete { inFollow = false }
+                    .doOnSubscribe {
+                        isLoading.postValue(true)
+                    }
+                    .doFinally {
+                        isLoading.postValue(false)
+                        inFollow = false
+                    }
                     .subscribe()
                     .addTo(compositeDisposable)
         }

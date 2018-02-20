@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.paging.PagedList
 import com.letitplay.maugry.letitplay.SchedulerProvider
@@ -26,9 +27,13 @@ class FeedViewModel(
     private val compositeDisposable = CompositeDisposable()
     private var inLike: Boolean = false
 
+    val isLoading = MutableLiveData<Boolean>()
+
     val feeds: LiveData<Result<PagedList<TrackWithChannel>>> by lazy {
         feedRepository.feeds()
                 .observeOn(schedulerProvider.ui())
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doOnEach { isLoading.postValue(false) }
                 .toLiveData()
     }
 
