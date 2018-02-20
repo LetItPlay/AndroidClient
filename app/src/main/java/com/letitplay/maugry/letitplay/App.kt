@@ -10,7 +10,6 @@ import com.crashlytics.android.Crashlytics
 import com.gsfoxpro.musicservice.service.MusicService
 import io.fabric.sdk.android.Fabric
 import net.danlew.android.joda.JodaTimeAndroid
-import org.joda.time.DateTime
 import timber.log.Timber
 
 
@@ -46,7 +45,6 @@ class App : MultiDexApplication() {
         ServiceLocator.applicationContext = this
         bindMusicService()
         Timber.plant(Timber.DebugTree())
-        Timber.d("APP DASHA" + DateTime.now())
         JodaTimeAndroid.init(this)
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, Crashlytics())
