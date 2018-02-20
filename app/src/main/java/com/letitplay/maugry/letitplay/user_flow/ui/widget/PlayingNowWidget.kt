@@ -10,18 +10,14 @@ import com.letitplay.maugry.letitplay.R
 import kotlinx.android.synthetic.main.playing_now_widget.view.*
 
 
-class PlayingNowWidget : MusicPlayer {
+class PlayingNowWidget @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : MusicPlayer(context, attrs, defStyleAttr) {
 
     var trackUrl: String? = null
     var trackListenerCount: Int? = null
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.playing_now_widget, this)
@@ -40,12 +36,12 @@ class PlayingNowWidget : MusicPlayer {
         }
     }
 
-    fun showNowPlaying() {
+    private fun showNowPlaying() {
         playing_now.visibility = View.VISIBLE
         listener_count.visibility = View.GONE
     }
 
-    fun showListenCount() {
+    private fun showListenCount() {
         listener_count.visibility = View.VISIBLE
         playing_now.visibility = View.GONE
         listener_count.text = trackListenerCount.toString()
