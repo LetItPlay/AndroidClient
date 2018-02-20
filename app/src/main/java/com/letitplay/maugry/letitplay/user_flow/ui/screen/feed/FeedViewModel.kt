@@ -18,7 +18,6 @@ class FeedViewModel(
 
     val feeds by lazy {
         feedRepository.feeds()
-                .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .toLiveData()
     }

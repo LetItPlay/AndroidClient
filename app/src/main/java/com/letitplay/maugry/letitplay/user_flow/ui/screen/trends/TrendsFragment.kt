@@ -42,8 +42,9 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     private val preferenceHelper by lazy { PreferenceHelper(context!!) }
     private var trendsRepo: MusicRepo? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        lifecycle.addObserver(vm)
         vm.trends.observe(this, Observer<Result<List<TrackWithChannel>>> { result ->
             when (result) {
                 is Result.Success -> trendsListAdapter.data = result.data

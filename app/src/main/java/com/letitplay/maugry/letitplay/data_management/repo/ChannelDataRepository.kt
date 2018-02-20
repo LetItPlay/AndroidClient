@@ -36,6 +36,7 @@ class ChannelDataRepository(
                 .map { Optional.of(it) }
                 .onErrorReturnItem(Optional.none())
                 .flatMapPublisher { db.channelDao().getAllChannels(preferenceHelper.contentLanguage!!) }
+                .subscribeOn(schedulerProvider.io())
     }
 
     override fun follow(channelData: ChannelWithFollow): Completable {
@@ -62,7 +63,9 @@ class ChannelDataRepository(
     }
 
     override fun channelsWithFollow(): Flowable<List<ChannelWithFollow>> {
-        return db.channelDao().getAllChannelsWithFollow(preferenceHelper.contentLanguage!!)
+        return db.channelDao()
+                .getAllChannelsWithFollow(preferenceHelper.contentLanguage!!)
+                .subscribeOn(schedulerProvider.io())
     }
 
     override fun loadChannels(): Completable {

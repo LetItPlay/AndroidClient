@@ -31,8 +31,8 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         )
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         vm.feeds.observe(this, Observer<PagedList<TrackWithChannel>> {
             feedListAdapter.setList(it)
         })
