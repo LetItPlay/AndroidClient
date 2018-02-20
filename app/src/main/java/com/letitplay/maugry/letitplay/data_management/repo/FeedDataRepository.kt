@@ -8,6 +8,8 @@ import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponse
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import com.letitplay.maugry.letitplay.utils.Result
+import com.letitplay.maugry.letitplay.utils.toResult
 import io.reactivex.Flowable
 
 
@@ -17,7 +19,7 @@ class FeedDataRepository(
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : FeedRepository {
-    override fun feeds(): Flowable<PagedList<TrackWithChannel>> {
+    override fun feeds(): Flowable<Result<PagedList<TrackWithChannel>>> {
         val boundaryCallback = FeedBoundaryCallback(
                 api,
                 ::insertNewData,
@@ -44,6 +46,7 @@ class FeedDataRepository(
         )
         return rxPagedListBuilder.build()
                 .subscribeOn(schedulerProvider.io())
+                .toResult(schedulerProvider)
     }
 
     private fun insertNewData(trends: FeedResponse) {

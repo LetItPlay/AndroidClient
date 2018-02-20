@@ -15,8 +15,10 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.feed_fragment.*
+import timber.log.Timber
 
 class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private val vm by lazy {
@@ -33,8 +35,15 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.feeds.observe(this, Observer<PagedList<TrackWithChannel>> {
-            feedListAdapter.setList(it)
+        vm.feeds.observe(this, Observer<Result<PagedList<TrackWithChannel>>> {
+            when (it) {
+                is Result.InProgress -> showProgress()
+                is Result.Success ->  {
+                    hideProgress()
+                    feedListAdapter.setList(it.data)
+                }
+                is Result.Failure -> Timber.d(it.e, it.errorMessage)
+            }
         })
     }
 

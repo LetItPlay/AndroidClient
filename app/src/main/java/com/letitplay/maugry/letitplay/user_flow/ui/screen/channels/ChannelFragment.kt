@@ -37,7 +37,11 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
         super.onCreate(savedInstanceState)
         vm.channels.observe(this, Observer<Result<List<ChannelWithFollow>>> { result ->
             when (result) {
-                is Result.Success -> channelsListAdapter.updateChannels(result.data)
+                is Result.Success -> {
+                    hideProgress()
+                    channelsListAdapter.updateChannels(result.data)
+                }
+                is Result.InProgress -> showProgress()
                 is Result.Failure -> Timber.e(result.e)
             }
         })

@@ -47,7 +47,12 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         lifecycle.addObserver(vm)
         vm.trends.observe(this, Observer<Result<List<TrackWithChannel>>> { result ->
             when (result) {
-                is Result.Success -> trendsListAdapter.data = result.data
+                is Result.Success ->  {
+                    hideProgress()
+                    trendsListAdapter.data = result.data
+                }
+                is Result.InProgress -> showProgress()
+                is Result.Failure -> hideProgress()
             }
         })
         vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
