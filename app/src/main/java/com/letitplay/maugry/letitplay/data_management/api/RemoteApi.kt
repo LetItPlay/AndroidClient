@@ -19,7 +19,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -69,7 +68,7 @@ interface LetItPlayApi {
     @GET("abrakadabra?")
     fun getSearch(@Query("lang") lang: String): Observable<TrendResponse>
 
-    @GET("feeds/7?")
+    @GET("trends/7?")
     fun trends(@Query("lang") lang: String): Single<TrendResponse>
 
     @GET("stations/{id}")
