@@ -18,6 +18,7 @@ class ViewModelFactory(
         private val trackRepository: TrackRepository,
         private val feedRepository: FeedRepository,
         private val profileRepository: ProfileRepository,
+        private val playerRepository: PlayerRepository,
         private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -27,6 +28,7 @@ class ViewModelFactory(
                         trendRepository,
                         channelRepository,
                         trackRepository,
+                        playerRepository,
                         schedulerProvider
                 )
             modelClass.isAssignableFrom(ChannelPageViewModel::class.java) ->
@@ -42,6 +44,8 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(FeedViewModel::class.java) ->
                 FeedViewModel(
                         feedRepository,
+                        trackRepository,
+                        playerRepository,
                         schedulerProvider
                 )
             modelClass.isAssignableFrom(ProfileViewModel::class.java) ->

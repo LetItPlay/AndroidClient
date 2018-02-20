@@ -9,14 +9,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.feed_fragment.*
 import timber.log.Timber
 
@@ -33,6 +36,10 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         )
     }
 
+    private var feedRepo: MusicRepo? = null
+    private val preferenceHelper by lazy { PreferenceHelper(context!!) }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vm.feeds.observe(this, Observer<Result<PagedList<TrackWithChannel>>> {
@@ -47,8 +54,6 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         })
     }
 
-    //    private var feedRepo: MusicRepo? = null
-//
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val feedRecycler = view.findViewById<RecyclerView>(R.id.feed_list)
@@ -83,6 +88,15 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     private fun onTrackClick(trackData: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
-        vm.onTrackClick(trackData)
+        vm.onListen(trackData.track)
+        if (feedRepo != null) {
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+            return
+        }
+        val playlist = (vm.feeds.value as Result.Success).data.map {
+            it.toAudioTrack()
+        }
+        feedRepo = MusicRepo(playlist)
+        navigationActivity.updateRepo(trackData.track.id, feedRepo)
     }
 }

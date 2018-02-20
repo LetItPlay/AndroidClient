@@ -33,7 +33,7 @@ class PreferenceHelper(context: Context) {
     fun saveListened(trackId: Int) {
         sharedPreferences
                 .edit()
-                .putBoolean(trackId.toString(), false)
+                .putBoolean(trackId.toString(), true)
                 .apply()
     }
 

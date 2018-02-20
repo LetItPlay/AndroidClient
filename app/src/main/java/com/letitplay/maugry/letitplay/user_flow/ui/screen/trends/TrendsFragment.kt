@@ -96,12 +96,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
 
     private fun playTrack(trackData: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
-
-        if (!preferenceHelper.isListened(trackData.track.id)) {
-            vm.sendListen()
-            preferenceHelper.saveListened(trackData.track.id)
-        }
-
+        vm.onListen(trackData.track)
         if (trendsRepo != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return

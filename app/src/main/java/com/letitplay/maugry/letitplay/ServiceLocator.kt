@@ -31,6 +31,7 @@ object ServiceLocator {
                 trackRepository,
                 feedRepository,
                 profileRepository,
+                playerRepository,
                 schedulerProvider
         )
     }
@@ -40,6 +41,7 @@ object ServiceLocator {
     private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, postServiceImpl, schedulerProvider) }
     private val feedRepository: FeedRepository by lazy { FeedDataRepository(db, serviceImpl, schedulerProvider, preferenceHelper) }
     private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider, preferenceHelper) }
+    private val playerRepository: PlayerRepository by lazy { PlayerDataRepository(postServiceImpl, schedulerProvider, preferenceHelper) }
 
     private val preferenceHelper: PreferenceHelper by lazy { PreferenceHelper(applicationContext) }
 
