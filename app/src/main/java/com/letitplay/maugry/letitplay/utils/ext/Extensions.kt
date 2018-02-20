@@ -8,6 +8,8 @@ fun String.splitTags(): List<String> =
                 .map(String::trim)
                 .filter(String::isNotEmpty)
 
+fun List<Int>.joinWithComma() = this.joinToString(",")
+
 fun TrackWithChannel.toAudioTrack(): AudioTrack {
     return AudioTrack(
             id = track.id,

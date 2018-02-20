@@ -4,7 +4,6 @@ import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
-import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Completable
@@ -20,11 +19,14 @@ class TrendDataRepository(
 ) : TrendRepository {
 
     override fun trends(): Flowable<List<TrackWithChannel>> {
-        return db.trackWithChannelDao().getAllTracksSortedByDate(preferenceHelper.contentLanguage!!)
+        return db.trackWithChannelDao()
+                .getAllTracksSortedByDate(preferenceHelper.contentLanguage!!)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
     }
 
     override fun loadTrends(): Completable {
-        return api.trends(if (preferenceHelper.contentLanguage == Language.EN) "en" else "ru" )
+        return api.trends(preferenceHelper.contentLanguage!!.strValue)
                 .doOnSuccess { resp ->
                     if (resp.channels == null || resp.tracks == null)
                         return@doOnSuccess
