@@ -3,17 +3,17 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 
 
 class ChannelPageViewModel(
-        private val channelRepository: ChannelRepository
+        private val channelRepository: ChannelRepository,
+        private val schedulerProvider: SchedulerProvider
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
@@ -35,8 +35,8 @@ class ChannelPageViewModel(
     fun onFollowClick() {
         channelWithFollow.value?.let {
             channelRepository.follow(it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(schedulerProvider.io())
+                    .observeOn(schedulerProvider.ui())
                     .subscribe()
                     .addTo(compositeDisposable)
         }

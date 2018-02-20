@@ -11,6 +11,7 @@ import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.toResult
 import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
 
 
 class FeedDataRepository(
@@ -19,6 +20,8 @@ class FeedDataRepository(
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : FeedRepository {
+    private val requestDisposable = CompositeDisposable()
+
     override fun feeds(): Flowable<Result<PagedList<TrackWithChannel>>> {
         val boundaryCallback = FeedBoundaryCallback(
                 api,
@@ -26,7 +29,8 @@ class FeedDataRepository(
                 schedulerProvider.ioExecutor(),
                 db,
                 schedulerProvider,
-                preferenceHelper
+                preferenceHelper,
+                requestDisposable
         )
         val dataSourceFactory = db.trackWithChannelDao()
                 .getAllTracksWithFollowedChannelsSortedByDate(preferenceHelper.contentLanguage!!)
@@ -47,6 +51,9 @@ class FeedDataRepository(
         return rxPagedListBuilder.build()
                 .subscribeOn(schedulerProvider.io())
                 .toResult(schedulerProvider)
+                .doFinally {
+                    requestDisposable.dispose()
+                }
     }
 
     private fun insertNewData(trends: FeedResponse) {

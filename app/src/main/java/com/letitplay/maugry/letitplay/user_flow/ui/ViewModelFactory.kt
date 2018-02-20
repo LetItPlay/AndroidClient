@@ -22,17 +22,34 @@ class ViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(TrendViewModel::class.java)
-            -> TrendViewModel(trendRepository, channelRepository, trackRepository, schedulerProvider) as T
-            modelClass.isAssignableFrom(ChannelPageViewModel::class.java)
-            -> ChannelPageViewModel(channelRepository) as T
-            modelClass.isAssignableFrom(ChannelViewModel::class.java)
-            -> ChannelViewModel(channelRepository, schedulerProvider) as T
-            modelClass.isAssignableFrom(FeedViewModel::class.java)
-            -> FeedViewModel(feedRepository, schedulerProvider) as T
-            modelClass.isAssignableFrom(ProfileViewModel::class.java)
-            -> ProfileViewModel(profileRepository, schedulerProvider) as T
+            modelClass.isAssignableFrom(TrendViewModel::class.java) ->
+                TrendViewModel(
+                        trendRepository,
+                        channelRepository,
+                        trackRepository,
+                        schedulerProvider
+                )
+            modelClass.isAssignableFrom(ChannelPageViewModel::class.java) ->
+                ChannelPageViewModel(
+                        channelRepository,
+                        schedulerProvider
+                )
+            modelClass.isAssignableFrom(ChannelViewModel::class.java) ->
+                ChannelViewModel(
+                        channelRepository,
+                        schedulerProvider
+                )
+            modelClass.isAssignableFrom(FeedViewModel::class.java) ->
+                FeedViewModel(
+                        feedRepository,
+                        schedulerProvider
+                )
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) ->
+                ProfileViewModel(
+                        profileRepository,
+                        schedulerProvider
+                )
             else -> throw IllegalArgumentException("Unknown type of view model")
-        }
+        } as T
     }
 }

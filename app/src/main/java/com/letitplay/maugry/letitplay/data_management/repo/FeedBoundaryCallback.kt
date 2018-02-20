@@ -10,6 +10,8 @@ import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.Executor
 
 
@@ -19,10 +21,11 @@ class FeedBoundaryCallback(
         private val ioExecutor: Executor,
         private val db: LetItPlayDb,
         private val schedulerProvider: SchedulerProvider,
-        private val preferenceHelper: PreferenceHelper
+        private val preferenceHelper: PreferenceHelper,
+        private val disposableContainer: CompositeDisposable
 ) : PagedList.BoundaryCallback<TrackWithChannel>() {
 
-    val helper = PagingRequestHelper(ioExecutor)
+    private val helper = PagingRequestHelper(ioExecutor)
 
     private fun insertItemsIntoDb(feedResponse: FeedResponse) {
         ioExecutor.execute {
@@ -37,9 +40,8 @@ class FeedBoundaryCallback(
                     .map(List<Int>::joinWithComma)
                     .flatMap { api.getFeed(it, 100, preferenceHelper.contentLanguage!!.strValue).toFlowable() }
                     .subscribeOn(schedulerProvider.io())
-                    .blockingSubscribe({
-                        insertItemsIntoDb(it)
-                    })
+                    .subscribe(this::insertItemsIntoDb)
+                    .addTo(disposableContainer)
         }
     }
 
@@ -52,4 +54,6 @@ class FeedBoundaryCallback(
 //            api.feeds("ru").subscribe({ insertItemsIntoDb(it) }, {})
 //        }
     }
+
+
 }
