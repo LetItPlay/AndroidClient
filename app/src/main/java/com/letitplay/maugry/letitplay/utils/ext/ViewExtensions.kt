@@ -85,9 +85,10 @@ fun ImageView.loadImage(url: String?, context: Context? = null) {
     if (url != null) {
         Glide.with(context ?: this.context)
                 .load(url)
+                .apply(RequestOptions.centerCropTransform())
                 .into(this)
     } else {
-        Glide.with(context)
+        Glide.with(context ?: this.context)
                 .clear(this)
     }
 }
@@ -99,7 +100,7 @@ fun ImageView.loadCircularImage(url: String?, context: Context? = null) {
                 .apply(RequestOptions.circleCropTransform())
                 .into(this)
     } else {
-        Glide.with(context)
+        Glide.with(context ?: this.context)
                 .clear(this)
     }
 }
