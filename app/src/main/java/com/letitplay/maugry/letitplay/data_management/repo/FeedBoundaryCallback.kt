@@ -22,7 +22,8 @@ class FeedBoundaryCallback(
         private val db: LetItPlayDb,
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper,
-        private val disposableContainer: CompositeDisposable
+        private val disposableContainer: CompositeDisposable,
+        private val networkPageSize: Int
 ) : PagedList.BoundaryCallback<TrackWithChannel>() {
 
     private val helper = PagingRequestHelper(ioExecutor)
@@ -38,7 +39,7 @@ class FeedBoundaryCallback(
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
             db.channelDao().getFollowedChannelsId()
                     .map(List<Int>::joinWithComma)
-                    .flatMap { api.getFeed(it, 100, preferenceHelper.contentLanguage!!.strValue).toFlowable() }
+                    .flatMap { api.getFeed(it, networkPageSize, preferenceHelper.contentLanguage!!.strValue).toFlowable() }
                     .subscribeOn(schedulerProvider.io())
                     .subscribe(this::insertItemsIntoDb)
                     .addTo(disposableContainer)

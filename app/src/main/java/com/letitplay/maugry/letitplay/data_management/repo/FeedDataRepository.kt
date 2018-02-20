@@ -18,8 +18,10 @@ class FeedDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val schedulerProvider: SchedulerProvider,
-        private val preferenceHelper: PreferenceHelper
+        private val preferenceHelper: PreferenceHelper,
+        private val networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE
 ) : FeedRepository {
+
     private val requestDisposable = CompositeDisposable()
 
     override fun feeds(): Flowable<Result<PagedList<TrackWithChannel>>> {
@@ -30,7 +32,8 @@ class FeedDataRepository(
                 db,
                 schedulerProvider,
                 preferenceHelper,
-                requestDisposable
+                requestDisposable,
+                networkPageSize
         )
         val dataSourceFactory = db.trackWithChannelDao()
                 .getAllTracksWithFollowedChannelsSortedByDate(preferenceHelper.contentLanguage!!)
@@ -63,5 +66,9 @@ class FeedDataRepository(
                 db.trackDao().insertTracks(trends.tracks)
             }
         }
+    }
+
+    companion object {
+        private const val DEFAULT_NETWORK_PAGE_SIZE = 10
     }
 }
