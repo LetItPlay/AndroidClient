@@ -63,7 +63,7 @@ interface LetItPlayApi {
     fun getTracks(): Observable<List<Track>>
 
     @GET("feed?")
-    fun getFeed(@Query("stIds") stIds: String, @Query("limit") limit: Int, @Query("lang") lang: String): Single<FeedResponse>
+    fun getFeed(@Query("stIds") stIds: String, @Query("offset") offset: Int, @Query("limit") limit: Int, @Query("lang") lang: String): Single<FeedResponse>
 
     @GET("abrakadabra?")
     fun getSearch(@Query("lang") lang: String): Observable<TrendResponse>

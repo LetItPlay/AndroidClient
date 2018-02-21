@@ -11,8 +11,6 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.FeedRepository
 import com.letitplay.maugry.letitplay.data_management.repo.PlayerRepository
 import com.letitplay.maugry.letitplay.data_management.repo.TrackRepository
-import com.letitplay.maugry.letitplay.utils.Result
-import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
@@ -29,12 +27,8 @@ class FeedViewModel(
 
     val isLoading = MutableLiveData<Boolean>()
 
-    val feeds: LiveData<Result<PagedList<TrackWithChannel>>> by lazy {
+    val feeds: LiveData<PagedList<TrackWithChannel>> by lazy {
         feedRepository.feeds()
-                .observeOn(schedulerProvider.ui())
-                .doOnSubscribe { isLoading.postValue(true) }
-                .doOnEach { isLoading.postValue(false) }
-                .toLiveData()
     }
 
     fun onLikeClick(trackData: TrackWithChannel) {

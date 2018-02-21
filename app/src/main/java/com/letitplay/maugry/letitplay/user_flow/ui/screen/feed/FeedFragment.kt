@@ -16,11 +16,11 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
+import com.letitplay.maugry.letitplay.utils.ext.hide
+import com.letitplay.maugry.letitplay.utils.ext.show
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.feed_fragment.*
-import timber.log.Timber
 
 class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private val vm by lazy {
@@ -39,13 +39,17 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.feeds.observe(this, Observer<Result<PagedList<TrackWithChannel>>> {
-            when (it) {
-                is Result.Success -> feedListAdapter.setList(it.data)
-                is Result.Failure -> Timber.d(it.e, it.errorMessage)
+        vm.feeds.observe(this, Observer<PagedList<TrackWithChannel>> {
+            when (it?.size) {
+                0 -> feed_no_tracks.show()
+                else -> {
+                    feed_no_tracks.hide()
+                    feedListAdapter.setList(it)
+                }
             }
         })
-        vm.isLoading.observe(this, Observer<Boolean> {
+        vm.isLoading.observe(this, Observer<Boolean>
+        {
             when (it) {
                 true -> showProgress()
                 else -> hideProgress()
@@ -92,7 +96,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = (vm.feeds.value as Result.Success).data.map {
+        val playlist = (vm.feeds.value)!!.map {
             it.toAudioTrack()
         }
         feedRepo = MusicRepo(playlist)

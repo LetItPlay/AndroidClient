@@ -39,7 +39,7 @@ class FeedBoundaryCallback(
         helper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
             db.channelDao().getFollowedChannelsId()
                     .map(List<Int>::joinWithComma)
-                    .flatMap { api.getFeed(it, networkPageSize, preferenceHelper.contentLanguage!!.strValue).toFlowable() }
+                    .flatMap { api.getFeed(it, 0, networkPageSize, preferenceHelper.contentLanguage!!.strValue).toFlowable() }
                     .subscribeOn(schedulerProvider.io())
                     .subscribe(this::insertItemsIntoDb)
                     .addTo(disposableContainer)
