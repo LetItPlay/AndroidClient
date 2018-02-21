@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
@@ -13,7 +12,7 @@ import kotlinx.android.synthetic.main.track_item.view.*
 
 class TrackAdapter(
         private val musicService: MusicService? = null,
-        private val onClickItem: ((Int) -> Unit)
+        private val onClickItem: ((AudioTrack) -> Unit)
 ) : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
     var data: List<AudioTrack> = ArrayList()
@@ -29,19 +28,25 @@ class TrackAdapter(
     override fun getItemCount(): Int = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackItemHolder {
-        return TrackItemHolder(parent).apply {
+        return TrackItemHolder(parent, onClickItem, musicService)
+    }
+
+    class TrackItemHolder(
+            parent: ViewGroup?,
+            onClick: (AudioTrack) -> Unit,
+            musicService: MusicService?
+    ) : BaseViewHolder(parent, R.layout.track_item) {
+        private lateinit var track: AudioTrack
+
+        init {
             itemView.setOnClickListener {
-                if (adapterPosition != NO_POSITION) {
-                    onClickItem(data[adapterPosition].id)
-                }
+                onClick(track)
             }
             itemView.track_playing_now.mediaSession = musicService?.mediaSession
         }
-    }
-
-    class TrackItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.track_item) {
 
         fun update(track: AudioTrack) {
+            this.track = track
             itemView.apply {
                 track_last_seen.text = DateHelper.getLongPastDate(track.publishedAt, context)
                 channel_name.text = track.channelTitle

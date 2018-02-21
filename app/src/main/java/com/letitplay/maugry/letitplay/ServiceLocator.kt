@@ -18,6 +18,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerDataRepo
 import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
 import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileDataRepository
 import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileRepository
+import com.letitplay.maugry.letitplay.data_management.repo.search.SearchDataRepository
+import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackDataRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendDataRepository
@@ -46,6 +48,7 @@ object ServiceLocator {
                 profileRepository,
                 playerRepository,
                 compilationRepository,
+                searchRepository,
                 schedulerProvider
         )
     }
@@ -57,7 +60,7 @@ object ServiceLocator {
     private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider, preferenceHelper) }
     private val playerRepository: PlayerRepository by lazy { PlayerDataRepository(postServiceImpl, schedulerProvider, preferenceHelper) }
     private val compilationRepository: CompilationRepository by lazy { CompilationNetworkRepository(serviceImpl, preferenceHelper, schedulerProvider) }
-
+    private val searchRepository : SearchRepository by lazy { SearchDataRepository(serviceImpl, postServiceImpl, db, schedulerProvider, preferenceHelper) }
     private val preferenceHelper: PreferenceHelper by lazy { PreferenceHelper(applicationContext) }
 
     val db: LetItPlayDb by lazy {

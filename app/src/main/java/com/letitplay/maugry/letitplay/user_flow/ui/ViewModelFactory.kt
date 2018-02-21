@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.compilation.Compilati
 import com.letitplay.maugry.letitplay.data_management.repo.feed.FeedRepository
 import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
 import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileRepository
+import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
@@ -15,6 +16,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewMo
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendViewModel
 
 
@@ -27,6 +29,7 @@ class ViewModelFactory(
         private val profileRepository: ProfileRepository,
         private val playerRepository: PlayerRepository,
         private val compilationRepository: CompilationRepository,
+        private val searchRepository: SearchRepository,
         private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -63,6 +66,11 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(CompilationViewModel::class.java) ->
                 CompilationViewModel(
                         compilationRepository
+                )
+            modelClass.isAssignableFrom(SearchViewModel::class.java) ->
+                SearchViewModel(
+                        searchRepository,
+                        channelRepository
                 )
             else -> throw IllegalArgumentException("Unknown type of view model")
         } as T

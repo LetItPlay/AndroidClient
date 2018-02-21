@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
@@ -39,9 +40,9 @@ class TrackFragment : BaseFragment(R.layout.track_fragment), MusicService.RepoCh
         header.attachTo(tracks_list)
     }
 
-    private fun playTrack(trackId: Int) {
+    private fun playTrack(track: AudioTrack) {
         if (musicService?.musicRepo != null) {
-            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackId)
+            navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
     }
