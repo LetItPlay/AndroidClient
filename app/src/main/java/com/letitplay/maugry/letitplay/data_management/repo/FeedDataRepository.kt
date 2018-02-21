@@ -1,8 +1,9 @@
 package com.letitplay.maugry.letitplay.data_management.repo
 
-import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
+import android.support.annotation.MainThread
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
@@ -19,17 +20,35 @@ class FeedDataRepository(
         private val prefetchDistance: Int = DEFAULT_PREFETCH_DISTANCE
 ) : FeedRepository {
 
-    override fun feeds(): LiveData<PagedList<TrackWithChannel>> {
+    @MainThread
+    override fun feeds(): Listing<TrackWithChannel> {
         val pagedListConfig = PagedList.Config.Builder()
                 .setPageSize(networkPageSize)
                 .setPrefetchDistance(prefetchDistance)
                 .setEnablePlaceholders(false)
                 .build()
-        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper)
+        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper, schedulerProvider)
 
-        return LivePagedListBuilder(dataSourceFactory, pagedListConfig)
+        val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
                 .setBackgroundThreadExecutor(schedulerProvider.ioExecutor())
                 .build()
+
+        val refreshState = Transformations.switchMap(dataSourceFactory.sourceLiveData, {
+            it.initialLoad
+        })
+        return Listing(
+                pagedList = livePagedList,
+                networkState = Transformations.switchMap(dataSourceFactory.sourceLiveData, {
+                    it.networkState
+                }),
+                retry = {
+                    dataSourceFactory.sourceLiveData.value?.retryAllFailed()
+                },
+                refresh = {
+                    dataSourceFactory.sourceLiveData.value?.invalidate()
+                },
+                refreshState = refreshState
+        )
     }
 
     companion object {

@@ -81,4 +81,5 @@
     <string name="add_up_the_playlist">Add up the playlist</string>
 
     <string name="all">все</string>
+    <string name="no_internet_connection">Нет интернет соединения</string>
 </resources>

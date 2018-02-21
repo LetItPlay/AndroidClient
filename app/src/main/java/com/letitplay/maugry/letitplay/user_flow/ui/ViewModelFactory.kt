@@ -45,8 +45,7 @@ class ViewModelFactory(
                 FeedViewModel(
                         feedRepository,
                         trackRepository,
-                        playerRepository,
-                        schedulerProvider
+                        playerRepository
                 )
             modelClass.isAssignableFrom(ProfileViewModel::class.java) ->
                 ProfileViewModel(

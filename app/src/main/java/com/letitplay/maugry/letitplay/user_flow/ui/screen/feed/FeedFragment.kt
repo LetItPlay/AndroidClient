@@ -48,13 +48,6 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                 }
             }
         })
-        vm.isLoading.observe(this, Observer<Boolean>
-        {
-            when (it) {
-                true -> showProgress()
-                else -> hideProgress()
-            }
-        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

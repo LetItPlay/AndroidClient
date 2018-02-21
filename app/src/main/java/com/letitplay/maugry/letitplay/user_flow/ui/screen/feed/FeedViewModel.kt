@@ -1,11 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.arch.paging.PagedList
-import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.FeedRepository
@@ -18,18 +14,14 @@ import io.reactivex.rxkotlin.addTo
 class FeedViewModel(
         private val feedRepository: FeedRepository,
         private val trackRepository: TrackRepository,
-        private val playerRepository: PlayerRepository,
-        private val schedulerProvider: SchedulerProvider
+        private val playerRepository: PlayerRepository
 ) : ViewModel(), LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
     private var inLike: Boolean = false
+    private val repoResult by lazy { feedRepository.feeds() }
 
-    val isLoading = MutableLiveData<Boolean>()
-
-    val feeds: LiveData<PagedList<TrackWithChannel>> by lazy {
-        feedRepository.feeds()
-    }
+    val feeds by lazy { repoResult.pagedList }
 
     fun onLikeClick(trackData: TrackWithChannel) {
         if (!inLike) {
@@ -42,7 +34,7 @@ class FeedViewModel(
     }
 
     fun refreshFeed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        repoResult.refresh()
     }
 
     fun onListen(track: Track) {

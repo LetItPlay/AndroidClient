@@ -50,16 +50,38 @@
             android:id="@+id/go_to_channels"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/following_bg"
             android:paddingBottom="8dp"
-            android:paddingTop="8dp"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
-            android:layout_marginTop="50dp"
+            android:paddingTop="8dp"
             android:text="@string/feed_go_to_channels"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
-            android:background="@drawable/following_bg"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/feed_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_internet_connection"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
