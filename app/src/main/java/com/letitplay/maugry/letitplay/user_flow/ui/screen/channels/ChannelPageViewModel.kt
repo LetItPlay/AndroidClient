@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
-import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
+import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 

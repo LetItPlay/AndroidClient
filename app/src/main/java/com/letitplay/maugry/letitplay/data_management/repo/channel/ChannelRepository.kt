@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.data_management.repo
+package com.letitplay.maugry.letitplay.data_management.repo.channel
 
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow

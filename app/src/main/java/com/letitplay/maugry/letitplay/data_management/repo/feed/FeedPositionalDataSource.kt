@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.data_management.repo
+package com.letitplay.maugry.letitplay.data_management.repo.feed
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PositionalDataSource
@@ -6,6 +6,7 @@ import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Maybe

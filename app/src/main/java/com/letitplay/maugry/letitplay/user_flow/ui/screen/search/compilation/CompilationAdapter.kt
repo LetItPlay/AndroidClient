@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation
 
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION

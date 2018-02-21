@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.data_management.repo
+package com.letitplay.maugry.letitplay.data_management.repo.feed
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.DataSource

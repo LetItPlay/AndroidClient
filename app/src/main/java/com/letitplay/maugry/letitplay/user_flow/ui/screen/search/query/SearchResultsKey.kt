@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query
 
 import android.annotation.SuppressLint
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment

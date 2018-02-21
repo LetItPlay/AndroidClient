@@ -1,7 +1,7 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation
 
 import android.arch.lifecycle.ViewModel
-import com.letitplay.maugry.letitplay.data_management.repo.CompilationRepository
+import com.letitplay.maugry.letitplay.data_management.repo.compilation.CompilationRepository
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 
 

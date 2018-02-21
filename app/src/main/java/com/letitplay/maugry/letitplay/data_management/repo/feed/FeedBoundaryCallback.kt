@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.data_management.repo
+package com.letitplay.maugry.letitplay.data_management.repo.feed
 
 import android.arch.paging.PagedList
 import android.arch.paging.PagingRequestHelper

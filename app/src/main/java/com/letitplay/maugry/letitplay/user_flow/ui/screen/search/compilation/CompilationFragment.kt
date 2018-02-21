@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,6 +12,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.CompilationModel
 import com.letitplay.maugry.letitplay.data_management.model.toTrackWithChannels
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.utils.ext.show
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.compilation_fragment.*

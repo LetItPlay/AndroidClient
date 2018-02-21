@@ -5,10 +5,10 @@ import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.repo.ChannelRepository
-import com.letitplay.maugry.letitplay.data_management.repo.PlayerRepository
-import com.letitplay.maugry.letitplay.data_management.repo.TrackRepository
-import com.letitplay.maugry.letitplay.data_management.repo.TrendRepository
+import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
+import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
+import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
+import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import com.letitplay.maugry.letitplay.utils.toResult

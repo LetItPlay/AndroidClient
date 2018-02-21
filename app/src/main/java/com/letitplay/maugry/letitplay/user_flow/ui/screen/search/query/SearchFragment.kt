@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -16,7 +16,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 
 class SearchFragment : BaseFragment(R.layout.search_fragment) {
 
-//    private lateinit var resultsAdapter: SearchResultsAdapter
+    private lateinit var resultsAdapter: SearchResultsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

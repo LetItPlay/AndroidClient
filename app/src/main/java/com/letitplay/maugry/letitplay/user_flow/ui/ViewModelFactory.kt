@@ -3,12 +3,18 @@ package com.letitplay.maugry.letitplay.user_flow.ui
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.letitplay.maugry.letitplay.SchedulerProvider
-import com.letitplay.maugry.letitplay.data_management.repo.*
+import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
+import com.letitplay.maugry.letitplay.data_management.repo.compilation.CompilationRepository
+import com.letitplay.maugry.letitplay.data_management.repo.feed.FeedRepository
+import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
+import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileRepository
+import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
+import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileViewModel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.CompilationViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendViewModel
 
 

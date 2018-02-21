@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.data_management.repo
+package com.letitplay.maugry.letitplay.data_management.repo.feed
 
 import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.Listing
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 
 

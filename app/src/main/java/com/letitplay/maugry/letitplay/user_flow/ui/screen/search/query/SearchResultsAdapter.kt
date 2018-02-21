@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query
 
 //typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
 //typealias TrackVH = TrackAdapter.TrackItemHolder

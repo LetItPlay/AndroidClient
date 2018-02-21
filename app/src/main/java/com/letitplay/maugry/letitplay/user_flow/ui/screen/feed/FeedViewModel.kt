@@ -4,9 +4,9 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.ViewModel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.repo.FeedRepository
-import com.letitplay.maugry.letitplay.data_management.repo.PlayerRepository
-import com.letitplay.maugry.letitplay.data_management.repo.TrackRepository
+import com.letitplay.maugry.letitplay.data_management.repo.feed.FeedRepository
+import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
+import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 

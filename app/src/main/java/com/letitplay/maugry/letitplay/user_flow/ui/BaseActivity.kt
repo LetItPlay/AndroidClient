@@ -15,7 +15,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.CompilationKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
