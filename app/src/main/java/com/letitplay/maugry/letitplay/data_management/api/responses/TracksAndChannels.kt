@@ -5,7 +5,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 
 
-data class FeedResponse(
+data class TracksAndChannels(
         @SerializedName("Tracks")
         val tracks: List<Track>? = null,
         @SerializedName("Stations")

@@ -2,14 +2,14 @@ package com.letitplay.maugry.letitplay.data_management.api
 
 
 import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.letitplay.maugry.letitplay.BuildConfig
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_POST_REQUEST_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
-import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponse
-import com.letitplay.maugry.letitplay.data_management.api.responses.TrendResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.TracksAndChannels
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChannelResponse
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
@@ -63,13 +63,18 @@ interface LetItPlayApi {
     fun getTracks(): Observable<List<Track>>
 
     @GET("feed?")
-    fun getFeed(@Query("stIds") stIds: String, @Query("offset") offset: Int, @Query("limit") limit: Int, @Query("lang") lang: String): Single<FeedResponse>
+    fun getFeed(
+            @Query("stIds") stIds: String,
+            @Query("offset") offset: Int,
+            @Query("limit") limit: Int,
+            @Query("lang") lang: String
+    ): Single<TracksAndChannels>
 
     @GET("abrakadabra?")
-    fun getSearch(@Query("lang") lang: String): Observable<TrendResponse>
+    fun getCompilation(@Query("lang") lang: String): Single<TracksAndChannels>
 
     @GET("trends/7?")
-    fun trends(@Query("lang") lang: String): Single<TrendResponse>
+    fun trends(@Query("lang") lang: String): Single<TracksAndChannels>
 
     @GET("stations/{id}")
     fun getChannelPiece(@Path("id") channelId: Int): Maybe<Channel>

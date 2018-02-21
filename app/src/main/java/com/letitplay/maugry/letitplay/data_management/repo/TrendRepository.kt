@@ -8,5 +8,4 @@ import io.reactivex.Flowable
 interface TrendRepository {
     fun trends(): Flowable<List<TrackWithChannel>>
     fun loadTrends(): Completable
-    fun sendListen(): Completable
 }

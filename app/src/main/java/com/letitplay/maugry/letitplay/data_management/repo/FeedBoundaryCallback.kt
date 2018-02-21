@@ -5,7 +5,7 @@ import android.arch.paging.PagingRequestHelper
 import android.support.annotation.MainThread
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
-import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.TracksAndChannels
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
@@ -14,6 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import java.util.concurrent.Executor
 
+typealias FeedResponse = TracksAndChannels
 
 class FeedBoundaryCallback(
         private val api: LetItPlayApi,
@@ -51,10 +52,5 @@ class FeedBoundaryCallback(
 
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: TrackWithChannel) {
-//        helper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER) {
-//            api.feeds("ru").subscribe({ insertItemsIntoDb(it) }, {})
-//        }
     }
-
-
 }
