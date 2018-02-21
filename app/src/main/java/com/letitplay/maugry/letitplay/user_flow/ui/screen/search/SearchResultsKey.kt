@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 class SearchResultsKey : BaseKey() {
     override fun isRootFragment() = false
 
-    override fun menuType(): MenuType = MenuType.PROFILE
+    override fun menuType(): MenuType = MenuType.COMPILATION
 
     override fun createFragment(): BaseFragment {
         return SearchFragment()

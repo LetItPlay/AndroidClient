@@ -5,6 +5,7 @@ import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChann
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.ext.splitTags
 
 fun toChannelModel(updatedChannelResponse: UpdatedChannelResponse): Channel {
@@ -33,6 +34,13 @@ fun toTrackModel(updatedTrackResponse: UpdatedTrackResponse): Track {
             listenCount = updatedTrackResponse.listenCount,
             publishedAt = updatedTrackResponse.publishedAt
     )
+}
+
+fun toTrackWithChannels(tracks: List<Track>, channel: List<Channel>): List<TrackWithChannel> {
+    val channelHashMap = channel.associateBy(Channel::id)
+    return tracks.map {
+        TrackWithChannel(it, channelHashMap[it.stationId]!!, null)
+    }
 }
 
 fun String.fixMediaPrefix(): String =

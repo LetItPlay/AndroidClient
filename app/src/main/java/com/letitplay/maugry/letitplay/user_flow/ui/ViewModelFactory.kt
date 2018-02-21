@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageVi
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.CompilationViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendViewModel
 
 
@@ -19,6 +20,7 @@ class ViewModelFactory(
         private val feedRepository: FeedRepository,
         private val profileRepository: ProfileRepository,
         private val playerRepository: PlayerRepository,
+        private val compilationRepository: CompilationRepository,
         private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -51,6 +53,10 @@ class ViewModelFactory(
                 ProfileViewModel(
                         profileRepository,
                         schedulerProvider
+                )
+            modelClass.isAssignableFrom(CompilationViewModel::class.java) ->
+                CompilationViewModel(
+                        compilationRepository
                 )
             else -> throw IllegalArgumentException("Unknown type of view model")
         } as T

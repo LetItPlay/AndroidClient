@@ -9,12 +9,12 @@ import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class PlaylistKey : BaseKey() {
+class CompilationKey : BaseKey() {
 
     override fun isRootFragment(): Boolean = true
 
-    override fun menuType(): MenuType = MenuType.PROFILE
+    override fun menuType(): MenuType = MenuType.COMPILATION
 
-    override fun createFragment(): BaseFragment = PlaylistFragment()
+    override fun createFragment(): BaseFragment = CompilationFragment()
 
 }

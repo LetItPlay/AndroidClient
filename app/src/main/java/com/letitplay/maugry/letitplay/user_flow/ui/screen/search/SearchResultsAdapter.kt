@@ -72,7 +72,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
 //
 //        fun update(channelItem: ExtendChannelModel) {
 //            itemView.apply {
-//                channel_name.text = channelItem.channel!!.name
+//                channel_name.text = channelItem.channel!!.title
 //                channel_follow.data = channelItem.following
 //                channel_followers_count.text = channelItem.channel!!.subscriptionCount.toString()
 //                channel_small_logo.loadImage(channelItem.channel!!.imageUrl)

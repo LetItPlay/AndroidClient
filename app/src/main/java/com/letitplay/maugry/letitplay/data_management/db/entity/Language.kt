@@ -6,5 +6,5 @@ enum class Language(val strValue: String) {
     @SerializedName("ru")
     RU("ru"),
     @SerializedName("en")
-    EN("strValue")
+    EN("en")
 }

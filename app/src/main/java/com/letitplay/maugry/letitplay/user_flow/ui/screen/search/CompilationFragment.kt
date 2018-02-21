@@ -1,0 +1,71 @@
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.search
+
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.support.v7.widget.RecyclerView
+import android.view.*
+import com.gsfoxpro.musicservice.MusicRepo
+import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.model.CompilationModel
+import com.letitplay.maugry.letitplay.data_management.model.toTrackWithChannels
+import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.utils.ext.show
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
+import kotlinx.android.synthetic.main.compilation_fragment.*
+import timber.log.Timber
+
+
+class CompilationFragment : BaseFragment(R.layout.compilation_fragment) {
+
+    private val compilationAdapter: CompilationAdapter by lazy {
+        CompilationAdapter(::onCompilationClick)
+    }
+
+    private val vm by lazy {
+        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+                .get(CompilationViewModel::class.java)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        vm.compilations.observe(this, Observer<List<CompilationModel>> {
+            when (it?.isEmpty()) {
+                true -> compilation_no_recommendations.show()
+                else -> compilationAdapter.data = it!!
+            }
+        })
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val recycler = view.findViewById<RecyclerView>(R.id.compilation_list)
+        recycler.adapter = compilationAdapter
+        return view
+    }
+
+    private fun onCompilationClick(compilation: CompilationModel) {
+        val audioTracks = toTrackWithChannels(compilation.tracks, compilation.channels)
+                .map(TrackWithChannel::toAudioTrack)
+        navigationActivity.updateRepo(compilation.tracks.first().id, MusicRepo(audioTracks))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu_item, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_search) {
+            Timber.d("Navigate to results page")
+            navigationActivity.navigateTo(SearchResultsKey())
+        }
+        return super.onOptionsItemSelected(item)
+    }
+}

@@ -4,16 +4,16 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.PlaylistModel
+import com.letitplay.maugry.letitplay.data_management.model.CompilationModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import kotlinx.android.synthetic.main.playlist_item.view.*
 
 
-class PlaylistAdapter(
-        private val onClick: ((PlaylistModel) -> Unit)
-) : RecyclerView.Adapter<PlaylistAdapter.PlaylistItemHolder>() {
+class CompilationAdapter(
+        private val onClick: ((CompilationModel) -> Unit)
+) : RecyclerView.Adapter<CompilationAdapter.PlaylistItemHolder>() {
 
-    var data: List<PlaylistModel> = ArrayList()
+    var data: List<CompilationModel> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -36,9 +36,9 @@ class PlaylistAdapter(
     }
 
     class PlaylistItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.playlist_item) {
-        fun update(playList: PlaylistModel) {
+        fun update(playList: CompilationModel) {
             itemView.apply {
-                playlist_title.text = playList.name
+                playlist_title.text = playList.title
                 playlist_description.text = playList.description
             }
         }
