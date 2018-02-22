@@ -16,7 +16,8 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import com.letitplay.maugry.letitplay.utils.Optional
+import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 
@@ -33,14 +34,9 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
     private var profileRepo: MusicRepo? = null
 
-    private val prefHelper: PreferenceHelper?
-        get() = context?.let { PreferenceHelper(it) }
-
-    private val currentContentLanguage: Language?
-        get() = prefHelper?.contentLanguage
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        lifecycle.addObserver(vm)
         vm.likedTracks.observe(this, Observer<List<TrackWithChannel>> {
 
             profile_track_count.text = it?.count()?.toString() ?: "0"
@@ -48,6 +44,14 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
             it?.let {
                 likedTracksListAdapter.data = it
+            }
+        })
+        val switchToRu = getString(R.string.profile_change_language_to_ru)
+        val switchToEn = getString(R.string.profile_change_language_to_en)
+        vm.language.observe(this, Observer<Optional<Language>> {
+            val lang = it?.value
+            lang?.let {
+                change_content_language_text.text = if (it == Language.EN) switchToRu else switchToEn
             }
         })
     }
@@ -65,14 +69,8 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         super.onViewCreated(view, savedInstanceState)
         profile_header.attachTo(profile_list)
 
-        val switchToRu = getString(R.string.profile_change_language_to_ru)
-        val switchToEn = getString(R.string.profile_change_language_to_en)
-
-        change_content_language_text.text = if (currentContentLanguage == Language.EN) switchToRu else switchToEn
-
         change_content_language.setOnClickListener {
-            prefHelper?.contentLanguage = if (currentContentLanguage == Language.EN) Language.RU else Language.EN
-            change_content_language_text.text = if (currentContentLanguage == Language.EN) switchToRu else switchToEn
+            vm.flipLanguage()
         }
     }
 
@@ -81,9 +79,9 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
-//        presenter?.playlist?.let {
-//            profileRepo = MusicRepo(it)
-//        }
+        vm.likedTracks.value?.let {
+            profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack))
+        }
         navigationActivity.updateRepo(track.id, profileRepo)
     }
 }
