@@ -14,6 +14,17 @@ class FeedDataSourceFactory(
         private val preferenceHelper: PreferenceHelper,
         private val schedulerProvider: SchedulerProvider
 ): DataSource.Factory<Int, TrackWithChannel> {
+    init {
+        db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
+                .skip(1)
+                .distinctUntilChanged()
+                .doOnNext {
+                    sourceLiveData.value?.invalidate()
+                }
+                .subscribeOn(schedulerProvider.io())
+                .subscribe()
+    }
+
     val sourceLiveData = MutableLiveData<FeedPositionalDataSource>()
 
     override fun create(): DataSource<Int, TrackWithChannel> {
