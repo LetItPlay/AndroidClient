@@ -17,9 +17,6 @@ abstract class ChannelDao {
     @Query("SELECT * FROM channels WHERE channels.channel_id = :channelId")
     abstract fun getChannel(channelId: Int): Flowable<Channel>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertChannel(channel: Channel)
-
     @Update(onConflict = OnConflictStrategy.REPLACE)
     abstract fun updateChannel(channel: Channel)
 

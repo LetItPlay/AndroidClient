@@ -5,7 +5,7 @@ import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
-import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Completable
@@ -16,13 +16,19 @@ class TrackDataRepository(
         private val postApi: LetItPlayPostApi,
         private val schedulerProvider: SchedulerProvider
 ): TrackRepository {
-    override fun like(track: Track, currentIsLiked: Boolean): Completable {
-        val likeDao = db.likeDao()
+    override fun like(track: TrackWithChannel): Completable {
+        val currentIsLiked = track.isLike
+        val trackId = track.track.id
+        val (likeDao, channelDao, trackDao) = Triple(db.likeDao(), db.channelDao(), db.trackDao())
         val (request, handleLikeDb) = when {
-            currentIsLiked -> UpdateRequestBody.UNLIKE to { likeDao.deleteLikeWithTrackId(track.id) }
-            else -> UpdateRequestBody.LIKE to { likeDao.insert(Like(track.id)) }
+            currentIsLiked -> UpdateRequestBody.UNLIKE to { likeDao.deleteLikeWithTrackId(trackId) }
+            else -> UpdateRequestBody.LIKE to {
+                channelDao.insertChannels(listOf(track.channel))
+                trackDao.insertTracks(listOf(track.track))
+                likeDao.insert(Like(trackId))
+            }
         }
-        return postApi.updateFavouriteTracks(track.id, request)
+        return postApi.updateFavouriteTracks(trackId, request)
                 .map { Optional.of(toTrackModel(it)) }
                 .onErrorReturnItem(Optional.none())
                 .doOnSuccess {

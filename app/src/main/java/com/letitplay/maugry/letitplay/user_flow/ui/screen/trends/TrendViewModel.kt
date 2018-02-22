@@ -64,7 +64,7 @@ class TrendViewModel(
 
     fun onLikeClick(trackData: TrackWithChannel) {
         if (!inLike) {
-            trackRepository.like(trackData.track, trackData.isLike)
+            trackRepository.like(trackData)
                     .doOnSubscribe { inLike = true }
                     .doOnComplete { inLike = false }
                     .subscribe()
