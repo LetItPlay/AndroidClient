@@ -23,7 +23,7 @@ class SearchDataRepository(
 
     override fun performQuery(query: String): Flowable<List<SearchResultItem>> {
         val lang = preferenceHelper.contentLanguage!!
-        val rawQuery = "%$query%"
+        val rawQuery = "%${query.trim()}%"
         val trackQuery: Flowable<List<SearchResultItem>> = Flowable.unsafeCreate<List<TrackWithChannel>> {
             val tracks = db.trackWithChannelDao().queryTracks(rawQuery, lang)
             it.onNext(tracks)
