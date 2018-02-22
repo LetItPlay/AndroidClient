@@ -40,12 +40,12 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vm.feeds.observe(this, Observer<PagedList<TrackWithChannel>> {
-            when (it?.size) {
-                0 -> feed_no_tracks.show()
-                else -> {
-                    feed_no_tracks.hide()
-                    feedListAdapter.setList(it)
-                }
+            feedListAdapter.setList(it)
+        })
+        vm.noFollowedChannels.observe(this, Observer<Boolean> {
+            when (it) {
+                false -> feed_no_tracks.hide()
+                else -> feed_no_tracks.show()
             }
         })
     }

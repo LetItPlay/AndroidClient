@@ -24,6 +24,11 @@ class ChannelDataRepository(
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
+    override fun followedChannelsId(): Flowable<List<Int>> {
+        return db.channelDao().getFollowedChannelsId()
+                .subscribeOn(schedulerProvider.io())
+    }
+
     override fun channel(channelId: Int): Flowable<ChannelWithFollow> {
         return db.channelDao().getChannelWithFollow(channelId)
                 .subscribeOn(schedulerProvider.io())

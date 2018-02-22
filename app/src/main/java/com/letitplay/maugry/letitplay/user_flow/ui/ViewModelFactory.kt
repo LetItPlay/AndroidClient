@@ -56,6 +56,7 @@ class ViewModelFactory(
                 FeedViewModel(
                         feedRepository,
                         trackRepository,
+                        channelRepository,
                         playerRepository
                 )
             modelClass.isAssignableFrom(ProfileViewModel::class.java) ->
