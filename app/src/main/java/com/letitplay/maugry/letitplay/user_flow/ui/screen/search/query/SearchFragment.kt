@@ -42,6 +42,12 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        vm.isLoading.observe(this, Observer<Boolean> {
+            when (it) {
+                true -> showProgress()
+                else -> hideProgress()
+            }
+        })
         vm.searchResult.observe(this, Observer<List<SearchResultItem>> {
             it?.let {
                 resultsAdapter.data = it

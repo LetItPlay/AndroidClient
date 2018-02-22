@@ -10,6 +10,8 @@ import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 
 
 class SearchViewModel(
@@ -17,15 +19,21 @@ class SearchViewModel(
         private val channelRepository: ChannelRepository
 ): ViewModel() {
 
-    val query = MutableLiveData<String>()
+    private val compositeDisposable = CompositeDisposable()
     private val submitClicks = MutableLiveData<Any>()
-    val searchResult: LiveData<List<SearchResultItem>> = Transformations.switchMap(submitClicks, { newQuery ->
+    val query = MutableLiveData<String>()
+    val isLoading = MutableLiveData<Boolean>()
+    val searchResult: LiveData<List<SearchResultItem>> = Transformations.switchMap(submitClicks, { _ ->
         searchRepository.performQuery(query.value!!)
                 .toLiveData()
     })
 
     fun onChannelFollow(channelWithFollow: ChannelWithFollow) {
         channelRepository.follow(channelWithFollow)
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doFinally { isLoading.postValue(false) }
+                .subscribe()
+                .addTo(compositeDisposable)
     }
 
     fun search(query: String) {
