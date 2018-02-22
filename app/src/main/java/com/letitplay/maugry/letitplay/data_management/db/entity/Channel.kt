@@ -13,7 +13,7 @@ data class Channel(
         val lang: Language,
         val name: String,
         @SerializedName("ImageURL")
-        val imageUrl: String,
+        val imageUrl: String?,
         val subscriptionCount: Int = 0,
         @ColumnInfo(name = "channel_tags")
         val tags: List<String>?
