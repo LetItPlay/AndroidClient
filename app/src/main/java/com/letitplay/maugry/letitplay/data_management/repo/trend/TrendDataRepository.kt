@@ -7,6 +7,8 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 
 class TrendDataRepository(
@@ -19,6 +21,10 @@ class TrendDataRepository(
     override fun trends(): Flowable<List<TrackWithChannel>> {
         return db.trackWithChannelDao()
                 .getAllTracksSortedByDate(preferenceHelper.contentLanguage!!)
+                .map {
+                    val now = DateTime.now()
+                    it.takeWhile { Days.daysBetween(DateTime(it.track.publishedAt), now).days < 7 }.sortedByDescending { it.track.listenCount }
+                }
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
