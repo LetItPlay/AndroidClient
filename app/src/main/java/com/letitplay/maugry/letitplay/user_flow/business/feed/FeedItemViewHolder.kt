@@ -91,6 +91,7 @@ class FeedItemViewHolder(
     }
 
     fun updateLike(feedData: TrackWithChannel) {
+        this.feedData = feedData
         itemView.feed_like.isLiked = feedData.isLike
         itemView.feed_like.likeCount = feedData.track.likeCount
     }
