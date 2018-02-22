@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
+import io.reactivex.Flowable
 
 @Dao
 abstract class LikeDao {
@@ -17,5 +18,5 @@ abstract class LikeDao {
     @Query("SELECT * FROM likes " +
             "INNER JOIN tracks ON tracks.track_id = likes.track_id " +
             "WHERE tracks.track_lang = :lang")
-    abstract fun getAllLikes(lang: Language): List<Like>
+    abstract fun getAllLikes(lang: Language): Flowable<List<Like>>
 }

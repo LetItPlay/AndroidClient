@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Maybe
+import io.reactivex.rxkotlin.zipWith
 
 
 class FeedPositionalDataSource(
@@ -51,8 +52,9 @@ class FeedPositionalDataSource(
         initialLoad.postValue(NetworkState.LOADING)
         retry = null
 
+        val startPosition = if (params.requestedStartPosition == 0) 0 else params.requestedStartPosition - 1
         try {
-            loadItems(0, params.pageSize)
+            loadItems(startPosition, params.requestedLoadSize)
                     .doOnError {
                         retry = { loadInitial(params, callback) }
                         val error = NetworkState.error(it.message)
@@ -62,7 +64,7 @@ class FeedPositionalDataSource(
                     .doOnSuccess {
                         networkState.postValue(NetworkState.LOADED)
                         initialLoad.postValue(NetworkState.LOADED)
-                        callback.onResult(it, 0)
+                        callback.onResult(it, startPosition)
                     }
                     .blockingGet()
         } catch (e: Exception) {
@@ -70,17 +72,17 @@ class FeedPositionalDataSource(
         }
     }
 
-    private fun loadItems(start: Int, size: Int): Maybe<List<TrackWithChannel>> {
+    private fun loadItems(offset: Int, size: Int): Maybe<List<TrackWithChannel>> {
         val lang = preferenceHelper.contentLanguage!!
         return db.channelDao().getFollowedChannelsId()
                 .map(List<Int>::joinWithComma)
                 .firstElement()
                 .flatMapSingle {
-                    api.getFeed(it, start, size, lang.strValue)
+                    api.getFeed(it, offset, size, lang.strValue)
                 }
-                .map {
-                    it to db.likeDao().getAllLikes(lang)
-                }
+                .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), {
+                    feed, likes ->  feed to likes
+                })
                 .map { (response, likes) ->
                     val likesHashMap = likes.associateBy { it.trackId }
                     val channelHashMap = response.channels!!.associateBy { it.id }
