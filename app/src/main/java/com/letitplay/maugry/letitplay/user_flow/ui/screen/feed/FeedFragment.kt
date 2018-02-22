@@ -90,9 +90,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = (vm.feeds.value)!!.map {
-            it.toAudioTrack()
-        }
+        val playlist = vm.feeds.value!!.map(TrackWithChannel::toAudioTrack)
         feedRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, feedRepo)
     }

@@ -75,7 +75,8 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     }
 
     private fun playTrack(track: Track) {
-        if (profileRepo != null) {
+        val trackId = track.id
+        if (profileRepo != null && profileRepo?.getAudioTrackAtId(trackId) != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }

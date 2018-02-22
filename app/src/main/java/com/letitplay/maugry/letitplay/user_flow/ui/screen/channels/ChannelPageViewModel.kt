@@ -2,20 +2,18 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
-import io.reactivex.disposables.CompositeDisposable
+import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import io.reactivex.rxkotlin.addTo
 
 
 class ChannelPageViewModel(
         private val channelRepository: ChannelRepository,
         private val schedulerProvider: SchedulerProvider
-) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable()
+) : BaseViewModel() {
 
     private lateinit var channelWithFollow: MutableLiveData<ChannelWithFollow>
     private lateinit var recentAddedChannelTracks: MutableLiveData<List<Track>>
@@ -40,11 +38,6 @@ class ChannelPageViewModel(
                     .subscribe()
                     .addTo(compositeDisposable)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 
     fun recentAddedTracks(channelId: Int): LiveData<List<Track>> {

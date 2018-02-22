@@ -4,19 +4,18 @@ import android.arch.lifecycle.*
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
+import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import com.letitplay.maugry.letitplay.utils.toResult
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
 
 class ChannelViewModel(
         private val channelRepo: ChannelRepository,
         private val schedulerProvider: SchedulerProvider
-) : ViewModel(), LifecycleObserver {
+) : BaseViewModel(), LifecycleObserver {
 
-    private val compositeDisposable = CompositeDisposable()
     private var inFollow: Boolean = false
 
     val isLoading = MutableLiveData<Boolean>()
@@ -57,10 +56,5 @@ class ChannelViewModel(
                     .subscribe()
                     .addTo(compositeDisposable)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 }

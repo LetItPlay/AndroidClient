@@ -3,23 +3,20 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModel
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
+import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 
 
 class SearchViewModel(
         private val searchRepository: SearchRepository,
         private val channelRepository: ChannelRepository
-): ViewModel() {
-
-    private val compositeDisposable = CompositeDisposable()
+): BaseViewModel() {
     private val submitClicks = MutableLiveData<Any>()
     val query = MutableLiveData<String>()
     val isLoading = MutableLiveData<Boolean>()
