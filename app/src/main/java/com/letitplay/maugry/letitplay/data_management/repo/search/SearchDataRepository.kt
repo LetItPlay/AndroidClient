@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 
 
@@ -24,21 +25,22 @@ class SearchDataRepository(
     override fun performQuery(query: String): Flowable<List<SearchResultItem>> {
         val lang = preferenceHelper.contentLanguage!!
         val rawQuery = "%${query.trim()}%"
-        val trackQuery: Flowable<List<SearchResultItem>> = Flowable.unsafeCreate<List<TrackWithChannel>> {
-            val tracks = db.trackWithChannelDao().queryTracks(rawQuery, lang)
-            it.onNext(tracks)
-            it.onComplete()
-        }
+        val trackQuery: Flowable<List<SearchResultItem>> = Single.fromCallable<List<TrackWithChannel>>({
+            db.trackWithChannelDao().queryTracks(rawQuery, lang)
+        })
                 .map(::toTrackResult)
-                .subscribeOn(schedulerProvider.io())
+                .toFlowable()
+                .cache()
         val channelQuery: Flowable<List<SearchResultItem>> = db
                 .channelDao()
                 .queryChannels(rawQuery, lang)
                 .map(::toChannelResult)
-                .subscribeOn(schedulerProvider.io())
-        return Flowable.combineLatest(trackQuery, channelQuery, BiFunction { tracks, channels ->
+                .distinctUntilChanged()
+        val results: Flowable<List<SearchResultItem>> = Flowable.combineLatest(trackQuery, channelQuery, BiFunction { tracks, channels ->
             channels.plus(tracks)
         })
+        return results
+                .subscribeOn(schedulerProvider.io())
     }
 
     private fun toTrackResult(tracks: List<TrackWithChannel>): List<SearchResultItem> =
