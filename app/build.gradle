@@ -10,7 +10,7 @@ project.ext {
     reactive_java_android_version = '2.0.1'
     reactive_java_kotlin_version = '2.0.2'
     retrofit_version = '2.2.0'
-    glide_version = "4.3.1"
+    glide_version = "4.6.1"
     timber_version = "4.6.0"
 }
 
