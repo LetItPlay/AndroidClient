@@ -50,7 +50,7 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
         })
         vm.searchResult.observe(this, Observer<List<SearchResultItem>> {
             it?.let {
-                resultsAdapter.data = it
+                resultsAdapter.updateItems(it)
             }
         })
     }

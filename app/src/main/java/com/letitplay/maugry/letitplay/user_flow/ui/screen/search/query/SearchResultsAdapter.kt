@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
@@ -24,11 +25,13 @@ class SearchResultsAdapter(
         private val onFollowClick: (ChannelWithFollow) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var data: List<SearchResultItem> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private var data: List<SearchResultItem> = emptyList()
+
+    fun updateItems(items: List<SearchResultItem>) {
+        val diffResult = DiffUtil.calculateDiff(ResultsDiffer(this.data, items))
+        this.data = items
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when (data[position]) {
@@ -44,6 +47,17 @@ class SearchResultsAdapter(
             CHANNEL_ITEM_TYPE -> ChannelVH(parent, onChannelClick, onFollowClick)
             TRACK_ITEM_TYPE -> TrackVH(parent, onTrackClick, musicService)
             else -> throw IllegalStateException()
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
+        }
+        val item = data[position]
+        if (FOLLOW_CHANGED in payloads && item is SearchResultItem.ChannelItem) {
+            (holder as? ChannelVH)?.updateFollow(item.channel)
         }
     }
 
@@ -76,9 +90,16 @@ class SearchResultsAdapter(
             this.channel = channelItem
             itemView.apply {
                 channel_name.text = channelItem.channel.name
+                channel_small_logo.loadImage(channelItem.channel.imageUrl)
+            }
+            updateFollow(channelItem)
+        }
+
+        fun updateFollow(channelItem: ChannelWithFollow) {
+            this.channel = channelItem
+            itemView.apply {
                 channel_follow.isFollowing = channelItem.isFollowing
                 channel_followers_count.text = channelItem.channel.subscriptionCount.toString()
-                channel_small_logo.loadImage(channelItem.channel.imageUrl)
             }
         }
     }
@@ -86,5 +107,7 @@ class SearchResultsAdapter(
     companion object {
         const val CHANNEL_ITEM_TYPE = 1
         const val TRACK_ITEM_TYPE = 2
+
+        val FOLLOW_CHANGED = Any()
     }
 }
