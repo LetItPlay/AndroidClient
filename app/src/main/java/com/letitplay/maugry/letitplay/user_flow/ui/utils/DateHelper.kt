@@ -64,6 +64,6 @@ object DateHelper {
             passed.minutes != 0 -> passed.minutes to R.string.minutes_short
             else -> passed.seconds to R.string.seconds_short
         }
-        return ctx.resources.getString(resource).format(component)
+        return ctx.resources.getString(resource, component)
     }
 }

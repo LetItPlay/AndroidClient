@@ -48,7 +48,7 @@ class LikedTracksAdapter(
                     track_playing_now.trackListenerCount = trackData.track.listenCount
                     track_playing_now.trackUrl = trackData.track.audioUrl
                     channel_name.text = trackData.channel.name
-                    track_time.text = DateHelper.getTime(trackData.track.totalLengthInSeconds)
+                    track_time.text = trackData.track.trackLengthShort
                     track_name.text = trackData.track.title
                     track_logo.loadImage(trackData.track.coverUrl)
             }

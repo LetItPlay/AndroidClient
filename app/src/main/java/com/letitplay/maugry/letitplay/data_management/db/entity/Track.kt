@@ -1,10 +1,8 @@
 package com.letitplay.maugry.letitplay.data_management.db.entity
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import java.util.*
 
 @Entity(tableName = "tracks",
@@ -35,4 +33,14 @@ data class Track(
         val tags: List<String>? = null,
         val listenCount: Int,
         val publishedAt: Date
-)
+) {
+    @Ignore
+    private var _trackLengthShort: String? = null
+
+    val trackLengthShort: String
+        get() {
+            if (_trackLengthShort == null)
+                _trackLengthShort = DateHelper.getTime(totalLengthInSeconds)
+            return _trackLengthShort!!
+        }
+}

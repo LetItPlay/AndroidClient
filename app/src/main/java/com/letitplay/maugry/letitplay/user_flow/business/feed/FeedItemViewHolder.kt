@@ -79,7 +79,7 @@ class FeedItemViewHolder(
             feed_track_info_description.text = feedData.track.description ?: ""
             feed_playing_now.trackListenerCount = feedData.track.listenCount
             feed_playing_now.trackUrl = feedData.track.audioUrl
-            feed_time.text = DateHelper.getTime(feedData.track.totalLengthInSeconds)
+            feed_time.text = feedData.track.trackLengthShort
             feed_track_title.text = feedData.track.title
             feed_channel_title.text = feedData.channel.name
             feed_track_last_update.text = data

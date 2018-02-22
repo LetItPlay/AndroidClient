@@ -1,7 +1,6 @@
 package com.letitplay.maugry.letitplay.data_management.db.entity
 
 import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Ignore
 
 data class TrackWithChannel(
         @Embedded
@@ -11,6 +10,4 @@ data class TrackWithChannel(
         val likeId: Int?
 ) {
     val isLike get() = likeId != null
-    @Ignore
-    var index: Int = -1
 }
