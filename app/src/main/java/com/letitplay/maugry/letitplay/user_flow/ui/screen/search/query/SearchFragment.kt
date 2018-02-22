@@ -87,8 +87,10 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
         searchItem.expandActionView()
-        searchView.setQuery(vm.query.value, true)
-        searchView.clearFocus()
+        if (vm.query.value != null) {
+            searchView.setQuery(vm.query.value, true)
+            searchView.clearFocus()
+        }
         activity?.let { activity ->
             val searchManager = activity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
             searchView.setSearchableInfo(searchManager.getSearchableInfo(activity.componentName))
