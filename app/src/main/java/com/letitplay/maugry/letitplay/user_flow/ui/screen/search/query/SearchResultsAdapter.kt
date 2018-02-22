@@ -28,7 +28,7 @@ class SearchResultsAdapter(
     private var data: List<SearchResultItem> = emptyList()
 
     fun updateItems(items: List<SearchResultItem>) {
-        val diffResult = DiffUtil.calculateDiff(ResultsDiffer(this.data, items))
+        val diffResult = DiffUtil.calculateDiff(ResultsDiffer(this.data, items), false)
         this.data = items
         diffResult.dispatchUpdatesTo(this)
     }

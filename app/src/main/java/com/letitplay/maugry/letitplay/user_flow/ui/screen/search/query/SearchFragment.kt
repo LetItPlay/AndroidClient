@@ -20,6 +20,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
+import kotlinx.android.synthetic.main.search_fragment.*
 
 
 class SearchFragment : BaseFragment(R.layout.search_fragment) {
@@ -50,6 +51,9 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
         })
         vm.searchResult.observe(this, Observer<List<SearchResultItem>> {
             it?.let {
+                if (it.size != resultsAdapter.itemCount) {
+                    results_recycler?.scrollToPosition(0)
+                }
                 resultsAdapter.updateItems(it)
             }
         })
