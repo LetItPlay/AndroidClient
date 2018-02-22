@@ -9,8 +9,8 @@
         android:id="@+id/track_logo"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/track_placeholder" />
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:alpha="0.6"
         android:ellipsize="end"
         android:maxLines="1"
@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:ellipsize="end"
         android:maxLines="1"
         android:textColor="#000000"
         android:textSize="14dp"
@@ -76,7 +77,7 @@
         android:id="@+id/track_time_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:layout_marginStart="8dp"
         android:src="@drawable/time_ic"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -86,10 +87,9 @@
         android:id="@+id/track_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="@id/track_time_icon"
         android:textColor="#4a4a4a"
         android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/track_time_icon"
         tools:text="01:00:25" />
 
@@ -97,9 +97,8 @@
         android:id="@+id/track_playing_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/track_time_icon"
         app:layout_constraintStart_toEndOf="@+id/track_time" />
     
     <!-- Dirty trick to prevent constraint collapse -->
