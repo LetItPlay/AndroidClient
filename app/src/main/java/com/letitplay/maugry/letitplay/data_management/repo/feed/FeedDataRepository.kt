@@ -7,9 +7,11 @@ import android.support.annotation.MainThread
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
+import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.Listing
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import io.reactivex.Flowable
 
 
 class FeedDataRepository(
@@ -20,6 +22,10 @@ class FeedDataRepository(
         private val networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE,
         private val prefetchDistance: Int = DEFAULT_PREFETCH_DISTANCE
 ) : FeedRepository {
+    override fun likes(): Flowable<List<Like>> {
+        return db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
+                .subscribeOn(schedulerProvider.io())
+    }
 
     @MainThread
     override fun feeds(): Listing<TrackWithChannel> {
@@ -28,32 +34,34 @@ class FeedDataRepository(
                 .setPrefetchDistance(prefetchDistance)
                 .setEnablePlaceholders(false)
                 .build()
-        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper, schedulerProvider)
+        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper)
 
         val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
                 .setBackgroundThreadExecutor(schedulerProvider.ioExecutor())
+                .setInitialLoadKey(0)
                 .build()
 
         val refreshState = Transformations.switchMap(dataSourceFactory.sourceLiveData, {
             it.initialLoad
         })
+
         return Listing(
                 pagedList = livePagedList,
                 networkState = Transformations.switchMap(dataSourceFactory.sourceLiveData, {
                     it.networkState
                 }),
                 retry = {
-                    dataSourceFactory.sourceLiveData.value?.retryAllFailed()
+                    //dataSourceFactory.sourceLiveData.value?.retryAllFailed()
                 },
                 refresh = {
-                    dataSourceFactory.sourceLiveData.value?.invalidate()
+                    dataSourceFactory.invalidateAllData()
                 },
                 refreshState = refreshState
         )
     }
 
     companion object {
-        private const val DEFAULT_NETWORK_PAGE_SIZE = 20
-        private const val DEFAULT_PREFETCH_DISTANCE = 50
+        private const val DEFAULT_NETWORK_PAGE_SIZE = 100
+        private const val DEFAULT_PREFETCH_DISTANCE = 10
     }
 }

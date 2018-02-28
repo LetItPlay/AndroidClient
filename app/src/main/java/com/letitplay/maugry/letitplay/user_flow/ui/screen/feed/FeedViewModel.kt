@@ -22,7 +22,7 @@ class FeedViewModel(
     private val repoResult by lazy { feedRepository.feeds() }
     val noFollowedChannels by lazy {
         channelRepository.followedChannelsId()
-                .map { it.isEmpty() }
+                .map(List<Int>::isEmpty)
                 .distinctUntilChanged()
                 .doOnNext {
                     refreshFeed()
