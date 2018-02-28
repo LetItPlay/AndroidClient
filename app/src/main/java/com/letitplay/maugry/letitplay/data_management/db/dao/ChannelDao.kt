@@ -31,8 +31,9 @@ abstract class ChannelDao {
     abstract fun getChannelWithFollow(channelId: Int): Flowable<ChannelWithFollow>
 
     @Query("SELECT channels.channel_id FROM channels " +
-            "INNER JOIN follows ON follows.channel_id = channels.channel_id")
-    abstract fun getFollowedChannelsId(): Flowable<List<Int>>
+            "INNER JOIN follows ON follows.channel_id = channels.channel_id " +
+            "WHERE channels.channel_lang = :lang")
+    abstract fun getFollowedChannelsId(lang: Language): Flowable<List<Int>>
 
     @Query("SELECT channels.*, follows.channel_id as followId FROM channels " +
             "LEFT JOIN follows ON follows.channel_id = channels.channel_id " +

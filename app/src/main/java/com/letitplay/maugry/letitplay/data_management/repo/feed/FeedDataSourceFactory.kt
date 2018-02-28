@@ -122,7 +122,7 @@ class FeedDataSourceFactory(
 
     private fun loadItems(offset: Int, size: Int): Maybe<List<TrackWithChannel>> {
         val lang = preferenceHelper.contentLanguage!!
-        return db.channelDao().getFollowedChannelsId()
+        return db.channelDao().getFollowedChannelsId(lang)
                 .map(List<Int>::joinWithComma)
                 .firstElement()
                 .flatMapSingle {

@@ -25,7 +25,7 @@ class ChannelDataRepository(
         private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
     override fun followedChannelsId(): Flowable<List<Int>> {
-        return db.channelDao().getFollowedChannelsId()
+        return db.channelDao().getFollowedChannelsId(preferenceHelper.contentLanguage!!)
                 .subscribeOn(schedulerProvider.io())
     }
 
