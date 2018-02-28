@@ -49,6 +49,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                     feed_no_tracks.hide()
                     feedListAdapter.setList(it.data)
                 }
+                swipe_refresh?.isRefreshing = false
             }
         })
         vm.refreshState.observe(this, Observer<NetworkState> {
@@ -59,7 +60,6 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                 }
                 else -> feed_no_internet.hide()
             }
-            swipe_refresh?.isRefreshing = it?.status == Status.RUNNING
         })
     }
 

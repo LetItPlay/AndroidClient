@@ -91,8 +91,6 @@ class FeedDataSourceFactory(
         }
 
         override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<TrackWithChannel>) {
-            networkState.postValue(NetworkState.LOADING)
-            initialLoad.postValue(NetworkState.LOADING)
             try {
                 var subList = emptyList<TrackWithChannel>()
                 // Have local data
