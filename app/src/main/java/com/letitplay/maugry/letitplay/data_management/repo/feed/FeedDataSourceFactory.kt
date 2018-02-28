@@ -11,12 +11,16 @@ import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Maybe
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.zipWith
+import java.io.IOException
 
 class FeedDataSourceFactory(
         private val api: LetItPlayApi,
         private val db: LetItPlayDb,
-        private val preferenceHelper: PreferenceHelper
+        private val preferenceHelper: PreferenceHelper,
+        private val compositeDisposable: CompositeDisposable
 ) : DataSource.Factory<Int, TrackWithChannel> {
     private val tracks = mutableListOf<TrackWithChannel>()
     private val tracksLock = Any()
@@ -45,6 +49,7 @@ class FeedDataSourceFactory(
                     sourceLiveData.value?.invalidate()
                 }
                 .subscribe()
+                .addTo(compositeDisposable)
     }
 
     override fun create(): DataSource<Int, TrackWithChannel> {
@@ -58,47 +63,61 @@ class FeedDataSourceFactory(
         val initialLoad = MutableLiveData<NetworkState>()
 
         override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<TrackWithChannel>) {
+            networkState.postValue(NetworkState.LOADING)
             val endPosition = params.startPosition + params.loadSize
             val needToLoad = endPosition - tracks.size
-            if (endPosition < tracks.size) {
-                var subList: List<TrackWithChannel> = emptyList()
-                synchronized(tracksLock) {
-                    subList = tracks.subList(params.startPosition, endPosition)
+            var subList: List<TrackWithChannel> = emptyList()
+            try {
+                if (endPosition < tracks.size) {
+                    synchronized(tracksLock) {
+                        subList = tracks.subList(params.startPosition, endPosition)
+                    }
+                } else {
+                    loadItems(tracks.size, needToLoad)
+                            .blockingGet()
+                            .let {
+                                synchronized(tracksLock) {
+                                    tracks.addAll(it)
+                                    val tracksSize = tracks.size
+                                    subList = tracks.subList(params.startPosition, if (endPosition > tracksSize) tracksSize else endPosition)
+                                }
+                            }
                 }
                 callback.onResult(subList.toList())
-            } else {
-                loadItems(tracks.size, needToLoad)
-                        .blockingGet()
-                        .let {
-                            var subList: List<TrackWithChannel> = emptyList()
-                            synchronized(tracksLock) {
-                                tracks.addAll(it)
-                                val tracksSize = tracks.size
-                                subList = tracks.subList(params.startPosition, if (endPosition > tracksSize) tracksSize else endPosition)
-                            }
-                            callback.onResult(subList.toList())
-                        }
+                networkState.postValue(NetworkState.LOADED)
+            } catch (e: IOException) {
+                networkState.postValue(NetworkState.error(e.message))
             }
         }
 
         override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<TrackWithChannel>) {
-            // Have local data
-            if (params.requestedLoadSize < tracks.size) {
+            networkState.postValue(NetworkState.LOADING)
+            initialLoad.postValue(NetworkState.LOADING)
+            try {
                 var subList = emptyList<TrackWithChannel>()
-                synchronized(tracksLock) {
-                    subList = tracks.subList(0, tracks.size)
-                }
-                callback.onResult(subList.toList(), 0)
-            } else {
-                loadItems(0, params.requestedLoadSize)
-                        .blockingGet()
-                        .let {
-                            synchronized(tracksLock) {
-                                tracks.clear()
-                                tracks.addAll(it)
+                // Have local data
+                if (params.requestedLoadSize < tracks.size) {
+                    synchronized(tracksLock) {
+                        subList = tracks.subList(0, tracks.size)
+                    }
+                } else {
+                    loadItems(0, params.requestedLoadSize)
+                            .blockingGet()
+                            .let {
+                                synchronized(tracksLock) {
+                                    tracks.clear()
+                                    tracks.addAll(it)
+                                    subList = it
+                                }
                             }
-                            callback.onResult(it.toList(), 0)
-                        }
+                }
+                networkState.postValue(NetworkState.LOADED)
+                initialLoad.postValue(NetworkState.LOADED)
+                callback.onResult(subList.toList(), 0)
+            } catch (e: Exception) {
+                val error = NetworkState.error(e.message)
+                networkState.postValue(error)
+                initialLoad.postValue(error)
             }
         }
     }
@@ -128,7 +147,7 @@ class FeedDataSourceFactory(
 }
 
 private fun <S, T> updateIfContains(collection: MutableList<T>, set: Set<S>, containFilter: ((S, T) -> Boolean), f: ((S, T) -> T)) {
-    set.forEach {  setItem ->
+    set.forEach { setItem ->
         val itemIndex = collection.indexOfFirst { containFilter(setItem, it) }
         if (itemIndex != -1) {
             val item = collection[itemIndex]

@@ -13,6 +13,8 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
+import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -46,6 +48,16 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             when (it) {
                 false -> feed_no_tracks.hide()
                 else -> feed_no_tracks.show()
+            }
+        })
+        vm.networkState.observe(this, Observer<NetworkState> {
+            it?.let {
+                val feeds = vm.feeds.value
+                if (it.status == Status.FAILED && (feeds == null || feeds.isEmpty())) {
+                    feed_no_internet.show()
+                } else {
+                    feed_no_internet.hide()
+                }
             }
         })
     }

@@ -12,6 +12,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.Listing
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
 
 
 class FeedDataRepository(
@@ -28,13 +29,13 @@ class FeedDataRepository(
     }
 
     @MainThread
-    override fun feeds(): Listing<TrackWithChannel> {
+    override fun feeds(compositeDisposable: CompositeDisposable): Listing<TrackWithChannel> {
         val pagedListConfig = PagedList.Config.Builder()
                 .setPageSize(networkPageSize)
                 .setPrefetchDistance(prefetchDistance)
                 .setEnablePlaceholders(false)
                 .build()
-        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper)
+        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper, compositeDisposable)
 
         val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
                 .setBackgroundThreadExecutor(schedulerProvider.ioExecutor())
@@ -61,7 +62,7 @@ class FeedDataRepository(
     }
 
     companion object {
-        private const val DEFAULT_NETWORK_PAGE_SIZE = 100
+        private const val DEFAULT_NETWORK_PAGE_SIZE = 50
         private const val DEFAULT_PREFETCH_DISTANCE = 10
     }
 }

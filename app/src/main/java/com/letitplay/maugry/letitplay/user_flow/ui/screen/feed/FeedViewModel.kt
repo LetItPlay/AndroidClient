@@ -19,7 +19,7 @@ class FeedViewModel(
         private val playerRepository: PlayerRepository
 ) : BaseViewModel(), LifecycleObserver {
     private var inLike: Boolean = false
-    private val repoResult by lazy { feedRepository.feeds() }
+    private val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
     val noFollowedChannels by lazy {
         channelRepository.followedChannelsId()
                 .map(List<Int>::isEmpty)
@@ -31,6 +31,7 @@ class FeedViewModel(
     }
 
     val feeds by lazy { repoResult.pagedList }
+    val networkState by lazy { repoResult.networkState }
 
     fun onLikeClick(trackData: TrackWithChannel) {
         if (!inLike) {
