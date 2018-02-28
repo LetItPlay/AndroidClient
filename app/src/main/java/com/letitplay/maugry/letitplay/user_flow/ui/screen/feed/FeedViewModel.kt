@@ -1,6 +1,9 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MediatorLiveData
+import android.arch.paging.PagedList
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
@@ -18,9 +21,16 @@ class FeedViewModel(
         private val channelRepository: ChannelRepository,
         private val playerRepository: PlayerRepository
 ) : BaseViewModel(), LifecycleObserver {
+
+    data class ViewState(
+            val data: PagedList<TrackWithChannel>?,
+            val noChannels: Boolean = false
+    )
+
     private var inLike: Boolean = false
     private val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
-    val noFollowedChannels by lazy {
+    private val feeds by lazy { repoResult.pagedList }
+    private val noFollowedChannels by lazy {
         channelRepository.followedChannelsId()
                 .map(List<Int>::isEmpty)
                 .distinctUntilChanged()
@@ -29,9 +39,19 @@ class FeedViewModel(
                 }
                 .toLiveData()
     }
+    private val stateMediator = MediatorLiveData<ViewState>()
+            .also { mediator ->
+                mediator.addSource(feeds, {
+                    mediator.setValue(ViewState(it, mediator.value?.noChannels ?: false))
+                })
+                mediator.addSource(noFollowedChannels, {
+                    mediator.setValue(ViewState(null, it ?: false))
+                })
+            }
 
-    val feeds by lazy { repoResult.pagedList }
-    val networkState by lazy { repoResult.networkState }
+    val state: LiveData<ViewState> by lazy { stateMediator }
+
+    val refreshState by lazy { repoResult.refreshState }
 
     fun onLikeClick(trackData: TrackWithChannel) {
         if (!inLike) {

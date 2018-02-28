@@ -2,7 +2,6 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
@@ -41,24 +40,26 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.feeds.observe(this, Observer<PagedList<TrackWithChannel>> {
-            feedListAdapter.setList(it)
-        })
-        vm.noFollowedChannels.observe(this, Observer<Boolean> {
-            when (it) {
-                false -> feed_no_tracks.hide()
-                else -> feed_no_tracks.show()
-            }
-        })
-        vm.networkState.observe(this, Observer<NetworkState> {
+        vm.state.observe(this, Observer<FeedViewModel.ViewState> {
             it?.let {
-                val feeds = vm.feeds.value
-                if (it.status == Status.FAILED && (feeds == null || feeds.isEmpty())) {
-                    feed_no_internet.show()
-                } else {
+                if (it.noChannels) {
+                    feed_no_tracks.show()
                     feed_no_internet.hide()
+                } else {
+                    feed_no_tracks.hide()
+                    feedListAdapter.setList(it.data)
                 }
             }
+        })
+        vm.refreshState.observe(this, Observer<NetworkState> {
+            when (it?.status) {
+                Status.FAILED -> {
+                    feed_no_tracks.hide()
+                    feed_no_internet.show()
+                }
+                else -> feed_no_internet.hide()
+            }
+            swipe_refresh?.isRefreshing = it?.status == Status.RUNNING
         })
     }
 
@@ -77,10 +78,6 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
             vm.refreshFeed()
-
-            if (swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = false
-            }
         }
         return view
     }
@@ -102,7 +99,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = vm.feeds.value!!.map(TrackWithChannel::toAudioTrack)
+        val playlist = vm.state.value?.data?.map(TrackWithChannel::toAudioTrack) ?: return
         feedRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, feedRepo)
     }
