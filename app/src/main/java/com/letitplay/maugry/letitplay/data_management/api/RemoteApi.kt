@@ -14,7 +14,6 @@ import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrack
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import io.reactivex.Maybe
-import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -59,7 +58,7 @@ interface LetItPlayApi {
     fun getChannelTracks(@Path("id") idStation: Int): Single<List<Track>>
 
     @GET("tracks")
-    fun getTracks(): Observable<List<Track>>
+    fun getTracks(): Single<List<Track>>
 
     @GET("feed?")
     fun getFeed(

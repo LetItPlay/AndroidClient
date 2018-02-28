@@ -49,6 +49,10 @@ class App : MultiDexApplication() {
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, Crashlytics())
         }
+        ServiceLocator.searchRepository.loadTracksAndChannels()
+                .retry()
+                .subscribeOn(ServiceLocator.schedulerProvider.io())
+                .subscribe()
     }
 
     private fun bindMusicService() {

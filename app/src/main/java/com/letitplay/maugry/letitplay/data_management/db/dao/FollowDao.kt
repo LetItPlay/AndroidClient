@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 @Dao
 abstract class FollowDao {
     @Query("SELECT * FROM follows")
-    abstract fun getAllFollows(): Flowable<Follow>
+    abstract fun getAllFollows(): Flowable<List<Follow>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertFollow(follow: Follow)

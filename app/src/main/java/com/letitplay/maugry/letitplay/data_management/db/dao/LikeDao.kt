@@ -19,4 +19,8 @@ abstract class LikeDao {
             "INNER JOIN tracks ON tracks.track_id = likes.track_id " +
             "WHERE tracks.track_lang = :lang")
     abstract fun getAllLikes(lang: Language): Flowable<List<Like>>
+
+    @Query("SELECT * FROM likes " +
+            "INNER JOIN tracks ON tracks.track_id = likes.track_id")
+    abstract fun getAllLikes(): Flowable<List<Like>>
 }
