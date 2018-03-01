@@ -78,6 +78,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginStart="10dp"
+            android:visibility="gone"
             app:srcCompat="@drawable/track_ic" />
 
         <TextView
@@ -87,6 +88,7 @@
             android:layout_marginStart="1dp"
             android:textColor="#4a4a4a"
             android:textSize="12sp"
+            android:visibility="gone"
             tools:text="123" />
     </LinearLayout>
 </RelativeLayout>
