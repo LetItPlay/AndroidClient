@@ -23,4 +23,8 @@ abstract class LikeDao {
     @Query("SELECT * FROM likes " +
             "INNER JOIN tracks ON tracks.track_id = likes.track_id")
     abstract fun getAllLikes(): Flowable<List<Like>>
+
+    @Query("SELECT * FROM likes " +
+            "WHERE likes.track_id = :id")
+    abstract fun getLike(id: Int): Like?
 }

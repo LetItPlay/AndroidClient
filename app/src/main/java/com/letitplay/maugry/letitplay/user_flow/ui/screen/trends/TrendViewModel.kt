@@ -16,7 +16,9 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import com.letitplay.maugry.letitplay.utils.toResult
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
 
 
 class TrendViewModel(
@@ -26,7 +28,7 @@ class TrendViewModel(
         private val playerRepository: PlayerRepository,
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), LifecycleObserver {
-    private var inLike: Boolean = false
+    private var likeDisposable: Disposable? = null
 
     val trends by lazy {
         trendRepository.trends()
@@ -59,16 +61,16 @@ class TrendViewModel(
     }
 
     fun onRefresh() {
-        // TODO
+        refreshChannels()
+        refreshTrends()
     }
 
     fun onLikeClick(trackData: TrackWithChannel) {
-        if (!inLike) {
-            trackRepository.like(trackData)
-                    .doOnSubscribe { inLike = true }
-                    .doOnComplete { inLike = false }
-                    .subscribe()
-                    .addTo(compositeDisposable)
+        if (likeDisposable == null || likeDisposable!!.isDisposed) {
+            likeDisposable = trackRepository.like(trackData)
+                    .subscribe({}, {
+                        Timber.e(it, "Error while liking")
+                    })
         }
     }
 
@@ -76,5 +78,10 @@ class TrendViewModel(
         playerRepository.onListen(track)
                 .subscribe()
                 .addTo(compositeDisposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        likeDisposable?.dispose()
     }
 }

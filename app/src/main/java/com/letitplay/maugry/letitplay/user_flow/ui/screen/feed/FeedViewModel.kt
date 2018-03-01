@@ -12,7 +12,9 @@ import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerReposito
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
 
 
 class FeedViewModel(
@@ -27,7 +29,7 @@ class FeedViewModel(
             val noChannels: Boolean = false
     )
 
-    private var inLike: Boolean = false
+    private var likeDisposable: Disposable? = null
     private val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
     private val feeds by lazy { repoResult.pagedList }
     private val noFollowedChannels by lazy {
@@ -54,12 +56,11 @@ class FeedViewModel(
     val refreshState by lazy { repoResult.refreshState }
 
     fun onLikeClick(trackData: TrackWithChannel) {
-        if (!inLike) {
-            trackRepository.like(trackData)
-                    .doOnSubscribe { inLike = true }
-                    .doOnComplete { inLike = false }
-                    .subscribe()
-                    .addTo(compositeDisposable)
+        if (likeDisposable == null || likeDisposable!!.isDisposed) {
+            likeDisposable = trackRepository.like(trackData)
+                    .subscribe({}, {
+                        Timber.e(it, "Error when liking")
+                    })
         }
     }
 
