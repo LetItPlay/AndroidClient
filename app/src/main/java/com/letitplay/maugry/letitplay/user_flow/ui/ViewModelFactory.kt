@@ -33,47 +33,49 @@ class ViewModelFactory(
         private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return when {
-            modelClass.isAssignableFrom(TrendViewModel::class.java) ->
-                TrendViewModel(
-                        trendRepository,
-                        channelRepository,
-                        trackRepository,
-                        playerRepository,
-                        schedulerProvider
-                )
-            modelClass.isAssignableFrom(ChannelPageViewModel::class.java) ->
-                ChannelPageViewModel(
-                        channelRepository,
-                        schedulerProvider
-                )
-            modelClass.isAssignableFrom(ChannelViewModel::class.java) ->
-                ChannelViewModel(
-                        channelRepository,
-                        schedulerProvider
-                )
-            modelClass.isAssignableFrom(FeedViewModel::class.java) ->
-                FeedViewModel(
-                        feedRepository,
-                        trackRepository,
-                        channelRepository,
-                        playerRepository
-                )
-            modelClass.isAssignableFrom(ProfileViewModel::class.java) ->
-                ProfileViewModel(
-                        profileRepository,
-                        schedulerProvider
-                )
-            modelClass.isAssignableFrom(CompilationViewModel::class.java) ->
-                CompilationViewModel(
-                        compilationRepository
-                )
-            modelClass.isAssignableFrom(SearchViewModel::class.java) ->
-                SearchViewModel(
-                        searchRepository,
-                        channelRepository
-                )
-            else -> throw IllegalArgumentException("Unknown type of view model")
-        } as T
+        return with (modelClass) {
+            when {
+                isAssignableFrom(TrendViewModel::class.java) ->
+                    TrendViewModel(
+                            trendRepository,
+                            channelRepository,
+                            trackRepository,
+                            playerRepository,
+                            schedulerProvider
+                    )
+                isAssignableFrom(ChannelPageViewModel::class.java) ->
+                    ChannelPageViewModel(
+                            channelRepository,
+                            schedulerProvider
+                    )
+                isAssignableFrom(ChannelViewModel::class.java) ->
+                    ChannelViewModel(
+                            channelRepository,
+                            schedulerProvider
+                    )
+                isAssignableFrom(FeedViewModel::class.java) ->
+                    FeedViewModel(
+                            feedRepository,
+                            trackRepository,
+                            channelRepository,
+                            playerRepository
+                    )
+               isAssignableFrom(ProfileViewModel::class.java) ->
+                    ProfileViewModel(
+                            profileRepository,
+                            schedulerProvider
+                    )
+                isAssignableFrom(CompilationViewModel::class.java) ->
+                    CompilationViewModel(
+                            compilationRepository
+                    )
+                isAssignableFrom(SearchViewModel::class.java) ->
+                    SearchViewModel(
+                            searchRepository,
+                            channelRepository
+                    )
+                else -> throw IllegalArgumentException("Unknown type of view model")
+            } as T
+        }
     }
 }
