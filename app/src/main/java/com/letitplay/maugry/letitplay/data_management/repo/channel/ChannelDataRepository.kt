@@ -10,11 +10,11 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollo
 import com.letitplay.maugry.letitplay.data_management.db.entity.Follow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
-import com.letitplay.maugry.letitplay.utils.Optional
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 
 class ChannelDataRepository(
@@ -38,28 +38,30 @@ class ChannelDataRepository(
     override fun channels(): Flowable<List<Channel>> {
         return api.channels()
                 .doOnSuccess { db.channelDao().insertChannels(it) }
-                .map { Optional.of(it) }
-                .onErrorReturnItem(Optional.none())
+                .onErrorReturnItem(emptyList())
                 .flatMapPublisher { db.channelDao().getAllChannels(preferenceHelper.contentLanguage!!) }
                 .subscribeOn(schedulerProvider.io())
     }
 
     override fun follow(channelData: ChannelWithFollow): Completable {
         val followDao = db.followDao()
-        val channel = channelData.channel
-        val (request, handleFollowDb) = when {
-            channelData.isFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.followId!!) }
-            else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channel.id)) }
-        }
-        return postApi.updateChannelFollowers(channel.id, request)
-                .map { Optional.of(toChannelModel(it)) }
-                .onErrorReturnItem(Optional.none())
+        val channelId = channelData.channel.id
+        val isFollowing = Single.fromCallable { followDao.getFollow(channelId) != null }
+        return isFollowing
+                .flatMap {
+                    val currentIsFollowing = it
+                    val (request, handleFollowDb) = when {
+                        currentIsFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.followId!!) }
+                        else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channelId)) }
+                    }
+                    postApi.updateChannelFollowers(channelId, request)
+                            .map { it to handleFollowDb }
+                }
                 .doOnSuccess {
-                    if (it.value != null) {
-                        db.runInTransaction {
-                            handleFollowDb()
-                            db.channelDao().updateChannel(it.value)
-                        }
+                    val channelModel = toChannelModel(it.first)
+                    db.runInTransaction {
+                        it.second()
+                        db.channelDao().updateChannel(channelModel)
                     }
                 }
                 .observeOn(schedulerProvider.ui())

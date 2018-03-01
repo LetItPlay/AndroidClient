@@ -34,7 +34,7 @@ class TrackDataRepository(
                     postApi.updateFavouriteTracks(trackId, request)
                             .map { it to handleLikeDb }
                 }
-                .map {
+                .doOnSuccess {
                     val trackModel = toTrackModel(it.first)
                     db.runInTransaction {
                         it.second()

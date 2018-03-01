@@ -17,4 +17,7 @@ abstract class FollowDao {
 
     @Query("DELETE FROM follows WHERE follows.channel_id = :channelId")
     abstract fun deleteFollowWithChannelId(channelId: Int)
+
+    @Query("SELECT * FROM follows WHERE follows.channel_id = :id")
+    abstract fun getFollow(id: Int): Follow?
 }
