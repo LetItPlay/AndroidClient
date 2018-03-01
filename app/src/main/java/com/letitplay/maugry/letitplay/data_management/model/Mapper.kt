@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.data_management.model
 
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
+import com.letitplay.maugry.letitplay.data_management.api.responses.TracksAndChannels
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChannelResponse
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
@@ -40,6 +41,15 @@ fun toTrackWithChannels(tracks: List<Track>, channel: List<Channel>): List<Track
     val channelHashMap = channel.associateBy(Channel::id)
     return tracks.map {
         TrackWithChannel(it, channelHashMap[it.stationId]!!, null)
+    }
+}
+
+fun toTrackWithChannels(tracksAndChannels: TracksAndChannels): List<TrackWithChannel> {
+    return with(tracksAndChannels) {
+        if (tracks != null && channels != null)
+            toTrackWithChannels(tracks, channels)
+        else
+            emptyList()
     }
 }
 

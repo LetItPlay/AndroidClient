@@ -5,9 +5,8 @@ import android.arch.paging.DataSource
 import android.arch.paging.PositionalDataSource
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
-import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
+import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Maybe
@@ -140,30 +139,4 @@ class FeedDataSourceFactory(
                 }
                 .toMaybe()
     }
-
-    inner class LikesState(val old: Set<Like> = emptySet(), val new: Set<Like> = emptySet())
-}
-
-private fun <S, T> updateIfContains(collection: MutableList<T>, set: Set<S>, containFilter: ((S, T) -> Boolean), f: ((S, T) -> T)) {
-    set.forEach { setItem ->
-        val itemIndex = collection.indexOfFirst { containFilter(setItem, it) }
-        if (itemIndex != -1) {
-            val item = collection[itemIndex]
-            collection[itemIndex] = f(setItem, item)
-        }
-    }
-}
-
-private fun isLikeForTrack(like: Like, trackWithChannel: TrackWithChannel): Boolean {
-    return like.trackId == trackWithChannel.track.id
-}
-
-private fun likeTrack(like: Like, trackWithChannel: TrackWithChannel): TrackWithChannel {
-    val trackObj = trackWithChannel.track
-    return trackWithChannel.copy(likeId = like.trackId, track = trackObj.copy(likeCount = trackObj.likeCount + 1))
-}
-
-private fun dislikeTrack(like: Like, trackWithChannel: TrackWithChannel): TrackWithChannel {
-    val trackObj = trackWithChannel.track
-    return trackWithChannel.copy(likeId = null, track = trackObj.copy(likeCount = trackObj.likeCount - 1))
 }

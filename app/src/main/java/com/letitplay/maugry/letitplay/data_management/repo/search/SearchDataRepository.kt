@@ -11,7 +11,6 @@ import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.*
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.ReplaySubject
-import timber.log.Timber
 
 class SearchDataRepository(
         private val api: LetItPlayApi,
@@ -85,22 +84,6 @@ class SearchDataRepository(
                         it.copy(likeId = likesHashMap[it.track.id]?.trackId)
                     }
                 })
-    }
-
-    private val localChannelsTransformer = ObservableTransformer<List<Channel>, List<ChannelWithFollow>> { localChannels ->
-        db.followDao().getAllFollows()
-                .doOnNext {
-                    Timber.e("WOW")
-                }
-                .toObservable()
-                .concatMap {
-                    val followsHashMap = it.associateBy { it.channelId }
-                    localChannels.map {
-                        it.map {
-                            ChannelWithFollow(it, followsHashMap[it.id]?.channelId)
-                        }
-                    }
-                }
     }
 
     private fun String.like(expr: String): Boolean = this.contains(expr, true)
