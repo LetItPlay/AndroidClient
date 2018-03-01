@@ -50,6 +50,11 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
                 else -> hideProgress()
             }
         })
+        vm.refreshing.observe(this, Observer<Boolean> {
+            it?.let {
+                swipe_refresh.isRefreshing = it
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,10 +69,6 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
             vm.onRefreshChannels()
-
-            if (swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = false
-            }
         }
         return view
     }

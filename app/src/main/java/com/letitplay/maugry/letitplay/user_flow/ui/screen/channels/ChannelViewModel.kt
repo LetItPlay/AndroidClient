@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import com.letitplay.maugry.letitplay.utils.toResult
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 
 
@@ -16,7 +17,7 @@ class ChannelViewModel(
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), LifecycleObserver {
 
-    private var inFollow: Boolean = false
+    private var followingDisposable: Disposable? = null
 
     val isLoading = MutableLiveData<Boolean>()
 
@@ -28,33 +29,43 @@ class ChannelViewModel(
                 .toLiveData()
     }
 
+    val refreshing = MutableLiveData<Boolean>()
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         refreshChannels()
     }
 
     fun onRefreshChannels() {
+        refreshing.postValue(true)
         refreshChannels()
     }
 
     private fun refreshChannels() {
         channelRepo.loadChannels()
+                .doFinally {
+                    refreshing.postValue(false)
+                }
                 .subscribe({}, {})
                 .addTo(compositeDisposable)
     }
 
     fun onFollowClick(channelData: ChannelWithFollow) {
-        if (!inFollow) {
-            channelRepo.follow(channelData)
+        if (followingDisposable == null || followingDisposable!!.isDisposed) {
+            followingDisposable = channelRepo.follow(channelData)
                     .doOnSubscribe {
                         isLoading.postValue(true)
                     }
                     .doFinally {
                         isLoading.postValue(false)
-                        inFollow = false
                     }
                     .subscribe()
-                    .addTo(compositeDisposable)
+
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        followingDisposable?.dispose()
     }
 }
