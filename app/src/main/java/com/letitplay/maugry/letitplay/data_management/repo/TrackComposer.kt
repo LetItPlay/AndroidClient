@@ -56,14 +56,13 @@ fun Flowable<List<Like>>.switchApplyLikes(tracks: Single<List<TrackWithChannel>>
                     tracksSubject.onNext(updatedTracks)
                     Flowable.just(tracksSubject.value)
                 }
-                .startWith {
+                .startWith(tracks.map {
                     val likes = likesFlowable.blockingFirst().associateBy { it.trackId }
-                    val tracks = tracks.blockingGet().map { track ->
+                    val tracksWithLikes = it.map { track ->
                         track.copy(likeId = likes[track.track.id]?.trackId)
                     }
-                    tracksSubject.onNext(tracks)
-                    it.onNext(tracks)
-                    it.onComplete()
-                }
+                    tracksSubject.onNext(tracksWithLikes)
+                    tracksWithLikes
+                }.toFlowable())
     }
 }

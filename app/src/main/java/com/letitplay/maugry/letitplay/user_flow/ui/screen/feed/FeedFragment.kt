@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,6 @@ import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
@@ -69,7 +69,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         feedRecycler.adapter = feedListAdapter
         val divider = listDivider(feedRecycler.context, R.drawable.list_divider)
         feedRecycler.addItemDecoration(divider)
-        feedRecycler.defaultItemAnimator.supportsChangeAnimations = false
+        feedRecycler.itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
         val goToChannels = view.findViewById<View>(R.id.go_to_channels)
         goToChannels.setOnClickListener {
             seeAllChannelsClick()

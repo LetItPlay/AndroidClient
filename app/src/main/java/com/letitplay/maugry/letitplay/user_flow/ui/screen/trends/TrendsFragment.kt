@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,6 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKe
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Result
-import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.channels_fragment.*
 import timber.log.Timber
@@ -66,7 +66,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         val trendsRecycler = view.findViewById<RecyclerView>(R.id.trend_list)
         trendsRecycler.adapter = trendsListAdapter
         trendsRecycler.addItemDecoration(listDivider(trendsRecycler.context, R.drawable.list_divider))
-        trendsRecycler.defaultItemAnimator.supportsChangeAnimations = false
+        trendsRecycler.itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {

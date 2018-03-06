@@ -47,7 +47,7 @@ class FeedViewModel(
                     mediator.setValue(ViewState(it, mediator.value?.noChannels ?: false))
                 })
                 mediator.addSource(noFollowedChannels, {
-                    mediator.setValue(ViewState(null, it ?: false))
+                    mediator.setValue(ViewState(mediator.value?.data, it ?: false))
                 })
             }
 
