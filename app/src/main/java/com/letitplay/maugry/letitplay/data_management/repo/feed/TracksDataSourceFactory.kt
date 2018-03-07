@@ -3,25 +3,19 @@ package com.letitplay.maugry.letitplay.data_management.repo.feed
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.DataSource
 import android.arch.paging.PositionalDataSource
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
-import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.repo.*
+import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
-import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.zipWith
 import java.io.IOException
 
-class FeedDataSourceFactory(
-        private val api: LetItPlayApi,
-        private val db: LetItPlayDb,
-        private val preferenceHelper: PreferenceHelper,
-        private val compositeDisposable: CompositeDisposable
+abstract class TracksDataSourceFactory(
+        protected val preferenceHelper: PreferenceHelper,
+        protected val compositeDisposable: CompositeDisposable
 ) : DataSource.Factory<Int, TrackWithChannel> {
-    private val tracks = mutableListOf<TrackWithChannel>()
+    protected val tracks = mutableListOf<TrackWithChannel>()
     private val tracksLock = Any()
 
     val sourceLiveData = MutableLiveData<FeedDataSource>()
@@ -29,26 +23,6 @@ class FeedDataSourceFactory(
     fun invalidateAllData() {
         tracks.clear()
         sourceLiveData.value?.invalidate()
-    }
-
-    init {
-        db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
-                .scan(LikesState(), { oldState, newLikesCollection ->
-                    LikesState(oldState.new, newLikesCollection.toSet())
-                })
-                .skip(2) // Skip empty and initial state
-                .distinctUntilChanged()
-                .doOnNext {
-                    val newLikes = it.new - it.old
-                    val newDislikes = it.old - it.new
-                    synchronized(tracksLock) {
-                        updateIfContains(tracks, newLikes, ::isLikeForTrack, ::likeTrack)
-                        updateIfContains(tracks, newDislikes, ::isLikeForTrack, ::dislikeTrack)
-                    }
-                    sourceLiveData.value?.invalidate()
-                }
-                .subscribe()
-                .addTo(compositeDisposable)
     }
 
     override fun create(): DataSource<Int, TrackWithChannel> {
@@ -63,6 +37,7 @@ class FeedDataSourceFactory(
 
         override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<TrackWithChannel>) {
             networkState.postValue(NetworkState.LOADING)
+            val lang = preferenceHelper.contentLanguage!!
             val endPosition = params.startPosition + params.loadSize
             val needToLoad = endPosition - tracks.size
             var subList: List<TrackWithChannel> = emptyList()
@@ -72,10 +47,10 @@ class FeedDataSourceFactory(
                         subList = tracks.subList(params.startPosition, endPosition)
                     }
                 } else {
-                    loadItems(tracks.size, needToLoad)
+                    loadItems(tracks.size, needToLoad, lang)
                             .blockingGet()
                             .let {
-                                synchronized(tracksLock) {
+                                withLock {
                                     tracks.addAll(it)
                                     val tracksSize = tracks.size
                                     subList = tracks.subList(params.startPosition, if (endPosition > tracksSize) tracksSize else endPosition)
@@ -90,18 +65,19 @@ class FeedDataSourceFactory(
         }
 
         override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<TrackWithChannel>) {
+            val lang = preferenceHelper.contentLanguage!!
             try {
                 var subList = emptyList<TrackWithChannel>()
                 // Have local data
-                if (params.requestedLoadSize < tracks.size) {
+                if (tracks.isNotEmpty()) {
                     synchronized(tracksLock) {
                         subList = tracks.subList(0, tracks.size)
                     }
                 } else {
-                    loadItems(0, params.requestedLoadSize)
+                    loadItems(0, params.requestedLoadSize, lang)
                             .blockingGet()
                             .let {
-                                synchronized(tracksLock) {
+                                withLock {
                                     tracks.clear()
                                     tracks.addAll(it)
                                     subList = it
@@ -119,24 +95,11 @@ class FeedDataSourceFactory(
         }
     }
 
-    private fun loadItems(offset: Int, size: Int): Maybe<List<TrackWithChannel>> {
-        val lang = preferenceHelper.contentLanguage!!
-        return db.channelDao().getFollowedChannelsId(lang)
-                .map(List<Int>::joinWithComma)
-                .firstElement()
-                .flatMapSingle {
-                    api.getFeed(it, offset, size, lang.strValue)
-                }
-                .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
-                    feed to likes
-                })
-                .map { (response, likes) ->
-                    val likesHashMap = likes.associateBy { it.trackId }
-                    val channelHashMap = response.channels!!.associateBy { it.id }
-                    response.tracks!!.map {
-                        TrackWithChannel(it, channelHashMap[it.stationId]!!, likesHashMap[it.id]?.trackId)
-                    }
-                }
-                .toMaybe()
+    protected fun <R> withLock(block: () -> R): R {
+        synchronized(tracksLock) {
+            return block()
+        }
     }
+
+    abstract fun loadItems(offset: Int, size: Int, lang: Language?): Maybe<List<TrackWithChannel>>
 }

@@ -7,12 +7,18 @@ import android.support.annotation.MainThread
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.repo.Listing
+import com.letitplay.maugry.letitplay.data_management.model.toTrackWithChannels
+import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.zipWith
 
 
 class FeedDataRepository(
@@ -35,7 +41,7 @@ class FeedDataRepository(
                 .setPrefetchDistance(prefetchDistance)
                 .setEnablePlaceholders(false)
                 .build()
-        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper, compositeDisposable)
+        val dataSourceFactory = FeedDataSourceFactory(db, preferenceHelper, compositeDisposable)
 
         val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
                 .setBackgroundThreadExecutor(schedulerProvider.ioExecutor())
@@ -59,6 +65,52 @@ class FeedDataRepository(
                 },
                 refreshState = refreshState
         )
+    }
+
+    inner class FeedDataSourceFactory(
+            db: LetItPlayDb,
+            preferenceHelper: PreferenceHelper,
+            compositeDisposable: CompositeDisposable
+    ) : TracksDataSourceFactory(preferenceHelper, compositeDisposable) {
+        init {
+            db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
+                    .scan(LikesState(), { oldState, newLikesCollection ->
+                        LikesState(oldState.new, newLikesCollection.toSet())
+                    })
+                    .skip(2) // Skip empty and initial state
+                    .distinctUntilChanged()
+                    .doOnNext {
+                        val newLikes = it.new - it.old
+                        val newDislikes = it.old - it.new
+                        withLock {
+                            updateIfContains(tracks, newLikes, ::isLikeForTrack, ::likeTrack)
+                            updateIfContains(tracks, newDislikes, ::isLikeForTrack, ::dislikeTrack)
+                        }
+                        sourceLiveData.value?.invalidate()
+                    }
+                    .subscribe()
+                    .addTo(compositeDisposable)
+        }
+
+        override fun loadItems(offset: Int, size: Int, lang: Language?): Maybe<List<TrackWithChannel>> {
+            return db.channelDao().getFollowedChannelsId(lang!!)
+                    .map(List<Int>::joinWithComma)
+                    .firstElement()
+                    .flatMapSingle {
+                        api.getFeed(it, offset, size, lang.strValue)
+                    }
+                    .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
+                        feed to likes
+                    })
+                    .map { (response, likes) ->
+                        if (response.tracks != null && response.channels != null) {
+                            toTrackWithChannels(response.tracks, response.channels, likes)
+                        } else {
+                            emptyList()
+                        }
+                    }
+                    .toMaybe()
+        }
     }
 
     companion object {

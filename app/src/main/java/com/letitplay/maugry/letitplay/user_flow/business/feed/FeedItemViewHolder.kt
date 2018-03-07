@@ -84,7 +84,7 @@ class FeedItemViewHolder(
                     MotionEvent.ACTION_MOVE -> {
                         val diffX = event.x - downX
                         val diffY = event.y - downY
-                        if (Math.abs(diffY) > touchSlop && diffY > diffX) {
+                        if (Math.abs(diffY) > touchSlop) {
                             shouldClick = false
                         }
                         view.parent.requestDisallowInterceptTouchEvent(true)
