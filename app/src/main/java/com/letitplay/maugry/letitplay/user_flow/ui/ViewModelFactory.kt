@@ -72,7 +72,8 @@ class ViewModelFactory(
                 isAssignableFrom(SearchViewModel::class.java) ->
                     SearchViewModel(
                             searchRepository,
-                            channelRepository
+                            channelRepository,
+                            playerRepository
                     )
                 else -> throw IllegalArgumentException("Unknown type of view model")
             } as T
