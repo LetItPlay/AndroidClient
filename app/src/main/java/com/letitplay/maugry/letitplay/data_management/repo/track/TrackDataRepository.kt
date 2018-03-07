@@ -6,7 +6,6 @@ import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequest
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -35,10 +34,8 @@ class TrackDataRepository(
                             .map { it to handleLikeDb }
                 }
                 .doOnSuccess {
-                    val trackModel = toTrackModel(it.first)
                     db.runInTransaction {
                         it.second()
-                        db.trackDao().updateTrack(trackModel)
                     }
                 }
                 .observeOn(schedulerProvider.ui())
