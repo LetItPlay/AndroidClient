@@ -2,6 +2,9 @@ package com.letitplay.maugry.letitplay.user_flow.business.feed
 
 import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.gsfoxpro.musicservice.service.MusicService
@@ -55,6 +58,7 @@ class FeedItemViewHolder(
             if ((itemView as SwipeHorizontalLayout).isDragging()) {
                 return@setOnLongClickListener false
             }
+            itemView.feed_track_info_scroll.smoothScrollTo(0, 0)
             TransitionManager.beginDelayedTransition(itemView as ViewGroup)
             itemView.feed_card_info.show()
             true
@@ -65,7 +69,37 @@ class FeedItemViewHolder(
             }
         }
         itemView.feed_playing_now.mediaSession = musicService?.mediaSession
+        itemView.feed_track_info_scroll.setOnTouchListener(object : View.OnTouchListener {
+            private var shouldClick = false
+            private var downX = 0f
+            private var downY = 0f
+            private val touchSlop = ViewConfiguration.get(itemView.context).scaledTouchSlop
+            override fun onTouch(view: View, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        shouldClick = true
+                        downX = event.x
+                        downY = event.y
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val diffX = event.x - downX
+                        val diffY = event.y - downY
+                        if (Math.abs(diffY) > touchSlop && diffY > diffX) {
+                            shouldClick = false
+                        }
+                        view.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        if (shouldClick) {
+                            itemView.performClick()
+                        }
+                    }
+                }
+                return false
+            }
+        })
     }
+
 
     fun update(feedData: TrackWithChannel?) {
         if (feedData == null) {
