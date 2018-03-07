@@ -13,7 +13,6 @@ import com.letitplay.maugry.letitplay.data_management.model.toTrackWithChannels
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.repo.feed.TracksDataSourceFactory
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
-import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
 import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -61,8 +60,9 @@ class TrendDataRepository(
     }
 
     inner class TrendDataSourceFactory(
-            compositeDisposable: CompositeDisposable
+            private val compositeDisposable: CompositeDisposable
     ) : TracksDataSourceFactory(preferenceHelper, false) {
+
         init {
             db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
                     .scan(LikesState(), { oldState, newLikesCollection ->
@@ -84,35 +84,24 @@ class TrendDataRepository(
         }
 
         override fun loadItems(offset: Int, size: Int, lang: Language?): Maybe<List<TrackWithChannel>> {
-            return db.channelDao().getFollowedChannelsId(lang!!)
-                    .map(List<Int>::joinWithComma)
-                    .firstElement()
-                    .flatMapSingle {
-                        api.getFeed(it, offset, size, lang.strValue)
-                    }
-                    .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
-                        feed to likes
-                    })
-                    .map { (response, likes) ->
-                        if (response.tracks != null && response.channels != null) {
-                            toTrackWithChannels(response.tracks, response.channels, likes)
-                        } else {
-                            emptyList()
+            return Maybe.create { emitter ->
+                api.trends(lang!!.strValue)
+                        .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
+                            feed to likes
+                        })
+                        .doOnSuccess { (response, likes) ->
+                            if (response.tracks != null && response.channels != null)
+                                emitter.onSuccess(toTrackWithChannels(response.tracks, response.channels, likes))
+                            else
+                                emitter.onSuccess(emptyList())
                         }
-                    }
-                    .toMaybe()
-//            return api.trends(lang!!.strValue)
-//                    .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
-//                        feed to likes
-//                    })
-//                    .map { (response, likes) ->
-//                        if (response.tracks != null && response.channels != null) {
-//                            toTrackWithChannels(response.tracks, response.channels, likes)
-//                        } else {
-//                            emptyList()
-//                        }
-//                    }
-//                    .toMaybe()
+                        .doFinally {
+                            emitter.onComplete()
+                        }
+                        .subscribeOn(schedulerProvider.io())
+                        .subscribe()
+                        .addTo(compositeDisposable)
+            }
         }
     }
 

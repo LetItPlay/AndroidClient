@@ -35,6 +35,7 @@ class TrendViewModel(
 
     val channels: LiveData<Result<List<Channel>>> by lazy {
         channelRepository.channels()
+                .subscribeOn(schedulerProvider.io())
                 .toResult(schedulerProvider)
                 .toLiveData()
     }

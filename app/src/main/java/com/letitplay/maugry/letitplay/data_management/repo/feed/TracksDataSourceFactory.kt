@@ -35,7 +35,6 @@ abstract class TracksDataSourceFactory(
         val initialLoad = MutableLiveData<NetworkState>()
 
         override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<TrackWithChannel>) {
-            return
             networkState.postValue(NetworkState.LOADING)
             val lang = preferenceHelper.contentLanguage!!
             val endPosition = params.startPosition + params.loadSize

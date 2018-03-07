@@ -3,10 +3,10 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -28,17 +28,18 @@ import kotlinx.android.synthetic.main.channel_small_item.view.*
 import kotlinx.android.synthetic.main.trends_fragment.*
 import timber.log.Timber
 
+class MyRecyclerView(context: Context): RecyclerView(context) {
+
+}
 
 class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
 
     private val trendsListAdapter by lazy {
         TrendAdapter(musicService,
                 ::playTrack,
-                ::onLikeClick)
-    }
-
-    private val channelsAdapter by lazy {
-        ChannelsAdapter()
+                ::onLikeClick,
+                ::onChannelClick,
+                ::seeAllChannelsClick)
     }
 
     private val vm by lazy {
@@ -58,7 +59,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         })
         vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
             when (result) {
-                is Result.Success -> channelsAdapter.channels = result.data
+                is Result.Success -> trendsListAdapter.channels = result.data
                 is Result.Failure -> Timber.e(result.e)
             }
         })
@@ -72,17 +73,6 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             addItemDecoration(listDivider(trendsRecycler.context, R.drawable.list_divider))
             itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
             isNestedScrollingEnabled = false
-        }
-        val channelsRecycler = view.findViewById<RecyclerView>(R.id.channelsRecyclerView)
-        channelsRecycler.apply {
-            adapter = channelsAdapter
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            addItemDecoration(listDivider(context!!, R.drawable.list_transparent_divider_16dp, LinearLayoutManager.HORIZONTAL))
-            isNestedScrollingEnabled = false
-        }
-        val seeAllButton = view.findViewById<View>(R.id.allChannelsText)
-        seeAllButton.setOnClickListener {
-            seeAllChannelsClick()
         }
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
