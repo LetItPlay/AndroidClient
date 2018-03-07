@@ -24,6 +24,8 @@ class SearchViewModel(
     val isLoading = MutableLiveData<Boolean>()
     val searchResult: LiveData<List<SearchResultItem>> = Transformations.switchMap(submitClicks, { _ ->
         searchRepository.performQuery(query.value!!)
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doOnEach { isLoading.postValue(false) }
                 .toLiveData()
     })
 
