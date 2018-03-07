@@ -8,12 +8,11 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.reactivex.Maybe
-import io.reactivex.disposables.CompositeDisposable
 import java.io.IOException
 
 abstract class TracksDataSourceFactory(
         protected val preferenceHelper: PreferenceHelper,
-        protected val compositeDisposable: CompositeDisposable
+        private val supportPaging: Boolean = true
 ) : DataSource.Factory<Int, TrackWithChannel> {
     protected val tracks = mutableListOf<TrackWithChannel>()
     private val tracksLock = Any()
@@ -26,28 +25,28 @@ abstract class TracksDataSourceFactory(
     }
 
     override fun create(): DataSource<Int, TrackWithChannel> {
-        val source = FeedDataSource()
+        val source = FeedDataSource(supportPaging)
         sourceLiveData.postValue(source)
         return source
     }
 
-    inner class FeedDataSource : PositionalDataSource<TrackWithChannel>() {
+    inner class FeedDataSource(private val supportPaging: Boolean) : PositionalDataSource<TrackWithChannel>() {
         val networkState = MutableLiveData<NetworkState>()
         val initialLoad = MutableLiveData<NetworkState>()
 
         override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<TrackWithChannel>) {
+            return
             networkState.postValue(NetworkState.LOADING)
             val lang = preferenceHelper.contentLanguage!!
             val endPosition = params.startPosition + params.loadSize
             val needToLoad = endPosition - tracks.size
             var subList: List<TrackWithChannel> = emptyList()
             try {
-                if (endPosition < tracks.size) {
-                    synchronized(tracksLock) {
+                when {
+                    endPosition < tracks.size -> withLock {
                         subList = tracks.subList(params.startPosition, endPosition)
                     }
-                } else {
-                    loadItems(tracks.size, needToLoad, lang)
+                    supportPaging -> loadItems(tracks.size, needToLoad, lang)
                             .blockingGet()
                             .let {
                                 withLock {
@@ -56,6 +55,9 @@ abstract class TracksDataSourceFactory(
                                     subList = tracks.subList(params.startPosition, if (endPosition > tracksSize) tracksSize else endPosition)
                                 }
                             }
+                    else -> withLock {
+                        subList = tracks.subList(params.startPosition, tracks.size)
+                    }
                 }
                 callback.onResult(subList.toList())
                 networkState.postValue(NetworkState.LOADED)
@@ -70,7 +72,7 @@ abstract class TracksDataSourceFactory(
                 var subList = emptyList<TrackWithChannel>()
                 // Have local data
                 if (tracks.isNotEmpty()) {
-                    synchronized(tracksLock) {
+                    withLock {
                         subList = tracks.subList(0, tracks.size)
                     }
                 } else {

@@ -1,6 +1,9 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.OnLifecycleEvent
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
@@ -26,13 +29,9 @@ class TrendViewModel(
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), LifecycleObserver {
     private var likeDisposable: Disposable? = null
-    val refresh = MutableLiveData<Any>()
 
-    val trends: LiveData<Result<List<TrackWithChannel>>> = Transformations.switchMap(refresh, {
-        trendRepository.trends()
-                .toResult(schedulerProvider)
-                .toLiveData()
-    })
+    private val repoResult by lazy { trendRepository.trends(compositeDisposable) }
+    val trends by lazy { repoResult.pagedList }
 
     val channels: LiveData<Result<List<Channel>>> by lazy {
         channelRepository.channels()
@@ -47,11 +46,12 @@ class TrendViewModel(
     }
 
     private fun refreshTrends() {
-        refresh.postValue(Any())
+        repoResult.refresh()
     }
 
     private fun refreshChannels() {
         channelRepository.loadChannels()
+                .subscribeOn(schedulerProvider.io())
                 .subscribe({}, {})
                 .addTo(compositeDisposable)
     }
