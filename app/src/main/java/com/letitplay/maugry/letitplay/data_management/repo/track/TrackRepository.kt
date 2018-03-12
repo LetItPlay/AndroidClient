@@ -6,4 +6,5 @@ import io.reactivex.Completable
 
 interface TrackRepository {
     fun like(track: TrackWithChannel): Completable
+    fun swipeTrackToTop(track: TrackWithChannel): Completable
 }

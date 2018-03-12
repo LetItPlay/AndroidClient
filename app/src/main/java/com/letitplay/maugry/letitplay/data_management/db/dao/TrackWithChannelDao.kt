@@ -35,4 +35,9 @@ abstract class TrackWithChannelDao {
             "INNER JOIN channels ON channels.channel_id = tracks.stationId " +
             "WHERE tracks.track_lang = :lang AND (tracks.title LIKE :query OR tracks.description LIKE :query OR tracks.track_tags LIKE :query)")
     abstract fun queryTracks(query: String, lang: Language): List<TrackWithChannel>
+
+    @Query("SELECT * FROM tracks " +
+            "INNER JOIN channels ON channels.channel_id = tracks.stationId "+
+            "INNER JOIN likes ON likes.track_id = tracks.track_id")
+    abstract fun getTracksInPlaylist(): Flowable<List<TrackWithChannel>>
 }

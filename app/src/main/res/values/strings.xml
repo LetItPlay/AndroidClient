@@ -2,6 +2,7 @@
     <string name="app_name">LetItPlay</string>
     <string name="menu_item_trends">Trends</string>
     <string name="menu_item_search">Search</string>
+    <string name="menu_item_playlist">Playlists</string>
     <string name="menu_item_feed">Feed</string>
     <string name="menu_item_profile">Profile</string>
 
@@ -20,6 +21,9 @@
     <string name="track_recent_added">Recent added</string>
     <string name="time_published_ago">ago</string>
     <string name="no_trends">There are no tracks</string>
+
+    <!--Playlists-->
+    <string name="playlists_no_tracks">There are no tracks</string>
 
     <!--PROFILE-->
     <string name="profile_change_language_to_ru">Поменять язык на русский</string>

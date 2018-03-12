@@ -32,12 +32,12 @@ class FeedItemViewHolder(
             }
 
             override fun onSwipeToRight() {
-                playlistActionsListener?.performPushToTop(feedData.track)
+                playlistActionsListener?.performPushToTop(feedData)
                         ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
 
             override fun onSwipeToLeft() {
-                playlistActionsListener?.performPushToBottom(feedData.track)
+                playlistActionsListener?.performPushToBottom(feedData)
                         ?.ifTrue(this@FeedItemViewHolder::showOverlay)
             }
         }

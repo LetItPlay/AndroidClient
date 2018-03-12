@@ -4,8 +4,7 @@
     android:id="@+id/feed_swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:swipe_menu_max_width="@dimen/swipe_menu_width"
-    app:swipe_to_action_enabled="false">
+    app:swipe_menu_max_width="@dimen/swipe_menu_width">
 
     <FrameLayout
         android:id="@+id/left_menu"

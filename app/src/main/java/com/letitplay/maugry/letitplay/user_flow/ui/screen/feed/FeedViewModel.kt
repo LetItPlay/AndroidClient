@@ -64,6 +64,14 @@ class FeedViewModel(
         }
     }
 
+    fun onSwipeTrackToTop(trackData: TrackWithChannel) {
+        trackRepository.swipeTrackToTop(trackData)
+                .subscribe({}, {
+                    Timber.e(it, "Error when liking")
+                })
+
+    }
+
     fun refreshFeed() {
         repoResult.refresh()
     }

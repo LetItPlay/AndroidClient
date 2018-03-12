@@ -5,6 +5,7 @@ import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import io.reactivex.Completable
@@ -15,7 +16,7 @@ class TrackDataRepository(
         private val db: LetItPlayDb,
         private val postApi: LetItPlayPostApi,
         private val schedulerProvider: SchedulerProvider
-): TrackRepository {
+) : TrackRepository {
     override fun like(track: TrackWithChannel): Completable {
         val trackId = track.track.id
         val (likeDao, channelDao, trackDao) = Triple(db.likeDao(), db.channelDao(), db.trackDao())
@@ -39,6 +40,24 @@ class TrackDataRepository(
                     db.runInTransaction {
                         it.second()
                         db.trackDao().updateTrack(trackModel)
+                    }
+                }
+                .observeOn(schedulerProvider.ui())
+                .subscribeOn(schedulerProvider.io())
+                .toCompletable()
+    }
+
+    override fun swipeTrackToTop(track: TrackWithChannel): Completable {
+        val trackId = track.track.id
+        val (trackInPlaylistDao, channelDao, trackDao) = Triple(db.playlistDao(), db.channelDao(), db.trackDao())
+        val trackInPlaylist = Single.fromCallable { db.playlistDao().getTrackInPlaylist(trackId) != null }
+        return trackInPlaylist
+                .doOnSuccess {
+                    if (it) {
+                        channelDao.insertChannels(listOf(track.channel))
+                        trackDao.insertTracks(listOf(track.track))
+                        trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId))
+
                     }
                 }
                 .observeOn(schedulerProvider.ui())

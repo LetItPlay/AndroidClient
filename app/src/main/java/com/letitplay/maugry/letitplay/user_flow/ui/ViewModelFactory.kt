@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelReposi
 import com.letitplay.maugry.letitplay.data_management.repo.compilation.CompilationRepository
 import com.letitplay.maugry.letitplay.data_management.repo.feed.FeedRepository
 import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
+import com.letitplay.maugry.letitplay.data_management.repo.playlists.PlaylistsRepository
 import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileRepository
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
@@ -14,6 +15,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchViewModel
@@ -27,13 +29,14 @@ class ViewModelFactory(
         private val trackRepository: TrackRepository,
         private val feedRepository: FeedRepository,
         private val profileRepository: ProfileRepository,
+        private val playlistRepository: PlaylistsRepository,
         private val playerRepository: PlayerRepository,
         private val compilationRepository: CompilationRepository,
         private val searchRepository: SearchRepository,
         private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return with (modelClass) {
+        return with(modelClass) {
             when {
                 isAssignableFrom(TrendViewModel::class.java) ->
                     TrendViewModel(
@@ -60,9 +63,14 @@ class ViewModelFactory(
                             channelRepository,
                             playerRepository
                     )
-               isAssignableFrom(ProfileViewModel::class.java) ->
+                isAssignableFrom(ProfileViewModel::class.java) ->
                     ProfileViewModel(
                             profileRepository,
+                            schedulerProvider
+                    )
+                isAssignableFrom(PlaylistsViewModel::class.java) ->
+                    PlaylistsViewModel(
+                            playlistRepository,
                             schedulerProvider
                     )
                 isAssignableFrom(CompilationViewModel::class.java) ->

@@ -16,6 +16,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.feed.FeedDataReposito
 import com.letitplay.maugry.letitplay.data_management.repo.feed.FeedRepository
 import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerDataRepository
 import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
+import com.letitplay.maugry.letitplay.data_management.repo.playlists.PlaylistsDataRepository
+import com.letitplay.maugry.letitplay.data_management.repo.playlists.PlaylistsRepository
 import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileDataRepository
 import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileRepository
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchDataRepository
@@ -46,6 +48,7 @@ object ServiceLocator {
                 trackRepository,
                 feedRepository,
                 profileRepository,
+                playlistsRepository,
                 playerRepository,
                 compilationRepository,
                 searchRepository,
@@ -58,9 +61,10 @@ object ServiceLocator {
     private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, postServiceImpl, schedulerProvider) }
     private val feedRepository: FeedRepository by lazy { FeedDataRepository(db, serviceImpl, schedulerProvider, preferenceHelper) }
     private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider, preferenceHelper) }
+    private val playlistsRepository: PlaylistsRepository by lazy { PlaylistsDataRepository(db, schedulerProvider) }
     private val playerRepository: PlayerRepository by lazy { PlayerDataRepository(postServiceImpl, schedulerProvider, preferenceHelper) }
     private val compilationRepository: CompilationRepository by lazy { CompilationNetworkRepository(serviceImpl, preferenceHelper, schedulerProvider) }
-    val searchRepository : SearchRepository by lazy { SearchDataRepository(serviceImpl, postServiceImpl, db, schedulerProvider, preferenceHelper) }
+    val searchRepository: SearchRepository by lazy { SearchDataRepository(serviceImpl, postServiceImpl, db, schedulerProvider, preferenceHelper) }
     private val preferenceHelper: PreferenceHelper by lazy { PreferenceHelper(applicationContext) }
 
     val db: LetItPlayDb by lazy {
@@ -76,7 +80,7 @@ object ServiceLocator {
     }
 
     val schedulerProvider: SchedulerProvider by lazy {
-        object: SchedulerProvider {
+        object : SchedulerProvider {
             private val mainThreadExecutor = MainThreadExecutor()
             private val mainThreadScheduler = Schedulers.from(mainThreadExecutor)
             private val ioExecutor = Executors.newSingleThreadExecutor()
