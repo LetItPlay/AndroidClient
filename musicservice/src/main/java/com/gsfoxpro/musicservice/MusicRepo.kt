@@ -2,7 +2,7 @@ package com.gsfoxpro.musicservice
 
 import com.gsfoxpro.musicservice.model.AudioTrack
 
-open class MusicRepo(val playlist: List<AudioTrack>) {
+open class MusicRepo(val playlist: MutableList<AudioTrack>, val isUserMode:Boolean = false) {
 
     val hasNext get() = !playlist.isEmpty() && currentTrackIndex < playlist.size - 1
     val hasPrev get() = !playlist.isEmpty() && currentTrackIndex > 0
@@ -25,6 +25,17 @@ open class MusicRepo(val playlist: List<AudioTrack>) {
             true -> getAudioTrackAtIndex(--currentTrackIndex)
             else -> null
         }
+
+    open fun addTrackToStart(track:AudioTrack){
+        if (isUserMode) {
+            playlist.add(0, track)
+        }
+    }
+    open fun addTrackToEnd(track:AudioTrack){
+        if (isUserMode) {
+            playlist.add(playlist.size, track)
+        }
+    }
 
     open fun getAudioTrackAtId(id: Int): AudioTrack? {
         val index =  playlist.indexOfFirst { it.id == id }

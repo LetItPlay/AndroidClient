@@ -69,7 +69,6 @@ class FeedViewModel(
                 .subscribe({}, {
                     Timber.e(it, "Error when liking")
                 })
-
     }
 
     fun refreshFeed() {

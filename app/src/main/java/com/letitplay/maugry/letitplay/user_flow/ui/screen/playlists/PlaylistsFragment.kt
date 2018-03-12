@@ -69,7 +69,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
             return
         }
         vm.tracksInPlaylist.value?.let {
-            playlistsRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack))
+            playlistsRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList(), true)
         }
         navigationActivity.updateRepo(track.id, playlistsRepo)
     }

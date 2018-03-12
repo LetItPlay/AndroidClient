@@ -83,7 +83,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         if (channel != null && tracks != null) {
             channelPageRepo = MusicRepo(tracks.map {
                 TrackWithChannel(it, channel.channel, null).toAudioTrack()
-            })
+            }.toMutableList())
             navigationActivity.updateRepo(track.id, channelPageRepo)
         }
     }

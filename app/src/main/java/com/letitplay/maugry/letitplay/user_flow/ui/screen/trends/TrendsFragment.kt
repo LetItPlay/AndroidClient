@@ -100,7 +100,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = (vm.trends.value as Result.Success).data.map(TrackWithChannel::toAudioTrack)
+        val playlist = (vm.trends.value as Result.Success).data.map(TrackWithChannel::toAudioTrack).toMutableList()
         trendsRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, trendsRepo)
     }

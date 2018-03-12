@@ -55,7 +55,7 @@ class CompilationFragment : BaseFragment(R.layout.compilation_fragment) {
     private fun onCompilationClick(compilation: CompilationModel) {
         val audioTracks = toTrackWithChannels(compilation.tracks, compilation.channels)
                 .map(TrackWithChannel::toAudioTrack)
-        navigationActivity.updateRepo(compilation.tracks.first().id, MusicRepo(audioTracks))
+        navigationActivity.updateRepo(compilation.tracks.first().id, MusicRepo(audioTracks.toMutableList()))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

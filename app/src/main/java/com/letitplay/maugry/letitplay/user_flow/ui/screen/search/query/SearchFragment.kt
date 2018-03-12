@@ -87,7 +87,7 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
                 .filterIsInstance(SearchResultItem.TrackItem::class.java)
                 .map(SearchResultItem.TrackItem::track)
                 .map(TrackWithChannel::toAudioTrack)
-        resultsMusicRepo = MusicRepo(playlist)
+        resultsMusicRepo = MusicRepo(playlist.toMutableList())
         navigationActivity.updateRepo(track.id, resultsMusicRepo)
     }
 

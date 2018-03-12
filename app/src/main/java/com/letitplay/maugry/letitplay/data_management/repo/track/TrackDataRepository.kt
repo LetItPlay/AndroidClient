@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 
 
 class TrackDataRepository(
@@ -50,13 +51,29 @@ class TrackDataRepository(
     override fun swipeTrackToTop(track: TrackWithChannel): Completable {
         val trackId = track.track.id
         val (trackInPlaylistDao, channelDao, trackDao) = Triple(db.playlistDao(), db.channelDao(), db.trackDao())
-        val trackInPlaylist = Single.fromCallable { db.playlistDao().getTrackInPlaylist(trackId) != null }
+        val trackInPlaylist = Single.zip(
+                Single.fromCallable { db.playlistDao().getTrackInPlaylist(trackId) },
+                Single.fromCallable { db.playlistDao().getFirstTrackInPlaylist() },
+                BiFunction { trackInPlaylist: TrackInPlaylist?, maxOrder: Int? ->
+                    Pair(trackInPlaylist, maxOrder)
+                })
         return trackInPlaylist
                 .doOnSuccess {
-                    if (!it) {
+                    val order: Int = when (it.first == null) {
+                        true ->
+                            when (it.second == null) {
+                                true -> 0
+                                else -> it.second!! - 1
+                            }
+                        else -> when (it.first?.order == it.second) {
+                            true -> it.second!!
+                            else -> it.second!! - 1
+                        }
+                    }
+                    db.runInTransaction {
                         channelDao.insertChannels(listOf(track.channel))
                         trackDao.insertTracks(listOf(track.track))
-                        trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId))
+                        trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId, order))
                     }
                 }
                 .observeOn(schedulerProvider.ui())

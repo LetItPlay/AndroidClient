@@ -17,5 +17,7 @@ import android.arch.persistence.room.PrimaryKey
 data class TrackInPlaylist(
         @PrimaryKey
         @ColumnInfo(name = "track_id")
-        val trackId: Int
+        val trackId: Int,
+        @ColumnInfo(name = "order")
+        val order: Int
 )

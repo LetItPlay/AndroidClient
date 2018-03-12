@@ -137,6 +137,21 @@ class MusicService : Service() {
         }
     }
 
+    fun addTrackToStart(track:AudioTrack){
+        musicRepo?.addTrackToStart(track)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
+    fun addTrackToEnd(track:AudioTrack){
+        musicRepo?.addTrackToEnd(track)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
+
     private val becomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action) {

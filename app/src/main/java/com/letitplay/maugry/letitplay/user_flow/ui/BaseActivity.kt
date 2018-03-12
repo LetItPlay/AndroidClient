@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
@@ -93,6 +94,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             skipToQueueItem(trackId)
         }
 
+    }
+
+    fun addTrackToStartRepo(elem: AudioTrack) {
+        musicService?.addTrackToStart(elem)
     }
 
 

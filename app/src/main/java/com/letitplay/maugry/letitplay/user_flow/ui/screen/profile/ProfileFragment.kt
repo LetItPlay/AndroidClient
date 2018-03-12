@@ -81,7 +81,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             return
         }
         vm.likedTracks.value?.let {
-            profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack))
+            profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList())
         }
         navigationActivity.updateRepo(track.id, profileRepo)
     }

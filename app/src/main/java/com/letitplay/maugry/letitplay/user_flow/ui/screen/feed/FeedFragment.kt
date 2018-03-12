@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
-import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
@@ -102,7 +101,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = vm.state.value?.data?.map(TrackWithChannel::toAudioTrack) ?: return
+        val playlist = vm.state.value?.data?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
         feedRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, feedRepo)
     }
@@ -110,11 +109,13 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
         override fun performPushToBottom(trackData: TrackWithChannel): Boolean {
             vm.onSwipeTrackToTop(trackData)
+            navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
             return true
         }
 
         override fun performPushToTop(trackData: TrackWithChannel): Boolean {
             vm.onSwipeTrackToTop(trackData)
+            navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
             return true
         }
 
