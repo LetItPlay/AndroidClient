@@ -53,11 +53,10 @@ class TrackDataRepository(
         val trackInPlaylist = Single.fromCallable { db.playlistDao().getTrackInPlaylist(trackId) != null }
         return trackInPlaylist
                 .doOnSuccess {
-                    if (it) {
+                    if (!it) {
                         channelDao.insertChannels(listOf(track.channel))
                         trackDao.insertTracks(listOf(track.track))
                         trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId))
-
                     }
                 }
                 .observeOn(schedulerProvider.ui())

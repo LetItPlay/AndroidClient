@@ -38,6 +38,6 @@ abstract class TrackWithChannelDao {
 
     @Query("SELECT * FROM tracks " +
             "INNER JOIN channels ON channels.channel_id = tracks.stationId "+
-            "INNER JOIN likes ON likes.track_id = tracks.track_id")
+            "INNER JOIN trackInPlaylist ON trackInPlaylist.track_id = tracks.track_id")
     abstract fun getTracksInPlaylist(): Flowable<List<TrackWithChannel>>
 }
