@@ -41,8 +41,10 @@ class PlaylistsAdapter(
 
 
     class PlaylistsItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.track_item) {
+        lateinit var trackData: TrackWithChannel
 
         fun update(trackData: TrackWithChannel) {
+            this.trackData = trackData
             itemView.apply {
                 track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
                 track_playing_now.trackListenerCount = trackData.track.listenCount
