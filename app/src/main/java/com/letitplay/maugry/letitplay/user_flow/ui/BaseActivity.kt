@@ -96,8 +96,12 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     }
 
-    fun addTrackToStartRepo(elem: AudioTrack) {
-        musicService?.addTrackToStart(elem)
+    fun addTrackToStartRepo(track: AudioTrack) {
+        musicService?.addTrackToStart(track)
+    }
+
+    fun addTrackToEndRepo(track: AudioTrack){
+        musicService?.addTrackToEnd(track)
     }
 
 

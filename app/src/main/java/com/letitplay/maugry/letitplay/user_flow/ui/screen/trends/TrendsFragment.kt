@@ -14,6 +14,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
@@ -30,6 +31,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         TrendAdapter(musicService,
                 ::playTrack,
                 ::onLikeClick,
+                swipeListener,
                 ::onChannelClick,
                 ::seeAllChannelsClick)
     }
@@ -103,6 +105,21 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         val playlist = (vm.trends.value as Result.Success).data.map(TrackWithChannel::toAudioTrack).toMutableList()
         trendsRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, trendsRepo)
+    }
+
+    val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
+        override fun performPushToBottom(trackData: TrackWithChannel): Boolean {
+            vm.onSwipeTrackToTop(trackData)
+            navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
+            return true
+        }
+
+        override fun performPushToTop(trackData: TrackWithChannel): Boolean {
+            vm.onSwipeTrackToBottom(trackData)
+            navigationActivity.addTrackToEndRepo(trackData.toAudioTrack())
+            return true
+        }
+
     }
 
 }
