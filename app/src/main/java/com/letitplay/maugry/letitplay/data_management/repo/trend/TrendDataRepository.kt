@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.model.toTrackWithChannels
+import com.letitplay.maugry.letitplay.data_management.model.feedToTrackWithChannels
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.data_management.repo.feed.TracksDataSourceFactory
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
@@ -61,7 +61,7 @@ class TrendDataRepository(
 
     inner class TrendDataSourceFactory(
             private val compositeDisposable: CompositeDisposable
-    ) : TracksDataSourceFactory(preferenceHelper, false) {
+    ) : TracksDataSourceFactory(preferenceHelper) {
 
         init {
             db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
@@ -85,16 +85,14 @@ class TrendDataRepository(
 
         override fun loadItems(offset: Int, size: Int, lang: Language?): Maybe<List<TrackWithChannel>> {
             return Maybe.create { emitter ->
-                api.trends(lang!!.strValue)
+                api.getTrends(offset, size, lang!!.strValue)
                         .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
                             feed to likes
                         })
                         .doOnSuccess { (response, likes) ->
-                            if (response.tracks != null && response.channels != null)
-                                emitter.onSuccess(toTrackWithChannels(response.tracks, response.channels, likes))
-                            else
-                                emitter.onSuccess(emptyList())
+                            emitter.onSuccess(feedToTrackWithChannels(response, likes))
                         }
+                        .doOnError(emitter::onError)
                         .doFinally {
                             emitter.onComplete()
                         }
@@ -106,7 +104,7 @@ class TrendDataRepository(
     }
 
     companion object {
-        const val DEFAULT_TREND_NETWORK_PAGE_SIZE = 50
+        const val DEFAULT_TREND_NETWORK_PAGE_SIZE = 20
         const val DEFAULT_TREND_PREFETCH_DISTANCE = 10
     }
 }

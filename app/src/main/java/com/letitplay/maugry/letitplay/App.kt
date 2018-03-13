@@ -13,7 +13,7 @@ import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
 
 
-const val GL_DATA_SERVICE_URL = "https://api.letitplay.io/"
+const val GL_DATA_SERVICE_URL = "https://beta.api.letitplay.io/"
 const val GL_POST_REQUEST_SERVICE_URL = "https://manage.letitplay.io/api/"
 const val GL_MEDIA_SERVICE_URL = "https://manage.letitplay.io/uploads/"
 const val GL_PROGRESS_DELAY: Long = 300 // in ms

@@ -9,7 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.model.toTrackWithChannels
+import com.letitplay.maugry.letitplay.data_management.model.feedToTrackWithChannels
 import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
@@ -93,11 +93,7 @@ class FeedDataRepository(
                         feed to likes
                     })
                     .map { (response, likes) ->
-                        if (response.tracks != null && response.channels != null) {
-                            toTrackWithChannels(response.tracks, response.channels, likes)
-                        } else {
-                            emptyList()
-                        }
+                        feedToTrackWithChannels(response, likes)
                     }
                     .toMaybe()
         }
