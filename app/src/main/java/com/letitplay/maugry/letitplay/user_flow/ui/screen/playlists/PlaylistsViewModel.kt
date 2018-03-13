@@ -32,4 +32,10 @@ class PlaylistsViewModel(
                     .addTo(compositeDisposable)
         }
     }
+
+    fun clearPlaylist() {
+        playlistRepository.clearPlaylist()
+                .subscribe()
+                .addTo(compositeDisposable)
+    }
 }

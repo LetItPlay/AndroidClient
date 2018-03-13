@@ -8,6 +8,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -48,14 +49,15 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(playlistRecycler)
+        view.findViewById<TextView>(R.id.playlist_clear_all).setOnClickListener {
+            vm.clearPlaylist()
+        }
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playlist_header.attachTo(playlists_list)
-
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

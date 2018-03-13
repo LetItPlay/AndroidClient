@@ -20,4 +20,7 @@ abstract class PlaylistDao {
 
     @Query("DELETE FROM trackInPlaylist WHERE trackInPlaylist.track_id = :trackId")
     abstract fun delete(trackId: Int)
+
+    @Query("DELETE FROM trackInPlaylist")
+    abstract fun deleteAll()
 }

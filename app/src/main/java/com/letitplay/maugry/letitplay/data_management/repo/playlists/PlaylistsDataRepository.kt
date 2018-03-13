@@ -9,10 +9,13 @@ import io.reactivex.Flowable
 
 class PlaylistsDataRepository(private val db: LetItPlayDb,
                               private val schedulerProvider: SchedulerProvider) : PlaylistsRepository {
+    override fun clearPlaylist(): Completable {
+        return Completable.fromAction { db.playlistDao().deleteAll() }
+                .subscribeOn(schedulerProvider.io())
+    }
+
     override fun removeTrackInPlaylist(trackId: Int): Completable {
-        return Completable.fromAction {
-            db.playlistDao().delete(trackId)
-        }
+        return Completable.fromAction { db.playlistDao().delete(trackId) }
                 .subscribeOn(schedulerProvider.io())
     }
 

@@ -8,4 +8,5 @@ import io.reactivex.Flowable
 interface PlaylistsRepository {
     fun trackInPlaylist(): Flowable<List<TrackWithChannel>>
     fun removeTrackInPlaylist(trackId: Int): Completable
+    fun clearPlaylist(): Completable
 }
