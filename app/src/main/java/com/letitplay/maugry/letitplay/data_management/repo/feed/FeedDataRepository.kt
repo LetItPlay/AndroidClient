@@ -104,7 +104,7 @@ class FeedDataRepository(
     }
 
     companion object {
-        private const val DEFAULT_NETWORK_PAGE_SIZE = 50
+        private const val DEFAULT_NETWORK_PAGE_SIZE = 20
         private const val DEFAULT_PREFETCH_DISTANCE = 10
     }
 }
