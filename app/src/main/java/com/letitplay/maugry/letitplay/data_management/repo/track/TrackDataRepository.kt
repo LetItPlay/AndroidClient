@@ -75,7 +75,6 @@ class TrackDataRepository(
                         trackDao.insertTracks(listOf(track.track))
                         trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId, order))
                     }
-                    Timber.d("MYDASHA"+order.toString())
                 }
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
