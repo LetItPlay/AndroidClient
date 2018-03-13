@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.playlists.PlaylistsRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
+import io.reactivex.rxkotlin.addTo
 
 
 class PlaylistsViewModel(
@@ -21,5 +22,20 @@ class PlaylistsViewModel(
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .toLiveData()
+    }
+
+    fun deleteTrackAt(trackIndex: Int) {
+        val track = tracksInPlaylist.value?.get(trackIndex)?.track
+        if (track != null) {
+            playlistRepository.removeTrackInPlaylist(track.id)
+                    .subscribe()
+                    .addTo(compositeDisposable)
+        }
+    }
+
+    fun clearPlaylist() {
+        playlistRepository.clearPlaylist()
+                .subscribe()
+                .addTo(compositeDisposable)
     }
 }

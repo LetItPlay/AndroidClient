@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/track_item"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +79,18 @@
                 app:layout_constraintStart_toEndOf="@+id/track_time_icon"
                 app:layout_constraintTop_toBottomOf="@+id/track_recent_added"
                 tools:text="23:07:18" />
+
+            <TextView
+                android:id="@+id/playlist_clear_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/clear_all"
+                android:textColor="#ff6666"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/track_track_icon"
+                app:layout_constraintEnd_toEndOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
 

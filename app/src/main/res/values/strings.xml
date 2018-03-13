@@ -76,4 +76,5 @@
 
     <string name="all">all</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="clear_all">Clear all</string>
 </resources>

@@ -15,7 +15,12 @@ abstract class PlaylistDao {
             "WHERE trackInPlaylist.track_id = :id")
     abstract fun getTrackInPlaylist(id: Int): TrackInPlaylist?
 
-
     @Query("SELECT min(track_order) FROM trackInPlaylist")
     abstract fun getFirstTrackInPlaylist(): Int?
+
+    @Query("DELETE FROM trackInPlaylist WHERE trackInPlaylist.track_id = :trackId")
+    abstract fun delete(trackId: Int)
+
+    @Query("DELETE FROM trackInPlaylist")
+    abstract fun deleteAll()
 }
