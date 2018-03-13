@@ -23,6 +23,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
 import com.letitplay.maugry.letitplay.utils.ext.active
 import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
+import com.letitplay.maugry.letitplay.utils.ext.show
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
@@ -90,7 +91,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             setOnClickListener {
                 expandPlayer()
             }
-            visibility = View.VISIBLE
+            show()
             skipToQueueItem(trackId)
         }
 

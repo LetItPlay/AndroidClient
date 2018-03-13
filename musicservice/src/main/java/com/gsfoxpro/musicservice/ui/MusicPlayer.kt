@@ -113,15 +113,19 @@ abstract class MusicPlayer : FrameLayout {
         }
     }
 
-    public fun next() {
+    fun next() {
         mediaController?.transportControls?.skipToNext()
     }
 
-    public fun prev() {
+    fun prev() {
         mediaController?.transportControls?.skipToPrevious()
     }
 
-    public fun skipToQueueItem(id: Int) {
+    fun stop() {
+        mediaController?.transportControls?.stop()
+    }
+
+    fun skipToQueueItem(id: Int) {
         mediaController?.transportControls?.skipToQueueItem(id.toLong())
     }
 
