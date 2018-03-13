@@ -16,6 +16,6 @@ abstract class PlaylistDao {
     abstract fun getTrackInPlaylist(id: Int): TrackInPlaylist?
 
 
-    @Query("SELECT MIN(trackInPlaylist.order) FROM trackInPlaylist")
+    @Query("SELECT min(track_order) FROM trackInPlaylist")
     abstract fun getFirstTrackInPlaylist(): Int?
 }

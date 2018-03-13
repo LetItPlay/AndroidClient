@@ -8,9 +8,12 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
+import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import timber.log.Timber
+import java.util.*
 
 
 class TrackDataRepository(
@@ -51,23 +54,20 @@ class TrackDataRepository(
     override fun swipeTrackToTop(track: TrackWithChannel): Completable {
         val trackId = track.track.id
         val (trackInPlaylistDao, channelDao, trackDao) = Triple(db.playlistDao(), db.channelDao(), db.trackDao())
-        val trackInPlaylist = Single.zip(
-                Single.fromCallable { db.playlistDao().getTrackInPlaylist(trackId) },
-                Single.fromCallable { db.playlistDao().getFirstTrackInPlaylist() },
-                BiFunction { trackInPlaylist: TrackInPlaylist?, maxOrder: Int? ->
-                    Pair(trackInPlaylist, maxOrder)
-                })
+        val trackInPlaylist = Single.fromCallable {
+                Optional.of(db.playlistDao().getTrackInPlaylist(trackId)) to
+                Optional.of(db.playlistDao().getFirstTrackInPlaylist()) }
         return trackInPlaylist
                 .doOnSuccess {
-                    val order: Int = when (it.first == null) {
+                    val order: Int = when (it.first.value == null) {
                         true ->
-                            when (it.second == null) {
+                            when (it.second.value == null) {
                                 true -> 0
-                                else -> it.second!! - 1
+                                else -> it.second.value!! - 1
                             }
-                        else -> when (it.first?.order == it.second) {
-                            true -> it.second!!
-                            else -> it.second!! - 1
+                        else -> when (it.first.value?.trackOrder == it.second.value) {
+                            true -> it.second.value!!
+                            else -> it.second.value!! - 1
                         }
                     }
                     db.runInTransaction {
@@ -75,6 +75,7 @@ class TrackDataRepository(
                         trackDao.insertTracks(listOf(track.track))
                         trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId, order))
                     }
+                    Timber.d("MYDASHA"+order.toString())
                 }
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())

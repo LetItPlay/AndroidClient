@@ -18,6 +18,6 @@ data class TrackInPlaylist(
         @PrimaryKey
         @ColumnInfo(name = "track_id")
         val trackId: Int,
-        @ColumnInfo(name = "order")
-        val order: Int
+        @ColumnInfo(name = "track_order")
+        val trackOrder: Int
 )
