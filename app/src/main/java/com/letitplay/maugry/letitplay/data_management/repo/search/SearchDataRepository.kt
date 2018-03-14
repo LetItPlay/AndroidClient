@@ -33,14 +33,15 @@ class SearchDataRepository(
     }
 
     override fun performQuery(query: String): Flowable<List<SearchResultItem>> {
+        val trimmedQuery = query.trim()
         val trackQuery: Flowable<List<SearchResultItem>> = tracksCache.toFlowable(BackpressureStrategy.LATEST)
                 .compose(localTracksTransformer)
-                .map2(query, ::filterTracks)
+                .map2(trimmedQuery, ::filterTracks)
                 .map(::toTrackResult)
                 .cache()
         val channelQuery: Flowable<List<SearchResultItem>> = channelsCache.toFlowable(BackpressureStrategy.LATEST)
                 .map { it.map { ChannelWithFollow(it, null) } }
-                .map2(query, ::filterChannels)
+                .map2(trimmedQuery, ::filterChannels)
                 .map(::toChannelResult)
                 .cache()
         val results: Flowable<List<SearchResultItem>> = io.reactivex.rxkotlin.Flowables.combineLatest(trackQuery, channelQuery, db.followDao().getAllFollows(), { tracks, channels, follows ->

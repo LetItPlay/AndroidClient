@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
@@ -21,7 +22,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
-import kotlinx.android.synthetic.main.channels_fragment.*
+import kotlinx.android.synthetic.main.trends_fragment.*
 import timber.log.Timber
 
 
@@ -45,14 +46,10 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(vm)
-        vm.trends.observe(this, Observer<Result<List<TrackWithChannel>>> { result ->
-            when (result) {
-                is Result.Success ->  {
-                    hideProgress()
-                    trendsListAdapter.data = result.data
-                }
-                is Result.InProgress -> showProgress()
-                is Result.Failure -> hideProgress()
+        vm.trends.observe(this, Observer<PagedList<TrackWithChannel>> {
+            hideProgress()
+            it?.let {
+                trendsListAdapter.setList(it)
             }
         })
         vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
@@ -66,9 +63,12 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val trendsRecycler = view.findViewById<RecyclerView>(R.id.trend_list)
-        trendsRecycler.adapter = trendsListAdapter
-        trendsRecycler.addItemDecoration(listDivider(trendsRecycler.context, R.drawable.list_divider))
-        trendsRecycler.itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
+        trendsRecycler.apply {
+            adapter = trendsListAdapter
+            addItemDecoration(listDivider(trendsRecycler.context, R.drawable.list_divider))
+            itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
+            isNestedScrollingEnabled = false
+        }
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
@@ -102,12 +102,12 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = (vm.trends.value as Result.Success).data.map(TrackWithChannel::toAudioTrack).toMutableList()
+        val playlist = (vm.trends.value)?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
         trendsRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, trendsRepo)
     }
 
-    val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
+    private val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
         override fun performPushToBottom(trackData: TrackWithChannel): Boolean {
             vm.onSwipeTrackToTop(trackData)
             navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
@@ -121,5 +121,4 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         }
 
     }
-
 }

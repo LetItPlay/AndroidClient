@@ -7,6 +7,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
+import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
@@ -15,13 +16,16 @@ import io.reactivex.rxkotlin.addTo
 
 class SearchViewModel(
         private val searchRepository: SearchRepository,
-        private val channelRepository: ChannelRepository
+        private val channelRepository: ChannelRepository,
+        private val playerRepository: PlayerRepository
 ): BaseViewModel() {
     private val submitClicks = MutableLiveData<Any>()
     val query = MutableLiveData<String>()
     val isLoading = MutableLiveData<Boolean>()
     val searchResult: LiveData<List<SearchResultItem>> = Transformations.switchMap(submitClicks, { _ ->
         searchRepository.performQuery(query.value!!)
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doOnEach { isLoading.postValue(false) }
                 .toLiveData()
     })
 
@@ -43,6 +47,8 @@ class SearchViewModel(
     }
 
     fun onListen(track: AudioTrack) {
-
+        playerRepository.onListen(track.id)
+                .subscribe({}, {})
+                .addTo(compositeDisposable)
     }
 }

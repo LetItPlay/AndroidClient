@@ -6,7 +6,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.ReplaySubject
 
-class LikesState(val old: Set<Like> = emptySet(), val new: Set<Like> = emptySet())
+typealias LikesState = SetState<Like>
 
 inline fun <S, T> updateIfContains(collection: MutableList<T>, set: Set<S>, containFilter: ((S, T) -> Boolean), f: ((S, T) -> T)) {
     set.forEach { setItem ->
