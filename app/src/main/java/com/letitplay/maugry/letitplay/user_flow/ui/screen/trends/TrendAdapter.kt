@@ -7,6 +7,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
+import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedAdapter
 
@@ -14,6 +15,7 @@ class TrendAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (TrackWithChannel) -> Unit,
         private val onLikeClick: (TrackWithChannel) -> Unit,
+        private val playlistActionsListener: OnPlaylistActionsListener? = null,
         private val onChannelClick: (Channel) -> Unit,
         private val seeAllChannelClick: (() -> Unit)
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -39,7 +41,7 @@ class TrendAdapter(
             R.layout.channel_list_item -> ChannelsListViewHolder(parent, onChannelClick, seeAllChannelClick)
             R.layout.feed_item -> FeedItemViewHolder(
                     parent,
-                    null,
+                    playlistActionsListener,
                     onClickItem,
                     onLikeClick,
                     musicService

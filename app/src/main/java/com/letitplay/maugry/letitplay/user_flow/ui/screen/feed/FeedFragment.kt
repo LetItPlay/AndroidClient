@@ -114,8 +114,8 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         }
 
         override fun performPushToTop(trackData: TrackWithChannel): Boolean {
-            vm.onSwipeTrackToTop(trackData)
-            navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
+            vm.onSwipeTrackToBottom(trackData)
+            navigationActivity.addTrackToEndRepo(trackData.toAudioTrack())
             return true
         }
 

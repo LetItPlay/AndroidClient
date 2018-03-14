@@ -70,6 +70,18 @@ class TrendViewModel(
         }
     }
 
+    fun onSwipeTrackToTop(trackData: TrackWithChannel) {
+        trackRepository.swipeTrackToTop(trackData)
+                .subscribe()
+                .addTo(compositeDisposable)
+    }
+
+    fun onSwipeTrackToBottom(trackData: TrackWithChannel) {
+        trackRepository.swipeTrackToBottom(trackData)
+                .subscribe()
+                .addTo(compositeDisposable)
+    }
+
     fun onListen(track: Track) {
         playerRepository.onListen(track)
                 .subscribe()
