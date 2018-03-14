@@ -83,7 +83,6 @@ class PlaylistsAdapter(
         fun update(trackData: TrackWithChannel) {
             this.trackData = trackData
             itemView.apply {
-                playlist_swipe_layout.reset()
                 track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
                 track_playing_now.trackListenerCount = trackData.track.listenCount
                 track_playing_now.trackUrl = trackData.track.audioUrl
