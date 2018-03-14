@@ -73,12 +73,16 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
             vm.onRefresh()
-
-            if (swipeRefreshLayout.isRefreshing) {
-                swipeRefreshLayout.isRefreshing = false
-            }
         }
         return view
+    }
+
+    override fun hideProgress() {
+        if (swipe_refresh.isRefreshing) {
+            swipe_refresh.isRefreshing = false
+        } else {
+            super.hideProgress()
+        }
     }
 
     private fun onLikeClick(track: TrackWithChannel) {
