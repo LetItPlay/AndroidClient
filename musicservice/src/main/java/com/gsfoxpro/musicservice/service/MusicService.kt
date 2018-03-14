@@ -151,6 +151,13 @@ class MusicService : Service() {
         }
     }
 
+    fun removeTrack(id:Int){
+        musicRepo?.removeTrack(id)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
 
     private val becomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {

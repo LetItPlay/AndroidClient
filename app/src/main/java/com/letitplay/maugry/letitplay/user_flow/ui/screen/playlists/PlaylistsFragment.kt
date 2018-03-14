@@ -45,6 +45,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
             override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?) = false
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 vm.deleteTrackAt(viewHolder.adapterPosition)
+                navigationActivity.removeTrack(viewHolder.adapterPosition)
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)

@@ -104,6 +104,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         musicService?.addTrackToEnd(track)
     }
 
+    fun removeTrack(id:Int){
+        musicService?.removeTrack(id)
+    }
+
 
     private fun setNavigationMenu() {
         navigationMenu?.setOnNavigationItemSelectedListener { item: MenuItem -> selectFragment(item) }
