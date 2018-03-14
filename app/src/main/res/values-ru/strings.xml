@@ -88,6 +88,6 @@
     <string name="no_internet_connection">Нет интернет соединения</string>
     <string name="clear_all">Очистить</string>
     <string name="my_playlist">Мой плейлист</string>
-    <string name="to_the_top_of_the_playlist">Вверз плейлиста</string>
+    <string name="to_the_top_of_the_playlist">Вверх плейлиста</string>
     <string name="to_the_bottom_of_the_playlist">Вниз плейлиста</string>
 </resources>
