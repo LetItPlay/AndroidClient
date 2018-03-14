@@ -109,14 +109,14 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
 
     val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
         override fun performPushToBottom(trackData: TrackWithChannel): Boolean {
-            vm.onSwipeTrackToTop(trackData)
-            navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
+            vm.onSwipeTrackToBottom(trackData)
+            navigationActivity.addTrackToEndRepo(trackData.toAudioTrack())
             return true
         }
 
         override fun performPushToTop(trackData: TrackWithChannel): Boolean {
-            vm.onSwipeTrackToBottom(trackData)
-            navigationActivity.addTrackToEndRepo(trackData.toAudioTrack())
+            vm.onSwipeTrackToTop(trackData)
+            navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())
             return true
         }
 
