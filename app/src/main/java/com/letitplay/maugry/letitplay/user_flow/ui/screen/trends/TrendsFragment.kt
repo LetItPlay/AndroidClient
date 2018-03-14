@@ -17,6 +17,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -74,6 +75,8 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         swipeRefreshLayout.setOnRefreshListener {
             vm.onRefresh()
         }
+        val beginSwipeHandler = BeginSwipeHandler(trendsRecycler)
+        trendsListAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         return view
     }
 

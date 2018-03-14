@@ -7,6 +7,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class FeedAdapter(
@@ -16,12 +17,15 @@ class FeedAdapter(
         private val playlistActionsListener: OnPlaylistActionsListener? = null
 ) : PagedListAdapter<TrackWithChannel, FeedItemViewHolder>(TRACK_WITH_CHANNEL_COMPARATOR) {
 
+    var onBeginSwipe: (SwipeLayout) -> Unit = {}
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedItemViewHolder {
         return FeedItemViewHolder(
                 parent,
                 playlistActionsListener,
                 onClickItem,
                 onLikeClick,
+                { onBeginSwipe(it) },
                 musicService
         )
     }

@@ -3,4 +3,5 @@
     <dimen name="swipe_menu_width">160dp</dimen>
     <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
+    <dimen name="swipe_text_width">87dp</dimen>
 </resources>

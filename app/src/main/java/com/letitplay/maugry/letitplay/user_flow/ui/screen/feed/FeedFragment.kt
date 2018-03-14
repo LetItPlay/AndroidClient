@@ -17,6 +17,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.hide
@@ -81,6 +82,8 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         swipeRefreshLayout.setOnRefreshListener {
             vm.refreshFeed()
         }
+        val beginSwipeHandler = BeginSwipeHandler(feedRecycler)
+        feedListAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         return view
     }
 
@@ -106,7 +109,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         navigationActivity.updateRepo(trackData.track.id, feedRepo)
     }
 
-    val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
+    private val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
         override fun performPushToBottom(trackData: TrackWithChannel): Boolean {
             vm.onSwipeTrackToTop(trackData)
             navigationActivity.addTrackToStartRepo(trackData.toAudioTrack())

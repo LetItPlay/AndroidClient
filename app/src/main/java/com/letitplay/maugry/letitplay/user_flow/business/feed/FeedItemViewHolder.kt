@@ -12,92 +12,110 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
-import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout
-import com.letitplay.maugry.letitplay.utils.ext.*
+import com.letitplay.maugry.letitplay.utils.ext.gone
+import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
 import kotlinx.android.synthetic.main.view_feed_card_info.view.*
+import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
 class FeedItemViewHolder(
         parent: ViewGroup?,
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
+        onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var feedData: TrackWithChannel
+    private var isSwiping: Boolean = false
 
     init {
-        val swipeLayout = itemView.findViewById<SwipeHorizontalLayout>(R.id.feed_swipe_layout)
-        swipeLayout.swipeCallback = object : SwipeCallback {
-            override fun onSwipeChanged(translationX: Int) {
-            }
-
-            override fun onSwipeToRight() {
-                playlistActionsListener?.performPushToTop(feedData)
-                        ?.ifTrue(this@FeedItemViewHolder::showOverlay)
-            }
-
-            override fun onSwipeToLeft() {
-                playlistActionsListener?.performPushToBottom(feedData)
-                        ?.ifTrue(this@FeedItemViewHolder::showOverlay)
-            }
+        val addToTop = {
+            playlistActionsListener?.performPushToTop(feedData)
+            itemView.feed_swipe_layout.animateReset()
+            showOverlay()
         }
-        itemView.setOnClickListener {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                if (itemView.feed_card_info.isVisible()) {
-                    TransitionManager.beginDelayedTransition(itemView as ViewGroup)
-                    itemView.feed_card_info.gone()
-                } else {
+        val addToBottom = {
+            playlistActionsListener?.performPushToBottom(feedData)
+            itemView.feed_swipe_layout.animateReset()
+            showOverlay()
+        }
+        itemView.apply {
+            setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
                     onClick(feedData)
                 }
             }
-        }
-        itemView.setOnLongClickListener {
-            if ((itemView as SwipeHorizontalLayout).isDragging()) {
-                return@setOnLongClickListener false
+            feed_card.setOnLongClickListener {
+                itemView.feed_track_info_scroll.smoothScrollTo(0, 0)
+                TransitionManager.beginDelayedTransition(itemView as ViewGroup)
+                itemView.feed_card_info.show()
+                true
             }
-            itemView.feed_track_info_scroll.smoothScrollTo(0, 0)
-            TransitionManager.beginDelayedTransition(itemView as ViewGroup)
-            itemView.feed_card_info.show()
-            true
-        }
-        itemView.feed_like.setOnClickListener {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                onLikeClick(feedData)
+            feed_card_info.setOnClickListener {
+                TransitionManager.beginDelayedTransition(itemView as ViewGroup)
+                itemView.feed_card_info.gone()
             }
-        }
-        itemView.feed_playing_now.mediaSession = musicService?.mediaSession
-        itemView.feed_track_info_scroll.setOnTouchListener(object : View.OnTouchListener {
-            private var shouldClick = false
-            private var downX = 0f
-            private var downY = 0f
-            private val touchSlop = ViewConfiguration.get(itemView.context).scaledTouchSlop
-            override fun onTouch(view: View, event: MotionEvent): Boolean {
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        shouldClick = true
-                        downX = event.x
-                        downY = event.y
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        val diffX = event.x - downX
-                        val diffY = event.y - downY
-                        if (Math.abs(diffY) > touchSlop) {
-                            shouldClick = false
-                        }
-                        view.parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        if (shouldClick) {
-                            itemView.performClick()
-                        }
-                    }
+            feed_like.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onLikeClick(feedData)
                 }
-                return false
             }
-        })
+            left_menu.setOnClickListener {
+                addToTop()
+            }
+            right_menu.setOnClickListener {
+                addToBottom()
+            }
+            feed_playing_now.mediaSession = musicService?.mediaSession
+            feed_track_info_scroll.setOnTouchListener(object : View.OnTouchListener {
+                private var shouldClick = false
+                private var downX = 0f
+                private var downY = 0f
+                private val touchSlop = ViewConfiguration.get(itemView.context).scaledTouchSlop
+                override fun onTouch(view: View, event: MotionEvent): Boolean {
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            shouldClick = true
+                            downX = event.x
+                            downY = event.y
+                        }
+                        MotionEvent.ACTION_MOVE -> {
+                            val diffX = event.x - downX
+                            val diffY = event.y - downY
+                            if (Math.abs(diffY) > touchSlop) {
+                                shouldClick = false
+                            }
+                            view.parent.requestDisallowInterceptTouchEvent(true)
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            if (shouldClick) {
+                                itemView.performClick()
+                            }
+                        }
+                    }
+                    return false
+                }
+            })
+            feed_swipe_layout.isLeftSwipeEnabled = true
+            feed_swipe_layout.setOnSwipeListener(object: SimpleOnSwipeListener {
+                override fun onBeginSwipe(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                    isSwiping = true
+                    onBeginSwipe(swipeLayout)
+                }
+
+                override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                    if (moveToRight)
+                        addToBottom()
+                    else
+                        addToTop()
+                }
+            })
+        }
     }
 
 

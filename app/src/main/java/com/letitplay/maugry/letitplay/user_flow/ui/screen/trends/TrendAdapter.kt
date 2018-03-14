@@ -12,6 +12,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedAdapter
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class TrendAdapter(
@@ -23,6 +24,7 @@ class TrendAdapter(
         private val onSeeAllClick: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val helper = HackyPagedListAdapterHelper<TrackWithChannel>(this, FeedAdapter.TRACK_WITH_CHANNEL_COMPARATOR)
+    var onBeginSwipe: (SwipeLayout) -> Unit = {}
 
     var channels: List<Channel> = emptyList()
         set(value) {
@@ -47,6 +49,7 @@ class TrendAdapter(
                     playlistActionsListener,
                     onClickItem,
                     onLikeClick,
+                    { onBeginSwipe(it) },
                     musicService
             )
             else -> throw IllegalArgumentException("unknown view type $viewType")
