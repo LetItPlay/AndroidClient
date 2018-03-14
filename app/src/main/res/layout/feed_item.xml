@@ -31,7 +31,7 @@
             android:layout_marginEnd="47dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
-            android:text="To the top of the playlist"
+            android:text="@string/to_the_top_of_the_playlist"
             android:textAlignment="textEnd"
             android:textColor="@color/white"
             android:textSize="24sp" />
@@ -63,7 +63,7 @@
             android:layout_marginStart="47dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
-            android:text="To the bottom of the playlist"
+            android:text="@string/to_the_bottom_of_the_playlist"
             android:textColor="@color/white"
             android:textSize="24sp" />
     </FrameLayout>
