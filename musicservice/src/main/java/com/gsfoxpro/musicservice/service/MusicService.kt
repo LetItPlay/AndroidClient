@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.metadata.Metadata
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -236,24 +237,27 @@ class MusicService : Service() {
     }
 
     private fun initTrack(audioTrack: AudioTrack?) {
-        audioTrack?.let {
+        if (audioTrack != null) {
             val mediaSource = ExtractorMediaSource.Factory(DefaultDataSourceFactory(applicationContext, "user-agent"))
                     .setExtractorsFactory(DefaultExtractorsFactory())
-                    .createMediaSource(Uri.parse(it.url))
+                    .createMediaSource(Uri.parse(audioTrack.url))
 
             exoPlayer.prepare(mediaSource)
 
-            metadataBuilder
-                    .putString(MediaMetadataCompat.METADATA_KEY_ART_URI, it.imageUrl)
-                    .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, it.url)
-                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, it.subtitle)
-                    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, it.title)
-                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1)
             mediaSession?.setMetadata(metadataBuilder.build())
-
-            lastInitializedTrack = it
         }
+        mediaSession?.setMetadata(buildMetadata(metadataBuilder, audioTrack))
+        lastInitializedTrack = audioTrack
         sendPlaylistInfoEvent()
+    }
+
+    private fun buildMetadata(builder: MediaMetadataCompat.Builder, audioTrack: AudioTrack?): MediaMetadataCompat {
+        return builder.putString(MediaMetadataCompat.METADATA_KEY_ART_URI, audioTrack?.imageUrl)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, audioTrack?.url)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, audioTrack?.subtitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, audioTrack?.title)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1)
+                .build()
     }
 
     private fun play(audioTrack: AudioTrack?) {
