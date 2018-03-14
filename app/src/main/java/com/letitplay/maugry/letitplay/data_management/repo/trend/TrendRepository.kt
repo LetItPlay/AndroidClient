@@ -1,9 +1,10 @@
 package com.letitplay.maugry.letitplay.data_management.repo.trend
 
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import io.reactivex.Flowable
+import com.letitplay.maugry.letitplay.data_management.repo.Listing
+import io.reactivex.disposables.CompositeDisposable
 
 
 interface TrendRepository {
-    fun trends(): Flowable<List<TrackWithChannel>>
+    fun trends(compositeDisposable: CompositeDisposable): Listing<TrackWithChannel>
 }

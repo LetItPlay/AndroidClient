@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/playlist_item" />
+        tools:listitem="@layout/compilation_item" />
 
     <TextView
         android:id="@+id/compilation_no_recommendations"

@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_POST_REQUEST_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
+import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponseItem
 import com.letitplay.maugry.letitplay.data_management.api.responses.TracksAndChannels
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChannelResponse
 import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
@@ -66,17 +67,22 @@ interface LetItPlayApi {
             @Query("offset") offset: Int,
             @Query("limit") limit: Int,
             @Query("lang") lang: String
-    ): Single<TracksAndChannels>
+    ): Single<List<FeedResponseItem>>
 
     @GET("abrakadabra?")
     fun getCompilation(@Query("lang") lang: String): Single<TracksAndChannels>
 
-    @GET("trends/7?")
-    fun trends(@Query("lang") lang: String): Single<TracksAndChannels>
+    @GET("trends?")
+    fun getTrends(
+            @Query("offset") offset: Int,
+            @Query("limit") limit: Int,
+            @Query("lang") lang: String
+    ): Single<List<FeedResponseItem>>
 
     @GET("stations/{id}")
     fun getChannelPiece(@Path("id") channelId: Int): Maybe<Channel>
 }
+
 
 interface LetItPlayPostApi {
     @POST("stations/{id}/counts/")

@@ -81,8 +81,8 @@ class FeedViewModel(
     }
 
     fun onListen(track: Track) {
-        playerRepository.onListen(track)
-                .subscribe()
+        playerRepository.onListen(track.id)
+                .subscribe({}, {})
                 .addTo(compositeDisposable)
     }
 }

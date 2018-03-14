@@ -19,26 +19,19 @@ import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.metadata.Metadata
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.gsfoxpro.musicservice.ExoPlayerListener
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.ui.MusicPlayerNotification
 
 
 class MusicService : Service() {
-
-    companion object {
-        const val UPDATE_INFO = "UPDATE_INFO"
-        const val PROGRESS_UPDATE_EVENT = "PROGRESS_UPDATE_EVENT"
-        const val CURRENT_PROGRESS = "CURRENT_PROGRESS"
-        const val PLAYLIST_INFO_EVENT = "PLAYLIST_INFO_EVENT"
-        const val HAS_NEXT = "HAS_NEXT"
-        const val HAS_PREV = "HAS_PREV"
-    }
 
     var mediaSession: MediaSessionCompat? = null
         private set
@@ -64,13 +57,13 @@ class MusicService : Service() {
     private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
 
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
-         .setActions(
-                 PlaybackStateCompat.ACTION_PLAY
-                 or PlaybackStateCompat.ACTION_STOP
-                 or PlaybackStateCompat.ACTION_PAUSE
-                 or PlaybackStateCompat.ACTION_PLAY_PAUSE
-                 or PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                 or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+            .setActions(
+                    PlaybackStateCompat.ACTION_PLAY
+                            or PlaybackStateCompat.ACTION_STOP
+                            or PlaybackStateCompat.ACTION_PAUSE
+                            or PlaybackStateCompat.ACTION_PLAY_PAUSE
+                            or PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                            or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
 
     private val mediaSessionCallback = object : MediaSessionCompat.Callback() {
         override fun onCommand(command: String?, extras: Bundle?, cb: ResultReceiver?) {
@@ -131,61 +124,7 @@ class MusicService : Service() {
         }
     }
 
-    private fun notifyRepoChangedListeners(repo: MusicRepo?) {
-        repoListeners.forEach {
-            it.onRepoChanged(repo)
-        }
-    }
-
-    fun addTrackToStart(track:AudioTrack){
-        musicRepo?.addTrackToStart(track)
-        repoListeners.forEach {
-            it.onRepoChanged(musicRepo)
-        }
-    }
-
-    fun addTrackToEnd(track:AudioTrack){
-        musicRepo?.addTrackToEnd(track)
-        repoListeners.forEach {
-            it.onRepoChanged(musicRepo)
-        }
-    }
-
-    fun removeTrack(id:Int){
-        musicRepo?.removeTrack(id)
-        repoListeners.forEach {
-            it.onRepoChanged(musicRepo)
-        }
-    }
-
-
-    private val becomingNoisyReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action) {
-                mediaSessionCallback.onPause()
-            }
-        }
-    }
-
-    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        when (focusChange) {
-            AudioManager.AUDIOFOCUS_GAIN -> mediaSessionCallback.onPlay()
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> mediaSessionCallback.onPause()
-            else -> mediaSessionCallback.onPause()
-        }
-    }
-
-    private val updateProgressTask = Runnable {
-        if (needUpdateProgress) {
-            val bundle = Bundle().apply {
-                putLong(CURRENT_PROGRESS, exoPlayer.currentPosition)
-            }
-            mediaSession?.sendSessionEvent(PROGRESS_UPDATE_EVENT, bundle)
-            startUpdateProgress(true)
-        }
-    }
-
-    private val playerListener = object : Player.EventListener {
+    private val playerListener = object : ExoPlayerListener() {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             when (playbackState) {
@@ -204,36 +143,33 @@ class MusicService : Service() {
                 }
             }
         }
+    }
 
-        override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
-        }
-
-        override fun onRepeatModeChanged(repeatMode: Int) {
-        }
-
-        override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
-        }
-
-        override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
-        }
-
-        override fun onPlayerError(error: ExoPlaybackException?) {
-        }
-
-        override fun onLoadingChanged(isLoading: Boolean) {
-        }
-
-        override fun onPositionDiscontinuity(reason: Int) {
-        }
-
-        override fun onSeekProcessed() {
-        }
-
-        override fun onTimelineChanged(timeline: Timeline?, manifest: Any?) {
+    private val updateProgressTask = Runnable {
+        if (needUpdateProgress) {
+            val bundle = Bundle().apply {
+                putLong(CURRENT_PROGRESS, exoPlayer.currentPosition)
+            }
+            mediaSession?.sendSessionEvent(PROGRESS_UPDATE_EVENT, bundle)
+            startUpdateProgress(true)
         }
     }
 
-    override fun onBind(intent: Intent?) = binder
+    private val becomingNoisyReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action) {
+                mediaSessionCallback.onPause()
+            }
+        }
+    }
+
+    private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_GAIN -> mediaSessionCallback.onPlay()
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> mediaSessionCallback.onPause()
+            else -> mediaSessionCallback.onPause()
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -285,25 +221,50 @@ class MusicService : Service() {
         MusicPlayerNotification.hide(this@MusicService)
     }
 
+
+    fun addTrackToStart(track: AudioTrack) {
+        musicRepo?.addTrackToStart(track)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
+    fun addTrackToEnd(track: AudioTrack) {
+        musicRepo?.addTrackToEnd(track)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
+    fun removeTrack(id:Int){
+        musicRepo?.removeTrack(id)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
     private fun initTrack(audioTrack: AudioTrack?) {
-        audioTrack?.let {
+        if (audioTrack != null) {
             val mediaSource = ExtractorMediaSource.Factory(DefaultDataSourceFactory(applicationContext, "user-agent"))
                     .setExtractorsFactory(DefaultExtractorsFactory())
-                    .createMediaSource(Uri.parse(it.url))
+                    .createMediaSource(Uri.parse(audioTrack.url))
 
             exoPlayer.prepare(mediaSource)
 
-            metadataBuilder
-                    .putString(MediaMetadataCompat.METADATA_KEY_ART_URI, it.imageUrl)
-                    .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, it.url)
-                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, it.subtitle)
-                    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, it.title)
-                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1)
             mediaSession?.setMetadata(metadataBuilder.build())
-
-            lastInitializedTrack = it
         }
+        mediaSession?.setMetadata(buildMetadata(metadataBuilder, audioTrack))
+        lastInitializedTrack = audioTrack
         sendPlaylistInfoEvent()
+    }
+
+    private fun buildMetadata(builder: MediaMetadataCompat.Builder, audioTrack: AudioTrack?): MediaMetadataCompat {
+        return builder.putString(MediaMetadataCompat.METADATA_KEY_ART_URI, audioTrack?.imageUrl)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, audioTrack?.url)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, audioTrack?.subtitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, audioTrack?.title)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1)
+                .build()
     }
 
     private fun play(audioTrack: AudioTrack?) {
@@ -362,18 +323,6 @@ class MusicService : Service() {
         }
     }
 
-    private fun registerBecomingNoisyReceiver() {
-        if (!becomingNoisyReceiverRegistered) {
-            registerReceiver(becomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
-        }
-    }
-
-    private fun unregisterBecomingNoisyReceiver() {
-        if (becomingNoisyReceiverRegistered) {
-            unregisterReceiver(becomingNoisyReceiver)
-        }
-    }
-
     private fun startUpdateProgress(fromRunnable: Boolean = false) {
         if (!fromRunnable && needUpdateProgress) {
             return
@@ -395,13 +344,42 @@ class MusicService : Service() {
         mediaSession?.sendSessionEvent(PLAYLIST_INFO_EVENT, bundle)
     }
 
+    private fun registerBecomingNoisyReceiver() {
+        if (!becomingNoisyReceiverRegistered) {
+            registerReceiver(becomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
+        }
+    }
+
+    private fun unregisterBecomingNoisyReceiver() {
+        if (becomingNoisyReceiverRegistered) {
+            unregisterReceiver(becomingNoisyReceiver)
+        }
+    }
+
     fun addRepoChangesListener(listener: RepoChangesListener) = repoListeners.add(listener)
     fun removeRepoChangesListener(listener: RepoChangesListener) = repoListeners.remove(listener)
+
+    private fun notifyRepoChangedListeners(repo: MusicRepo?) {
+        repoListeners.forEach {
+            it.onRepoChanged(repo)
+        }
+    }
+
+    override fun onBind(intent: Intent?) = binder
 
     inner class LocalBinder(val musicService: MusicService = this@MusicService) : Binder()
 
 
     interface RepoChangesListener {
         fun onRepoChanged(repo: MusicRepo?)
+    }
+
+    companion object {
+        const val UPDATE_INFO = "UPDATE_INFO"
+        const val PROGRESS_UPDATE_EVENT = "PROGRESS_UPDATE_EVENT"
+        const val CURRENT_PROGRESS = "CURRENT_PROGRESS"
+        const val PLAYLIST_INFO_EVENT = "PLAYLIST_INFO_EVENT"
+        const val HAS_NEXT = "HAS_NEXT"
+        const val HAS_PREV = "HAS_PREV"
     }
 }

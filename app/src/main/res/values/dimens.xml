@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="swipe_menu_width">164dp</dimen>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="swipe_menu_width">160dp</dimen>
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
 </resources>

@@ -7,12 +7,16 @@ import android.support.annotation.MainThread
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
-import com.letitplay.maugry.letitplay.data_management.db.entity.Like
+import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.repo.Listing
+import com.letitplay.maugry.letitplay.data_management.model.feedToTrackWithChannels
+import com.letitplay.maugry.letitplay.data_management.repo.*
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
-import io.reactivex.Flowable
+import com.letitplay.maugry.letitplay.utils.ext.joinWithComma
+import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.zipWith
 
 
 class FeedDataRepository(
@@ -23,10 +27,6 @@ class FeedDataRepository(
         private val networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE,
         private val prefetchDistance: Int = DEFAULT_PREFETCH_DISTANCE
 ) : FeedRepository {
-    override fun likes(): Flowable<List<Like>> {
-        return db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
-                .subscribeOn(schedulerProvider.io())
-    }
 
     @MainThread
     override fun feeds(compositeDisposable: CompositeDisposable): Listing<TrackWithChannel> {
@@ -35,7 +35,7 @@ class FeedDataRepository(
                 .setPrefetchDistance(prefetchDistance)
                 .setEnablePlaceholders(false)
                 .build()
-        val dataSourceFactory = FeedDataSourceFactory(api, db, preferenceHelper, compositeDisposable)
+        val dataSourceFactory = FeedDataSourceFactory(compositeDisposable)
 
         val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
                 .setBackgroundThreadExecutor(schedulerProvider.ioExecutor())
@@ -51,18 +51,56 @@ class FeedDataRepository(
                 networkState = Transformations.switchMap(dataSourceFactory.sourceLiveData, {
                     it.networkState
                 }),
-                retry = {
-                    //dataSourceFactory.sourceLiveData.value?.retryAllFailed()
-                },
                 refresh = {
                     dataSourceFactory.invalidateAllData()
                 },
-                refreshState = refreshState
+                refreshState = refreshState,
+                retry = {}
         )
     }
 
+    inner class FeedDataSourceFactory(
+            compositeDisposable: CompositeDisposable
+    ) : TracksDataSourceFactory(preferenceHelper) {
+        init {
+            db.likeDao().getAllLikes(preferenceHelper.contentLanguage!!)
+                    .scan(LikesState(), { oldState, newLikesCollection ->
+                        LikesState(oldState.new, newLikesCollection.toSet())
+                    })
+                    .skip(2) // Skip empty and initial state
+                    .distinctUntilChanged()
+                    .doOnNext {
+                        val newLikes = it.new - it.old
+                        val newDislikes = it.old - it.new
+                        withLock {
+                            updateIfContains(tracks, newLikes, ::isLikeForTrack, ::likeTrack)
+                            updateIfContains(tracks, newDislikes, ::isLikeForTrack, ::dislikeTrack)
+                        }
+                        sourceLiveData.value?.invalidate()
+                    }
+                    .subscribe()
+                    .addTo(compositeDisposable)
+        }
+
+        override fun loadItems(offset: Int, size: Int, lang: Language?): Maybe<List<TrackWithChannel>> {
+            return db.channelDao().getFollowedChannelsId(lang!!)
+                    .map(List<Int>::joinWithComma)
+                    .firstElement()
+                    .flatMapSingle {
+                        api.getFeed(it, offset, size, lang.strValue)
+                    }
+                    .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
+                        feed to likes
+                    })
+                    .map { (response, likes) ->
+                        feedToTrackWithChannels(response, likes)
+                    }
+                    .toMaybe()
+        }
+    }
+
     companion object {
-        private const val DEFAULT_NETWORK_PAGE_SIZE = 50
+        private const val DEFAULT_NETWORK_PAGE_SIZE = 20
         private const val DEFAULT_PREFETCH_DISTANCE = 10
     }
 }

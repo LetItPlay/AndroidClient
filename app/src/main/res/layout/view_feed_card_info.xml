@@ -23,26 +23,28 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
-        app:layout_constraintBottom_toTopOf="@+id/feed_track_info_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />
 
-    <TextView
-        android:id="@+id/feed_track_info_description"
-        android:layout_width="0dp"
+    <ScrollView
+        android:id="@+id/feed_track_info_scroll"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_track_info_title"
-        tools:text="@tools:sample/lorem/random" />
+        android:layout_marginTop="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/feed_track_info_title"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/feed_track_info_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:paddingBottom="8dp"
+            tools:text="@tools:sample/lorem/random" />
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

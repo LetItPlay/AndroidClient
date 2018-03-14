@@ -39,10 +39,8 @@ class TrackDataRepository(
                             .map { it to handleLikeDb }
                 }
                 .doOnSuccess {
-                    val trackModel = toTrackModel(it.first)
                     db.runInTransaction {
                         it.second()
-                        db.trackDao().updateTrack(trackModel)
                     }
                 }
                 .observeOn(schedulerProvider.ui())

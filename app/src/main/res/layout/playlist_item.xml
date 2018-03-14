@@ -1,72 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ru.rambler.libs.swipe_layout.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlist_swipe_layout"
     android:layout_width="match_parent"
-    android:layout_height="244dp"
-    android:layout_marginBottom="16dp"
-    app:cardCornerRadius="2dp">
+    android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout
+    <include
+        android:id="@+id/playlist_track_item"
+        layout="@layout/track_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="85dp" />
 
-        <ImageView
-            android:id="@+id/playlist_logo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/search_placeholder"
-            app:layout_constraintBottom_toTopOf="@+id/playlist_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/letitplay_logo"
-            android:layout_width="56dp"
-            android:layout_height="14dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/logo_ic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/playlist_right_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:bring_to_clamp="200dp"
+        app:clamp="parent"
+        app:gravity="right"
+        app:sticky="160dp">
 
         <TextView
-            android:id="@+id/playlist_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:ellipsize="end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/feed_item_menu_right_background"
             android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.01"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/playlist_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/search_actual_news" />
-
-        <TextView
-            android:id="@+id/playlist_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.01"
-            android:textColor="#4a4a4a"
-            android:textSize="14dp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/search_compilation" />
-    </android.support.constraint.ConstraintLayout>
-
-</android.support.v7.widget.CardView>
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            android:text="Remove"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+</ru.rambler.libs.swipe_layout.SwipeLayout>

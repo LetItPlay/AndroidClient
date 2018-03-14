@@ -4,11 +4,9 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -17,18 +15,20 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.playlists_fragment.*
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
 
-
     private val playlistAdapter: PlaylistsAdapter by lazy {
-        PlaylistsAdapter(musicService, ::playTrack)
+        PlaylistsAdapter(musicService, ::playTrack, ::onBeginSwipe, ::onSwipeReached, ::onRemoveClick)
     }
 
     private var playlistsRepo: MusicRepo? = null
+    private var lastSwipeLayout: SwipeLayout? = null
 
     private val vm by lazy {
         ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
@@ -38,21 +38,19 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val playlistRecycler = view.findViewById<RecyclerView>(R.id.playlists_list)
+        playlistAdapter.setHasStableIds(true)
         playlistRecycler.adapter = playlistAdapter
         val divider = listDivider(playlistRecycler.context, R.drawable.list_divider)
         playlistRecycler.addItemDecoration(divider)
-        val simpleItemTouchCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?) = false
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                vm.deleteTrackAt(viewHolder.adapterPosition)
-                navigationActivity.removeTrack(viewHolder.adapterPosition)
+        view.findViewById<View>(R.id.playlist_clear_all).setOnClickListener {
+            onPlaylistClear()
+        }
+        playlistRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                lastSwipeLayout?.animateReset()
+                lastSwipeLayout = null
             }
-        }
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(playlistRecycler)
-        view.findViewById<TextView>(R.id.playlist_clear_all).setOnClickListener {
-            vm.clearPlaylist()
-        }
+        })
         return view
     }
 
@@ -73,7 +71,36 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         })
     }
 
+    private fun onRemoveClick(track: Track, swipeLayout: SwipeLayout) {
+        // TODO: Move it to viewmodel !
+        swipeLayout.animateReset()
+        navigationActivity.musicPlayerSmall?.next()
+        vm.deleteTrack(track)
+    }
+
+
+    private fun onSwipeReached(track: Track, swipeLayout: SwipeLayout) {
+        onRemoveClick(track, swipeLayout)
+    }
+
+    private fun onBeginSwipe(swipeLayout: SwipeLayout) {
+        if (swipeLayout != lastSwipeLayout)
+            lastSwipeLayout?.animateReset()
+        lastSwipeLayout = swipeLayout
+    }
+
+    private fun onPlaylistClear() {
+        // TODO: Move it to viewmodel !
+        navigationActivity.musicPlayerSmall?.apply {
+            stop()
+            navigationActivity.updateRepo(-1, null)
+            gone()
+        }
+        vm.clearPlaylist()
+    }
+
     private fun playTrack(track: Track) {
+        lastSwipeLayout?.animateReset()
         val trackId = track.id
         if (playlistsRepo != null && playlistsRepo?.getAudioTrackAtId(trackId) != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)

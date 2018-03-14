@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.CompilationModel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import kotlinx.android.synthetic.main.playlist_item.view.*
+import kotlinx.android.synthetic.main.compilation_item.view.*
 
 
 class CompilationAdapter(
@@ -35,7 +35,7 @@ class CompilationAdapter(
         }
     }
 
-    class PlaylistItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.playlist_item) {
+    class PlaylistItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.compilation_item) {
         fun update(playList: CompilationModel) {
             itemView.apply {
                 playlist_title.text = playList.title
