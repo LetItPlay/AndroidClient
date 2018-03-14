@@ -71,16 +71,18 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         })
     }
 
-    private fun onRemoveClick(track: Track, swipeLayout: SwipeLayout) {
+    private fun onRemoveClick(track: Track, position: Int, swipeLayout: SwipeLayout) {
         // TODO: Move it to viewmodel !
         swipeLayout.animateReset()
-        navigationActivity.musicPlayerSmall?.next()
+        if (musicService?.musicRepo?.currentAudioTrack?.id == track.id)
+            navigationActivity.musicPlayerSmall?.next()
         vm.deleteTrack(track)
+        navigationActivity.removeTrack(position)
     }
 
 
-    private fun onSwipeReached(track: Track, swipeLayout: SwipeLayout) {
-        onRemoveClick(track, swipeLayout)
+    private fun onSwipeReached(track: Track, position: Int, swipeLayout: SwipeLayout) {
+        onRemoveClick(track, position, swipeLayout)
     }
 
     private fun onBeginSwipe(swipeLayout: SwipeLayout) {
