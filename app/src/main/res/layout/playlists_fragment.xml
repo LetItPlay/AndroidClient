@@ -34,7 +34,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif"
-                android:text="@string/track_recent_added"
+                android:text="@string/my_playlist"
                 android:textColor="#000000"
                 android:textSize="24dp"
                 android:textStyle="normal"
