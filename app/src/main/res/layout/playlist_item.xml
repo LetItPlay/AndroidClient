@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.rambler.libs.swipe_layout.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlist_swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/playlist_track_item"
+        layout="@layout/track_item"
+        android:layout_width="match_parent"
+        android:layout_height="85dp" />
+
+    <LinearLayout
+        android:id="@+id/playlist_right_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:bring_to_clamp="200dp"
+        app:clamp="parent"
+        app:gravity="right"
+        app:sticky="160dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/feed_item_menu_right_background"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="0dp"
+            android:text="Remove"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+</ru.rambler.libs.swipe_layout.SwipeLayout>

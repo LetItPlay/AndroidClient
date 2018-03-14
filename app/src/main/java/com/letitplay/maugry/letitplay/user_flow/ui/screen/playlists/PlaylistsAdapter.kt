@@ -9,12 +9,19 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import kotlinx.android.synthetic.main.playlist_item.view.*
 import kotlinx.android.synthetic.main.track_item.view.*
+import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class PlaylistsAdapter(
         private val musicService: MusicService? = null,
-        private val onClickItem: (Track) -> Unit) : RecyclerView.Adapter<PlaylistsAdapter.PlaylistsItemHolder>() {
+        private val onClickItem: (Track) -> Unit,
+        private val onBeginSwipe: (SwipeLayout) -> Unit,
+        private val onSwipeReached: (Track, SwipeLayout) -> Unit,
+        private val onRemoveClick: (Track, SwipeLayout) -> Unit
+) : RecyclerView.Adapter<PlaylistsAdapter.PlaylistItemHolder>() {
 
     var data: List<TrackWithChannel> = ArrayList()
         set(value) {
@@ -24,28 +31,59 @@ class PlaylistsAdapter(
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: PlaylistsItemHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaylistItemHolder, position: Int) {
         holder.update(data[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlaylistsItemHolder {
-        return PlaylistsItemHolder(parent).apply {
-            itemView.track_playing_now.mediaSession = musicService?.mediaSession
-            itemView.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onClickItem(data[adapterPosition].track)
-                }
-            }
-        }
+    override fun getItemId(position: Int): Long {
+        return data[position].track.id.toLong()
     }
 
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlaylistItemHolder {
+        return PlaylistItemHolder(parent, musicService, onClickItem, onBeginSwipe, onSwipeReached, onRemoveClick)
+    }
 
-    class PlaylistsItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.track_item) {
+    class PlaylistItemHolder(
+            parent: ViewGroup?,
+            musicService: MusicService?,
+            onClickItem: (Track) -> Unit,
+            onBeginSwipe: (SwipeLayout) -> Unit,
+            onSwipeReached: (Track, SwipeLayout) -> Unit,
+            onRemoveClick: (Track, SwipeLayout) -> Unit
+    ) : BaseViewHolder(parent, R.layout.playlist_item) {
         lateinit var trackData: TrackWithChannel
+
+        init {
+            itemView.apply {
+                track_playing_now.mediaSession = musicService?.mediaSession
+                playlist_track_item.setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        onClickItem(trackData.track)
+                    }
+                }
+                playlist_swipe_layout.setOnSwipeListener(object: SimpleOnSwipeListener {
+
+                    override fun onBeginSwipe(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                        onBeginSwipe(swipeLayout)
+                    }
+
+                    override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                        onSwipeReached(trackData.track, swipeLayout)
+                    }
+                })
+                playlist_right_view.setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        onRemoveClick(trackData.track, itemView.playlist_swipe_layout)
+                    }
+                }
+
+            }
+        }
 
         fun update(trackData: TrackWithChannel) {
             this.trackData = trackData
             itemView.apply {
+                playlist_swipe_layout.reset()
                 track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
                 track_playing_now.trackListenerCount = trackData.track.listenCount
                 track_playing_now.trackUrl = trackData.track.audioUrl
