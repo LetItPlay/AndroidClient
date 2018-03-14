@@ -19,8 +19,8 @@ class PlaylistsAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (Track) -> Unit,
         private val onBeginSwipe: (SwipeLayout) -> Unit,
-        private val onSwipeReached: (Track, SwipeLayout) -> Unit,
-        private val onRemoveClick: (Track, SwipeLayout) -> Unit
+        private val onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
+        private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit
 ) : RecyclerView.Adapter<PlaylistsAdapter.PlaylistItemHolder>() {
 
     var data: List<TrackWithChannel> = ArrayList()
@@ -48,8 +48,8 @@ class PlaylistsAdapter(
             musicService: MusicService?,
             onClickItem: (Track) -> Unit,
             onBeginSwipe: (SwipeLayout) -> Unit,
-            onSwipeReached: (Track, SwipeLayout) -> Unit,
-            onRemoveClick: (Track, SwipeLayout) -> Unit
+            onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
+            onRemoveClick: (Track, Int, SwipeLayout) -> Unit
     ) : BaseViewHolder(parent, R.layout.playlist_item) {
         lateinit var trackData: TrackWithChannel
 
@@ -68,12 +68,12 @@ class PlaylistsAdapter(
                     }
 
                     override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
-                        onSwipeReached(trackData.track, swipeLayout)
+                        onSwipeReached(trackData.track, adapterPosition, swipeLayout)
                     }
                 })
                 playlist_right_view.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        onRemoveClick(trackData.track, itemView.playlist_swipe_layout)
+                        onRemoveClick(trackData.track, adapterPosition, itemView.playlist_swipe_layout)
                     }
                 }
 

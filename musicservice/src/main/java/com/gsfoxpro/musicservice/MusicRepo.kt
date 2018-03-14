@@ -36,6 +36,11 @@ open class MusicRepo(val playlist: MutableList<AudioTrack>, val isUserMode:Boole
             playlist.add(playlist.size, track)
         }
     }
+    open fun removeTrack(id:Int){
+        if (isUserMode) {
+            playlist.removeAt(id)
+        }
+    }
 
     open fun getAudioTrackAtId(id: Int): AudioTrack? {
         val index =  playlist.indexOfFirst { it.id == id }

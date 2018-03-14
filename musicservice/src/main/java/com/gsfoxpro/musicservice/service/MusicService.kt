@@ -236,6 +236,13 @@ class MusicService : Service() {
         }
     }
 
+    fun removeTrack(id:Int){
+        musicRepo?.removeTrack(id)
+        repoListeners.forEach {
+            it.onRepoChanged(musicRepo)
+        }
+    }
+
     private fun initTrack(audioTrack: AudioTrack?) {
         if (audioTrack != null) {
             val mediaSource = ExtractorMediaSource.Factory(DefaultDataSourceFactory(applicationContext, "user-agent"))
@@ -361,6 +368,7 @@ class MusicService : Service() {
     override fun onBind(intent: Intent?) = binder
 
     inner class LocalBinder(val musicService: MusicService = this@MusicService) : Binder()
+
 
     interface RepoChangesListener {
         fun onRepoChanged(repo: MusicRepo?)

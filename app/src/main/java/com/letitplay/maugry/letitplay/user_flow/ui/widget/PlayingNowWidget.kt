@@ -37,11 +37,15 @@ class PlayingNowWidget @JvmOverloads constructor(
     }
 
     private fun showNowPlaying() {
+        feed_playing_now_icon.visibility = View.VISIBLE
+        feed_playing.visibility = View.GONE
         playing_now.visibility = View.VISIBLE
         listener_count.visibility = View.GONE
     }
 
     private fun showListenCount() {
+        feed_playing_now_icon.visibility = View.GONE
+        feed_playing.visibility = View.VISIBLE
         listener_count.visibility = View.VISIBLE
         playing_now.visibility = View.GONE
         listener_count.text = trackListenerCount.toString()
