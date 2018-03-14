@@ -14,13 +14,14 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/feed_item_menu_left_background"/>
+            android:background="@drawable/feed_item_menu_left_background" />
+
         <ImageView
             android:layout_width="160dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
             android:src="@drawable/add_to_top_bg" />
 
         <TextView
@@ -28,8 +29,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginEnd="47dp"
-            android:gravity="center_vertical"
             android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
             android:text="To the top of the playlist"
             android:textAlignment="textEnd"
             android:textColor="@color/white"
@@ -45,14 +46,26 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/feed_item_menu_right_background"/>
+            android:background="@drawable/feed_item_menu_right_background" />
+
         <ImageView
             android:layout_width="160dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
             android:src="@drawable/add_to_bottom_bg" />
+
+        <TextView
+            android:layout_width="87dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginStart="47dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="To the bottom of the playlist"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
     </FrameLayout>
 
     <android.support.constraint.ConstraintLayout
