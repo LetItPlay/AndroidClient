@@ -17,6 +17,8 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
+import com.letitplay.maugry.letitplay.utils.ext.hide
+import com.letitplay.maugry.letitplay.utils.ext.show
 import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.playlists_fragment.*
 import ru.rambler.libs.swipe_layout.SwipeLayout
@@ -59,10 +61,20 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(vm)
         vm.tracksInPlaylist.observe(this, Observer<List<TrackWithChannel>> {
-            playlist_count.text = it?.count()?.toString() ?: "0"
-            playlist_time.text = DateHelper.getTime(it?.sumBy { it.track.totalLengthInSeconds } ?: 0)
-            it?.let {
-                playlistAdapter.data = it
+            when {
+                it != null && it.isNotEmpty() -> {
+                    playlist_no_tracks.hide()
+                    playlist_count.text = it.count().toString()
+                    playlist_time.text = DateHelper.getTime(it.sumBy { it.track.totalLengthInSeconds })
+                    playlist_header.show()
+                    playlists_list.show()
+                    playlistAdapter.data = it
+                }
+                else -> {
+                    playlists_list.hide()
+                    playlist_header.hide()
+                    playlist_no_tracks.show()
+                }
             }
         })
     }

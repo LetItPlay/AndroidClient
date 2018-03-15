@@ -95,7 +95,7 @@
     </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
 
     <LinearLayout
-        android:id="@+id/feed_no_tracks"
+        android:id="@+id/playlist_no_tracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
