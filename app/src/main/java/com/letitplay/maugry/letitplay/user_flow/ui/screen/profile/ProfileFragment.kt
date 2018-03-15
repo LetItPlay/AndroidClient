@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -28,7 +28,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     }
 
     private val vm by lazy {
-        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+        ViewModelProvider(this, ServiceLocator.viewModelFactory)
                 .get(ProfileViewModel::class.java)
     }
 

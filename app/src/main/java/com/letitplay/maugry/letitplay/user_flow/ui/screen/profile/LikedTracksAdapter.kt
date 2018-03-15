@@ -29,7 +29,7 @@ class LikedTracksAdapter(
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ProfileItemHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileItemHolder {
         return ProfileItemHolder(parent).apply {
             itemView.track_playing_now.mediaSession = musicService?.mediaSession
             itemView.setOnClickListener {

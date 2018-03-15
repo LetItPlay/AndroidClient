@@ -40,7 +40,7 @@ class ChannelAdapter(
 
     override fun getItemCount(): Int = channels.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelViewHolder {
         return ChannelViewHolder(parent, onClick, onFollowClick)
     }
 

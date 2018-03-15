@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -29,7 +29,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
     private var channelPageRepo: MusicRepo? = null
 
     private val vm by lazy {
-        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+        ViewModelProvider(this, ServiceLocator.viewModelFactory)
                 .get(ChannelPageViewModel::class.java)
     }
 

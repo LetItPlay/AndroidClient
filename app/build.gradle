@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 project.ext {
-    support_library_version = "27.0.2"
+    support_library_version = "27.1.0"
     reactive_java_version = '2.1.0'
     reactive_java_android_version = '2.0.1'
     reactive_java_kotlin_version = '2.0.2'
@@ -45,7 +45,7 @@ androidExtensions {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.github.Zhuinden:simple-stack:1.8.0'
+    implementation 'com.github.Zhuinden:simple-stack:1.8.0'
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"
     implementation "com.android.support:cardview-v7:$support_library_version"
@@ -65,14 +65,14 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation 'com.google.android:flexbox:0.3.1'
     implementation 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
-    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
 
     implementation "android.arch.persistence.room:runtime:1.0.0"
     kapt "android.arch.persistence.room:compiler:1.0.0"
-    implementation "android.arch.paging:runtime:1.0.0-alpha5"
+    implementation "android.arch.paging:runtime:1.0.0-alpha6"
     kapt "android.arch.lifecycle:compiler:1.1.0"
     implementation "android.arch.persistence.room:rxjava2:1.0.0"
     implementation 'android.arch.lifecycle:reactivestreams:1.1.0'

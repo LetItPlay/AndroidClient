@@ -48,13 +48,14 @@ class MusicPlayerNotification {
                     .setContentTitle(description.title)
                     .setContentText(description.subtitle)
                     .setSmallIcon(smallIcon)
-                    .setLargeIcon(largeImage ?: BitmapFactory.decodeResource(context.resources, android.R.mipmap.sym_def_app_icon)) //временно
+                    .setLargeIcon(largeImage
+                            ?: BitmapFactory.decodeResource(context.resources, android.R.mipmap.sym_def_app_icon)) //временно
                     .setShowWhen(false)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setOnlyAlertOnce(true)
 
-            NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notificationBuilder?.build())
+            NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notificationBuilder!!.build())
 
             if (largeImage == null) {
                 updateImageAsync(context, description.iconUri)
@@ -74,14 +75,14 @@ class MusicPlayerNotification {
                     .asBitmap()
                     .load(imageUri)
                     .into(object : SimpleTarget<Bitmap>() {
-                        override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
-                            resource?.let { bitmap ->
-                                if (imageCache.size > IMAGE_CASH_SIZE) {
-                                    imageCache.clear()
-                                }
-                                imageCache.put(imageUri, bitmap)
-                                notificationBuilder?.setLargeIcon(bitmap)
-                                NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notificationBuilder?.build())
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            if (imageCache.size > IMAGE_CASH_SIZE) {
+                                imageCache.clear()
+                            }
+                            imageCache[imageUri] = resource
+                            if (notificationBuilder != null) {
+                                notificationBuilder!!.setLargeIcon(resource)
+                                NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notificationBuilder!!.build())
                             }
                         }
                     })

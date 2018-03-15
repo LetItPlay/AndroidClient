@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private val vm by lazy {
-        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+        ViewModelProvider(this, ServiceLocator.viewModelFactory)
                 .get(FeedViewModel::class.java)
     }
 
@@ -50,7 +50,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                     feed_no_internet.hide()
                 } else {
                     feed_no_tracks.hide()
-                    feedListAdapter.setList(it.data)
+                    feedListAdapter.submitList(it.data)
                 }
                 swipe_refresh?.isRefreshing = false
             }

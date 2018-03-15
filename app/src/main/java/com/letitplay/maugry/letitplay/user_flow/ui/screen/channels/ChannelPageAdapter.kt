@@ -29,7 +29,7 @@ class ChannelPageAdapter(
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ChannelPageItemHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelPageItemHolder {
         return ChannelPageItemHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {

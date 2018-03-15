@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -33,7 +33,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
     private var playlistsRepo: MusicRepo? = null
 
     private val vm by lazy {
-        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+        ViewModelProvider(this, ServiceLocator.viewModelFactory)
                 .get(PlaylistsViewModel::class.java)
     }
 

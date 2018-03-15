@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.paging.PagedListAdapter
-import android.support.v7.recyclerview.extensions.DiffCallback
+import android.support.v7.util.DiffUtil
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
@@ -19,7 +19,7 @@ class FeedAdapter(
 
     var onBeginSwipe: (SwipeLayout) -> Unit = {}
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): FeedItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemViewHolder {
         return FeedItemViewHolder(
                 parent,
                 playlistActionsListener,
@@ -48,7 +48,7 @@ class FeedAdapter(
     companion object {
         val LIKE_CHANGED = Any()
 
-        val TRACK_WITH_CHANNEL_COMPARATOR = object : DiffCallback<TrackWithChannel>() {
+        val TRACK_WITH_CHANNEL_COMPARATOR = object : DiffUtil.ItemCallback<TrackWithChannel>() {
             override fun areItemsTheSame(oldItem: TrackWithChannel, newItem: TrackWithChannel) =
                     oldItem.track.id == newItem.track.id
 

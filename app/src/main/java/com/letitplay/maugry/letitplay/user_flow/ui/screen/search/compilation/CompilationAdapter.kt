@@ -25,7 +25,7 @@ class CompilationAdapter(
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlaylistItemHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistItemHolder {
         return PlaylistItemHolder(parent).apply {
             itemView.setOnClickListener {
                 if (adapterPosition != NO_POSITION) {

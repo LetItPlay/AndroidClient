@@ -45,7 +45,7 @@ class FeedItemViewHolder(
             showOverlay()
         }
         itemView.apply {
-            setOnClickListener {
+            feed_card.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onClick(feedData)
                 }
@@ -85,7 +85,6 @@ class FeedItemViewHolder(
                             downY = event.y
                         }
                         MotionEvent.ACTION_MOVE -> {
-                            val diffX = event.x - downX
                             val diffY = event.y - downY
                             if (Math.abs(diffY) > touchSlop) {
                                 shouldClick = false

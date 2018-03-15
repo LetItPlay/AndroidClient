@@ -1,13 +1,15 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
-import android.arch.paging.HackyPagedListAdapterHelper
+import android.arch.paging.AsyncPagedListDiffer
 import android.arch.paging.PagedList
+import android.support.v7.recyclerview.extensions.AsyncDifferConfig
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.ShiftedListUpdateCallback
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
@@ -23,7 +25,13 @@ class TrendAdapter(
         private val onChannelClick: (Channel) -> Unit,
         private val onSeeAllClick: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val helper = HackyPagedListAdapterHelper<TrackWithChannel>(this, FeedAdapter.TRACK_WITH_CHANNEL_COMPARATOR)
+
+    private val asyncDifferConfig = AsyncDifferConfig
+            .Builder<TrackWithChannel>(FeedAdapter.TRACK_WITH_CHANNEL_COMPARATOR)
+            .build()
+
+    private val differ = AsyncPagedListDiffer<TrackWithChannel>(ShiftedListUpdateCallback(this), asyncDifferConfig)
+
     var onBeginSwipe: (SwipeLayout) -> Unit = {}
 
     var channels: List<Channel> = emptyList()
@@ -41,7 +49,7 @@ class TrendAdapter(
         return if (position == 0) R.layout.channel_list_item else R.layout.feed_item
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.channel_list_item -> ChannelsListViewHolder(parent, onChannelClick, onSeeAllClick)
             R.layout.feed_item -> FeedItemViewHolder(
@@ -63,7 +71,7 @@ class TrendAdapter(
         }
     }
 
-    override fun getItemCount(): Int = helper.itemCount + 1
+    override fun getItemCount(): Int = differ.itemCount + 1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
@@ -74,11 +82,9 @@ class TrendAdapter(
         }
     }
 
-    fun setList(pagedList: PagedList<TrackWithChannel>) {
-        helper.setList(pagedList)
+    fun submitList(pagedList: PagedList<TrackWithChannel>) {
+        differ.submitList(pagedList)
     }
 
-    private fun getItem(position: Int): TrackWithChannel? = helper.getItem(position)
-
-    fun getCurrentList(): PagedList<TrackWithChannel>? = helper.currentList
+    private fun getItem(position: Int): TrackWithChannel? = differ.getItem(position)
 }

@@ -40,7 +40,7 @@ class PlaylistsAdapter(
         return data[position].track.id.toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlaylistItemHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistItemHolder {
         return PlaylistItemHolder(
                 parent,
                 musicService,

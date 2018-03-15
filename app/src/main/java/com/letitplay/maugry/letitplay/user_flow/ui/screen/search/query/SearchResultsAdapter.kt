@@ -42,7 +42,7 @@ class SearchResultsAdapter(
 
     override fun getItemCount() = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             CHANNEL_ITEM_TYPE -> ChannelVH(parent, onChannelClick, onFollowClick)
             TRACK_ITEM_TYPE -> TrackVH(parent, onTrackClick, musicService)

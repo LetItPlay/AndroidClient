@@ -296,6 +296,7 @@ class MusicService : Service() {
         startUpdateProgress()
     }
 
+    @Suppress("DEPRECATION")
     private fun requestAudioFocus(): Boolean {
         if (!audioFocusRequested) {
             audioFocusRequested = true
@@ -311,6 +312,7 @@ class MusicService : Service() {
         return true
     }
 
+    @Suppress("DEPRECATION")
     private fun abandonAudioFocus() {
         if (!audioFocusRequested) {
             return

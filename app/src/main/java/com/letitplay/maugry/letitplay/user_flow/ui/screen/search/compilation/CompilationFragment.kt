@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -26,7 +26,7 @@ class CompilationFragment : BaseFragment(R.layout.compilation_fragment) {
     }
 
     private val vm by lazy {
-        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+        ViewModelProvider(this, ServiceLocator.viewModelFactory)
                 .get(CompilationViewModel::class.java)
     }
 

@@ -21,13 +21,13 @@ class TrackAdapter(
             notifyDataSetChanged()
         }
 
-    override fun onBindViewHolder(holder: TrackItemHolder?, position: Int) {
-        holder?.update(data[position])
+    override fun onBindViewHolder(holder: TrackItemHolder, position: Int) {
+        holder.update(data[position])
     }
 
     override fun getItemCount(): Int = data.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackItemHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemHolder {
         return TrackItemHolder(parent, onClickItem, musicService)
     }
 

@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -39,7 +39,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     }
 
     private val vm by lazy {
-        ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
+        ViewModelProvider(this, ServiceLocator.viewModelFactory)
                 .get(TrendViewModel::class.java)
     }
     private var trendsRepo: MusicRepo? = null
@@ -50,7 +50,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         vm.trends.observe(this, Observer<PagedList<TrackWithChannel>> {
             hideProgress()
             it?.let {
-                trendsListAdapter.setList(it)
+                trendsListAdapter.submitList(it)
             }
         })
         vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
