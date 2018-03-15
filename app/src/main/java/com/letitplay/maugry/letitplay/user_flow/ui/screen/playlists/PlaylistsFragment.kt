@@ -13,6 +13,7 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
@@ -24,11 +25,10 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
 
     private val playlistAdapter: PlaylistsAdapter by lazy {
-        PlaylistsAdapter(musicService, ::playTrack, ::onBeginSwipe, ::onSwipeReached, ::onRemoveClick)
+        PlaylistsAdapter(musicService, ::playTrack, ::onSwipeReached, ::onRemoveClick)
     }
 
     private var playlistsRepo: MusicRepo? = null
-    private var lastSwipeLayout: SwipeLayout? = null
 
     private val vm by lazy {
         ViewModelProviders.of(this, ServiceLocator.viewModelFactory)
@@ -39,18 +39,14 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val playlistRecycler = view.findViewById<RecyclerView>(R.id.playlists_list)
         playlistAdapter.setHasStableIds(true)
+        val beginSwipeHandler = BeginSwipeHandler(playlistRecycler)
+        playlistAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         playlistRecycler.adapter = playlistAdapter
         val divider = listDivider(playlistRecycler.context, R.drawable.list_divider)
         playlistRecycler.addItemDecoration(divider)
         view.findViewById<View>(R.id.playlist_clear_all).setOnClickListener {
             onPlaylistClear()
         }
-        playlistRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                lastSwipeLayout?.animateReset()
-                lastSwipeLayout = null
-            }
-        })
         return view
     }
 
@@ -85,12 +81,6 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         onRemoveClick(track, position, swipeLayout)
     }
 
-    private fun onBeginSwipe(swipeLayout: SwipeLayout) {
-        if (swipeLayout != lastSwipeLayout)
-            lastSwipeLayout?.animateReset()
-        lastSwipeLayout = swipeLayout
-    }
-
     private fun onPlaylistClear() {
         // TODO: Move it to viewmodel !
         navigationActivity.musicPlayerSmall?.apply {
@@ -102,7 +92,6 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
     }
 
     private fun playTrack(track: Track) {
-        lastSwipeLayout?.animateReset()
         val trackId = track.id
         if (playlistsRepo != null && playlistsRepo?.getAudioTrackAtId(trackId) != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)

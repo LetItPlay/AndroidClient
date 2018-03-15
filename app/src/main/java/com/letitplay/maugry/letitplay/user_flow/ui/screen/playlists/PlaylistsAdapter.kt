@@ -18,10 +18,11 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 class PlaylistsAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (Track) -> Unit,
-        private val onBeginSwipe: (SwipeLayout) -> Unit,
         private val onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
         private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit
 ) : RecyclerView.Adapter<PlaylistsAdapter.PlaylistItemHolder>() {
+
+    var onBeginSwipe: (SwipeLayout) -> Unit = {}
 
     var data: List<TrackWithChannel> = ArrayList()
         set(value) {
@@ -40,7 +41,14 @@ class PlaylistsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PlaylistItemHolder {
-        return PlaylistItemHolder(parent, musicService, onClickItem, onBeginSwipe, onSwipeReached, onRemoveClick)
+        return PlaylistItemHolder(
+                parent,
+                musicService,
+                onClickItem,
+                { onBeginSwipe(it) },
+                onSwipeReached,
+                onRemoveClick
+        )
     }
 
     class PlaylistItemHolder(
@@ -58,10 +66,11 @@ class PlaylistsAdapter(
                 track_playing_now.mediaSession = musicService?.mediaSession
                 playlist_track_item.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
+                        playlist_swipe_layout.animateReset()
                         onClickItem(trackData.track)
                     }
                 }
-                playlist_swipe_layout.setOnSwipeListener(object: SimpleOnSwipeListener {
+                playlist_swipe_layout.setOnSwipeListener(object : SimpleOnSwipeListener {
 
                     override fun onBeginSwipe(swipeLayout: SwipeLayout, moveToRight: Boolean) {
                         onBeginSwipe(swipeLayout)
