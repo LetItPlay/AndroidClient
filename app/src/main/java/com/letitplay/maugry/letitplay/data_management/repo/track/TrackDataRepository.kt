@@ -7,7 +7,6 @@ import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.data_management.model.toTrackModel
 import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -52,22 +51,12 @@ class TrackDataRepository(
         val trackId = track.track.id
         val (trackInPlaylistDao, channelDao, trackDao) = Triple(db.playlistDao(), db.channelDao(), db.trackDao())
         val trackInPlaylist = Single.fromCallable {
-            Optional.of(db.playlistDao().getTrackInPlaylist(trackId)) to
-                    Optional.of(db.playlistDao().getFirstTrackInPlaylist())
+            Pair(Optional.of(db.playlistDao().getTrackInPlaylist(trackId)),
+                    Optional.of(db.playlistDao().getFirstTrackInPlaylist()))
         }
         return trackInPlaylist
-                .doOnSuccess {
-                    val order: Int = when (it.first.value == null) {
-                        true ->
-                            when (it.second.value == null) {
-                                true -> 0
-                                else -> it.second.value!! - 1
-                            }
-                        else -> when (it.first.value?.trackOrder == it.second.value) {
-                            true -> it.second.value!!
-                            else -> it.second.value!! - 1
-                        }
-                    }
+                .doOnSuccess { (foundTrackInPlaylist, firstOrderInPlaylist) ->
+                    val order = calcNewOrder(foundTrackInPlaylist.value, firstOrderInPlaylist.value, Edge.TOP)
                     db.runInTransaction {
                         channelDao.insertChannels(listOf(track.channel))
                         trackDao.insertTracks(listOf(track.track))
@@ -87,18 +76,8 @@ class TrackDataRepository(
                     Optional.of(db.playlistDao().getLastTrackInPlaylist())
         }
         return trackInPlaylist
-                .doOnSuccess {
-                    val order: Int = when (it.first.value == null) {
-                        true ->
-                            when (it.second.value == null) {
-                                true -> 0
-                                else -> it.second.value!! + 1
-                            }
-                        else -> when (it.first.value?.trackOrder == it.second.value) {
-                            true -> it.second.value!!
-                            else -> it.second.value!! + 1
-                        }
-                    }
+                .doOnSuccess { (foundTrackInPlaylist, lastOrderInPlaylist) ->
+                    val order = calcNewOrder(foundTrackInPlaylist.value, lastOrderInPlaylist.value, Edge.BOTTOM)
                     db.runInTransaction {
                         channelDao.insertChannels(listOf(track.channel))
                         trackDao.insertTracks(listOf(track.track))
@@ -110,4 +89,21 @@ class TrackDataRepository(
                 .toCompletable()
     }
 
+
+    companion object {
+        fun calcNewOrder(track: TrackInPlaylist?, edgeValue: Int?, edge: Edge): Int {
+            return when {
+                edgeValue == null -> 0
+                track != null && track.trackOrder == edgeValue -> track.trackOrder
+                else -> when (edge) {
+                    Edge.TOP -> edgeValue - 1
+                    Edge.BOTTOM -> edgeValue + 1
+                }
+            }
+        }
+    }
+
+    enum class Edge {
+        TOP, BOTTOM
+    }
 }
