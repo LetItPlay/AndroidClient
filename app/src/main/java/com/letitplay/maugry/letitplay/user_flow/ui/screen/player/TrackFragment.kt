@@ -53,7 +53,7 @@ class TrackFragment : BaseFragment(R.layout.track_fragment), MusicService.RepoCh
         trackAdapter.data = repo?.playlist ?: emptyList()
         repo?.playlist?.let {
             track_playlist_count?.text = it.size.toString()
-            track_playlist_time?.text = DateHelper.getTime(it.sumBy { it.length ?: 0 })
+            track_playlist_time?.text = DateHelper.getTime(it.sumBy { it.lengthInSeconds })
         }
     }
 }

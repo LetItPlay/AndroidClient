@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 project.ext {
     support_library_version = "27.1.0"
-    exoplayer_version = "2.6.1"
+    exoplayer_version = "2.7.1"
     glide_version = "4.6.1"
 }
 

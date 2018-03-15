@@ -18,7 +18,7 @@ fun TrackWithChannel.toAudioTrack(): AudioTrack {
             subtitle = channel.name,
             imageUrl = track.coverUrl ?: "",
             channelTitle = channel.name,
-            length = track.totalLengthInSeconds,
+            lengthInMs = (track.totalLengthInSeconds * 1000).toLong(),
             listenCount = track.listenCount,
             publishedAt = track.publishedAt
     )

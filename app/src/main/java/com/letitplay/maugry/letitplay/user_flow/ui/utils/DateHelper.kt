@@ -23,6 +23,8 @@ object DateHelper {
         )
     }
 
+    fun getTime(timeInSeconds: Long?) = getTime(timeInSeconds?.toInt())
+
     fun getTime(timeInSeconds: Int?): String {
         var secondsStr = "00"
         var minutesStr = "00"

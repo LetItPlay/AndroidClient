@@ -9,6 +9,8 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 
 
 open class ExoPlayerListener: Player.EventListener {
+    override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {}
+
     override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
 
     override fun onSeekProcessed() {}
@@ -24,8 +26,6 @@ open class ExoPlayerListener: Player.EventListener {
     override fun onRepeatModeChanged(repeatMode: Int) {}
 
     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {}
-
-    override fun onTimelineChanged(timeline: Timeline, manifest: Any?) {}
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {}
 }

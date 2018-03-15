@@ -16,8 +16,7 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.Player.STATE_ENDED
-import com.google.android.exoplayer2.Player.STATE_READY
+import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.metadata.Metadata
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -128,15 +127,7 @@ class MusicService : Service() {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             when (playbackState) {
-                STATE_READY -> {
-                    val duration = exoPlayer.duration
-                    if (duration >= 0) {
-                        metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration)
-                        mediaSession?.setMetadata(metadataBuilder.build())
-                    }
-
-                }
-                STATE_ENDED -> {
+                STATE_ENDED, STATE_IDLE -> {
                     if (musicRepo?.autoPlay == true && playWhenReady) {
                         mediaSessionCallback.onSkipToNext()
                     }
@@ -250,8 +241,6 @@ class MusicService : Service() {
                     .createMediaSource(Uri.parse(audioTrack.url))
 
             exoPlayer.prepare(mediaSource)
-
-            mediaSession?.setMetadata(metadataBuilder.build())
         }
         mediaSession?.setMetadata(buildMetadata(metadataBuilder, audioTrack))
         lastInitializedTrack = audioTrack
@@ -263,7 +252,7 @@ class MusicService : Service() {
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, audioTrack?.url)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, audioTrack?.subtitle)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, audioTrack?.title)
-                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, audioTrack?.lengthInMs ?: 0)
                 .build()
     }
 

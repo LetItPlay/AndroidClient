@@ -9,7 +9,9 @@ open class AudioTrack(
         open val subtitle: String? = null,
         open val imageUrl: String? = null,
         open val channelTitle: String? = null,
-        open val length: Int? = 0,
+        open val lengthInMs: Long? = 0,
         open val listenCount: Int? = 0,
         open val publishedAt: Date? = null
-)
+) {
+    val lengthInSeconds = (lengthInMs?.div(1000) ?: 0).toInt()
+}

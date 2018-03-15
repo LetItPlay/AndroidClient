@@ -51,7 +51,7 @@ class TrackAdapter(
                 track_last_seen.text = DateHelper.getLongPastDate(track.publishedAt, context)
                 channel_name.text = track.channelTitle
                 track_name.text = track.title
-                track_time.text = DateHelper.getTime(track.length)
+                track_time.text = DateHelper.getTime(track.lengthInSeconds)
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackUrl = track.url
                 track_logo.loadImage(track.imageUrl)
