@@ -83,7 +83,9 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         // TODO: Move it to viewmodel !
         swipeLayout.animateReset()
         if (musicService?.musicRepo?.currentAudioTrack?.id == track.id)
-            navigationActivity.musicPlayerSmall?.next()
+            navigationActivity.musicPlayerSmall?.apply {
+                next()
+            }
         vm.deleteTrack(track)
         navigationActivity.removeTrack(position)
     }
