@@ -97,7 +97,7 @@ class FeedItemViewHolder(
                         }
                         MotionEvent.ACTION_UP -> {
                             if (shouldClick) {
-                                itemView.performClick()
+                                itemView.feed_card_info.performClick()
                             }
                         }
                     }
