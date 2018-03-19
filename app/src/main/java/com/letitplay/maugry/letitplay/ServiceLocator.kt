@@ -26,6 +26,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.track.TrackDataReposi
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendDataRepository
 import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
+import com.letitplay.maugry.letitplay.data_management.repo.userToken.UserTokenDataRepository
 import com.letitplay.maugry.letitplay.user_flow.Router
 import com.letitplay.maugry.letitplay.user_flow.ui.ViewModelFactory
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
@@ -51,6 +52,7 @@ object ServiceLocator {
                 playlistsRepository,
                 playerRepository,
                 compilationRepository,
+                userTokenRepository,
                 searchRepository,
                 schedulerProvider
         )
@@ -63,6 +65,7 @@ object ServiceLocator {
     private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider, preferenceHelper) }
     private val playlistsRepository: PlaylistsRepository by lazy { PlaylistsDataRepository(db, schedulerProvider) }
     private val playerRepository: PlayerRepository by lazy { PlayerDataRepository(postServiceImpl, schedulerProvider, preferenceHelper) }
+    private val userTokenRepository: UserTokenDataRepository by lazy { UserTokenDataRepository(db, serviceImpl, schedulerProvider, preferenceHelper)}
     private val compilationRepository: CompilationRepository by lazy { CompilationNetworkRepository(serviceImpl, preferenceHelper, schedulerProvider) }
     val searchRepository: SearchRepository by lazy { SearchDataRepository(serviceImpl, postServiceImpl, db, schedulerProvider, preferenceHelper) }
     private val preferenceHelper: PreferenceHelper by lazy { PreferenceHelper(applicationContext) }

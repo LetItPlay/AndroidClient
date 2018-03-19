@@ -29,6 +29,12 @@ private val logInterceptor = HttpLoggingInterceptor().apply {
 
 private val httpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
+        .addInterceptor { chain ->
+            val original = chain.request()
+            val requestBuilder = original.newBuilder().header("Authorization", "Bearer "+"autho-value")
+            val request = requestBuilder.build()
+            chain.proceed(request)
+        }
         .build()
 
 private val gson = GsonBuilder()
