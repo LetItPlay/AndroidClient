@@ -12,11 +12,14 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeCallback
-import com.letitplay.maugry.letitplay.utils.ext.*
+import com.letitplay.maugry.letitplay.utils.ext.gone
+import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
+import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
 import kotlinx.android.synthetic.main.view_feed_card_info.view.*
+import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
 import ru.rambler.libs.swipe_layout.SwipeLayout
 
 class FeedItemViewHolder(
@@ -31,6 +34,17 @@ class FeedItemViewHolder(
     private var isSwiping: Boolean = false
 
     init {
+
+        val addToTop = {
+            playlistActionsListener?.performPushToTop(feedData)
+            itemView.feed_swipe_layout.animateReset()
+            showOverlay()
+        }
+        val addToBottom = {
+            playlistActionsListener?.performPushToBottom(feedData)
+            itemView.feed_swipe_layout.animateReset()
+            showOverlay()
+        }
 
         itemView.apply {
             feed_card.setOnClickListener {
@@ -52,6 +66,13 @@ class FeedItemViewHolder(
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onLikeClick(feedData)
                 }
+            }
+
+            left_menu.setOnClickListener {
+                addToTop()
+            }
+            right_menu.setOnClickListener {
+                addToBottom()
             }
 
             feed_playing_now.mediaSession = musicService?.mediaSession
@@ -83,21 +104,20 @@ class FeedItemViewHolder(
                     return false
                 }
             })
-            feed_swipe_layout.swipeCallback = object : SwipeCallback {
-                override fun onSwipeChanged(translationX: Int) {
+            feed_swipe_layout.isLeftSwipeEnabled = true
+            feed_swipe_layout.setOnSwipeListener(object : SimpleOnSwipeListener {
+                override fun onBeginSwipe(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                    isSwiping = true
+                    onBeginSwipe(swipeLayout)
                 }
 
-                override fun onSwipeToRight() {
-                    playlistActionsListener?.performPushToTop(feedData)
-                            ?.ifTrue(this@FeedItemViewHolder::showOverlay)
+                override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                    if (moveToRight)
+                        addToBottom()
+                    else
+                        addToTop()
                 }
-
-                override fun onSwipeToLeft() {
-                    playlistActionsListener?.performPushToBottom(feedData)
-                            ?.ifTrue(this@FeedItemViewHolder::showOverlay)
-                }
-
-            }
+            })
         }
     }
 

@@ -1,59 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ru.rambler.libs.swipe_layout.SwipeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/feed_swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:swipe_menu_max_width="@dimen/swipe_menu_width">
-
-    <FrameLayout
-        android:id="@+id/left_menu"
-        android:layout_width="0dp"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/feed_item_menu_left_background"/>
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:src="@drawable/add_to_top_bg" />
-
-        <TextView
-            android:layout_width="87dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_marginEnd="47dp"
-            android:gravity="center_vertical"
-            android:fontFamily="sans-serif-medium"
-            android:text="To the top of the playlist"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/right_menu"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/feed_item_menu_right_background"/>
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:src="@drawable/add_to_bottom_bg" />
-    </FrameLayout>
+    app:left_swipe_enabled="true"
+    app:right_swipe_enabled="true">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/content"
@@ -79,4 +32,73 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/feed_card" />
     </android.support.constraint.ConstraintLayout>
-</com.letitplay.maugry.letitplay.user_flow.ui.widget.SwipeHorizontalLayout>
+
+    <FrameLayout
+        android:id="@+id/left_menu"
+        android:layout_width="210dp"
+        android:layout_height="match_parent"
+        app:bring_to_clamp="180dp"
+        app:clamp="self"
+        app:gravity="left"
+        app:sticky="@dimen/swipe_menu_width">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/feed_item_menu_left_background" />
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/add_to_top_bg" />
+
+        <TextView
+            android:layout_width="@dimen/swipe_text_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="47dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/to_the_top_of_the_playlist"
+            android:textAlignment="textEnd"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/right_menu"
+        android:layout_width="210dp"
+        android:layout_height="match_parent"
+        app:bring_to_clamp="180dp"
+        app:clamp="self"
+        app:gravity="right"
+        app:sticky="@dimen/swipe_menu_width">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/feed_item_menu_right_background" />
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/add_to_bottom_bg" />
+
+        <TextView
+            android:layout_width="87dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginStart="47dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/to_the_bottom_of_the_playlist"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+    </FrameLayout>
+</ru.rambler.libs.swipe_layout.SwipeLayout>
