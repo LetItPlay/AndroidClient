@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
@@ -84,7 +85,11 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         swipeLayout.animateReset()
         if (musicService?.musicRepo?.currentAudioTrack?.id == track.id)
             navigationActivity.musicPlayerSmall?.apply {
-                next()
+                val audioNext: AudioTrack? = musicService?.musicRepo?.nextAudioTrack
+                stop()
+                if (audioNext != null) {
+                    skipToQueueItem(audioNext.id)
+                }
             }
         vm.deleteTrack(track)
         navigationActivity.removeTrack(position)
