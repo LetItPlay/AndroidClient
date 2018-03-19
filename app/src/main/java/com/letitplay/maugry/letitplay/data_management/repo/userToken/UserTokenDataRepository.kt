@@ -10,8 +10,9 @@ import io.reactivex.Completable
 class UserTokenDataRepository(private val db: LetItPlayDb,
                               private val api: LetItPlayApi,
                               private val schedulerProvider: SchedulerProvider,
-                              private val preferenceHelper: PreferenceHelper ) : UserTokenRepository {
+                              private val preferenceHelper: PreferenceHelper) : UserTokenRepository {
     override fun getJwt(userToken: String): Completable {
-
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 }
