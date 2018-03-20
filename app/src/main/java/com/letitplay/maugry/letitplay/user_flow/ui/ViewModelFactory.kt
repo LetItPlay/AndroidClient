@@ -13,6 +13,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.search.SearchReposito
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.data_management.repo.userToken.UserTokenDataRepository
+import com.letitplay.maugry.letitplay.data_management.repo.userToken.UserTokenRepository
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.JwtViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
@@ -33,7 +35,7 @@ class ViewModelFactory(
         private val playlistRepository: PlaylistsRepository,
         private val playerRepository: PlayerRepository,
         private val compilationRepository: CompilationRepository,
-        private val userTokenDataRepository: UserTokenDataRepository,
+        private val userTokenRepository: UserTokenRepository,
         private val searchRepository: SearchRepository,
         private val schedulerProvider: SchedulerProvider
 ) : ViewModelProvider.Factory {
@@ -78,6 +80,10 @@ class ViewModelFactory(
                 isAssignableFrom(CompilationViewModel::class.java) ->
                     CompilationViewModel(
                             compilationRepository
+                    )
+                isAssignableFrom(JwtViewModel::class.java) ->
+                    JwtViewModel(
+                            userTokenRepository
                     )
                 isAssignableFrom(SearchViewModel::class.java) ->
                     SearchViewModel(
