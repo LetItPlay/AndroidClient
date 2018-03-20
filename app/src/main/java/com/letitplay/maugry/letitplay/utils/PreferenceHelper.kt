@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.utils
 import android.content.Context
 import android.content.SharedPreferences
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
+import com.letitplay.maugry.letitplay.utils.ext.transaction
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.BehaviorSubject
@@ -24,9 +25,9 @@ class PreferenceHelper(context: Context) {
         set(value) {
             if (value != null) {
                 sharedPreferences
-                        .edit()
-                        .putString(APP_SETTINGS_CONTENT_LANG, value.name)
-                        .apply()
+                        .transaction {
+                            putString(APP_SETTINGS_CONTENT_LANG, value.name)
+                        }
                 languageSubject.onNext(Optional.of(value))
             }
         }
@@ -38,10 +39,9 @@ class PreferenceHelper(context: Context) {
     }
 
     fun saveListened(trackId: Int) {
-        sharedPreferences
-                .edit()
-                .putBoolean(trackId.toString(), true)
-                .apply()
+        sharedPreferences.transaction {
+            putBoolean(trackId.toString(), true)
+        }
     }
 
     companion object {
