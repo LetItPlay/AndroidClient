@@ -11,4 +11,6 @@ interface SimpleOnSwipeListener: SwipeLayout.OnSwipeListener {
     override fun onLeftStickyEdge(swipeLayout: SwipeLayout, moveToRight: Boolean) {}
 
     override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {}
+
+    override fun onPositionChanged(swipeLayout: SwipeLayout?, moveToRight: Boolean, left: Int) {}
 }

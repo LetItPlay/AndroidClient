@@ -1,11 +1,9 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
 import android.support.transition.TransitionManager
+import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.widget.RecyclerView
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewConfiguration
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
@@ -31,10 +29,8 @@ class FeedItemViewHolder(
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var feedData: TrackWithChannel
-    private var isSwiping: Boolean = false
 
     init {
-
         val addToTop = {
             playlistActionsListener?.performPushToTop(feedData)
             itemView.feed_swipe_layout.animateReset()
@@ -45,19 +41,23 @@ class FeedItemViewHolder(
             itemView.feed_swipe_layout.animateReset()
             showOverlay()
         }
-
-        itemView.apply {
-            feed_card.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    onClick(feedData)
-                }
-            }
-            feed_card.setOnLongClickListener {
+        val detector = GestureDetectorCompat(itemView.context, object: GestureDetector.SimpleOnGestureListener() {
+            override fun onLongPress(e: MotionEvent) {
                 itemView.feed_track_info_scroll.smoothScrollTo(0, 0)
                 TransitionManager.beginDelayedTransition(itemView as ViewGroup)
                 itemView.feed_card_info.show()
-                true
+                super.onLongPress(e)
             }
+
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    onClick(feedData)
+                }
+                return super.onSingleTapConfirmed(e)
+            }
+        })
+        itemView.setOnTouchListener { _, motionEvent -> detector.onTouchEvent(motionEvent) }
+        itemView.apply {
             feed_card_info.setOnClickListener {
                 TransitionManager.beginDelayedTransition(itemView as ViewGroup)
                 itemView.feed_card_info.gone()
@@ -67,7 +67,6 @@ class FeedItemViewHolder(
                     onLikeClick(feedData)
                 }
             }
-
             left_menu.setOnClickListener {
                 addToTop()
             }
@@ -104,10 +103,8 @@ class FeedItemViewHolder(
                     return false
                 }
             })
-            feed_swipe_layout.isLeftSwipeEnabled = true
             feed_swipe_layout.setOnSwipeListener(object : SimpleOnSwipeListener {
                 override fun onBeginSwipe(swipeLayout: SwipeLayout, moveToRight: Boolean) {
-                    isSwiping = true
                     onBeginSwipe(swipeLayout)
                 }
 
@@ -151,7 +148,7 @@ class FeedItemViewHolder(
         itemView.feed_like.likeCount = feedData.track.likeCount
     }
 
-    fun showOverlay() {
+    private fun showOverlay() {
         val animation = AnimationUtils.loadAnimation(itemView.context, R.anim.overlay_with_delay)
         itemView.track_added_overlay.startAnimation(animation)
     }
