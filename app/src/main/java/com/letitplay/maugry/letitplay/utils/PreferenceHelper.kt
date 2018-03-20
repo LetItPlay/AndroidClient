@@ -31,6 +31,20 @@ class PreferenceHelper(context: Context) {
             }
         }
 
+    var userToken: String?
+        get() {
+            return sharedPreferences.getString(APP_SETTINGS_USER_TOKEN, null)
+        }
+        set(value) {
+            if (value != null) {
+                sharedPreferences
+                        .edit()
+                        .putString(APP_SETTINGS_USER_TOKEN, value)
+                        .apply()
+            }
+        }
+
+
     val liveLanguage: Flowable<Optional<Language>> get() = languageSubject.toFlowable(BackpressureStrategy.DROP)
 
     fun isListened(trackId: Int): Boolean {
@@ -47,6 +61,7 @@ class PreferenceHelper(context: Context) {
     companion object {
         private const val APP_SETTINGS = "APP_SETTINGS"
         private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
+        private const val APP_SETTINGS_USER_TOKEN = "APP_SETTINGS_USER_TOKEN"
         private const val NO_VALUE = "NO_VALUE"
     }
 }
