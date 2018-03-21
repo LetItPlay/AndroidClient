@@ -56,25 +56,27 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         playlist_header.attachTo(playlists_list)
+        playlist_header.hide()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        lifecycle.addObserver(vm)
-        vm.tracksInPlaylist.observe(this, Observer<List<TrackWithChannel>> {
-            when {
-                it != null && it.isNotEmpty() -> {
-                    playlist_no_tracks.hide()
-                    playlist_count.text = it.count().toString()
-                    playlist_time.text = DateHelper.getTime(it.sumBy { it.track.totalLengthInSeconds })
-                    playlist_header.show()
-                    playlists_list.show()
-                    playlistAdapter.data = it
-                }
-                else -> {
-                    playlists_list.hide()
-                    playlist_header.hide()
-                    playlist_no_tracks.show()
+        vm.state.observe(this, Observer<PlaylistsViewModel.ViewState> {
+            if (it != null) {
+                when {
+                    it.showTracks -> {
+                        playlist_count.text = it.tracks.count().toString()
+                        playlist_time.text = DateHelper.getTime(it.tracks.sumBy { it.track.totalLengthInSeconds })
+                        playlistAdapter.data = it.tracks
+                        playlist_no_tracks.hide()
+                        playlist_header.show()
+                        playlists_list.show()
+                    }
+                    else -> {
+                        playlists_list.hide()
+                        playlist_header.hide()
+                        playlist_no_tracks.show()
+                    }
                 }
             }
         })
@@ -116,7 +118,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
-        vm.tracksInPlaylist.value?.let {
+        vm.state.value?.tracks?.let {
             playlistsRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList(), true)
         }
         navigationActivity.updateRepo(track.id, playlistsRepo)
