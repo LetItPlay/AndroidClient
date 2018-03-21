@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.data_management.model
 
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.GL_MEDIA_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponseItem
 import com.letitplay.maugry.letitplay.data_management.api.responses.TracksAndChannels
@@ -97,3 +98,17 @@ fun String.fixMediaPrefix(): String =
             this.startsWith("http") -> this
             else -> GL_MEDIA_SERVICE_URL + this
         }
+
+fun TrackWithChannel.toAudioTrack(): AudioTrack {
+    return AudioTrack(
+            id = track.id,
+            url = track.audioUrl ?: "",
+            title = track.title,
+            subtitle = channel.name,
+            imageUrl = track.coverUrl ?: "",
+            channelTitle = channel.name,
+            lengthInMs = (track.totalLengthInSeconds * 1000).toLong(),
+            listenCount = track.listenCount,
+            publishedAt = track.publishedAt
+    )
+}
