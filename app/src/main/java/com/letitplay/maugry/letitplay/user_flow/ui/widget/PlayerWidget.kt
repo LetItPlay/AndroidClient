@@ -10,6 +10,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerContainerAdapter
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
 
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.player_fragment.view.*
 class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    private val preferenceHelper = PreferenceHelper(context)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.player_container_fragment, this)
@@ -24,12 +26,12 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
             player_playback_button.setOnClickListener {
                 val bottomSheetDialog = BottomSheetDialog(context)
                 val availSpeedList = availableSpeeds()
-                val currentSpeedIndex = 0 // TODO:
+                val currentSpeedIndex = availSpeedList.indexOf(preferenceHelper.playbackSpeed)
                 val optionsDialog = PlaybackSpeedDialog(context).apply {
                     setItems(availSpeedList, currentSpeedIndex)
                     onOptionClick = {
                         // Send command to service
-                        // Change UI
+                        preferenceHelper.playbackSpeed = it
                         this.selectAt(availSpeedList.indexOf(it))
                     }
                 }
