@@ -12,6 +12,8 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.SeekBar
 import com.gsfoxpro.musicservice.service.MusicService
+import com.gsfoxpro.musicservice.service.MusicService.Companion.ARG_SPEED
+import com.gsfoxpro.musicservice.service.MusicService.Companion.CHANGE_PLAYBACK_SPEED
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -157,6 +159,10 @@ abstract class MusicPlayer : FrameLayout {
         }
     }
 
+    fun changePlaybackSpeed(value: Float) {
+        mediaController?.sendCommand(CHANGE_PLAYBACK_SPEED, Bundle().apply { putFloat(ARG_SPEED, value) }, null)
+    }
+
     abstract fun updateButtonsStates()
 
     abstract fun updateTrackInfo(metadata: MediaMetadataCompat)
@@ -176,7 +182,6 @@ abstract class MusicPlayer : FrameLayout {
         val df = SimpleDateFormat(if (hours != 0) formatWithHours else formatWithoutHours)
         return df.format(date)
     }
-
 
     private fun unregisterCallback(){
         mediaController?.unregisterCallback(mediaControllerCallback)
