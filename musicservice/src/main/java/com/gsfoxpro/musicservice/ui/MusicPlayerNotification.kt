@@ -2,16 +2,21 @@ package com.gsfoxpro.musicservice.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.net.Uri
+import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.gsfoxpro.musicservice.R
+
 
 class MusicPlayerNotification {
     companion object {
@@ -20,6 +25,7 @@ class MusicPlayerNotification {
 
         private var notificationBuilder: NotificationCompat.Builder? = null
         private val imageCache: MutableMap<Uri, Bitmap> = HashMap()
+        private var placeholderBitmap: Bitmap? = null
 
         fun show(context: Context, mediaSession: MediaSessionCompat) {
             val controller = mediaSession.controller
@@ -32,6 +38,10 @@ class MusicPlayerNotification {
             val largeImage = imageCache[description.iconUri]
 
             val stopIntent = MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_STOP)
+
+            if (placeholderBitmap == null) {
+                placeholderBitmap = getBitmapFromVectorDrawable(context, R.drawable.ic_track_placeholder)
+            }
 
             notificationBuilder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
                     .setStyle(android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -48,8 +58,7 @@ class MusicPlayerNotification {
                     .setContentTitle(description.title)
                     .setContentText(description.subtitle)
                     .setSmallIcon(smallIcon)
-                    .setLargeIcon(largeImage
-                            ?: BitmapFactory.decodeResource(context.resources, android.R.mipmap.sym_def_app_icon)) //временно
+                    .setLargeIcon(largeImage ?: placeholderBitmap)
                     .setShowWhen(false)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -88,5 +97,19 @@ class MusicPlayerNotification {
                     })
         }
 
+        private fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap {
+            var drawable = ContextCompat.getDrawable(context, drawableId)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                drawable = DrawableCompat.wrap(drawable!!).mutate()
+            }
+
+            val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth,
+                    drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+
+            return bitmap
+        }
     }
 }
