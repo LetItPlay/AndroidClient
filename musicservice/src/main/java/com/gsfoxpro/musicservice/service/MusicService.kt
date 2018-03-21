@@ -54,6 +54,7 @@ class MusicService : Service() {
     private val progressHandler = Handler()
     private var needUpdateProgress = false
     private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
+    private var initialPlaybackSpeed: Float = 1f
 
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
             .setActions(
@@ -64,9 +65,18 @@ class MusicService : Service() {
                             or PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                             or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
 
+    private val playbackSpeed get() = mediaSession?.controller?.playbackState?.playbackSpeed ?: initialPlaybackSpeed
+
     private val mediaSessionCallback = object : MediaSessionCompat.Callback() {
-        override fun onCommand(command: String?, extras: Bundle?, cb: ResultReceiver?) {
+        override fun onCommand(command: String, extras: Bundle?, cb: ResultReceiver?) {
             when (command) {
+                CHANGE_PLAYBACK_SPEED -> {
+                    val arg = extras?.getFloat(ARG_SPEED) ?: return
+                    val currentState = mediaSession?.controller?.playbackState ?: return
+                    exoPlayer.playbackParameters = PlaybackParameters(arg, 1.0f)
+                    val newState = stateBuilder.setState(currentState.state, currentState.position, arg).build()
+                    mediaSession?.setPlaybackState(newState)
+                }
                 UPDATE_INFO -> {
                     mediaSession?.setMetadata(metadataBuilder.build())
                     sendPlaylistInfoEvent()
@@ -86,7 +96,7 @@ class MusicService : Service() {
             abandonAudioFocus()
 
             mediaSession?.apply {
-                setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, exoPlayer.currentPosition, 1F).build())
+                setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, exoPlayer.currentPosition, playbackSpeed).build())
                 MusicPlayerNotification.show(this@MusicService, this)
             }
         }
@@ -101,7 +111,7 @@ class MusicService : Service() {
 
             mediaSession?.apply {
                 isActive = false
-                setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_STOPPED, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1F).build())
+                setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_STOPPED, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, playbackSpeed).build())
             }
             MusicPlayerNotification.hide(this@MusicService)
         }
@@ -202,6 +212,10 @@ class MusicService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent != null && intent.hasExtra(ARG_SPEED)) {
+            initialPlaybackSpeed = intent.getFloatExtra(ARG_SPEED, 1.0F)
+            exoPlayer.playbackParameters = PlaybackParameters(initialPlaybackSpeed, 1.0f)
+        }
         MediaButtonReceiver.handleIntent(mediaSession, intent)
         return super.onStartCommand(intent, flags, startId)
     }
@@ -274,7 +288,7 @@ class MusicService : Service() {
         val currentPosition = if (trackChanged) 0L else exoPlayer.currentPosition
         mediaSession?.apply {
             isActive = true
-            setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, currentPosition, 1F).build())
+            setPlaybackState(stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, currentPosition, playbackSpeed).build())
             MusicPlayerNotification.show(this@MusicService, this)
         }
         mediaSession?.sendSessionEvent("eee", null)
@@ -367,6 +381,8 @@ class MusicService : Service() {
 
     companion object {
         const val UPDATE_INFO = "UPDATE_INFO"
+        const val CHANGE_PLAYBACK_SPEED = "CHANGE_PLAYBACK_SPEED"
+        const val ARG_SPEED = "ARG_SPEED"
         const val PROGRESS_UPDATE_EVENT = "PROGRESS_UPDATE_EVENT"
         const val CURRENT_PROGRESS = "CURRENT_PROGRESS"
         const val PLAYLIST_INFO_EVENT = "PLAYLIST_INFO_EVENT"

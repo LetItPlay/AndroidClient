@@ -3,6 +3,8 @@ package com.letitplay.maugry.letitplay.utils
 import android.content.Context
 import android.content.SharedPreferences
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
+import com.letitplay.maugry.letitplay.data_management.model.DEFAULT_PLAYBACK_SPEED
+import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.utils.ext.transaction
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -24,12 +26,15 @@ class PreferenceHelper(context: Context) {
         }
         set(value) {
             if (value != null) {
-                sharedPreferences
-                        .transaction {
-                            putString(APP_SETTINGS_CONTENT_LANG, value.name)
-                        }
+                putString(APP_SETTINGS_CONTENT_LANG, value.name)
                 languageSubject.onNext(Optional.of(value))
             }
+        }
+
+    var playbackSpeed: PlaybackSpeed
+        get() = PlaybackSpeed(sharedPreferences.getFloat(PLAYBACK_SPEED, DEFAULT_PLAYBACK_SPEED.value))
+        set(value) {
+            putFloat(PLAYBACK_SPEED, value.value)
         }
 
     val liveLanguage: Flowable<Optional<Language>> get() = languageSubject.toFlowable(BackpressureStrategy.DROP)
@@ -44,9 +49,22 @@ class PreferenceHelper(context: Context) {
         }
     }
 
+    private fun putString(key: String, value: String) {
+        sharedPreferences.transaction {
+            putString(key, value)
+        }
+    }
+
+    private fun putFloat(key: String, value: Float) {
+        sharedPreferences.transaction {
+            putFloat(key, value)
+        }
+    }
+
     companion object {
         private const val APP_SETTINGS = "APP_SETTINGS"
         private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
         private const val NO_VALUE = "NO_VALUE"
+        private const val PLAYBACK_SPEED = "APP_PLAYBACK_SPEED"
     }
 }

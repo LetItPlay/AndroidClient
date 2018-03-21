@@ -13,6 +13,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
@@ -20,7 +21,6 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
-import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.playlists_fragment.*
 import ru.rambler.libs.swipe_layout.SwipeLayout
 

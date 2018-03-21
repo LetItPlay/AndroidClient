@@ -14,11 +14,11 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
-import com.letitplay.maugry.letitplay.utils.ext.toAudioTrack
 import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {

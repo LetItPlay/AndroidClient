@@ -8,6 +8,8 @@ import android.os.IBinder
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.gsfoxpro.musicservice.service.MusicService
+import com.gsfoxpro.musicservice.service.MusicService.Companion.ARG_SPEED
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.fabric.sdk.android.Fabric
 import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
@@ -43,7 +45,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         ServiceLocator.applicationContext = this
-        bindMusicService()
+        bindMusicService(PreferenceHelper(this))
         Timber.plant(Timber.DebugTree())
         JodaTimeAndroid.init(this)
         if (!BuildConfig.DEBUG) {
@@ -55,8 +57,14 @@ class App : MultiDexApplication() {
                 .subscribe()
     }
 
-    private fun bindMusicService() {
-        startService(Intent(this, MusicService::class.java))
+    private fun bindMusicService(preferenceHelper: PreferenceHelper) {
+        startService(buildStartMusicServiceIntent(preferenceHelper))
         bindService(Intent(applicationContext, MusicService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun buildStartMusicServiceIntent(preferenceHelper: PreferenceHelper): Intent {
+        return Intent(this, MusicService::class.java).apply {
+            putExtra(ARG_SPEED, preferenceHelper.playbackSpeed.value)
+        }
     }
 }
