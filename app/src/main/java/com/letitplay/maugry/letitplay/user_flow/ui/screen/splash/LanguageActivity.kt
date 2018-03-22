@@ -20,7 +20,9 @@ class LanguageActivity : AppCompatActivity() {
         rus_button.setOnClickListener {
             saveLang(Language.RU)
         }
-
+        fr_button.setOnClickListener {
+            saveLang(Language.FR)
+        }
     }
 
     private fun saveLang(lang: Language) {

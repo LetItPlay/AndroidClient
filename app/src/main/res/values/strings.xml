@@ -26,8 +26,6 @@
     <string name="playlists_no_tracks">There are no tracks</string>
 
     <!--PROFILE-->
-    <string name="profile_change_language_to_ru">Поменять язык на русский</string>
-    <string name="profile_change_language_to_en">Switch to English</string>
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
     <string name="profile_user_name">Your future profile</string>
 
@@ -40,8 +38,9 @@
     <!--LANGUAGE-->
     <string name="language_select_language">Select\nyour language</string>
     <string name="language_logo_text">let it play</string>
-    <string name="language_en">English</string>
-    <string name="language_ru">Русский</string>
+    <string name="english" translatable="false">English</string>
+    <string name="russian" translatable="false">Русский</string>
+    <string name="french" translatable="false">Français</string>
 
     <plurals name="weeks_long">
         <item quantity="one">%d w.</item>
@@ -80,4 +79,8 @@
     <string name="my_playlist">My playlist</string>
     <string name="to_the_top_of_the_playlist">To the top of the playlist</string>
     <string name="to_the_bottom_of_the_playlist">To the bottom of the playlist</string>
+    <string name="language_en" translatable="false">Language: English</string>
+    <string name="language_ru" translatable="false">Язык: Русский</string>
+    <string name="language_fr" translatable="false">Langue: Français</string>
+    <string name="select_language">Select language</string>
 </resources>

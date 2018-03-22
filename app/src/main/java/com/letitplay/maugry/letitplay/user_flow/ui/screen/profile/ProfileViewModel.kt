@@ -1,6 +1,5 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
-import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import com.letitplay.maugry.letitplay.SchedulerProvider
@@ -16,7 +15,7 @@ import io.reactivex.rxkotlin.addTo
 class ProfileViewModel(
         private val profileRepository: ProfileRepository,
         private val schedulerProvider: SchedulerProvider
-) : BaseViewModel(), LifecycleObserver {
+) : BaseViewModel() {
 
     val language: LiveData<Optional<Language>> by lazy {
         profileRepository.getLanguage().toLiveData()
@@ -31,8 +30,9 @@ class ProfileViewModel(
         })
     }
 
-    fun flipLanguage() {
-        profileRepository.flipLanguage()
+    fun changeLanguage(shortStr: String) {
+        val lang = Language.fromString(shortStr) ?: throw IllegalArgumentException()
+        profileRepository.changeLanguage(lang)
                 .subscribe()
                 .addTo(compositeDisposable)
     }

@@ -8,6 +8,6 @@ import io.reactivex.Flowable
 
 interface ProfileRepository {
     fun likedTracks(): Flowable<List<TrackWithChannel>>
-    fun flipLanguage(): Completable
     fun getLanguage(): Flowable<Optional<Language>>
+    fun changeLanguage(language: Language): Completable
 }

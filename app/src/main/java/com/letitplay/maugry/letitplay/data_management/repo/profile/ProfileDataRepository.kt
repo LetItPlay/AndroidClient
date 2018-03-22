@@ -15,6 +15,14 @@ class ProfileDataRepository(
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ): ProfileRepository {
+    override fun changeLanguage(language: Language): Completable {
+        return Completable.fromAction {
+            val currentLang = preferenceHelper.contentLanguage
+            if (currentLang != language)
+                preferenceHelper.contentLanguage = language
+        }
+    }
+
     override fun getLanguage(): Flowable<Optional<Language>> {
         return preferenceHelper.liveLanguage
     }
@@ -23,11 +31,5 @@ class ProfileDataRepository(
         return db.trackWithChannelDao()
                 .getLikedTracks(preferenceHelper.contentLanguage!!)
                 .subscribeOn(schedulerProvider.io())
-    }
-
-    override fun flipLanguage(): Completable {
-        return Completable.fromAction {
-            preferenceHelper.contentLanguage = if (preferenceHelper.contentLanguage == Language.EN) Language.RU else Language.EN
-        }
     }
 }

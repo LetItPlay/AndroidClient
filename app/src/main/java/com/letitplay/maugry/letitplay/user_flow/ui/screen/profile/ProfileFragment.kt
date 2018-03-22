@@ -3,10 +3,12 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -19,6 +21,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Optional
 import kotlinx.android.synthetic.main.profile_fragment.*
+import kotlinx.android.synthetic.main.view_language_dialog.view.*
 
 
 class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
@@ -36,7 +39,6 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        lifecycle.addObserver(vm)
         vm.likedTracks.observe(this, Observer<List<TrackWithChannel>> {
 
             profile_track_count.text = it?.count()?.toString() ?: "0"
@@ -46,12 +48,14 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 likedTracksListAdapter.data = it
             }
         })
-        val switchToRu = getString(R.string.profile_change_language_to_ru)
-        val switchToEn = getString(R.string.profile_change_language_to_en)
         vm.language.observe(this, Observer<Optional<Language>> {
             val lang = it?.value
             lang?.let {
-                change_content_language_text.text = if (it == Language.EN) switchToRu else switchToEn
+                profile_current_language.text = getString(when (it) {
+                    Language.RU -> R.string.language_ru
+                    Language.EN -> R.string.language_en
+                    Language.FR -> R.string.language_fr
+                })
             }
         })
     }
@@ -70,7 +74,18 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         profile_header.attachTo(profile_list)
 
         change_content_language.setOnClickListener {
-            vm.flipLanguage()
+            BottomSheetDialog(requireContext()).apply {
+                val dialogView = layoutInflater.inflate(R.layout.view_language_dialog, null)
+                val onLanguageClick = View.OnClickListener { view ->
+                    vm.changeLanguage((view as TextView).tag as String)
+                    this.dismiss()
+                }
+                dialogView.rus_button.setOnClickListener(onLanguageClick)
+                dialogView.eng_button.setOnClickListener(onLanguageClick)
+                dialogView.fr_button.setOnClickListener(onLanguageClick)
+                setContentView(dialogView)
+                show()
+            }
         }
     }
 

@@ -17,12 +17,13 @@ class SplashActivity : AppCompatActivity() {
         navigate()
     }
 
-    fun navigate() {
-        val prefHelper = this.let { PreferenceHelper(it) }
+    private fun navigate() {
+        val prefHelper = PreferenceHelper(this)
+
         if (prefHelper.contentLanguage == null) {
-            this.startActivity(Intent(this, LanguageActivity::class.java))
+            startActivity(Intent(this, LanguageActivity::class.java))
         } else {
-            this.startActivity(Intent(this, NavigationActivity::class.java))
+            startActivity(Intent(this, NavigationActivity::class.java))
         }
     }
 }

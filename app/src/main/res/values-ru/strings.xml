@@ -26,8 +26,6 @@
     <string name="playlists_no_tracks">Треки отсутствуют</string>
 
     <!--PROFILE-->
-    <string name="profile_change_language_to_ru">Поменять язык на русский</string>
-    <string name="profile_change_language_to_en">Switch to English</string>
     <string name="profile_favourite_tracks">Треки, понравившиеся вам</string>
     <string name="profile_user_name">Ваш будущий профиль</string>
 
@@ -40,8 +38,6 @@
     <!--LANGUAGE-->
     <string name="language_select_language">Select\nyour language</string>
     <string name="language_logo_text">let it play</string>
-    <string name="language_en">English</string>
-    <string name="language_ru">Русский</string>
 
     <plurals name="weeks_long">
         <item quantity="one">%d нед.</item>
@@ -90,4 +86,5 @@
     <string name="my_playlist">Мой плейлист</string>
     <string name="to_the_top_of_the_playlist">Вверх плей-листа</string>
     <string name="to_the_bottom_of_the_playlist">Вниз плей-листа</string>
+    <string name="select_language">Выбрать язык</string>
 </resources>

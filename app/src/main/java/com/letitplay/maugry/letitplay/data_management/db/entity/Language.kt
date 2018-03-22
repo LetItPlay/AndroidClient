@@ -6,5 +6,13 @@ enum class Language(val strValue: String) {
     @SerializedName("ru")
     RU("ru"),
     @SerializedName("en")
-    EN("en")
+    EN("en"),
+    @SerializedName("fr")
+    FR("fr");
+
+    companion object {
+        fun fromString(strValue: String): Language? {
+            return Language.values().firstOrNull { it.strValue == strValue }
+        }
+    }
 }
