@@ -101,11 +101,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         musicService?.addTrackToStart(track)
     }
 
-    fun addTrackToEndRepo(track: AudioTrack){
+    fun addTrackToEndRepo(track: AudioTrack) {
         musicService?.addTrackToEnd(track)
     }
 
-    fun removeTrack(id:Int){
+    fun removeTrack(id: Int) {
         musicService?.removeTrack(id)
     }
 
@@ -168,7 +168,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
                 navigationMenu?.visibility = View.GONE
             }
 
+            MenuType.PLAYLISTS -> {
+                toolbar.visibility = View.GONE
+            }
             else -> {
+                toolbar.visibility = View.VISIBLE
                 navigationMenu?.visibility = View.VISIBLE
                 musicPlayerSmall?.let {
                     if (it.isPlaying()) it.visibility = View.VISIBLE

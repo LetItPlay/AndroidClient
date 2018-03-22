@@ -55,8 +55,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlist_header.attachTo(playlists_list)
-        playlist_header.hide()
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -69,12 +68,12 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
                         playlist_time.text = DateHelper.getTime(it.tracks.sumBy { it.track.totalLengthInSeconds })
                         playlistAdapter.data = it.tracks
                         playlist_no_tracks.hide()
-                        playlist_header.show()
                         playlists_list.show()
                     }
                     else -> {
+                        playlist_count.text = "0"
+                        playlist_time.text = "00:00"
                         playlists_list.hide()
-                        playlist_header.hide()
                         playlist_no_tracks.show()
                     }
                 }

@@ -5,25 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/playlists_list"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/playlist_header_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/track_item" />
-
-    <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
-        android:id="@+id/playlist_header"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:visibility="invisible">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/playlist_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -47,8 +39,10 @@
                 android:id="@+id/track_track_icon"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/track_ic"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
 
@@ -56,8 +50,10 @@
                 android:id="@+id/playlist_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:textColor="#4a4a4a"
                 android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/track_track_icon"
                 app:layout_constraintTop_toBottomOf="@+id/track_recent_added"
                 tools:text="76" />
@@ -66,8 +62,10 @@
                 android:id="@+id/track_time_icon"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
                 android:src="@drawable/time_ic"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/playlist_count"
                 app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
 
@@ -75,8 +73,10 @@
                 android:id="@+id/playlist_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:textColor="#4a4a4a"
                 android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/track_time_icon"
                 app:layout_constraintTop_toBottomOf="@+id/track_recent_added"
                 tools:text="23:07:18" />
@@ -85,15 +85,30 @@
                 android:id="@+id/playlist_clear_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/clear_all"
                 android:textColor="#ff6666"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/track_track_icon"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
         </android.support.constraint.ConstraintLayout>
-    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/playlists_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playlist_header_container"
+        tools:listitem="@layout/track_item" />
+
 
     <LinearLayout
         android:id="@+id/playlist_no_tracks"
