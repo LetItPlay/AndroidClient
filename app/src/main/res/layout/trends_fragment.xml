@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.RecyclerView
+        <com.letitplay.maugry.letitplay.user_flow.ui.widget.NestedRecyclerView
             android:id="@+id/trend_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

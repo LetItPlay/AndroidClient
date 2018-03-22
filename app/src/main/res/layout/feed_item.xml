@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.rambler.libs.swipe_layout.SwipeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/feed_swipe_layout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:left_swipe_enabled="true"
-    app:right_swipe_enabled="true">
+    android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/content"
+    <ru.rambler.libs.swipe_layout.SwipeLayout
+        android:id="@+id/feed_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible">
+        app:left_swipe_enabled="true"
+        app:right_swipe_enabled="true">
 
         <include
             android:id="@+id/feed_card"
@@ -20,85 +18,96 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <include
-            android:id="@+id/feed_card_info"
-            layout="@layout/view_feed_card_info"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:animateLayoutChanges="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/feed_card"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/feed_card" />
-    </android.support.constraint.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/left_menu"
+            android:layout_width="210dp"
+            android:layout_height="match_parent"
+            app:bring_to_clamp="180dp"
+            app:clamp="self"
+            app:gravity="left"
+            app:sticky="@dimen/swipe_menu_width">
 
-    <FrameLayout
-        android:id="@+id/left_menu"
-        android:layout_width="210dp"
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/feed_item_menu_left_background" />
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/add_to_top_bg" />
+
+            <TextView
+                android:layout_width="@dimen/swipe_text_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="47dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:text="@string/to_the_top_of_the_playlist"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/right_menu"
+            android:layout_width="210dp"
+            android:layout_height="match_parent"
+            app:bring_to_clamp="180dp"
+            app:clamp="self"
+            app:gravity="right"
+            app:sticky="@dimen/swipe_menu_width">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/feed_item_menu_right_background" />
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/add_to_bottom_bg" />
+
+            <TextView
+                android:layout_width="87dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_marginStart="47dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:text="@string/to_the_bottom_of_the_playlist"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+        </FrameLayout>
+    </ru.rambler.libs.swipe_layout.SwipeLayout>
+
+    <ImageView
+        android:id="@+id/feed_track_info_logo"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:bring_to_clamp="180dp"
-        app:clamp="self"
-        app:gravity="left"
-        app:sticky="@dimen/swipe_menu_width">
+        android:layout_alignBottom="@id/feed_swipe_layout"
+        android:layout_alignTop="@id/feed_swipe_layout"
+        android:alpha="0.04"
+        android:scaleType="center"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/feed_item_menu_left_background" />
-
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_marginBottom="32dp"
-            android:layout_marginTop="32dp"
-            android:src="@drawable/add_to_top_bg" />
-
-        <TextView
-            android:layout_width="@dimen/swipe_text_width"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:layout_marginEnd="47dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_vertical"
-            android:text="@string/to_the_top_of_the_playlist"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/right_menu"
-        android:layout_width="210dp"
+    <include
+        android:id="@+id/feed_card_info"
+        layout="@layout/view_feed_card_info"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:bring_to_clamp="180dp"
-        app:clamp="self"
-        app:gravity="right"
-        app:sticky="@dimen/swipe_menu_width">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/feed_item_menu_right_background" />
-
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_marginBottom="32dp"
-            android:layout_marginTop="32dp"
-            android:src="@drawable/add_to_bottom_bg" />
-
-        <TextView
-            android:layout_width="87dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_marginStart="47dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center_vertical"
-            android:text="@string/to_the_bottom_of_the_playlist"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </FrameLayout>
-</ru.rambler.libs.swipe_layout.SwipeLayout>
+        android:layout_alignBottom="@id/feed_swipe_layout"
+        android:layout_alignTop="@id/feed_swipe_layout"
+        android:animateLayoutChanges="true"
+        android:visibility="invisible" />
+</RelativeLayout>

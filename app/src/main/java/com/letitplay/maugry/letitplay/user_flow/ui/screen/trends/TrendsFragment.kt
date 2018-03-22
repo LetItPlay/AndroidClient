@@ -68,7 +68,6 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             adapter = trendsListAdapter
             addItemDecoration(listDivider(trendsRecycler.context, R.drawable.list_divider))
             itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
-            isNestedScrollingEnabled = false
         }
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
@@ -109,7 +108,8 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = (vm.trends.value)?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
+        val playlist = (vm.trends.value)?.map(TrackWithChannel::toAudioTrack)?.toMutableList()
+                ?: return
         trendsRepo = MusicRepo(playlist)
         navigationActivity.updateRepo(trackData.track.id, trendsRepo)
     }

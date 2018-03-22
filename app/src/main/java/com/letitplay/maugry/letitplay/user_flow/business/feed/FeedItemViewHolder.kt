@@ -2,18 +2,18 @@ package com.letitplay.maugry.letitplay.user_flow.business.feed
 
 import android.support.transition.TransitionManager
 import android.support.v4.view.GestureDetectorCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.utils.ext.gone
-import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
-import com.letitplay.maugry.letitplay.utils.ext.loadImage
-import com.letitplay.maugry.letitplay.utils.ext.show
+import com.letitplay.maugry.letitplay.utils.ext.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
 import kotlinx.android.synthetic.main.view_feed_card_info.view.*
@@ -41,11 +41,9 @@ class FeedItemViewHolder(
             itemView.feed_swipe_layout.animateReset()
             showOverlay()
         }
-        val detector = GestureDetectorCompat(itemView.context, object: GestureDetector.SimpleOnGestureListener() {
+        val gestureOnSwipeDetector = GestureDetectorCompat(itemView.context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onLongPress(e: MotionEvent) {
-                itemView.feed_track_info_scroll.smoothScrollTo(0, 0)
-                TransitionManager.beginDelayedTransition(itemView as ViewGroup)
-                itemView.feed_card_info.show()
+                showInfo()
                 super.onLongPress(e)
             }
 
@@ -56,12 +54,15 @@ class FeedItemViewHolder(
                 return super.onSingleTapConfirmed(e)
             }
         })
-        itemView.setOnTouchListener { _, motionEvent -> detector.onTouchEvent(motionEvent) }
         itemView.apply {
-            feed_card_info.setOnClickListener {
-                TransitionManager.beginDelayedTransition(itemView as ViewGroup)
-                itemView.feed_card_info.gone()
+            feed_swipe_layout.setOnTouchListener { _, motionEvent -> gestureOnSwipeDetector.onTouchEvent(motionEvent) }
+            feed_track_info_title.setOnClickListener {
+                hideInfo()
             }
+            feed_track_info_description.setOnClickListener {
+                hideInfo()
+            }
+
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onLikeClick(feedData)
@@ -73,36 +74,7 @@ class FeedItemViewHolder(
             right_menu.setOnClickListener {
                 addToBottom()
             }
-
             feed_playing_now.mediaSession = musicService?.mediaSession
-            feed_track_info_scroll.setOnTouchListener(object : View.OnTouchListener {
-                private var shouldClick = false
-                private var downX = 0f
-                private var downY = 0f
-                private val touchSlop = ViewConfiguration.get(itemView.context).scaledTouchSlop
-                override fun onTouch(view: View, event: MotionEvent): Boolean {
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            shouldClick = true
-                            downX = event.x
-                            downY = event.y
-                        }
-                        MotionEvent.ACTION_MOVE -> {
-                            val diffY = event.y - downY
-                            if (Math.abs(diffY) > touchSlop) {
-                                shouldClick = false
-                            }
-                            view.parent.requestDisallowInterceptTouchEvent(true)
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            if (shouldClick) {
-                                itemView.feed_card_info.performClick()
-                            }
-                        }
-                    }
-                    return false
-                }
-            })
             feed_swipe_layout.setOnSwipeListener(object : SimpleOnSwipeListener {
                 override fun onBeginSwipe(swipeLayout: SwipeLayout, moveToRight: Boolean) {
                     onBeginSwipe(swipeLayout)
@@ -126,7 +98,9 @@ class FeedItemViewHolder(
         this.feedData = feedData
         itemView.apply {
             val data = DateHelper.getLongPastDate(feedData.track.publishedAt, context)
+            feed_card.show()
             feed_card_info.gone()
+            feed_track_info_logo.gone()
             feed_track_info_title.text = feedData.track.title
             feed_track_info_description.text = feedData.track.description ?: ""
             feed_playing_now.trackListenerCount = feedData.track.listenCount
@@ -151,5 +125,24 @@ class FeedItemViewHolder(
     private fun showOverlay() {
         val animation = AnimationUtils.loadAnimation(itemView.context, R.anim.overlay_with_delay)
         itemView.track_added_overlay.startAnimation(animation)
+    }
+
+    private fun showInfo() {
+        itemView.apply {
+            (feed_card_info as? NestedScrollView)?.scrollTo(0, 0)
+            TransitionManager.beginDelayedTransition(this as ViewGroup)
+            feed_track_info_logo.show()
+            feed_card.hide()
+            feed_card_info.show()
+        }
+    }
+
+    private fun hideInfo() {
+        itemView.apply {
+            TransitionManager.beginDelayedTransition(this as ViewGroup)
+            feed_track_info_logo.hide()
+            feed_card_info.gone()
+            feed_card.show()
+        }
     }
 }
