@@ -65,7 +65,7 @@ class PlaybackSpeedDialog @JvmOverloads constructor(
         inner class OptionViewHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.playback_speed_item) {
 
             fun bind(speed: PlaybackSpeed) {
-                val caption = if (speed == DEFAULT_PLAYBACK_SPEED) context.getString(R.string.default_speed) else formatValue(speed.value)
+                val caption =  formatValue(speed.value)
                 itemView.option_caption.text = caption
             }
 
