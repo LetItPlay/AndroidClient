@@ -10,7 +10,7 @@
         android:title="@string/menu_item_trends" />
     <item
         android:id="@+id/action_playlist"
-        android:icon="@drawable/ic_playlist"
+        android:icon="@drawable/ic_channels"
         android:title="@string/menu_item_playlist" />
     <item
         android:id="@+id/action_search"

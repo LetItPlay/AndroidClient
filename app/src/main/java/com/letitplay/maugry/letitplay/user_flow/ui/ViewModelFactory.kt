@@ -15,6 +15,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationViewModel
@@ -82,6 +83,12 @@ class ViewModelFactory(
                             searchRepository,
                             channelRepository,
                             playerRepository
+                    )
+                isAssignableFrom(PlayerViewModel::class.java) ->
+                    PlayerViewModel(
+                            profileRepository,
+                            trackRepository,
+                            schedulerProvider
                     )
                 else -> throw IllegalArgumentException("Unknown type of view model")
             } as T

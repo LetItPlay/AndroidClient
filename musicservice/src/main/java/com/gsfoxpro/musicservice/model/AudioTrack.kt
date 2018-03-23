@@ -11,7 +11,8 @@ open class AudioTrack(
         open val channelTitle: String? = null,
         open val lengthInMs: Long? = 0,
         open val listenCount: Int? = 0,
-        open val publishedAt: Date? = null
+        open val publishedAt: Date? = null,
+        open val isLiked: Int? = null
 ) {
     val lengthInSeconds = (lengthInMs?.div(1000) ?: 0).toInt()
 }

@@ -52,7 +52,7 @@
                 android:id="@+id/player_like_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/like_ic"
+                android:src="@drawable/dislike"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/player_playback_button"
                 app:layout_constraintHorizontal_bias="0.5"
