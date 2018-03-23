@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -20,10 +18,12 @@ import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsL
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.feed_fragment.*
+import timber.log.Timber
 
 class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private val vm by lazy {
@@ -66,6 +66,11 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         })
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val feedRecycler = view.findViewById<RecyclerView>(R.id.feed_list)
@@ -88,7 +93,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     }
 
     private fun seeAllChannelsClick() {
-        navigationActivity.navigateTo(ChannelsKey())
+        navigationActivity.replaceHistory(R.id.action_channels)
     }
 
     private fun onLikeClick(trackData: TrackWithChannel) {
@@ -122,5 +127,17 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             return true
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu_item, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_search) {
+            Timber.d("Navigate to results page")
+            navigationActivity.navigateTo(SearchResultsKey())
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

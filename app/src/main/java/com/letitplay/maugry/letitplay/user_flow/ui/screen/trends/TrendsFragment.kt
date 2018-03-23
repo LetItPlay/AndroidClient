@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -21,6 +19,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Result
 import kotlinx.android.synthetic.main.trends_fragment.*
@@ -33,9 +32,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         TrendAdapter(musicService,
                 ::playTrack,
                 ::onLikeClick,
-                swipeListener,
-                ::onChannelClick,
-                ::seeAllChannelsClick)
+                swipeListener)
     }
 
     private val vm by lazy {
@@ -53,12 +50,11 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
                 trendsListAdapter.submitList(it)
             }
         })
-        vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
-            when (result) {
-                is Result.Success -> trendsListAdapter.updateChannels(result.data)
-                is Result.Failure -> Timber.e(result.e)
-            }
-        })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -92,14 +88,6 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         vm.onLikeClick(track)
     }
 
-    private fun onChannelClick(channel: Channel) {
-        navigationActivity.navigateTo(ChannelPageKey(channel.id))
-    }
-
-    private fun seeAllChannelsClick() {
-        navigationActivity.navigateTo(ChannelsKey())
-    }
-
     private fun playTrack(trackData: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
         val trackId = trackData.track.id
@@ -127,5 +115,17 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             return true
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu_item, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_search) {
+            Timber.d("Navigate to results page")
+            navigationActivity.navigateTo(SearchResultsKey())
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

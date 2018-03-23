@@ -21,10 +21,8 @@ class TrendAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (TrackWithChannel) -> Unit,
         private val onLikeClick: (TrackWithChannel) -> Unit,
-        private val playlistActionsListener: OnPlaylistActionsListener? = null,
-        private val onChannelClick: (Channel) -> Unit,
-        private val onSeeAllClick: () -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        private val playlistActionsListener: OnPlaylistActionsListener? = null
+) : RecyclerView.Adapter<FeedItemViewHolder>() {
 
     private val asyncDifferConfig = AsyncDifferConfig
             .Builder<TrackWithChannel>(FeedAdapter.TRACK_WITH_CHANNEL_COMPARATOR)
@@ -34,25 +32,9 @@ class TrendAdapter(
 
     var onBeginSwipe: (SwipeLayout) -> Unit = {}
 
-    var channels: List<Channel> = emptyList()
-        set(value) {
-            field = value
-            notifyItemChanged(0)
-        }
 
-    fun updateChannels(channels: List<Channel>) {
-        this.channels = channels
-        notifyItemChanged(0)
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return if (position == 0) R.layout.channel_list_item else R.layout.feed_item
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            R.layout.channel_list_item -> ChannelsListViewHolder(parent, onChannelClick, onSeeAllClick)
-            R.layout.feed_item -> FeedItemViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemViewHolder{
+        return FeedItemViewHolder(
                     parent,
                     playlistActionsListener,
                     onClickItem,
@@ -60,25 +42,21 @@ class TrendAdapter(
                     { onBeginSwipe(it) },
                     musicService
             )
-            else -> throw IllegalArgumentException("unknown view type $viewType")
-        }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is FeedItemViewHolder -> holder.update(getItem(position - 1))
-            is ChannelsListViewHolder -> holder.update(channels)
-        }
+    override fun onBindViewHolder(holder: FeedItemViewHolder, position: Int) {
+             holder.update(getItem(position))
+
     }
 
-    override fun getItemCount(): Int = differ.itemCount + 1
+    override fun getItemCount(): Int = differ.itemCount
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: List<Any>) {
+    override fun onBindViewHolder(holder: FeedItemViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
             return super.onBindViewHolder(holder, position, payloads)
         }
-        if (FeedAdapter.LIKE_CHANGED in payloads && holder is FeedItemViewHolder) {
-            holder.updateLike(getItem(position - 1)!!)
+        if (FeedAdapter.LIKE_CHANGED in payloads) {
+            holder.updateLike(getItem(position )!!)
         }
     }
 

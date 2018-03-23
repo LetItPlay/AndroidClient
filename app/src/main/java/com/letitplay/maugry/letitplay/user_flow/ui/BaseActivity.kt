@@ -14,10 +14,10 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
@@ -83,6 +83,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
         }
         main_player.setViewPager(supportFragmentManager)
+
     }
 
     fun updateRepo(trackId: Int, repo: MusicRepo?) {
@@ -114,12 +115,12 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         navigationMenu?.setOnNavigationItemSelectedListener { item: MenuItem -> selectFragment(item) }
     }
 
-    private fun selectFragment(item: MenuItem): Boolean {
-        when (item.itemId) {
+    private fun selectFragment(item: MenuItem?): Boolean {
+        when (item?.itemId) {
             R.id.action_feed -> replaceHistory(FeedKey())
             R.id.action_trands -> replaceHistory(TrendsKey())
             R.id.action_playlist -> replaceHistory(PlaylistsKey())
-            R.id.action_search -> replaceHistory(CompilationKey())
+            R.id.action_channels -> replaceHistory(ChannelsKey())
             R.id.action_profile -> replaceHistory(ProfileKey())
         }
         return true
@@ -193,6 +194,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun navigateTo(key: Any) {
         backstackDelegate.backstack.goTo(key)
+    }
+
+    fun replaceHistory(menuItem: Int) {
+        selectFragment(navigationMenu?.menu?.findItem(menuItem))
+        navigationMenu?.active(menuItem)
     }
 
     override fun handleStateChange(stateChange: StateChange, completionCallback: StateChanger.Callback) {

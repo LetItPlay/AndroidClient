@@ -20,7 +20,7 @@ class ChannelsKey : BaseKey(), StateKey {
 
     override fun menuType(): MenuType = MenuType.CHANNELS
 
-    override fun isRootFragment(): Boolean = false
+    override fun isRootFragment(): Boolean = true
 
     override fun createFragment(): BaseFragment = ChannelFragment()
 

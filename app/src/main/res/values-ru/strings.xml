@@ -4,6 +4,7 @@
     <string name="menu_item_search">Поиск</string>
     <string name="menu_item_playlist">Плейлист</string>
     <string name="menu_item_feed">Новое</string>
+    <string name="menu_item_channels">Каналы</string>
     <string name="menu_item_profile">Профиль</string>
 
     <!--CHANNELS-->

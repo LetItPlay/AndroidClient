@@ -4,9 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
@@ -122,4 +120,5 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         }
         navigationActivity.updateRepo(track.id, playlistsRepo)
     }
+
 }
