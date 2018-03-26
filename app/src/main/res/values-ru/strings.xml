@@ -85,6 +85,7 @@
     <string name="no_internet_connection">Нет интернет соединения</string>
     <string name="clear_all">Очистить</string>
     <string name="my_playlist">Мой плейлист</string>
+    <string name="recommended">Рекомендуемое</string>
     <string name="to_the_top_of_the_playlist">Вверх плей-листа</string>
     <string name="to_the_bottom_of_the_playlist">Вниз плей-листа</string>
     <string name="select_language">Выбрать язык</string>

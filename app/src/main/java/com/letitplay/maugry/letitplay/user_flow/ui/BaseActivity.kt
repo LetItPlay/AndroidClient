@@ -7,6 +7,7 @@ import android.os.PersistableBundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import com.gsfoxpro.musicservice.MusicRepo
@@ -36,12 +37,12 @@ import kotlinx.android.synthetic.main.navigation_main.*
 
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
-    lateinit var mBottomSheetBehavior: BottomSheetBehavior<View>
-    lateinit var backstackDelegate: BackstackDelegate
-    lateinit var fragmentStateChanger: FragmentStateChanger
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var backstackDelegate: BackstackDelegate
+    private lateinit var fragmentStateChanger: FragmentStateChanger
 
-    var navigationMenu: BottomNavigationView? = null
-    val playerViewModel by lazy {
+    private var navigationMenu: BottomNavigationView? = null
+    private val playerViewModel by lazy {
         ViewModelProvider(viewModelStore, ServiceLocator.viewModelFactory).get(PlayerViewModel::class.java)
     }
 
@@ -55,6 +56,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
             return music_player_small
         }
+    val toolbar get() = (main_toolbar as? Toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         backstackDelegate = BackstackDelegate(null)
@@ -64,16 +66,16 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         navigationMenu = findViewById(R.id.navigation)
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        toolbar?.setNavigationOnClickListener { onBackPressed() }
         setNavigationMenu()
         navigationMenu?.disableShiftMode()
         navigationMenu?.active(R.id.action_feed)
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
         setSupportActionBar(toolbar)
-        mBottomSheetBehavior = BottomSheetBehavior.from(main_player)
-        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        mBottomSheetBehavior.setBottomSheetCallback(object : SimpleBottomSheetCallback() {
+        bottomSheetBehavior = BottomSheetBehavior.from(main_player)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.setBottomSheetCallback(object : SimpleBottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     collapsePlayer()
@@ -123,7 +125,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         when (item?.itemId) {
             R.id.action_feed -> replaceHistory(FeedKey())
             R.id.action_trands -> replaceHistory(TrendsKey())
-            R.id.action_playlist -> replaceHistory(PlaylistsKey())
+            R.id.action_playlists -> replaceHistory(PlaylistsKey())
             R.id.action_channels -> replaceHistory(ChannelsKey())
             R.id.action_profile -> replaceHistory(ProfileKey())
         }
@@ -161,10 +163,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     private fun setBackNavigationIcon(key: BaseKey) {
-        if (key.isRootFragment()) toolbar.navigationIcon = null
+        if (key.isRootFragment()) toolbar?.navigationIcon = null
         else {
-            toolbar.setNavigationOnClickListener { onBackPressed() }
-            toolbar.setNavigationIcon(R.drawable.back)
+            toolbar?.setNavigationOnClickListener { onBackPressed() }
+            toolbar?.setNavigationIcon(R.drawable.back)
         }
 
         when (key.menuType()) {
@@ -174,10 +176,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
 
             MenuType.PLAYLISTS -> {
-                toolbar.visibility = View.GONE
+                toolbar?.visibility = View.GONE
             }
             else -> {
-                toolbar.visibility = View.VISIBLE
+                toolbar?.visibility = View.VISIBLE
                 navigationMenu?.visibility = View.VISIBLE
                 musicPlayerSmall?.let {
                     if (it.isPlaying()) it.visibility = View.VISIBLE
@@ -188,12 +190,12 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun collapsePlayer() {
         main_player.setCollapsedState()
-        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     fun expandPlayer() {
         main_player.setExpandedState(musicService)
-        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     fun navigateTo(key: Any) {
