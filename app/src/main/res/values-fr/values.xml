@@ -29,7 +29,7 @@
     <string name="playlists_no_tracks">Pas de titres</string>
 
     <!--PROFILE-->
-    <string name="profile_favourite_tracks">Titres"J'aime"</string>
+    <string name="profile_favourite_tracks">Titres que vous aimez</string>
     <string name="profile_user_name">Votre futur profil</string>
 
     <!-- SEARCH -->
@@ -80,7 +80,7 @@
     <string name="my_playlist">Ma playlist</string>
     <string name="to_the_top_of_the_playlist">En haut de la playliste</string>
     <string name="to_the_bottom_of_the_playlist">Au bas de la playlist</string>
-    <string name="select_language">Sélectionner la langue</string>
+    <string name="select_language">Сhanger de langue</string>
 
     <string name="language_en">Langue: English</string>
     <string name="language_ru">Langue: Русский</string>
