@@ -46,8 +46,8 @@ class MusicPlayerBig : MusicPlayer {
     }
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
-        player_channel_title.updateText(metadata.description?.title)
-        player_track_title.updateText(metadata.description?.subtitle)
+        player_track_title.updateText(metadata.description?.title)
+        player_channel_title.updateText(metadata.description?.subtitle)
         Glide.with(context)
                 .load(metadata.description.iconUri)
                 .into(player_track_image)

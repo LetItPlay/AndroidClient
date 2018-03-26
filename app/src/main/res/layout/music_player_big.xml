@@ -83,7 +83,7 @@
                 android:textAlignment="center"
                 android:textColor="#020202"
                 android:textSize="18dp"
-                app:layout_constraintBottom_toTopOf="@+id/player_track_title"
+                app:layout_constraintBottom_toTopOf="@+id/track_detailed_track_title"
                 tools:text="Disgusting men" />
         </LinearLayout>
 

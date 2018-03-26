@@ -9,13 +9,16 @@ class PlayerContainerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     enum class PlayerTabs {
         PLAYER,
-        TRACKS
+        TRACKS,
+        DETAILED
     }
 
     override fun getItem(position: Int): Fragment? {
         return when (position) {
             PlayerTabs.PLAYER.ordinal -> PlayerFragment()
             PlayerTabs.TRACKS.ordinal -> TrackFragment()
+            PlayerTabs.DETAILED.ordinal -> TrackDetailFragment()
+
             else -> null
         }
     }

@@ -4,12 +4,11 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import kotlinx.android.synthetic.main.player_container_fragment.*
+import kotlinx.android.synthetic.main.player_fragment.*
 
 
 class PlayerFragment : BaseFragment(R.layout.player_fragment) {
@@ -20,10 +19,10 @@ class PlayerFragment : BaseFragment(R.layout.player_fragment) {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        if (music_player_big.mediaSession == null)
+            music_player_big.mediaSession = musicService?.mediaSession
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

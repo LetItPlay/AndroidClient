@@ -17,6 +17,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerViewModel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
+import kotlinx.android.synthetic.main.track_detail_fragment.view.*
 
 
 class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)

@@ -110,6 +110,8 @@ fun TrackWithChannel.toAudioTrack(): AudioTrack {
             lengthInMs = (track.totalLengthInSeconds * 1000).toLong(),
             listenCount = track.listenCount,
             publishedAt = track.publishedAt,
+            description = track.description,
+            likeCount = track.likeCount,
             isLiked =  likeId
     )
 }
