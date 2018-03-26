@@ -22,6 +22,7 @@ import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.user_playlist_fragment.*
+import kotlinx.android.synthetic.main.user_playlist_fragment.view.*
 import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
@@ -40,6 +41,7 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        playlist_header.hide()
         vm.state.observe(this, Observer<PlaylistsViewModel.ViewState> {
             if (it != null) {
                 when {
@@ -48,12 +50,14 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
                         playlist_time.text = DateHelper.getTime(it.tracks.sumBy { it.track.totalLengthInSeconds })
                         playlistAdapter.data = it.tracks
                         playlist_no_tracks.hide()
+                        playlist_header.show()
                         playlist_track_list.show()
                     }
                     else -> {
                         playlist_count.text = "0"
                         playlist_time.text = "00:00"
                         playlist_track_list.hide()
+                        playlist_header.hide()
                         playlist_no_tracks.show()
                     }
                 }
@@ -65,6 +69,7 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val playlistRecycler = view.findViewById<RecyclerView>(R.id.playlist_track_list)
         playlistAdapter.setHasStableIds(true)
+        view.playlist_header.attachTo(playlistRecycler)
         val beginSwipeHandler = BeginSwipeHandler(playlistRecycler)
         playlistAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         playlistRecycler.adapter = playlistAdapter

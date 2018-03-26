@@ -8,6 +8,7 @@
     <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
         android:id="@+id/playlist_header"
         android:layout_width="match_parent"
+        android:visibility="invisible"
         android:layout_height="wrap_content">
 
         <android.support.constraint.ConstraintLayout
@@ -101,7 +102,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/playlist_header"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/track_item" />
 
 
