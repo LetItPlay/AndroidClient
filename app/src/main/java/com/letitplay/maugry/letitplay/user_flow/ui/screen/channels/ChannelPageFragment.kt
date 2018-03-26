@@ -81,10 +81,11 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         val channel = vm.channelPage(getKey()).value
         val tracks = vm.recentAddedTracks(getKey()).value
         if (channel != null && tracks != null) {
-            channelPageRepo = MusicRepo(tracks.map {
-                TrackWithChannel(it, channel.channel, null).toAudioTrack()
-            }.toMutableList())
-            navigationActivity.updateRepo(track.id, channelPageRepo)
+            val tracksList = tracks.map {
+                TrackWithChannel(it, channel.channel, null)
+            }
+            channelPageRepo = MusicRepo(tracksList.map { it.toAudioTrack() }.toMutableList())
+            navigationActivity.updateRepo(track.id, channelPageRepo, tracksList)
         }
     }
 

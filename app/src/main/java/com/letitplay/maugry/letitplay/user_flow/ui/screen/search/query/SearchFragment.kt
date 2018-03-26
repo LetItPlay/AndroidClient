@@ -83,12 +83,11 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
-        val playlist = vm.searchResult.value!!
+        val tracks = vm.searchResult.value!!
                 .filterIsInstance(SearchResultItem.TrackItem::class.java)
                 .map(SearchResultItem.TrackItem::track)
-                .map(TrackWithChannel::toAudioTrack)
-        resultsMusicRepo = MusicRepo(playlist.toMutableList())
-        navigationActivity.updateRepo(track.id, resultsMusicRepo)
+        resultsMusicRepo = MusicRepo(tracks.map(TrackWithChannel::toAudioTrack).toMutableList())
+        navigationActivity.updateRepo(track.id, resultsMusicRepo, tracks)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

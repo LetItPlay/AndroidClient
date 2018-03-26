@@ -101,8 +101,8 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         }
         vm.likedTracks.value?.let {
             profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList())
+            navigationActivity.updateRepo(track.id, profileRepo, it)
         }
-        navigationActivity.updateRepo(track.id, profileRepo)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui
 
+import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -14,12 +15,15 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SimpleBottomSheetCallback
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
 import com.letitplay.maugry.letitplay.utils.ext.active
 import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
@@ -29,7 +33,6 @@ import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
-import kotlinx.android.synthetic.main.player_container_fragment.view.*
 
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
@@ -38,6 +41,9 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     lateinit var fragmentStateChanger: FragmentStateChanger
 
     var navigationMenu: BottomNavigationView? = null
+    val playerViewModel by lazy {
+        ViewModelProvider(viewModelStore, ServiceLocator.viewModelFactory).get(PlayerViewModel::class.java)
+    }
 
     protected val musicService: MusicService?
         get() = (application as App).musicService
@@ -46,7 +52,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         get() {
             if (music_player_small.mediaSession == null) {
                 music_player_small.mediaSession = musicService?.mediaSession
-
             }
             return music_player_small
         }
@@ -68,26 +73,25 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         setSupportActionBar(toolbar)
         mBottomSheetBehavior = BottomSheetBehavior.from(main_player)
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        mBottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        mBottomSheetBehavior.setBottomSheetCallback(object : SimpleBottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     collapsePlayer()
                 }
             }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
         main_player.apply {
-            collapse.setOnClickListener {
-                collapsePlayer()
+            onCollapseClick = ::collapsePlayer
+            playerViewModel = this@BaseActivity.playerViewModel.apply {
+                setMusicService(musicService)
             }
         }
         main_player.setViewPager(supportFragmentManager)
-
     }
 
-    fun updateRepo(trackId: Int, repo: MusicRepo?) {
+    fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
         musicService?.musicRepo = repo
+        playerViewModel.setMusicRepo(repo, tracks)
         musicPlayerSmall?.apply {
             setOnClickListener {
                 expandPlayer()
@@ -183,12 +187,12 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     fun collapsePlayer() {
-        main_player.onCollapse()
+        main_player.setCollapsedState()
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     fun expandPlayer() {
-        main_player.onExpand(musicService)
+        main_player.setExpandedState(musicService)
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 

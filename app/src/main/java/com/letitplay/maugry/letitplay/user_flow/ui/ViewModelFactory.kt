@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui
 
+import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.letitplay.maugry.letitplay.SchedulerProvider
@@ -15,7 +16,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationViewModel
@@ -25,6 +26,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
+        private val application: Application,
         private val trendRepository: TrendRepository,
         private val channelRepository: ChannelRepository,
         private val trackRepository: TrackRepository,
@@ -39,6 +41,11 @@ class ViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return with(modelClass) {
             when {
+                isAssignableFrom(PlayerViewModel::class.java) ->
+                    PlayerViewModel(
+                            application,
+                            trackRepository
+                    )
                 isAssignableFrom(TrendViewModel::class.java) ->
                     TrendViewModel(
                             trendRepository,
@@ -83,12 +90,6 @@ class ViewModelFactory(
                             searchRepository,
                             channelRepository,
                             playerRepository
-                    )
-                isAssignableFrom(PlayerViewModel::class.java) ->
-                    PlayerViewModel(
-                            profileRepository,
-                            trackRepository,
-                            schedulerProvider
                     )
                 else -> throw IllegalArgumentException("Unknown type of view model")
             } as T

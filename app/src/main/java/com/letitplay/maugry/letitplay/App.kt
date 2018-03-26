@@ -44,6 +44,7 @@ class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        ServiceLocator.application = this
         ServiceLocator.applicationContext = this
         bindMusicService(PreferenceHelper(this))
         Timber.plant(Timber.DebugTree())

@@ -4,7 +4,9 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
@@ -13,7 +15,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
@@ -103,7 +105,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         // TODO: Move it to viewmodel !
         navigationActivity.musicPlayerSmall?.apply {
             stop()
-            navigationActivity.updateRepo(-1, null)
+            navigationActivity.updateRepo(-1, null, emptyList())
             gone()
         }
         vm.clearPlaylist()
@@ -117,8 +119,8 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
         }
         vm.state.value?.tracks?.let {
             playlistsRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList(), true)
+            navigationActivity.updateRepo(track.id, playlistsRepo, it)
         }
-        navigationActivity.updateRepo(track.id, playlistsRepo)
     }
 
 }

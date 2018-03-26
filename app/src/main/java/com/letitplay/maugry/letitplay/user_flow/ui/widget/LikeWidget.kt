@@ -38,10 +38,10 @@ class LikeWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet
     }
 
     private fun setLiked() {
-        feed_like_icon.setImageResource(R.drawable.like_ic)
+        feed_like_icon.setImageResource(R.drawable.ic_like)
     }
 
     private fun setUnliked() {
-        feed_like_icon.setImageResource(R.drawable.dislike)
+        feed_like_icon.setImageResource(R.drawable.ic_dislike)
     }
 }

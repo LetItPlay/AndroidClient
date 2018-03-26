@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.os.Handler
@@ -40,9 +41,11 @@ import java.util.concurrent.Executors
 object ServiceLocator {
     lateinit var applicationContext: Context
     lateinit var backstackDelegate: BackstackDelegate
+    lateinit var application: Application
 
     val viewModelFactory by lazy {
         ViewModelFactory(
+                application,
                 trendRepository,
                 channelRepository,
                 trackRepository,

@@ -26,5 +26,9 @@ abstract class LikeDao {
 
     @Query("SELECT * FROM likes " +
             "WHERE likes.track_id = :id")
-    abstract fun getLike(id: Int): Like?
+    abstract fun getLikeSync(id: Int): Like?
+
+    @Query("SELECT * FROM likes " +
+            "WHERE likes.track_id = :id")
+    abstract fun getLike(id: Int): Flowable<List<Like>> // Because Rx doesn't support nullable types
 }
