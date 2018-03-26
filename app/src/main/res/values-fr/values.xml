@@ -1,4 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_name">LetItPlay</string>
+    <string name="menu_item_trends">Tendances</string>
+    <string name="menu_item_search">Rechercher</string>
+    <string name="menu_item_playlist">Playlist</string>
+    <string name="menu_item_feed">Accueil</string>
+    <string name="menu_item_channels">Chaînes</string>
+    <string name="menu_item_profile">Mon Profil</string>
+
+    <!--CHANNELS-->
+    <string name="channels_following">Abonné(e)</string>
+    <string name="channels_unfollowing">S\'abonner</string>
+    <string name="channel_page_description">Pas de description</string>
+    <string name="channel_page_recent_added">Récents</string>
+
+    <!--FEED-->
+    <string name="playing_now">joue maintenant</string>
+    <string name="feed_no_tracks">Pas de titres.Abonnez-vous d\'abord à l\'une des chaînes</string>
+    <string name="feed_go_to_channels">Afficher la liste de chaînes</string>
+
+    <!--TRACK-->
+    <string name="track_recent_added">Récents</string>
+    <string name="time_published_ago">il y a</string>
+    <string name="no_trends">Pas de titres</string>
+
+    <!--Playlists-->
+    <string name="playlists_no_tracks">Pas de titres</string>
+
+    <!--PROFILE-->
+    <string name="profile_favourite_tracks">Titres"J'aime"</string>
+    <string name="profile_user_name">Votre futur profil</string>
+
+    <!-- SEARCH -->
+    <string name="search_title">Rechercher</string>
+    <string name="search_no_recommendation">Pas de recommendations</string>
+    <string name="search_actual_news">Informations d\'actualité en 30 minutes</string>
+    <string name="search_compilation">Une compilation d\'informations d\'actualité dans une playlist de 30 minutes</string>
+
+    <!--LANGUAGE-->
+    <string name="language_select_language">Choisissez\nvotre langue</string>
+    <string name="language_logo_text">let it play</string>
+
+    <plurals name="weeks_long">
+        <item quantity="one">il y a %d sem.</item>
+        <item quantity="other">il y a %d sem.</item>
+    </plurals>
+    <plurals name="days_long">
+        <item quantity="one">il y a %d j.</item>
+        <item quantity="other">il y a %d j.</item>
+    </plurals>
+    <plurals name="hours_long">
+        <item quantity="one">il y a %d h.</item>
+        <item quantity="other">il y a %d h.</item>
+    </plurals>
+    <plurals name="minutes_long">
+        <item quantity="one">il y a %d min.</item>
+        <item quantity="other">il y a %d min.</item>
+    </plurals>
+    <plurals name="seconds_long">
+        <item quantity="one">il y a %d sec.</item>
+        <item quantity="other">il y a %d sec.</item>
+    </plurals>
+
+    <string name="weeks_short">il y a %dw.</string>
+    <string name="days_short">il y a %dd.</string>
+    <string name="hours_short">il y a %dh.</string>
+    <string name="minutes_short">il y a %dm.</string>
+    <string name="seconds_short">il y a %dsec.</string>
+
+    <string name="track_added">Titre ajouté</string>
+    <string name="add_down_the_playlist">Ajouter au bas de la playlist</string>
+    <string name="add_up_the_playlist">Ajouter en haut de la playlist</string>
+
+
+    <string name="all">tout</string>
+    <string name="no_internet_connection">Pas de connexion Internet</string>
+    <string name="clear_all">Effacer</string>
+    <string name="my_playlist">Ma playlist</string>
+    <string name="to_the_top_of_the_playlist">En haut de la playliste</string>
+    <string name="to_the_bottom_of_the_playlist">Au bas de la playlist</string>
     <string name="select_language">Sélectionner la langue</string>
+
+    <string name="language_en">Langue: English</string>
+    <string name="language_ru">Langue: Русский</string>
+    <string name="language_fr">Langue: Français</string>
 </resources>

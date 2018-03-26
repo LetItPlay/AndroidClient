@@ -52,24 +52,11 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="4dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/feed_channels_ago"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/feed_channel_title"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="18 hours" />
+            tools:text="18 hours ago" />
 
-        <TextView
-            android:id="@+id/feed_channels_ago"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/time_published_ago"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/feed_track_last_update"
-            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
