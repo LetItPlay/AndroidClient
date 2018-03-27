@@ -8,8 +8,7 @@
         android:id="@+id/root_constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
-
+        android:layout_marginBottom="56dp">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
@@ -36,21 +35,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/navigation_menu_item" />
-
         <com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
             android:id="@+id/music_player_small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:elevation="8dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/navigation"
+            app:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
@@ -59,8 +51,19 @@
         android:id="@+id/main_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         app:behavior_peekHeight="0dp"
+        android:elevation="16dp"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior" />
 
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navigation_menu_item" />
 </android.support.design.widget.CoordinatorLayout>
