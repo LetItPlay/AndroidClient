@@ -82,4 +82,14 @@ class PlayerViewModel(
         compositeDisposable.clear()
         musicService = null
     }
+
+    fun followChannelForCurrentTrack() {
+        val currentTrackId = currentTrack.value?.id
+        val channel = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }?.channel
+        if (channel != null) {
+            channelRepository.follow(channel)
+                    .subscribeBy({})
+                    .addTo(compositeDisposable)
+        }
+    }
 }
