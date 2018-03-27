@@ -91,10 +91,12 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
     private fun onPlaylistClear() {
         // TODO: Move it to viewmodel !
-        navigationActivity.musicPlayerSmall?.apply {
-            stop()
-            navigationActivity.updateRepo(-1, null, emptyList())
-            gone()
+        if (musicService?.musicRepo == playlistsRepo) {
+            navigationActivity.musicPlayerSmall?.apply {
+                stop()
+                navigationActivity.updateRepo(-1, null, emptyList())
+                gone()
+            }
         }
         vm.clearPlaylist()
     }

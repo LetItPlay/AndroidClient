@@ -12,6 +12,7 @@ import com.gsfoxpro.musicservice.service.MusicService.Companion.ARG_SPEED
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import io.fabric.sdk.android.Fabric
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
 
@@ -57,7 +58,7 @@ class App : MultiDexApplication() {
         tracksSubscription = ServiceLocator.searchRepository.loadTracksAndChannels()
                 .retry()
                 .subscribeOn(ServiceLocator.schedulerProvider.io())
-                .subscribe({}, {})
+                .subscribeBy({})
     }
 
     override fun onTerminate() {

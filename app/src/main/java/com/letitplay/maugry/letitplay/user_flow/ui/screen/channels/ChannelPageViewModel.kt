@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 
 
 class ChannelPageViewModel(
@@ -35,7 +36,7 @@ class ChannelPageViewModel(
             channelRepository.follow(it)
                     .subscribeOn(schedulerProvider.io())
                     .observeOn(schedulerProvider.ui())
-                    .subscribe()
+                    .subscribeBy({})
                     .addTo(compositeDisposable)
         }
     }
@@ -46,7 +47,7 @@ class ChannelPageViewModel(
             channelRepository.recentAddedTracks(channelId)
                     .subscribe({
                         recentAddedChannelTracks.value = it
-                    })
+                    }, {})
                     .addTo(compositeDisposable)
         }
         return recentAddedChannelTracks
