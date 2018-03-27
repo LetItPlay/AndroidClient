@@ -4,6 +4,7 @@ import java.util.*
 
 open class AudioTrack(
         open val id: Int,
+        open val channelId: Int,
         open val url: String,
         open val title: String? = null,
         open val subtitle: String? = null,
@@ -13,8 +14,7 @@ open class AudioTrack(
         open val listenCount: Int? = 0,
         open val publishedAt: Date? = null,
         open val description:String? = null,
-        open val likeCount: Int? = null,
-        open val isLiked: Int? = null
+        open val likeCount: Int? = null
 ) {
     val lengthInSeconds = (lengthInMs?.div(1000) ?: 0).toInt()
 }

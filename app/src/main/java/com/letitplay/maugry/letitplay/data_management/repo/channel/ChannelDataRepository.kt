@@ -24,6 +24,7 @@ class ChannelDataRepository(
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
+
     override fun followedChannelsId(): Flowable<List<Int>> {
         return db.channelDao().getFollowedChannelsId(preferenceHelper.contentLanguage!!)
                 .subscribeOn(schedulerProvider.io())
@@ -41,6 +42,12 @@ class ChannelDataRepository(
                 .onErrorReturnItem(emptyList())
                 .flatMapPublisher { db.channelDao().getAllChannels(preferenceHelper.contentLanguage!!) }
                 .subscribeOn(schedulerProvider.io())
+    }
+
+    override fun channelFollowState(channelId: Int): Flowable<Boolean> {
+        return Flowable.fromCallable { db.followDao().getFollow(channelId) != null }
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
     }
 
     override fun follow(channelData: ChannelWithFollow): Completable {

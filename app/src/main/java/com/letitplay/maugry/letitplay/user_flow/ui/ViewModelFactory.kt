@@ -44,7 +44,8 @@ class ViewModelFactory(
                 isAssignableFrom(PlayerViewModel::class.java) ->
                     PlayerViewModel(
                             application,
-                            trackRepository
+                            trackRepository,
+                            channelRepository
                     )
                 isAssignableFrom(TrendViewModel::class.java) ->
                     TrendViewModel(

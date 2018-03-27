@@ -11,6 +11,7 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +21,8 @@ import java.lang.ref.WeakReference
 
 class PlayerViewModel(
         application: Application,
-        private val trackRepository: TrackRepository
+        private val trackRepository: TrackRepository,
+        private val channelRepository: ChannelRepository
 ): AndroidViewModel(application) {
     private var musicService: WeakReference<MusicService>? = null
     private val compositeDisposable = CompositeDisposable()
@@ -29,6 +31,9 @@ class PlayerViewModel(
     val musicRepo = MutableLiveData<MusicRepo>()
     val currentTrackIsLiked: LiveData<Boolean> = Transformations.switchMap(currentTrack, { track ->
         trackRepository.trackLikeState(track.id).toLiveData()
+    })
+    val curretChannelIsFollow: LiveData<Boolean> = Transformations.switchMap(currentTrack, { track ->
+        channelRepository.channelFollowState(track.channelId).toLiveData()
     })
 
     private val tracksInRepo: MutableLiveData<List<TrackWithChannel>> = MutableLiveData()

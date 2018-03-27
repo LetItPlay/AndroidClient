@@ -102,6 +102,7 @@ fun String.fixMediaPrefix(): String =
 fun TrackWithChannel.toAudioTrack(): AudioTrack {
     return AudioTrack(
             id = track.id,
+            channelId = channel.id,
             url = track.audioUrl ?: "",
             title = track.title,
             subtitle = channel.name,
@@ -111,7 +112,6 @@ fun TrackWithChannel.toAudioTrack(): AudioTrack {
             listenCount = track.listenCount,
             publishedAt = track.publishedAt,
             description = track.description,
-            likeCount = track.likeCount,
-            isLiked =  likeId
+            likeCount = track.likeCount
     )
 }

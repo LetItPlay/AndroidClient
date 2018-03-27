@@ -15,4 +15,5 @@ interface ChannelRepository {
     fun loadChannels(): Completable
     fun recentAddedTracks(channelId: Int): Flowable<List<Track>>
     fun followedChannelsId(): Flowable<List<Int>>
+    fun channelFollowState(trackId: Int): Flowable<Boolean>
 }
