@@ -10,7 +10,6 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationFragment
 import kotlinx.android.synthetic.main.playlists_fragment.*
 
-
 class PlaylistsFragment: BaseFragment(R.layout.playlists_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

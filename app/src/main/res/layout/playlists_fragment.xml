@@ -30,7 +30,7 @@
             app:tabTextColor="@color/black70" />
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.ViewPagerWithoutScroll
         android:id="@+id/playlists_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
