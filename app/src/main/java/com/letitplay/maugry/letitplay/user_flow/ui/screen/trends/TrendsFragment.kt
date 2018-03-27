@@ -13,11 +13,15 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
+import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
+import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
+import com.letitplay.maugry.letitplay.utils.ext.hide
+import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.trends_fragment.*
 import timber.log.Timber
 
@@ -40,8 +44,22 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(vm)
+        vm.loadingState.observe(this, Observer<NetworkState> {
+            when (it?.status) {
+                Status.RUNNING -> {
+                    showProgress()
+                }
+                Status.SUCCESS -> {
+                    hideProgress()
+                    trends_no_internet.hide()
+                }
+                Status.FAILED -> {
+                    hideProgress()
+                    trends_no_internet.show()
+                }
+            }
+        })
         vm.trends.observe(this, Observer<PagedList<TrackWithChannel>> {
-            hideProgress()
             it?.let {
                 trendsListAdapter.submitList(it)
             }
@@ -76,6 +94,14 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             swipe_refresh.isRefreshing = false
         } else {
             super.hideProgress()
+        }
+    }
+
+    override fun showProgress() {
+        if (swipe_refresh.isRefreshing) {
+            return
+        } else {
+            super.showProgress()
         }
     }
 

@@ -66,6 +66,7 @@ abstract class TracksDataSourceFactory(
         }
 
         override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<TrackWithChannel>) {
+            initialLoad.postValue(NetworkState.LOADING)
             val lang = preferenceHelper.contentLanguage!!
             try {
                 var subList = emptyList<TrackWithChannel>()

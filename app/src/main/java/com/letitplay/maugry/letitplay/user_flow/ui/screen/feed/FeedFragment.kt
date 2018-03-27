@@ -56,11 +56,16 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         })
         vm.refreshState.observe(this, Observer<NetworkState> {
             when (it?.status) {
+                Status.RUNNING -> showProgress()
+                Status.SUCCESS -> {
+                    feed_no_internet.hide()
+                    hideProgress()
+                }
                 Status.FAILED -> {
                     feed_no_tracks.hide()
                     feed_no_internet.show()
+                    hideProgress()
                 }
-                else -> feed_no_internet.hide()
             }
         })
     }
@@ -93,6 +98,22 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     private fun seeAllChannelsClick() {
         navigationActivity.replaceHistory(R.id.action_channels)
+    }
+
+    override fun showProgress() {
+        if (swipe_refresh.isRefreshing) {
+            return
+        } else {
+            super.showProgress()
+        }
+    }
+
+    override fun hideProgress() {
+        if (swipe_refresh.isRefreshing) {
+            swipe_refresh.isRefreshing = false
+        } else {
+            super.hideProgress()
+        }
     }
 
     private fun onLikeClick(trackData: TrackWithChannel) {

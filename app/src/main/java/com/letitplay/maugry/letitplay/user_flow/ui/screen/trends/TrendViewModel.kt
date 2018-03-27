@@ -32,6 +32,7 @@ class TrendViewModel(
 
     private val repoResult by lazy { trendRepository.trends(compositeDisposable) }
     val trends by lazy { repoResult.pagedList }
+    val loadingState by lazy { repoResult.refreshState }
 
     val channels: LiveData<Result<List<Channel>>> by lazy {
         channelRepository.channels()
