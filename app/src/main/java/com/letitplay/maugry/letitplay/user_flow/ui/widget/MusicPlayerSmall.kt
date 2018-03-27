@@ -10,15 +10,8 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.utils.ext.updateText
 import kotlinx.android.synthetic.main.music_player_small.view.*
 
-class MusicPlayerSmall : MusicPlayer {
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+class MusicPlayerSmall @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : MusicPlayer(context, attrs, defStyleAttr) {
 
     init {
         LayoutInflater.from(context).inflate(R.layout.music_player_small, this)

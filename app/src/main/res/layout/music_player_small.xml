@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,44 +29,44 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:textSize="14dp"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:scrollHorizontally="true"
-        android:marqueeRepeatLimit="marquee_forever"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        tools:text="Title"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textSize="14dp"
         app:layout_constraintEnd_toStartOf="@+id/play_pause_button"
         app:layout_constraintStart_toEndOf="@+id/cover"
-        app:layout_constraintTop_toTopOf="@+id/cover" />
+        app:layout_constraintTop_toTopOf="@+id/cover"
+        tools:text="Title" />
 
     <TextView
         android:id="@+id/subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:textSize="14dp"
-        android:singleLine="true"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="#000"
+        android:textSize="14dp"
         android:textStyle="bold"
-        tools:text="Subtitle"
         app:layout_constraintBottom_toBottomOf="@+id/cover"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toStartOf="@+id/title" />
+        app:layout_constraintStart_toStartOf="@+id/title"
+        tools:text="Subtitle" />
 
     <ProgressBar
         android:id="@+id/progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
-        tools:progress="50"
-        android:progressDrawable="@drawable/player_progreess_horizontal"
         android:layout_height="2dp"
+        android:progressDrawable="@drawable/player_progreess_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:progress="50" />
 
     <ImageView
         android:id="@+id/next_button"
