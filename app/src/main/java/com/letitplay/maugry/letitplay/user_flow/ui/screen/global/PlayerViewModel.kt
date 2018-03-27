@@ -25,10 +25,14 @@ class PlayerViewModel(
     private var musicService: WeakReference<MusicService>? = null
     private val compositeDisposable = CompositeDisposable()
 
-    val currentTrack = MutableLiveData<AudioTrack>()
+    val currentTrack = MutableLiveData<AudioTrack?>()
     val musicRepo = MutableLiveData<MusicRepo>()
-    val currentTrackIsLiked: LiveData<Boolean> = Transformations.switchMap(currentTrack, { track ->
-        trackRepository.trackLikeState(track.id).toLiveData()
+    val currentTrackIsLiked: LiveData<Boolean?> = Transformations.switchMap(currentTrack, { track ->
+        if (track != null) {
+            trackRepository.trackLikeState(track.id).toLiveData()
+        } else {
+            MutableLiveData<Boolean>().apply { value = null }
+        }
     })
 
     private val tracksInRepo: MutableLiveData<List<TrackWithChannel>> = MutableLiveData()

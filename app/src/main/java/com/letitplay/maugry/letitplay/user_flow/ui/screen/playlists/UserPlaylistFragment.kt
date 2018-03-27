@@ -16,20 +16,18 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.user_playlist_fragment.*
-import kotlinx.android.synthetic.main.user_playlist_fragment.view.*
 import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
-    private val playlistAdapter: PlaylistsAdapter by lazy {
-        PlaylistsAdapter(musicService, ::playTrack, ::onSwipeReached, ::onRemoveClick)
+    private val playlistAdapter: PlaylistAdapter by lazy {
+        PlaylistAdapter(musicService, ::playTrack, ::onSwipeReached, ::onRemoveClick, ::onPlaylistClear)
     }
 
     private var playlistsRepo: MusicRepo? = null
@@ -41,23 +39,16 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        playlist_header.hide()
         vm.state.observe(this, Observer<PlaylistsViewModel.ViewState> {
             if (it != null) {
                 when {
                     it.showTracks -> {
-                        playlist_count.text = it.tracks.count().toString()
-                        playlist_time.text = DateHelper.getTime(it.tracks.sumBy { it.track.totalLengthInSeconds })
                         playlistAdapter.data = it.tracks
                         playlist_no_tracks.hide()
-                        playlist_header.show()
                         playlist_track_list.show()
                     }
                     else -> {
-                        playlist_count.text = "0"
-                        playlist_time.text = "00:00"
                         playlist_track_list.hide()
-                        playlist_header.hide()
                         playlist_no_tracks.show()
                     }
                 }
@@ -69,22 +60,18 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val playlistRecycler = view.findViewById<RecyclerView>(R.id.playlist_track_list)
         playlistAdapter.setHasStableIds(true)
-        view.playlist_header.attachTo(playlistRecycler)
         val beginSwipeHandler = BeginSwipeHandler(playlistRecycler)
         playlistAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         playlistRecycler.adapter = playlistAdapter
         val divider = listDivider(playlistRecycler.context, R.drawable.list_divider)
         playlistRecycler.addItemDecoration(divider)
-        view.findViewById<View>(R.id.playlist_clear_all).setOnClickListener {
-            onPlaylistClear()
-        }
         return view
     }
 
     private fun onRemoveClick(track: Track, position: Int, swipeLayout: SwipeLayout) {
         // TODO: Move it to viewmodel !
         swipeLayout.animateReset()
-        if (musicService?.musicRepo?.currentAudioTrack?.id == track.id)
+        if (musicService?.musicRepo?.currentAudioTrack?.id == track.id) {
             navigationActivity.musicPlayerSmall?.apply {
                 val audioNext: AudioTrack? = musicService?.musicRepo?.nextAudioTrack
                 stop()
@@ -92,6 +79,7 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
                     skipToQueueItem(audioNext.id)
                 }
             }
+        }
         vm.deleteTrack(track)
         navigationActivity.removeTrack(position)
     }
