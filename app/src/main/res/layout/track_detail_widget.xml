@@ -108,7 +108,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/dislike" />
+                android:src="@drawable/ic_dislike" />
 
             <TextView
                 android:id="@+id/player_like_count"

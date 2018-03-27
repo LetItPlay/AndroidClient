@@ -1,7 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.letitplay.maugry.letitplay.user_flow.ui.widget.TrackDetailedWidget
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/track_detailed_widget"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/track_detailed_channel_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/player_bottom_decorator"
+            app:layout_constraintEnd_toStartOf="@+id/track_detailed_channel_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_top_decorator"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/track_detailed_channel_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/player_bottom_decorator"
+            app:layout_constraintEnd_toStartOf="@+id/player_channel_follow"
+            app:layout_constraintStart_toEndOf="@+id/track_detailed_channel_logo"
+            app:layout_constraintTop_toBottomOf="@+id/player_top_decorator"
+            app:layout_constraintVertical_bias="0.49"
+            tools:text="Channel name" />
+
+        <com.letitplay.maugry.letitplay.user_flow.ui.widget.FollowWidget
+            android:id="@+id/player_channel_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/player_bottom_decorator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/track_detailed_channel_title"
+            app:layout_constraintTop_toBottomOf="@+id/player_top_decorator" />
+
+        <View
+            android:id="@+id/player_top_decorator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.1"
+            android:background="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/track_detailed_channel_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/player_bottom_decorator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.1"
+            android:background="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/track_detailed_track_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/track_detailed_channel_logo" />
+
+        <TextView
+            android:id="@+id/track_detailed_track_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.01"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/player_like_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_bottom_decorator"
+            tools:text="Disgusting men" />
+
+        <LinearLayout
+            android:id="@+id/player_like_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@id/player_track_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/track_detailed_track_title">
+
+            <ImageView
+                android:id="@+id/player_like_ic"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_dislike" />
+
+            <TextView
+                android:id="@+id/player_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:textColor="#4a4a4a"
+                android:textSize="12dp"
+                tools:text="01:00:25" />
+
+            <ImageView
+                android:id="@+id/player_listener_ic"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/play_inactive" />
+
+            <TextView
+                android:id="@+id/player_listener_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:textColor="#4a4a4a"
+                android:textSize="12dp"
+                tools:text="01:00:25" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/player_track_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#020202"
+            android:textSize="14dp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_like_container" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

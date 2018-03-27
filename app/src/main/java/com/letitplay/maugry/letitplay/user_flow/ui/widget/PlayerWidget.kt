@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import com.bumptech.glide.Glide
+import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
@@ -15,10 +17,11 @@ import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlaylistFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackDetailFragment
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
-import kotlinx.android.synthetic.main.track_detail_fragment.view.*
+import kotlinx.android.synthetic.main.track_detail_fragment.*
 
 class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -28,6 +31,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     var playerViewModel: PlayerViewModel? = null
     private val playerFragment by lazy { PlayerFragment() }
     private val playlistFragment by lazy { PlaylistFragment() }
+    private val trackDetailedFragment by lazy { TrackDetailFragment() }
     private val preferenceHelper = PreferenceHelper(context)
 
     init {
@@ -53,6 +57,11 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
             if (it != null) {
                 setLikeState(it)
             }
+        }
+
+        playerViewModel?.currentTrack?.observeForever {
+            if (it != null)
+                setDetailedTrack(it)
         }
         player_like_button.setOnClickListener {
             playerViewModel?.likeCurrentTrack()
@@ -90,15 +99,28 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         player_like_button.setImageResource(if (isLiked) R.drawable.ic_like else R.drawable.ic_dislike)
     }
 
-    inner class PlayerTabsAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
+    private fun setDetailedTrack(track: AudioTrack) {
+        if (trackDetailedFragment!= null) {
+            trackDetailedFragment.track_detailed_channel_title.text = track.channelTitle
+            trackDetailedFragment.track_detailed_track_title.text = track.title
+            trackDetailedFragment.player_like_count.text = track.likeCount?.toString()
+            trackDetailedFragment.player_listener_count.text = track.listenCount?.toString()
+            Glide.with(context)
+                    .load(track.imageUrl)
+                    .into(trackDetailedFragment.track_detailed_channel_logo)
+        }
+    }
+
+    inner class PlayerTabsAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> playerFragment
                 1 -> playlistFragment
+                2 -> trackDetailedFragment
                 else -> throw IllegalArgumentException()
             }
         }
 
-        override fun getCount(): Int = 2
+        override fun getCount(): Int = 3
     }
 }
