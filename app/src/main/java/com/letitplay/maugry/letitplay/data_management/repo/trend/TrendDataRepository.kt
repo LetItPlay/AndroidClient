@@ -89,15 +89,13 @@ class TrendDataRepository(
                         .zipWith(db.likeDao().getAllLikes(lang).firstOrError(), { feed, likes ->
                             feed to likes
                         })
-                        .doOnSuccess { (response, likes) ->
-                            emitter.onSuccess(feedToTrackWithChannels(response, likes))
-                        }
-                        .doOnError(emitter::onError)
-                        .doFinally {
-                            emitter.onComplete()
-                        }
                         .subscribeOn(schedulerProvider.io())
-                        .subscribe()
+                        .doFinally(emitter::onComplete)
+                        .subscribe({ (response, likes) ->
+                            emitter.onSuccess(feedToTrackWithChannels(response, likes))
+                        }, { err: Throwable ->
+                            emitter.onError(err)
+                        })
                         .addTo(compositeDisposable)
             }
         }

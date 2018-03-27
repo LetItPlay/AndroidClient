@@ -1,6 +1,5 @@
 package com.letitplay.maugry.letitplay.data_management.db.dao
 
-import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Query
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
