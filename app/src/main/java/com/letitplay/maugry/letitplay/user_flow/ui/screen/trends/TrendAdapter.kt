@@ -6,13 +6,10 @@ import android.support.v7.recyclerview.extensions.AsyncDifferConfig
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
-import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.ShiftedListUpdateCallback
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
-import com.letitplay.maugry.letitplay.user_flow.business.trends.ChannelsListViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedAdapter
 import ru.rambler.libs.swipe_layout.SwipeLayout
 

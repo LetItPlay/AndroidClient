@@ -46,7 +46,7 @@ class LikedTracksAdapter(
             itemView.apply {
                     track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
                     track_playing_now.trackListenerCount = trackData.track.listenCount
-                    track_playing_now.trackUrl = trackData.track.audioUrl
+                    track_playing_now.trackId = trackData.track.id.toString()
                     channel_name.text = trackData.channel.name
                     track_time.text = trackData.track.trackLengthShort
                     track_name.text = trackData.track.title

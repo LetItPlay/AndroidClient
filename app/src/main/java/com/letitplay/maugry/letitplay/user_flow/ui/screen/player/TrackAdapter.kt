@@ -53,7 +53,7 @@ class TrackAdapter(
                 track_name.text = track.title
                 track_time.text = DateHelper.getTime(track.lengthInSeconds)
                 track_playing_now.trackListenerCount = track.listenCount
-                track_playing_now.trackUrl = track.url
+                track_playing_now.trackId = track.id.toString()
                 track_logo.loadImage(track.imageUrl)
             }
         }
