@@ -30,7 +30,7 @@ class SearchViewModel(
     })
 
     fun onChannelFollow(channelWithFollow: ChannelWithFollow) {
-        channelRepository.follow(channelWithFollow)
+        channelRepository.follow(channelWithFollow.channel)
                 .doOnSubscribe { isLoading.postValue(true) }
                 .doFinally { isLoading.postValue(false) }
                 .subscribe()

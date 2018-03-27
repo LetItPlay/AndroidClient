@@ -33,7 +33,7 @@ class ChannelPageViewModel(
 
     fun onFollowClick() {
         channelWithFollow.value?.let {
-            channelRepository.follow(it)
+            channelRepository.follow(it.channel)
                     .subscribeOn(schedulerProvider.io())
                     .observeOn(schedulerProvider.ui())
                     .subscribeBy({})

@@ -49,8 +49,8 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                     feed_no_internet.hide()
                 } else {
                     feed_no_tracks.hide()
-                    feedListAdapter.submitList(it.data)
                 }
+                feedListAdapter.submitList(it.data)
                 swipe_refresh?.isRefreshing = false
             }
         })

@@ -53,7 +53,7 @@ class ChannelViewModel(
 
     fun onFollowClick(channelData: ChannelWithFollow) {
         if (followingDisposable == null || followingDisposable!!.isDisposed) {
-            followingDisposable = channelRepo.follow(channelData)
+            followingDisposable = channelRepo.follow(channelData.channel)
                     .doOnSubscribe {
                         isLoading.postValue(true)
                     }

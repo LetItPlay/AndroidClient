@@ -6,13 +6,8 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.GestureDetectorCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
@@ -27,7 +22,6 @@ import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
 import kotlinx.android.synthetic.main.track_detail_fragment.*
-import kotlinx.android.synthetic.main.track_detail_fragment.view.*
 
 class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -37,7 +31,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     var playerViewModel: PlayerViewModel? = null
     private val playerFragment by lazy { PlayerFragment() }
     private val playlistFragment by lazy { PlaylistFragment() }
-    private val trackDetailedFragment by lazy { TrackDetailFragment()}
+    private val trackDetailedFragment by lazy { TrackDetailFragment() }
 
     private val preferenceHelper = PreferenceHelper(context)
 
@@ -67,7 +61,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
         }
 
-        playerViewModel?.curretChannelIsFollow?.observeForever {
+        playerViewModel?.currentChannelIsFollow?.observeForever {
             if (it != null) {
                 setFollowState(it)
             }
@@ -82,8 +76,6 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         collapse.setOnClickListener {
             onCollapseClick()
         }
-
-
     }
 
     private fun onPlaybackSpeedOptionClick(dialog: PlaybackSpeedDialog, options: List<PlaybackSpeed>, playbackSpeed: PlaybackSpeed) {
@@ -116,7 +108,9 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setDetailedTrack(track: AudioTrack) {
-
+        trackDetailedFragment.player_channel_follow.setOnClickListener {
+            playerViewModel?.followChannelForCurrentTrack()
+        }
         trackDetailedFragment.track_detailed_channel_title.text = track.channelTitle
         trackDetailedFragment.track_detailed_track_title.text = track.title
         trackDetailedFragment.player_like_count.text = track.likeCount?.toString()
@@ -129,7 +123,6 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setFollowState(isFollow: Boolean) {
-
         trackDetailedFragment.player_channel_follow.isFollowing = isFollow
     }
 
