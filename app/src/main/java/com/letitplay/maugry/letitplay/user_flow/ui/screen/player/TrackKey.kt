@@ -15,5 +15,5 @@ class TrackKey : BaseKey() {
 
     override fun menuType(): MenuType = MenuType.PLAYER
 
-    override fun createFragment(): BaseFragment = TrackFragment()
+    override fun createFragment(): BaseFragment = PlaylistFragment()
 }

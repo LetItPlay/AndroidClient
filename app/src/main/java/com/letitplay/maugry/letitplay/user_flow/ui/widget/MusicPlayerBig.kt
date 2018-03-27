@@ -12,17 +12,10 @@ import com.letitplay.maugry.letitplay.utils.ext.updateText
 import kotlinx.android.synthetic.main.music_player_big.view.*
 
 
-class MusicPlayerBig : MusicPlayer {
+class MusicPlayerBig @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : MusicPlayer(context, attrs, defStyleAttr) {
 
     private var trackDurationMs: Long = 0
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.music_player_big, this)
@@ -31,8 +24,8 @@ class MusicPlayerBig : MusicPlayer {
         player_pause_play.setOnClickListener { playPause() }
         player_next.setOnClickListener { next() }
         player_back.setOnClickListener { prev() }
-        player_remote_next.setOnClickListener { seekTo(10*1000) }
-        player_remote_back.setOnClickListener { seekTo(-10*1000) }
+        player_remote_next.setOnClickListener { seekTo(10 * 1000) }
+        player_remote_back.setOnClickListener { seekTo(-10 * 1000) }
         initSeekBar(player_big_progress)
     }
 
@@ -58,7 +51,7 @@ class MusicPlayerBig : MusicPlayer {
     }
 
     override fun updateCurrentPosition(positionMs: Long) {
-        player_current_time.text = DateHelper.getTime((positionMs/1000).toInt())
-        player_time_left.text = "-${DateHelper.getTime(((trackDurationMs - positionMs)/1000).toInt())}"
+        player_current_time.text = DateHelper.getTime((positionMs / 1000).toInt())
+        player_time_left.text = "-${DateHelper.getTime(((trackDurationMs - positionMs) / 1000).toInt())}"
     }
 }

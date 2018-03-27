@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen
+package com.letitplay.maugry.letitplay.user_flow.ui.utils
 
 import android.support.v7.widget.RecyclerView
 import ru.rambler.libs.swipe_layout.SwipeLayout

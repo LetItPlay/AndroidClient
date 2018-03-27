@@ -11,17 +11,13 @@ import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
-import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.Result
 import kotlinx.android.synthetic.main.trends_fragment.*
 import timber.log.Timber
 
@@ -96,10 +92,11 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = (vm.trends.value)?.map(TrackWithChannel::toAudioTrack)?.toMutableList()
+        val tracks = vm.trends.value
+        val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList()
                 ?: return
         trendsRepo = MusicRepo(playlist)
-        navigationActivity.updateRepo(trackData.track.id, trendsRepo)
+        navigationActivity.updateRepo(trackData.track.id, trendsRepo, tracks)
     }
 
     private val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {

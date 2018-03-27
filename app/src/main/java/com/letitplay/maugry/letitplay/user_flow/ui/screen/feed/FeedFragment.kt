@@ -16,9 +16,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.BeginSwipeHandler
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
@@ -109,9 +108,10 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
             return
         }
-        val playlist = vm.state.value?.data?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
+        val tracks = vm.state.value?.data
+        val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
         feedRepo = MusicRepo(playlist)
-        navigationActivity.updateRepo(trackData.track.id, feedRepo)
+        navigationActivity.updateRepo(trackData.track.id, feedRepo, tracks)
     }
 
     private val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {

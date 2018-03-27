@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.utils.Optional
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 
@@ -18,11 +19,10 @@ class TrackDataRepository(
         private val schedulerProvider: SchedulerProvider
 ) : TrackRepository {
 
-
     override fun like(track: TrackWithChannel): Completable {
         val trackId = track.track.id
         val (likeDao, channelDao, trackDao) = Triple(db.likeDao(), db.channelDao(), db.trackDao())
-        val isLiked = Single.fromCallable { db.likeDao().getLike(trackId) != null }
+        val isLiked = Single.fromCallable { db.likeDao().getLikeSync(trackId) != null }
         return isLiked
                 .flatMap {
                     val currentIsLiked = it
@@ -89,6 +89,12 @@ class TrackDataRepository(
                 .toCompletable()
     }
 
+    override fun trackLikeState(trackId: Int): Flowable<Boolean> {
+        return db.likeDao().getLike(trackId)
+                .map(List<Like>::isNotEmpty)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+    }
 
     companion object {
         fun calcNewOrder(track: TrackInPlaylist?, edgeValue: Int?, edge: Edge): Int {

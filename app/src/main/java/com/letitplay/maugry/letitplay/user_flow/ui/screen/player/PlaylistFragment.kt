@@ -13,10 +13,10 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import kotlinx.android.synthetic.main.track_fragment.*
+import kotlinx.android.synthetic.main.playlist_fragment.*
 import timber.log.Timber
 
-class TrackFragment : BaseFragment(R.layout.track_fragment), MusicService.RepoChangesListener {
+class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.RepoChangesListener {
 
     private lateinit var trackAdapter: TrackAdapter
 
@@ -24,10 +24,11 @@ class TrackFragment : BaseFragment(R.layout.track_fragment), MusicService.RepoCh
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val tracksRecycler = view.findViewById<RecyclerView>(R.id.tracks_list)
         trackAdapter = TrackAdapter(musicService, ::playTrack)
-        tracksRecycler.adapter = trackAdapter
-        tracksRecycler.layoutManager = LinearLayoutManager(context)
-        val divider = listDivider(tracksRecycler.context, R.drawable.list_divider)
-        tracksRecycler.addItemDecoration(divider)
+        tracksRecycler.apply {
+            adapter = trackAdapter
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(listDivider(tracksRecycler.context, R.drawable.list_divider))
+        }
         return view
     }
 
@@ -46,7 +47,6 @@ class TrackFragment : BaseFragment(R.layout.track_fragment), MusicService.RepoCh
             return
         }
     }
-
 
     override fun onRepoChanged(repo: MusicRepo?) {
         Timber.d("Music repo changed")

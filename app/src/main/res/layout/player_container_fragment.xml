@@ -33,7 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/collapse" />
 
-
     <android.support.v7.widget.CardView
         android:id="@+id/player_bottom_actions"
         android:layout_width="0dp"
@@ -52,7 +51,7 @@
                 android:id="@+id/player_like_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/dislike"
+                android:src="@drawable/ic_dislike"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/player_playback_button"
                 app:layout_constraintHorizontal_bias="0.5"
