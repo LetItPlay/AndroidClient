@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import com.letitplay.maugry.letitplay.utils.toResult
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 
 
 class ChannelViewModel(
@@ -46,7 +47,7 @@ class ChannelViewModel(
                 .doFinally {
                     refreshing.postValue(false)
                 }
-                .subscribe({}, {})
+                .subscribeBy({})
                 .addTo(compositeDisposable)
     }
 
@@ -59,8 +60,7 @@ class ChannelViewModel(
                     .doFinally {
                         isLoading.postValue(false)
                     }
-                    .subscribe()
-
+                    .subscribeBy({})
         }
     }
 

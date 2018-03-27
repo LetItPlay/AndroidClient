@@ -16,13 +16,11 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.Player.*
+import com.google.android.exoplayer2.Player.STATE_ENDED
+import com.google.android.exoplayer2.Player.STATE_IDLE
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.metadata.Metadata
 import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.gsfoxpro.musicservice.ExoPlayerListener
 import com.gsfoxpro.musicservice.MusicRepo
@@ -263,6 +261,7 @@ class MusicService : Service() {
 
     private fun buildMetadata(builder: MediaMetadataCompat.Builder, audioTrack: AudioTrack?): MediaMetadataCompat {
         return builder.putString(MediaMetadataCompat.METADATA_KEY_ART_URI, audioTrack?.imageUrl)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, audioTrack?.id?.toString())
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, audioTrack?.url)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, audioTrack?.subtitle)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, audioTrack?.title)
@@ -276,7 +275,7 @@ class MusicService : Service() {
         }
 
         var trackChanged = false
-        if (lastInitializedTrack?.url != audioTrack.url) {
+        if (lastInitializedTrack?.id != audioTrack.id) {
             initTrack(audioTrack)
             trackChanged = true
         }

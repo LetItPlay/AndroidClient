@@ -18,7 +18,7 @@
             android:id="@+id/channels_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/channels_item" />
 
     </android.support.v4.widget.SwipeRefreshLayout>

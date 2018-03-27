@@ -16,7 +16,7 @@ class PlayingNowWidget @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : MusicPlayer(context, attrs, defStyleAttr) {
 
-    var trackUrl: String? = null
+    var trackId: String? = null
     var trackListenerCount: Int? = null
 
     init {
@@ -28,7 +28,7 @@ class PlayingNowWidget @JvmOverloads constructor(
     }
 
     override fun updateTrackInfo(metadata: MediaMetadataCompat) {
-        if (metadata.description.mediaUri.toString() == trackUrl) {
+        if (metadata.description.mediaId == trackId) {
             showNowPlaying()
         }
         else {

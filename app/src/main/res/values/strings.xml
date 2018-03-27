@@ -76,6 +76,7 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="clear_all">Clear all</string>
     <string name="my_playlist">My playlist</string>
+    <string name="recommended">Recommended</string>
     <string name="to_the_top_of_the_playlist">To the top of the playlist</string>
     <string name="to_the_bottom_of_the_playlist">To the bottom of the playlist</string>
     <string name="select_language">Select language</string>

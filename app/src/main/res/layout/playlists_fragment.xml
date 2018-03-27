@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/playlist_header_container"
+        android:id="@+id/playlist_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -14,122 +14,30 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/playlist_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <include
+            android:id="@id/main_toolbar"
+            layout="@layout/toolbar" />
 
-            <TextView
-                android:id="@+id/track_recent_added"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif"
-                android:text="@string/my_playlist"
-                android:textColor="#000000"
-                android:textSize="24dp"
-                android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/track_track_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/track_ic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
-
-            <TextView
-                android:id="@+id/playlist_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textColor="#4a4a4a"
-                android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/track_track_icon"
-                app:layout_constraintTop_toBottomOf="@+id/track_recent_added"
-                tools:text="76" />
-
-            <ImageView
-                android:id="@+id/track_time_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/time_ic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/playlist_count"
-                app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
-
-            <TextView
-                android:id="@+id/playlist_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:textColor="#4a4a4a"
-                android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/track_time_icon"
-                app:layout_constraintTop_toBottomOf="@+id/track_recent_added"
-                tools:text="23:07:18" />
-
-            <TextView
-                android:id="@+id/playlist_clear_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="sans-serif"
-                android:text="@string/clear_all"
-                android:textColor="#ff6666"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/track_recent_added" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/playlists_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="invisible"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/playlist_header_container"
-        tools:listitem="@layout/track_item" />
-
-
-    <LinearLayout
-        android:id="@+id/playlist_no_tracks"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
+        <android.support.design.widget.TabLayout
+            android:id="@+id/playlists_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/playlists_no_tracks"
-            android:textAlignment="center"
-            android:textSize="16dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            app:tabTextAppearance="@style/PlaylistTabTextAppearance"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="@color/black70" />
+    </android.support.design.widget.AppBarLayout>
+
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.ViewPagerWithoutScroll
+        android:id="@+id/playlists_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playlist_appbar" />
+
+
 </android.support.constraint.ConstraintLayout>
