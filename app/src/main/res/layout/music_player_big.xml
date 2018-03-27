@@ -7,12 +7,13 @@
 
     <FrameLayout
         android:id="@+id/player_track_image_container"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toTopOf="@+id/player_big_progress"
+        app:layout_constraintDimensionRatio="2:2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,8 +47,8 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:textAlignment="textEnd"
         android:text="0:00"
+        android:textAlignment="textEnd"
         app:layout_constraintBottom_toTopOf="@+id/player_channel_title_wrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_big_progress" />
@@ -62,58 +63,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_big_progress" />
 
-        <LinearLayout
-            android:id="@+id/player_channel_title_wrapper"
-            android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/player_channel_title_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/player_track_title_wrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_current_time">
+
+        <TextView
+            android:id="@+id/player_channel_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/player_track_title_wrapper"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_current_time">
+            android:ellipsize="marquee"
+            android:lineSpacingExtra="8sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="#020202"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/track_detailed_track_title"
+            tools:text="Disgusting men" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/player_channel_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:lineSpacingExtra="8sp"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:textAlignment="center"
-                android:textColor="#020202"
-                android:textSize="18dp"
-                app:layout_constraintBottom_toTopOf="@+id/track_detailed_track_title"
-                tools:text="Disgusting men" />
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/player_track_title_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/player_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_channel_title_wrapper">
 
-        <LinearLayout
-            android:id="@+id/player_track_title_wrapper"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/player_track_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/player_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_channel_title_wrapper">
-
-            <TextView
-                android:id="@+id/player_track_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:layout_marginBottom="8dp"
-                android:lineSpacingExtra="9sp"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:singleLine="true"
-                android:textAlignment="center"
-                android:textColor="#020202"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                tools:text="75. Bljjjjow of War bbbbDibbbvity… Original Sin 2" />
-        </LinearLayout>
+            android:ellipsize="marquee"
+            android:lineSpacingExtra="9sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="#020202"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            tools:text="75. Bljjjjow of War bbbbDibbbvity… Original Sin 2" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/player_back"
@@ -164,4 +165,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/player_remote_next" />
+
 </android.support.constraint.ConstraintLayout>
+

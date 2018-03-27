@@ -37,7 +37,11 @@ class PlayerViewModel(
         }
     })
     val curretChannelIsFollow: LiveData<Boolean> = Transformations.switchMap(currentTrack, { track ->
-        channelRepository.channelFollowState(track.channelId).toLiveData()
+        if (track != null) {
+            channelRepository.channelFollowState(track.channelId).toLiveData()
+        }else {
+            MutableLiveData<Boolean>().apply { value = null }
+        }
     })
 
     private val tracksInRepo: MutableLiveData<List<TrackWithChannel>> = MutableLiveData()
