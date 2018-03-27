@@ -45,20 +45,21 @@ class ChannelDataRepository(
     }
 
     override fun channelFollowState(channelId: Int): Flowable<Boolean> {
-        return Flowable.fromCallable { db.followDao().getFollow(channelId) != null }
+        return db.followDao().getFollow(channelId)
+                .map(List<Follow>::isNotEmpty)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun follow(channelData: ChannelWithFollow): Completable {
+    override fun follow(channelData: Channel): Completable {
         val followDao = db.followDao()
-        val channelId = channelData.channel.id
-        val isFollowing = Single.fromCallable { followDao.getFollow(channelId) != null }
+        val channelId = channelData.id
+        val isFollowing = Single.fromCallable { followDao.getFollowSync(channelId) != null }
         return isFollowing
                 .flatMap {
                     val currentIsFollowing = it
                     val (request, handleFollowDb) = when {
-                        currentIsFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.followId!!) }
+                        currentIsFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.id) }
                         else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channelId)) }
                     }
                     postApi.updateChannelFollowers(channelId, request)

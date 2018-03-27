@@ -11,7 +11,7 @@ interface ChannelRepository {
     fun channels(): Flowable<List<Channel>>
     fun channelsWithFollow(): Flowable<List<ChannelWithFollow>>
     fun channel(channelId: Int): Flowable<ChannelWithFollow>
-    fun follow(channelData: ChannelWithFollow): Completable
+    fun follow(channel: Channel): Completable
     fun loadChannels(): Completable
     fun recentAddedTracks(channelId: Int): Flowable<List<Track>>
     fun followedChannelsId(): Flowable<List<Int>>

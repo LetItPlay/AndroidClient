@@ -16,6 +16,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import java.lang.ref.WeakReference
 
 
@@ -36,10 +37,10 @@ class PlayerViewModel(
             MutableLiveData<Boolean>().apply { value = null }
         }
     })
-    val curretChannelIsFollow: LiveData<Boolean> = Transformations.switchMap(currentTrack, { track ->
+    val currentChannelIsFollow: LiveData<Boolean?> = Transformations.switchMap(currentTrack, { track ->
         if (track != null) {
             channelRepository.channelFollowState(track.channelId).toLiveData()
-        }else {
+        } else {
             MutableLiveData<Boolean>().apply { value = null }
         }
     })
@@ -71,7 +72,7 @@ class PlayerViewModel(
         val track = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }
         if (track != null) {
             trackRepository.like(track)
-                    .subscribe()
+                    .subscribeBy({})
                     .addTo(compositeDisposable)
         }
     }

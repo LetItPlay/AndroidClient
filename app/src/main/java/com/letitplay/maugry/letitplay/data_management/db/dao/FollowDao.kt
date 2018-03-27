@@ -19,5 +19,8 @@ abstract class FollowDao {
     abstract fun deleteFollowWithChannelId(channelId: Int)
 
     @Query("SELECT * FROM follows WHERE follows.channel_id = :id")
-    abstract fun getFollow(id: Int): Follow?
+    abstract fun getFollow(id: Int): Flowable<List<Follow>>
+
+    @Query("SELECT * FROM follows WHERE follows.channel_id = :id")
+    abstract fun getFollowSync(id: Int): Follow?
 }
