@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_trends"
         android:title="@string/menu_item_trends" />
     <item
-        android:id="@+id/action_playlist"
+        android:id="@+id/action_playlists"
         android:icon="@drawable/ic_playlist"
         android:title="@string/menu_item_playlist" />
     <item

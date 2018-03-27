@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import android.widget.TextView
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
@@ -9,18 +10,20 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
+import kotlinx.android.synthetic.main.playlist_header.view.*
 import kotlinx.android.synthetic.main.playlist_item.view.*
 import kotlinx.android.synthetic.main.track_item.view.*
 import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
 import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
-class PlaylistsAdapter(
+class PlaylistAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (Track) -> Unit,
         private val onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
-        private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit
-) : RecyclerView.Adapter<PlaylistsAdapter.PlaylistItemHolder>() {
+        private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit,
+        private val onClearAll: () -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var onBeginSwipe: (SwipeLayout) -> Unit = {}
 
@@ -30,28 +33,56 @@ class PlaylistsAdapter(
             notifyDataSetChanged()
         }
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int = data.size + 1
 
-    override fun onBindViewHolder(holder: PlaylistItemHolder, position: Int) {
-        holder.update(data[position])
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) R.layout.playlist_header else R.layout.playlist_item
     }
 
     override fun getItemId(position: Int): Long {
-        return data[position].track.id.toLong()
+        return if (position != 0) data[position-1].track.id.toLong() else 0
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistItemHolder {
-        return PlaylistItemHolder(
-                parent,
-                musicService,
-                onClickItem,
-                { onBeginSwipe(it) },
-                onSwipeReached,
-                onRemoveClick
-        )
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is PlaylistItemHolder -> holder.update(data[position - 1])
+            is HeaderItemHolder -> {
+                holder.trackCount.text = data.count().toString()
+                holder.totalTime.text = DateHelper.getTime(data.sumBy { it.track.totalLengthInSeconds })
+            }
+        }
     }
 
-    class PlaylistItemHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            R.layout.playlist_item -> PlaylistItemHolder(
+                    parent,
+                    musicService,
+                    onClickItem,
+                    { onBeginSwipe(it) },
+                    onSwipeReached,
+                    onRemoveClick
+            )
+            R.layout.playlist_header -> HeaderItemHolder(parent, onClearAll)
+            else -> throw IllegalStateException("No such view type $viewType")
+        }
+    }
+
+    inner class HeaderItemHolder(
+            parent: ViewGroup?,
+            onClear: () -> Unit
+    ) : BaseViewHolder(parent, R.layout.playlist_header) {
+        val totalTime: TextView get() = itemView.playlist_time
+        val trackCount: TextView get() = itemView.playlist_count
+
+        init {
+            itemView.playlist_clear_all.setOnClickListener {
+                onClear()
+            }
+        }
+    }
+
+    inner class PlaylistItemHolder(
             parent: ViewGroup?,
             musicService: MusicService?,
             onClickItem: (Track) -> Unit,
