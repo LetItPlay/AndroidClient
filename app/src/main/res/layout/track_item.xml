@@ -37,25 +37,16 @@
         android:id="@+id/track_last_seen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:alpha="0.6"
         tools:text="6h"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/track_last_seen_ago"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/track_last_seen_ago"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/time_published_ago"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/track_name"
