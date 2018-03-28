@@ -122,7 +122,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     }
 
     private fun onTrackClick(trackData: TrackWithChannel) {
-        if (feed_swipe_refresh.isRefreshing) return
+        if (feed_swipe_refresh?.isRefreshing == true) return
         val trackId = trackData.track.id
         vm.onListen(trackData.track)
         if (feedRepo != null && feedRepo?.getAudioTrackAtId(trackId) != null) {

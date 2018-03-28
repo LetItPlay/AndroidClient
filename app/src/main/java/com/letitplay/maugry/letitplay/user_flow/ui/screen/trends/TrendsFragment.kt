@@ -111,7 +111,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     }
 
     private fun playTrack(trackData: TrackWithChannel) {
-        if (swipe_refresh.isRefreshing) return
+        if (swipe_refresh?.isRefreshing== true) return
         val trackId = trackData.track.id
         vm.onListen(trackData.track)
         if (trendsRepo != null && trendsRepo?.getAudioTrackAtId(trackId) != null) {
