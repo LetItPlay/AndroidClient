@@ -7,5 +7,4 @@ import io.reactivex.Flowable
 
 interface SearchRepository {
     fun performQuery(query: String): Flowable<List<SearchResultItem>>
-    fun loadTracksAndChannels(): Completable
 }

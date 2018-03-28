@@ -29,7 +29,7 @@ class TrackDataRepository(
                     val (request, handleLikeDb) = when {
                         currentIsLiked -> UpdateRequestBody.UNLIKE to { likeDao.deleteLikeWithTrackId(trackId) }
                         else -> UpdateRequestBody.LIKE to {
-                            channelDao.insertChannels(listOf(track.channel))
+                            channelDao.updateOrInsertChannel(listOf(track.channel))
                             trackDao.insertTracks(listOf(track.track))
                             likeDao.insert(Like(trackId))
                         }
@@ -58,7 +58,7 @@ class TrackDataRepository(
                 .doOnSuccess { (foundTrackInPlaylist, firstOrderInPlaylist) ->
                     val order = calcNewOrder(foundTrackInPlaylist.value, firstOrderInPlaylist.value, Edge.TOP)
                     db.runInTransaction {
-                        channelDao.insertChannels(listOf(track.channel))
+                        channelDao.updateOrInsertChannel(listOf(track.channel))
                         trackDao.insertTracks(listOf(track.track))
                         trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId, order))
                     }
@@ -79,7 +79,7 @@ class TrackDataRepository(
                 .doOnSuccess { (foundTrackInPlaylist, lastOrderInPlaylist) ->
                     val order = calcNewOrder(foundTrackInPlaylist.value, lastOrderInPlaylist.value, Edge.BOTTOM)
                     db.runInTransaction {
-                        channelDao.insertChannels(listOf(track.channel))
+                        channelDao.updateOrInsertChannel(listOf(track.channel))
                         trackDao.insertTracks(listOf(track.track))
                         trackInPlaylistDao.insertTrackInPlaylist(TrackInPlaylist(trackId, order))
                     }

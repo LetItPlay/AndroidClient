@@ -1,19 +1,18 @@
 package com.letitplay.maugry.letitplay.data_management.api
 
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
+import com.github.salomonbrys.kotson.fromJson
+import com.github.salomonbrys.kotson.get
+import com.google.gson.*
 import com.letitplay.maugry.letitplay.BuildConfig
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.GL_POST_REQUEST_SERVICE_URL
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
-import com.letitplay.maugry.letitplay.data_management.api.responses.FeedResponseItem
-import com.letitplay.maugry.letitplay.data_management.api.responses.TracksAndChannels
-import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedChannelResponse
-import com.letitplay.maugry.letitplay.data_management.api.responses.UpdatedTrackResponse
+import com.letitplay.maugry.letitplay.data_management.api.responses.*
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import io.reactivex.Maybe
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -22,6 +21,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import java.lang.reflect.Type
 
 private val logInterceptor = HttpLoggingInterceptor().apply {
     level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.HEADERS else HttpLoggingInterceptor.Level.NONE
@@ -31,8 +31,23 @@ private val httpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
         .build()
 
+class SearchResponseDeserializer: JsonDeserializer<SearchResponseItem> {
+    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): SearchResponseItem {
+        return try {
+            val audioUrl = json!!["AudioURL"].asString
+            val track = gson.fromJson(json, Track::class.java)
+            val channel = gson.fromJson<Channel>(json["station"])
+            SearchResponseItem.TrackSearchResponse(TrackWithChannel(track, channel, null))
+        } catch (e: NoSuchElementException) {
+            SearchResponseItem.ChannelSearchResponse(gson.fromJson(json, Channel::class.java))
+        }
+    }
+}
+
+
 private val gson = GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+        .registerTypeAdapter(SearchResponseItem::class.java, SearchResponseDeserializer())
         .create()
 
 private val serviceBuilder = Retrofit.Builder()
@@ -81,6 +96,9 @@ interface LetItPlayApi {
 
     @GET("stations/{id}")
     fun getChannelPiece(@Path("id") channelId: Int): Maybe<Channel>
+
+    @GET("search")
+    fun search(@Query("q") query: String): Single<SearchResponse>
 }
 
 

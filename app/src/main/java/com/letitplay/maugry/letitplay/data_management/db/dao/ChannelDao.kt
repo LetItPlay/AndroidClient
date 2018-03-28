@@ -1,6 +1,9 @@
 package com.letitplay.maugry.letitplay.data_management.db.dao
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
@@ -12,13 +15,10 @@ abstract class ChannelDao {
     abstract fun getAllChannels(lang: Language): Flowable<List<Channel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertChannels(channels: List<Channel>)
+    abstract fun updateOrInsertChannel(channels: List<Channel>)
 
     @Query("SELECT * FROM channels WHERE channels.channel_id = :channelId")
     abstract fun getChannel(channelId: Int): Flowable<Channel>
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun updateChannel(channel: Channel)
 
     @Query("SELECT channels.*, follows.channel_id as followId FROM channels " +
             "LEFT JOIN follows ON follows.channel_id = channels.channel_id " +

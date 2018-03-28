@@ -67,7 +67,7 @@ object ServiceLocator {
     private val playlistsRepository: PlaylistsRepository by lazy { PlaylistsDataRepository(db, schedulerProvider) }
     private val playerRepository: PlayerRepository by lazy { PlayerDataRepository(postServiceImpl, schedulerProvider, preferenceHelper) }
     private val compilationRepository: CompilationRepository by lazy { CompilationNetworkRepository(serviceImpl, preferenceHelper, schedulerProvider) }
-    val searchRepository: SearchRepository by lazy { SearchDataRepository(serviceImpl, postServiceImpl, db, schedulerProvider, preferenceHelper) }
+    val searchRepository: SearchRepository by lazy { SearchDataRepository(serviceImpl, db, schedulerProvider) }
     private val preferenceHelper: PreferenceHelper by lazy { PreferenceHelper(applicationContext) }
 
     val db: LetItPlayDb by lazy {

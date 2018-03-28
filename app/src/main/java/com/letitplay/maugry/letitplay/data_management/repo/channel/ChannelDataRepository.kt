@@ -38,7 +38,7 @@ class ChannelDataRepository(
 
     override fun channels(): Flowable<List<Channel>> {
         return api.channels()
-                .doOnSuccess { db.channelDao().insertChannels(it) }
+                .doOnSuccess { db.channelDao().updateOrInsertChannel(it) }
                 .onErrorReturnItem(emptyList())
                 .flatMapPublisher { db.channelDao().getAllChannels(preferenceHelper.contentLanguage!!) }
                 .subscribeOn(schedulerProvider.io())
@@ -68,8 +68,8 @@ class ChannelDataRepository(
                 .doOnSuccess {
                     val channelModel = toChannelModel(it.first)
                     db.runInTransaction {
+                        db.channelDao().updateOrInsertChannel(listOf(channelModel))
                         it.second()
-                        db.channelDao().updateChannel(channelModel)
                     }
                 }
                 .observeOn(schedulerProvider.ui())
@@ -86,7 +86,7 @@ class ChannelDataRepository(
     override fun loadChannels(): Completable {
         return api.channels()
                 .doOnSuccess {
-                    db.channelDao().insertChannels(it)
+                    db.channelDao().updateOrInsertChannel(it)
                 }
                 .subscribeOn(schedulerProvider.io())
                 .toCompletable()
