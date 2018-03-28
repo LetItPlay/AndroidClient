@@ -19,6 +19,8 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlaylistFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackDetailFragment
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import com.letitplay.maugry.letitplay.utils.ext.isHtml
+import com.letitplay.maugry.letitplay.utils.ext.toHtml
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
 import kotlinx.android.synthetic.main.track_detail_fragment.*
@@ -115,7 +117,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         trackDetailedFragment.track_detailed_track_title.text = track.title
         trackDetailedFragment.player_like_count.text = track.likeCount?.toString()
         trackDetailedFragment.player_listener_count.text = track.listenCount?.toString()
-        trackDetailedFragment.player_track_description.text = track.description
+        trackDetailedFragment.player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description ?: ""
         Glide.with(context)
                 .load(track.imageUrl)
                 .into(trackDetailedFragment.track_detailed_channel_logo)
