@@ -3,37 +3,33 @@ package com.letitplay.maugry.letitplay.user_flow.ui.widget
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetDialog
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.PagerAdapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.R.id.*
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlaylistFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackDetailFragment
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.isHtml
 import com.letitplay.maugry.letitplay.utils.ext.toHtml
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
-import kotlinx.android.synthetic.main.track_detail_fragment.*
+import kotlinx.android.synthetic.main.track_detail_fragment.view.*
 
 class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     var isExpanded: Boolean = false
-    var onCollapseClick: () -> Unit = {}
-    var playerViewModel: PlayerViewModel? = null
-    private val playerFragment by lazy { PlayerFragment() }
-    private val playlistFragment by lazy { PlaylistFragment() }
-    private val trackDetailedFragment by lazy { TrackDetailFragment() }
+    lateinit var onCollapseClick: () -> Unit
+    lateinit var playerViewModel: PlayerViewModel
 
     private val preferenceHelper = PreferenceHelper(context)
 
@@ -51,58 +47,72 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
                 bottomSheetDialog.setContentView(optionsDialog)
                 bottomSheetDialog.show()
             }
-        }
 
-    }
+            val pages = arrayOf(R.id.detail, R.id.player, R.id.playlist)
+            player_pager.offscreenPageLimit = pages.size
+            player_pager.adapter = object: PagerAdapter() {
+                override fun getCount(): Int = pages.size
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        playerViewModel?.currentTrackIsLiked?.observeForever {
-            if (it != null) {
-                setLikeState(it)
+                override fun isViewFromObject(view: View, `object`: Any): Boolean {
+                    return view == `object`
+                }
+
+                override fun instantiateItem(container: ViewGroup, position: Int): Any {
+                    return findViewById(pages[position])
+                }
             }
-        }
-
-        playerViewModel?.currentChannelIsFollow?.observeForever {
-            if (it != null) {
-                setFollowState(it)
+            player_tabs.setupWithViewPager(player_pager)
+            player_like_button.setOnClickListener {
+                playerViewModel.likeCurrentTrack()
             }
-        }
-        playerViewModel?.currentTrack?.observeForever {
-            if (it != null)
-                setDetailedTrack(it)
-        }
-        player_like_button.setOnClickListener {
-            playerViewModel?.likeCurrentTrack()
-        }
-        collapse.setOnClickListener {
-            onCollapseClick()
+            collapse.setOnClickListener {
+                onCollapseClick()
+            }
+            detail.track_detailed_scroll.setOnTouchListener(object : View.OnTouchListener {
+                private var touchX = 0f
+                private var touchY = 0f
+                override fun onTouch(view: View, event: MotionEvent): Boolean {
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            touchX = event.x
+                            touchY = event.y
+                            view.parent.requestDisallowInterceptTouchEvent(true)
+                        }
+                        MotionEvent.ACTION_MOVE -> {
+                            val dx = Math.abs(event.x - touchX)
+                            val dy = Math.abs(event.y - touchY)
+                            if ((dx == 0f || dy / dx > 1f) && (touchY>event.y || touchY<event.y && view.scrollY !=0))
+                                view.parent.requestDisallowInterceptTouchEvent(true)
+                            else view.parent.requestDisallowInterceptTouchEvent(false)
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            view.parent.requestDisallowInterceptTouchEvent(false)
+                        }
+                    }
+                    view.onTouchEvent(event)
+                    return true
+                }
+            })
         }
     }
 
     private fun onPlaybackSpeedOptionClick(dialog: PlaybackSpeedDialog, options: List<PlaybackSpeed>, playbackSpeed: PlaybackSpeed) {
-        val player = music_player_big
+        val player = player.music_player_big
         player.changePlaybackSpeed(playbackSpeed.value)
         dialog.selectAt(options.indexOf(playbackSpeed))
         preferenceHelper.playbackSpeed = playbackSpeed
     }
 
-    fun setViewPager(fm: FragmentManager) {
-        player_tabs.setupWithViewPager(player_pager)
-        player_pager.offscreenPageLimit = 2
-        player_pager.adapter = PlayerTabsAdapter(fm)
-    }
-
     fun setExpandedState(musicService: MusicService?) {
         isExpanded = true
-        music_player_big.apply {
+        (player as MusicPlayerBig).apply {
             mediaSession = musicService?.mediaSession
         }
     }
 
     fun setCollapsedState() {
         isExpanded = false
-        music_player_big.mediaSession = null
+        (player as MusicPlayerBig).mediaSession = null
     }
 
     private fun setLikeState(isLiked: Boolean) {
@@ -110,34 +120,43 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setDetailedTrack(track: AudioTrack) {
-        trackDetailedFragment.player_channel_follow.setOnClickListener {
-            playerViewModel?.followChannelForCurrentTrack()
-        }
-        trackDetailedFragment.track_detailed_channel_title.text = track.channelTitle
-        trackDetailedFragment.track_detailed_track_title.text = track.title
-        trackDetailedFragment.player_like_count.text = track.likeCount?.toString()
-        trackDetailedFragment.player_listener_count.text = track.listenCount?.toString()
-        trackDetailedFragment.player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description ?: ""
-        Glide.with(context)
-                .load(track.imageUrl)
-                .into(trackDetailedFragment.track_detailed_channel_logo)
+        with (detail) {
+            player_channel_follow.setOnClickListener {
+                playerViewModel.followChannelForCurrentTrack()
+            }
+            track_detailed_channel_title.text = track.channelTitle
+            track_detailed_track_title.text = track.title
+            player_like_count.text = track.likeCount?.toString()
+            player_listener_count.text = track.listenCount?.toString()
+            player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description
+                    ?: ""
+            Glide.with(context)
+                    .load(track.imageUrl)
+                    .into(track_detailed_channel_logo)
 
+        }
     }
 
     private fun setFollowState(isFollow: Boolean) {
-        trackDetailedFragment.player_channel_follow.isFollowing = isFollow
+        player_channel_follow.isFollowing = isFollow
     }
 
-    inner class PlayerTabsAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment {
-            return when (position) {
-                0 -> playerFragment
-                1 -> playlistFragment
-                2 -> trackDetailedFragment
-                else -> throw IllegalArgumentException()
+    fun setup(onCollapse: () -> Unit, vm: PlayerViewModel) {
+        this.onCollapseClick = onCollapse
+        this.playerViewModel = vm
+        playerViewModel.currentTrackIsLiked.observeForever {
+            if (it != null) {
+                setLikeState(it)
             }
         }
-
-        override fun getCount(): Int = 3
+        playerViewModel.currentChannelIsFollow.observeForever {
+            if (it != null) {
+                setFollowState(it)
+            }
+        }
+        playerViewModel.currentTrack.observeForever {
+            if (it != null)
+                setDetailedTrack(it)
+        }
     }
 }

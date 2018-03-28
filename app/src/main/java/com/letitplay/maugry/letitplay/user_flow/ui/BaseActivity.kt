@@ -83,12 +83,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
         })
         main_player.apply {
-            onCollapseClick = ::collapsePlayer
-            playerViewModel = this@BaseActivity.playerViewModel.apply {
+            this@BaseActivity.playerViewModel.apply {
                 setMusicService(musicService)
             }
+            setup(::collapsePlayer, this@BaseActivity.playerViewModel)
         }
-        main_player.setViewPager(supportFragmentManager)
     }
 
     fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
