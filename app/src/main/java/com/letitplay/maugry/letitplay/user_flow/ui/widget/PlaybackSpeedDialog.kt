@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.model.DEFAULT_PLAYBACK_SPEED
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import kotlinx.android.synthetic.main.playback_speed_item.view.*
@@ -50,7 +49,9 @@ class PlaybackSpeedDialog @JvmOverloads constructor(
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionViewHolder {
             return OptionViewHolder(parent).apply {
                 itemView.setOnClickListener {
-                    onOptionClick(options[adapterPosition])
+                    if (adapterPosition == RecyclerView.NO_POSITION) {
+                        onOptionClick(options[adapterPosition])
+                    }
                 }
             }
         }

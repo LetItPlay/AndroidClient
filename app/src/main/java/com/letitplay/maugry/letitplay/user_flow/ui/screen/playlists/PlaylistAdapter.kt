@@ -111,7 +111,9 @@ class PlaylistAdapter(
                     }
 
                     override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
-                        onSwipeReached(trackData.track, adjustedAdapterPosition, swipeLayout)
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            onSwipeReached(trackData.track, adjustedAdapterPosition, swipeLayout)
+                        }
                     }
                 })
                 playlist_right_view.setOnClickListener {
