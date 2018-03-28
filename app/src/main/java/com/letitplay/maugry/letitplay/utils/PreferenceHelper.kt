@@ -66,5 +66,6 @@ class PreferenceHelper(context: Context) {
         private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
         private const val NO_VALUE = "NO_VALUE"
         private const val PLAYBACK_SPEED = "APP_PLAYBACK_SPEED"
+        const val PROFILE_FILENAME = "user_avatar.jpg"
     }
 }
