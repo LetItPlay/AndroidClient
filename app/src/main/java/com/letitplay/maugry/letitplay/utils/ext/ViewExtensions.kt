@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.utils.ext
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
@@ -94,9 +95,13 @@ fun ImageView.loadImage(url: String?, context: Context? = null) {
 }
 
 fun ImageView.loadCircularImage(url: String?, context: Context? = null) {
-    if (url != null) {
+    loadCircularImage(Uri.parse(url), context)
+}
+
+fun ImageView.loadCircularImage(uri: Uri?, context: Context? = null) {
+    if (uri != null) {
         Glide.with(context ?: this.context)
-                .load(url)
+                .load(uri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(this)
     } else {

@@ -1,12 +1,18 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
+import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -19,12 +25,18 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchRes
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Optional
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper.Companion.PROFILE_FILENAME
+import com.letitplay.maugry.letitplay.utils.ext.getUriForFile
+import com.letitplay.maugry.letitplay.utils.ext.getUriForImageFile
+import com.letitplay.maugry.letitplay.utils.ext.imageFile
 import kotlinx.android.synthetic.main.profile_fragment.*
 import kotlinx.android.synthetic.main.view_language_dialog.view.*
 import timber.log.Timber
+import java.util.*
 
 
 class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
+    private val REQUEST_IMAGE_CAPTURE = 1
 
     private val likedTracksListAdapter: LikedTracksAdapter by lazy {
         LikedTracksAdapter(musicService, ::playTrack)
@@ -42,7 +54,8 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         vm.likedTracks.observe(this, Observer<List<TrackWithChannel>> {
 
             profile_track_count.text = it?.count()?.toString() ?: "0"
-            profile_tracks_time.text = DateHelper.getTime(it?.sumBy { it.track.totalLengthInSeconds } ?: 0)
+            profile_tracks_time.text = DateHelper.getTime(it?.sumBy { it.track.totalLengthInSeconds }
+                    ?: 0)
 
             it?.let {
                 likedTracksListAdapter.data = it
@@ -64,6 +77,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val profileRecycler = view.findViewById<RecyclerView>(R.id.profile_list)
@@ -76,7 +90,8 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profile_header.attachTo(profile_list)
-
+        loadProfileAvatar()
+        profile_photo_icon.setOnClickListener(::takePhoto)
         change_content_language.setOnClickListener {
             BottomSheetDialog(requireContext()).apply {
                 val dialogView = layoutInflater.inflate(R.layout.view_language_dialog, null)
@@ -90,6 +105,34 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 setContentView(dialogView)
                 show()
             }
+        }
+    }
+
+    private fun takePhoto(view: View) {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
+            val photoFile = context?.imageFile(PROFILE_FILENAME)
+            if (photoFile != null) {
+                val photoURI = requireContext().getUriForFile(photoFile)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    private fun loadProfileAvatar() {
+        val uri = requireContext().getUriForImageFile(PROFILE_FILENAME)
+        Glide.with(profile_user_avatar_pic)
+                .load(uri)
+                .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions().signature(ObjectKey(UUID.randomUUID().toString()))
+                        .placeholder(R.drawable.profile_placeholder))
+                .into(profile_user_avatar_pic)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            loadProfileAvatar()
         }
     }
 
