@@ -51,7 +51,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                     feed_no_tracks.hide()
                 }
                 feedListAdapter.submitList(it.data)
-                swipe_refresh?.isRefreshing = false
+                feed_swipe_refresh?.isRefreshing = false
             }
         })
         vm.refreshState.observe(this, Observer<NetworkState> {
@@ -86,7 +86,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         goToChannels.setOnClickListener {
             seeAllChannelsClick()
         }
-        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.feed_swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
             vm.refreshFeed()
@@ -101,7 +101,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     }
 
     override fun showProgress() {
-        if (swipe_refresh.isRefreshing) {
+        if (feed_swipe_refresh.isRefreshing) {
             return
         } else {
             super.showProgress()
@@ -109,20 +109,20 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     }
 
     override fun hideProgress() {
-        if (swipe_refresh.isRefreshing) {
-            swipe_refresh.isRefreshing = false
+        if (feed_swipe_refresh.isRefreshing) {
+            feed_swipe_refresh.isRefreshing = false
         } else {
             super.hideProgress()
         }
     }
 
     private fun onLikeClick(trackData: TrackWithChannel) {
-        if (swipe_refresh.isRefreshing) return
+        if (feed_swipe_refresh.isRefreshing) return
         vm.onLikeClick(trackData)
     }
 
     private fun onTrackClick(trackData: TrackWithChannel) {
-        if (swipe_refresh.isRefreshing) return
+        if (feed_swipe_refresh.isRefreshing) return
         val trackId = trackData.track.id
         vm.onListen(trackData.track)
         if (feedRepo != null && feedRepo?.getAudioTrackAtId(trackId) != null) {
