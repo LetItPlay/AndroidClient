@@ -10,7 +10,7 @@ data class SearchResponse(
         @SerializedName("numResults")
         val numResults: Int,
         @SerializedName("results")
-        val results: List<SearchResponseItem>
+        val results: List<SearchResponseItem>? = null
 )
 
 sealed class SearchResponseItem {

@@ -22,7 +22,7 @@ class SearchDataRepository(
     override fun performQuery(query: String): Flowable<List<SearchResultItem>> {
         val trimmedQuery = query.toLowerCase().trim()
         val searchFlowable = api.search(trimmedQuery)
-                .map(SearchResponse::results)
+                .map{ it.results ?: emptyList() }
         val trackQuery = searchFlowable.map {
             it.filterIsInstance(SearchResponseItem.TrackSearchResponse::class.java)
                     .map(SearchResponseItem.TrackSearchResponse::track)
