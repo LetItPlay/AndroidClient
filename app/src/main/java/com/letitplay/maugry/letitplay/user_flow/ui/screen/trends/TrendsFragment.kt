@@ -111,18 +111,22 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     }
 
     private fun playTrack(trackData: TrackWithChannel) {
-        if (swipe_refresh?.isRefreshing== true) return
-        val trackId = trackData.track.id
-        vm.onListen(trackData.track)
-        if (trendsRepo != null && trendsRepo?.getAudioTrackAtId(trackId) != null) {
-            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
-            return
+        try {
+            if (swipe_refresh?.isRefreshing == true) return
+            val trackId = trackData.track.id
+            vm.onListen(trackData.track)
+            if (trendsRepo != null && trendsRepo?.getAudioTrackAtId(trackId) != null) {
+                navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+                return
+            }
+            val tracks = vm.trends.value
+            val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList()
+                    ?: return
+            trendsRepo = MusicRepo(playlist)
+            navigationActivity.updateRepo(trackData.track.id, trendsRepo, tracks)
+        }catch (e:Exception){
+            Timber.d("Trends")
         }
-        val tracks = vm.trends.value
-        val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList()
-                ?: return
-        trendsRepo = MusicRepo(playlist)
-        navigationActivity.updateRepo(trackData.track.id, trendsRepo, tracks)
     }
 
     private val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {

@@ -122,17 +122,21 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     }
 
     private fun onTrackClick(trackData: TrackWithChannel) {
-        if (feed_swipe_refresh?.isRefreshing == true) return
-        val trackId = trackData.track.id
-        vm.onListen(trackData.track)
-        if (feedRepo != null && feedRepo?.getAudioTrackAtId(trackId) != null) {
-            navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
-            return
+        try {
+            if (feed_swipe_refresh?.isRefreshing == true) return
+            val trackId = trackData.track.id
+            vm.onListen(trackData.track)
+            if (feedRepo != null && feedRepo?.getAudioTrackAtId(trackId) != null) {
+                navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+                return
+            }
+            val tracks = vm.state.value?.data
+            val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
+            feedRepo = MusicRepo(playlist)
+            navigationActivity.updateRepo(trackData.track.id, feedRepo, tracks)
+        }catch (e:Exception){
+            Timber.d("Feed")
         }
-        val tracks = vm.state.value?.data
-        val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
-        feedRepo = MusicRepo(playlist)
-        navigationActivity.updateRepo(trackData.track.id, feedRepo, tracks)
     }
 
     private val swipeListener: OnPlaylistActionsListener = object : OnPlaylistActionsListener {
