@@ -49,7 +49,7 @@ class PlaybackSpeedDialog @JvmOverloads constructor(
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionViewHolder {
             return OptionViewHolder(parent).apply {
                 itemView.setOnClickListener {
-                    if (adapterPosition == RecyclerView.NO_POSITION) {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
                         onOptionClick(options[adapterPosition])
                     }
                 }
