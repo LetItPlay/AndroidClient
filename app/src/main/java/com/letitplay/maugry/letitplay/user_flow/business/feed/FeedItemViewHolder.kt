@@ -102,7 +102,10 @@ class FeedItemViewHolder(
             feed_card_info.gone()
             feed_track_info_logo.gone()
             feed_track_info_title.text = feedData.track.title
-            feed_track_info_description.text = feedData.track.description ?: ""
+            feed_track_info_description.text = feedData.track.description?.let {
+                if (it.isHtml()) it.toHtml() else it
+            } ?: ""
+
             feed_playing_now.trackListenerCount = feedData.track.listenCount
             feed_playing_now.trackId = feedData.track.id.toString()
             feed_time.text = feedData.track.trackLengthShort
