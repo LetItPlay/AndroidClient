@@ -92,6 +92,9 @@ class PlaylistAdapter(
     ) : BaseViewHolder(parent, R.layout.playlist_item) {
         lateinit var trackData: TrackWithChannel
 
+        val adjustedAdapterPosition
+            get() = adapterPosition - 1
+
         init {
             itemView.apply {
                 track_playing_now.mediaSession = musicService?.mediaSession
@@ -108,12 +111,12 @@ class PlaylistAdapter(
                     }
 
                     override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
-                        onSwipeReached(trackData.track, adapterPosition, swipeLayout)
+                        onSwipeReached(trackData.track, adjustedAdapterPosition, swipeLayout)
                     }
                 })
                 playlist_right_view.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
-                        onRemoveClick(trackData.track, adapterPosition, itemView.playlist_swipe_layout)
+                        onRemoveClick(trackData.track, adjustedAdapterPosition, itemView.playlist_swipe_layout)
                     }
                 }
 
