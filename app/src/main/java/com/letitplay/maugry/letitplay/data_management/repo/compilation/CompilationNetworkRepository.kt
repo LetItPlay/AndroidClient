@@ -16,11 +16,18 @@ class CompilationNetworkRepository(
     override fun getCompilations(): Single<List<CompilationModel>> {
         return api.getCompilation(preferenceHelper.contentLanguage!!.strValue)
                 .map {
-                    val (newsCompilationTitle, newsCompilationSubtitle) = when (preferenceHelper.contentLanguage) {
-                        Language.RU -> "Актуальные новости за 30 минут" to "Подборка актуальных новостей в виде 30-минутного плейлиста"
-                        else -> "Fresh news in 30 minutes" to "A compilation of fresh news in one 30-minute playlist"
+                    when(it.tracks?.isNotEmpty()) {
+                       true -> {
+                           val (newsCompilationTitle, newsCompilationSubtitle)
+                                   = when (preferenceHelper.contentLanguage) {
+                               Language.RU -> "Актуальные новости за 30 минут" to "Подборка актуальных новостей в виде 30-минутного плейлиста"
+                               Language.EN -> "Fresh news in 30 minutes" to "A compilation of fresh news in one 30-minute playlist"
+                               else -> "Informations 'actualité en 30 minutes" to "Une compilation 'informations 'actualité dans une playlist de 30 minutes"
+                           }
+                           listOf(CompilationModel(newsCompilationTitle, newsCompilationSubtitle, it.tracks, it.channels!!))
+                       }
+                        else -> emptyList()
                     }
-                    listOf(CompilationModel(newsCompilationTitle, newsCompilationSubtitle, it.tracks!!, it.channels!!))
                 }
                 .subscribeOn(schedulerProvider.io())
     }
