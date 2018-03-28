@@ -103,7 +103,7 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
     private fun playTrack(track: Track) {
         val trackId = track.id
-        if (playlistsRepo != null && playlistsRepo?.getAudioTrackAtId(trackId) != null) {
+        if (playlistsRepo != null && musicService?.musicRepo?.getAudioTrackAtId(trackId) != null) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
