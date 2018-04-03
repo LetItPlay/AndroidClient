@@ -23,9 +23,7 @@ import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
-    private val recentAddedListAdapter by lazy {
-        ChannelPageAdapter(::onTrackClicked)
-    }
+    private val recentAddedListAdapter = ChannelPageAdapter(::onTrackClicked)
     private var channelPageRepo: MusicRepo? = null
 
     private val vm by lazy {

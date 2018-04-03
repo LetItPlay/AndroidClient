@@ -26,7 +26,12 @@ import kotlinx.android.synthetic.main.search_fragment.*
 class SearchFragment : BaseFragment(R.layout.search_fragment) {
 
     private val resultsAdapter by lazy {
-        SearchResultsAdapter(musicService, ::onChannelClick, ::onTrackClick, ::onChannelFollowClick)
+        SearchResultsAdapter(
+                musicService,
+                ::onChannelClick,
+                ::onTrackClick,
+                ::onChannelFollowClick
+        )
     }
 
     private val vm by lazy {
