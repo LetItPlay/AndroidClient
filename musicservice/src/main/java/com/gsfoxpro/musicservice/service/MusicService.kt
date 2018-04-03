@@ -11,6 +11,7 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
 import android.os.*
+import android.support.v4.app.NotificationCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
@@ -156,7 +157,8 @@ class MusicService : Service() {
 
     private val becomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action) {
+            val fromMessenger = intent.hasCategory(NotificationCompat.CATEGORY_MESSAGE)
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY == intent.action && !fromMessenger) {
                 mediaSessionCallback.onPause()
             }
         }
