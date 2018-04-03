@@ -106,6 +106,9 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 show()
             }
         }
+        login_action.setOnClickListener {
+            Timber.d("Log out")
+        }
     }
 
     private fun takePhoto(view: View) {

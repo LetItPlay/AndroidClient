@@ -89,4 +89,7 @@
     <string name="english" translatable="false">English</string>
     <string name="russian" translatable="false">Русский</string>
     <string name="french" translatable="false">Français</string>
+
+    <string name="logout">Log out</string>
+    <string name="authorization">Authorization</string>
 </resources>

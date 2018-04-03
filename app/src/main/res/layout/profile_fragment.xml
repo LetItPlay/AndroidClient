@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:paddingTop="4dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/track_item" />
+        tools:listitem="@layout/track_item"
+        tools:visibility="invisible" />
 
     <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
         android:id="@+id/profile_header"
@@ -105,7 +106,6 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/change_content_language_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -113,7 +113,35 @@
                         android:letterSpacing="0.04"
                         android:text="@string/select_language"
                         android:textColor="#000000"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+                </FrameLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/login_action"
+                android:layout_width="223dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="12dp"
+                android:background="#19000000"
+                app:cardCornerRadius="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/change_content_language">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.04"
+                        android:text="@string/logout"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
                         android:textStyle="normal" />
                 </FrameLayout>
             </android.support.v7.widget.CardView>
@@ -122,11 +150,11 @@
                 android:id="@+id/profile_current_language"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/change_content_language"
+                app:layout_constraintTop_toBottomOf="@id/login_action"
                 tools:text="@string/language_en" />
 
             <View
