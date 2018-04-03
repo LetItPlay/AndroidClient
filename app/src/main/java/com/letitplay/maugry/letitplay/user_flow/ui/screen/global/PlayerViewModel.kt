@@ -92,4 +92,8 @@ class PlayerViewModel(
                     .addTo(compositeDisposable)
         }
     }
+
+    fun fetchAndPlay(trackId: Int) {
+        // TODO: Fetch track data and play
+    }
 }

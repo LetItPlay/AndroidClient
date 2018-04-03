@@ -3,7 +3,9 @@
     package="com.letitplay.maugry.letitplay">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera2" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -21,6 +23,7 @@
 
         <activity
             android:name=".user_flow.ui.NavigationActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <meta-data
@@ -30,9 +33,19 @@
 
         <activity
             android:name=".user_flow.ui.screen.splash.SplashActivity"
-            android:theme="@style/SplashTheme"
             android:noHistory="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter android:label="filter_view_http_letitplay">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="api.letitplay.io"
+                    android:scheme="https" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,14 +57,14 @@
             android:name=".user_flow.ui.screen.splash.LanguageActivity"
             android:screenOrientation="portrait" />
 
-
         <provider
-            android:authorities="com.letitplay.maugry.letitplay.fileprovider"
             android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.letitplay.maugry.letitplay.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
         <service
             android:name="com.gsfoxpro.musicservice.service.MusicService"

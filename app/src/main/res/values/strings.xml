@@ -89,4 +89,6 @@
     <string name="english" translatable="false">English</string>
     <string name="russian" translatable="false">Русский</string>
     <string name="french" translatable="false">Français</string>
+
+    <string name="filter_view_http_letitplay">filter_view_http_letitplay</string>
 </resources>
