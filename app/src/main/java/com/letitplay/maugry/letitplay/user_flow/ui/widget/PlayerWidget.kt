@@ -117,7 +117,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         trackDetailedFragment.track_detailed_track_title.text = track.title
         trackDetailedFragment.player_like_count.text = track.likeCount?.toString()
         trackDetailedFragment.player_listener_count.text = track.listenCount?.toString()
-        trackDetailedFragment.player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description ?: ""
+        trackDetailedFragment.player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description  ?: ""
         Glide.with(context)
                 .load(track.imageUrl)
                 .into(trackDetailedFragment.track_detailed_channel_logo)
