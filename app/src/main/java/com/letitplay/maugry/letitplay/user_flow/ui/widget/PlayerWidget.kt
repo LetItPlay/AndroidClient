@@ -14,20 +14,23 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
+import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.R.id.*
+import com.letitplay.maugry.letitplay.ServiceLocator.application
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.CurrentPlaylistAdapter
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.isHtml
 import com.letitplay.maugry.letitplay.utils.ext.toHtml
 import kotlinx.android.synthetic.main.player_container_fragment.view.*
 import kotlinx.android.synthetic.main.player_fragment.view.*
-import kotlinx.android.synthetic.main.track_detail_fragment.*
+import kotlinx.android.synthetic.main.playlist_fragment.view.*
 import kotlinx.android.synthetic.main.track_detail_fragment.view.*
 
 class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -37,6 +40,10 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     lateinit var onCollapseClick: () -> Unit
     lateinit var playerViewModel: PlayerViewModel
     private lateinit var currentPlaylistAdapter: CurrentPlaylistAdapter
+
+    protected val musicService: MusicService?
+        get() = (application as App).musicService
+
 
     private val preferenceHelper = PreferenceHelper(context)
 
@@ -55,10 +62,11 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
                 bottomSheetDialog.show()
             }
 
+
             val pages = arrayOf(R.id.detail, R.id.player, R.id.playlist)
             player_pager.offscreenPageLimit = pages.size
 
-            player_pager.adapter = object: PagerAdapter() {
+            player_pager.adapter = object : PagerAdapter() {
                 override fun getCount(): Int = pages.size
 
                 override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -78,6 +86,11 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
                 onCollapseClick()
             }
 
+            currentPlaylistAdapter = CurrentPlaylistAdapter(musicService, ::playTrack)
+            playlist.tracks_list.apply {
+                adapter = currentPlaylistAdapter
+                addItemDecoration(listDivider(context, R.drawable.list_divider))
+            }
 
 
             detail.track_detailed_scroll.setOnTouchListener(object : View.OnTouchListener {
@@ -139,6 +152,13 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
+    private fun playTrack(track: AudioTrack) {
+        if (musicService?.musicRepo != null) {
+            (player as MusicPlayerBig).skipToQueueItem(track.id)
+        }
+    }
+
+
     private fun onPlaybackSpeedOptionClick(dialog: PlaybackSpeedDialog, options: List<PlaybackSpeed>, playbackSpeed: PlaybackSpeed) {
         val player = player.music_player_big
         player.changePlaybackSpeed(playbackSpeed.value)
@@ -146,7 +166,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         preferenceHelper.playbackSpeed = playbackSpeed
     }
 
-    fun setExpandedState(musicService: MusicService?) {
+    fun setExpandedState() {
         isExpanded = true
         (player as MusicPlayerBig).apply {
             mediaSession = musicService?.mediaSession
@@ -163,7 +183,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private fun setDetailedTrack(track: AudioTrack) {
-        with (detail) {
+        with(detail) {
             player_channel_follow.setOnClickListener {
                 playerViewModel.followChannelForCurrentTrack()
             }
@@ -176,12 +196,17 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
             Glide.with(context)
                     .load(track.imageUrl)
                     .into(track_detailed_channel_logo)
-
         }
     }
 
     private fun setFollowState(isFollow: Boolean) {
         player_channel_follow.isFollowing = isFollow
+    }
+
+    private fun setMusicRepoState(repo: MusicRepo?) {
+        repo?.playlist?.let {
+            currentPlaylistAdapter.data = it
+        }
     }
 
     fun setup(onCollapse: () -> Unit, vm: PlayerViewModel) {
@@ -200,6 +225,12 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         playerViewModel.currentTrack.observeForever {
             if (it != null)
                 setDetailedTrack(it)
+        }
+
+        playerViewModel.musicRepo.observeForever {
+            if (it != null) {
+                setMusicRepoState(it)
+            }
         }
     }
 }

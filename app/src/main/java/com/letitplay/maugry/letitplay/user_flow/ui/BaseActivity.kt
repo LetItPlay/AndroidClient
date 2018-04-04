@@ -193,7 +193,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     fun expandPlayer() {
-        main_player.setExpandedState(musicService)
+        main_player.setExpandedState()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
