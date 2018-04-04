@@ -15,6 +15,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.FakeFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlaylistFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackDetailFragment
@@ -34,6 +35,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val playerFragment by lazy { PlayerFragment() }
     private val playlistFragment by lazy { PlaylistFragment() }
     private val trackDetailedFragment by lazy { TrackDetailFragment() }
+    private val fakeFragment by lazy { FakeFragment() }
 
     private val preferenceHelper = PreferenceHelper(context)
 
@@ -117,7 +119,8 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         trackDetailedFragment.track_detailed_track_title.text = track.title
         trackDetailedFragment.player_like_count.text = track.likeCount?.toString()
         trackDetailedFragment.player_listener_count.text = track.listenCount?.toString()
-        trackDetailedFragment.player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description  ?: ""
+        trackDetailedFragment.player_track_description.text = if (track.description?.isHtml() == true) track.description?.toHtml() else track.description
+                ?: ""
         Glide.with(context)
                 .load(track.imageUrl)
                 .into(trackDetailedFragment.track_detailed_channel_logo)
@@ -131,7 +134,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     inner class PlayerTabsAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> playerFragment
+                0 ->  playerFragment
                 1 -> playlistFragment
                 2 -> trackDetailedFragment
                 else -> throw IllegalArgumentException()
