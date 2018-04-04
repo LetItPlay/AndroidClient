@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.TextView
 
-class MyTextView: TextView {
+class TrackDescriptionTextView: TextView {
 
     constructor(context: Context) :
             super(context)
