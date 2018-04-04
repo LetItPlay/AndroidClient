@@ -23,10 +23,10 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.SimpleBottomSheetCallback
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
 import com.letitplay.maugry.letitplay.utils.ext.active
 import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
+import com.letitplay.maugry.letitplay.utils.ext.setOnStateChanged
 import com.letitplay.maugry.letitplay.utils.ext.show
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
@@ -34,13 +34,14 @@ import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
 
-abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
+abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), StateChanger {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     protected lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
     protected var navigationMenu: BottomNavigationView? = null
+
     private val playerViewModel by lazy {
         ViewModelProvider(viewModelStore, ServiceLocator.viewModelFactory).get(PlayerViewModel::class.java)
     }
@@ -64,23 +65,32 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         backstackDelegate.registerForLifecycleCallbacks(this)
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
-        navigationMenu = findViewById(R.id.navigation)
+        setSupportActionBar(toolbar)
         toolbar?.setNavigationOnClickListener { onBackPressed() }
-        setNavigationMenu()
-        navigationMenu?.disableShiftMode()
-        navigationMenu?.active(R.id.action_feed)
+        initNavigationMenu()
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
-        setSupportActionBar(toolbar)
+        initPlayer()
+    }
+
+    private fun initNavigationMenu() {
+        navigationMenu = findViewById<BottomNavigationView>(R.id.navigation).apply {
+            setOnNavigationItemSelectedListener(this@BaseActivity::selectFragment)
+            disableShiftMode()
+            active(R.id.action_feed)
+        }
+    }
+
+    private fun initPlayer() {
         bottomSheetBehavior = BottomSheetBehavior.from(main_player)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        bottomSheetBehavior.setBottomSheetCallback(object : SimpleBottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
+        bottomSheetBehavior.apply {
+            state = BottomSheetBehavior.STATE_COLLAPSED
+            setOnStateChanged { _, newState ->
                 if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     collapsePlayer()
                 }
             }
-        })
+        }
         main_player.apply {
             onCollapseClick = ::collapsePlayer
             playerViewModel = this@BaseActivity.playerViewModel.apply {
@@ -113,11 +123,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun removeTrack(id: Int) {
         musicService?.removeTrack(id)
-    }
-
-
-    private fun setNavigationMenu() {
-        navigationMenu?.setOnNavigationItemSelectedListener { item: MenuItem -> selectFragment(item) }
     }
 
     private fun selectFragment(item: MenuItem?): Boolean {

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SimpleBottomSheetCallback
 import timber.log.Timber
 
 
@@ -108,4 +110,12 @@ fun ImageView.loadCircularImage(uri: Uri?, context: Context? = null) {
         Glide.with(context ?: this.context)
                 .clear(this)
     }
+}
+
+fun BottomSheetBehavior<View>.setOnStateChanged(cb: (View, Int) -> Unit) {
+    setBottomSheetCallback(object: SimpleBottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            cb(bottomSheet, newState)
+        }
+    })
 }
