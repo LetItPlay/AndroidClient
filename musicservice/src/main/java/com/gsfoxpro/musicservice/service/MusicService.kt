@@ -164,8 +164,14 @@ class MusicService : Service() {
 
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         when (focusChange) {
-            AudioManager.AUDIOFOCUS_GAIN -> mediaSessionCallback.onPlay()
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> mediaSessionCallback.onPause()
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                mediaSessionCallback.onPlay()
+                exoPlayer.volume = VOLUME_NORMAL
+            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                registerBecomingNoisyReceiver()
+                exoPlayer.volume = VOLUME_DUCK
+            }
             else -> mediaSessionCallback.onPause()
         }
     }
@@ -387,5 +393,8 @@ class MusicService : Service() {
         const val PLAYLIST_INFO_EVENT = "PLAYLIST_INFO_EVENT"
         const val HAS_NEXT = "HAS_NEXT"
         const val HAS_PREV = "HAS_PREV"
+
+        const val VOLUME_DUCK = 0.2f
+        const val VOLUME_NORMAL = 1.0f
     }
 }
