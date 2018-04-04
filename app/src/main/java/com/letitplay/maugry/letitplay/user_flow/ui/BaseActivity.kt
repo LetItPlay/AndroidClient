@@ -3,7 +3,6 @@ package com.letitplay.maugry.letitplay.user_flow.ui
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.app.AppCompatActivity
@@ -38,7 +37,7 @@ import kotlinx.android.synthetic.main.navigation_main.*
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    private lateinit var backstackDelegate: BackstackDelegate
+    protected lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
     private var navigationMenu: BottomNavigationView? = null
@@ -152,14 +151,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
                 this.startActivity(intent)
             }
         }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     private fun setBackNavigationIcon(key: BaseKey) {

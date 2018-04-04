@@ -11,6 +11,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import timber.log.Timber
 
 
 class ChannelPageViewModel(
@@ -34,8 +35,12 @@ class ChannelPageViewModel(
             channelRepository.follow(it.channel)
                     .subscribeOn(schedulerProvider.io())
                     .observeOn(schedulerProvider.ui())
-                    .subscribeBy({})
+                    .subscribeBy(::onError)
                     .addTo(compositeDisposable)
         }
+    }
+
+    private fun onError(throwable: Throwable) {
+        Timber.e("Error: ", throwable)
     }
 }

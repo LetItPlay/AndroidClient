@@ -13,7 +13,6 @@ import com.letitplay.maugry.letitplay.data_management.api.responses.*
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import io.reactivex.Maybe
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -71,7 +70,7 @@ interface LetItPlayApi {
     fun channels(): Single<List<Channel>>
 
     @GET("stations/{id}/tracks")
-    fun getChannelTracks(@Path("id") idStation: Int): Single<List<Track>>
+    fun getChannelTracks(@Path("id") idStation: Int): Single<List<TrackWithEmbeddedChannel>>
 
     @GET("tracks")
     fun getTracks(): Single<List<Track>>
@@ -82,7 +81,7 @@ interface LetItPlayApi {
             @Query("offset") offset: Int,
             @Query("limit") limit: Int,
             @Query("lang") lang: String
-    ): Single<List<FeedResponseItem>>
+    ): Single<List<TrackWithEmbeddedChannel>>
 
     @GET("abrakadabra?")
     fun getCompilation(@Query("lang") lang: String): Single<TracksAndChannels>
@@ -92,10 +91,10 @@ interface LetItPlayApi {
             @Query("offset") offset: Int,
             @Query("limit") limit: Int,
             @Query("lang") lang: String
-    ): Single<List<FeedResponseItem>>
+    ): Single<List<TrackWithEmbeddedChannel>>
 
     @GET("stations/{id}")
-    fun getChannelPiece(@Path("id") channelId: Int): Maybe<Channel>
+    fun getChannelPiece(@Path("id") channelId: Int): Single<Channel>
 
     @GET("search")
     fun search(@Query("q") query: String): Single<SearchResponse>

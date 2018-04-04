@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
+import com.zhuinden.simplestack.StateChange
 import timber.log.Timber
 
 
@@ -22,6 +25,11 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
         handleIntent(intent)
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
     private fun handleIntent(intent: Intent) {
         val trackIdToPlay = intent.getIntExtra(ARG_TRACK_ID, UNDEFINED_ID)
         val channelIdToShow = intent.getIntExtra(ARG_CHANNEL_ID, UNDEFINED_ID)
@@ -33,6 +41,7 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
             channelIdToShow != UNDEFINED_ID -> {
                 // TODO: Fetch channels and navigate to channel page
                 Timber.d("Intent to channel page $channelIdToShow")
+                backstackDelegate.backstack.setHistory(listOf(ChannelsKey(), ChannelPageKey(channelIdToShow)), StateChange.REPLACE)
             }
         }
     }
