@@ -134,7 +134,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
             feedRepo = MusicRepo(playlist)
             navigationActivity.updateRepo(trackData.track.id, feedRepo, tracks)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Timber.d("Feed")
         }
     }

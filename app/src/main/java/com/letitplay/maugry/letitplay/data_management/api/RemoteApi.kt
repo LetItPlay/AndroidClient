@@ -75,6 +75,9 @@ interface LetItPlayApi {
     @GET("tracks")
     fun getTracks(): Single<List<Track>>
 
+    @GET("tracks/{id}")
+    fun getTrackPiece(@Path("id") trackId: Int): Single<TrackWithEmbeddedChannel>
+
     @GET("feed?")
     fun getFeed(
             @Query("stIds") stIds: String,

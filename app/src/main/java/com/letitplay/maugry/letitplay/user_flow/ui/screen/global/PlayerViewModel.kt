@@ -13,10 +13,12 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.InitializedMutableLiveData
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import timber.log.Timber
 import java.lang.ref.WeakReference
 
 
@@ -25,6 +27,7 @@ class PlayerViewModel(
         private val trackRepository: TrackRepository,
         private val channelRepository: ChannelRepository
 ): AndroidViewModel(application) {
+
     private var musicService: WeakReference<MusicService>? = null
     private val compositeDisposable = CompositeDisposable()
 
@@ -34,14 +37,14 @@ class PlayerViewModel(
         if (track != null) {
             trackRepository.trackLikeState(track.id).toLiveData()
         } else {
-            MutableLiveData<Boolean>().apply { value = null }
+            InitializedMutableLiveData<Boolean?>(null)
         }
     })
     val currentChannelIsFollow: LiveData<Boolean?> = Transformations.switchMap(currentTrack, { track ->
         if (track != null) {
             channelRepository.channelFollowState(track.channelId).toLiveData()
         } else {
-            MutableLiveData<Boolean>().apply { value = null }
+            InitializedMutableLiveData<Boolean?>(null)
         }
     })
 
@@ -72,9 +75,28 @@ class PlayerViewModel(
         val track = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }
         if (track != null) {
             trackRepository.like(track)
-                    .subscribeBy({})
+                    .subscribeBy(::onError)
                     .addTo(compositeDisposable)
         }
+    }
+
+    fun followChannelForCurrentTrack() {
+        val currentTrackId = currentTrack.value?.id
+        val channel = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }?.channel
+        if (channel != null) {
+            channelRepository.follow(channel)
+                    .subscribeBy(::onError)
+                    .addTo(compositeDisposable)
+        }
+    }
+
+    fun fetchAndPlay(trackId: Int, cb: (TrackWithChannel) -> Unit) {
+        trackRepository.fetchTrack(trackId)
+                .doOnSuccess {
+                    cb(it)
+                }
+                .subscribe()
+                .addTo(compositeDisposable)
     }
 
     override fun onCleared() {
@@ -83,17 +105,7 @@ class PlayerViewModel(
         musicService = null
     }
 
-    fun followChannelForCurrentTrack() {
-        val currentTrackId = currentTrack.value?.id
-        val channel = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }?.channel
-        if (channel != null) {
-            channelRepository.follow(channel)
-                    .subscribeBy({})
-                    .addTo(compositeDisposable)
-        }
-    }
-
-    fun fetchAndPlay(trackId: Int) {
-        // TODO: Fetch track data and play
+    private fun onError(throwable: Throwable) {
+        Timber.e("Error: ", throwable)
     }
 }

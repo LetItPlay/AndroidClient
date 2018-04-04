@@ -3,8 +3,10 @@ package com.letitplay.maugry.letitplay.user_flow.ui
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
+import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
@@ -37,7 +39,9 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
         when {
             trackIdToPlay != UNDEFINED_ID -> {
                 Timber.d("Intent to play track $trackIdToPlay")
-                playerVm.fetchAndPlay(trackIdToPlay)
+                playerVm.fetchAndPlay(trackIdToPlay) {
+                    updateRepo(trackIdToPlay, MusicRepo(mutableListOf(it.toAudioTrack())), listOf(it))
+                }
             }
             channelIdToShow != UNDEFINED_ID -> {
                 Timber.d("Intent to channel page $channelIdToShow")
