@@ -10,10 +10,10 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
-class TrackAdapter(
+class CurrentPlaylistAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: ((AudioTrack) -> Unit)
-) : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
+) : RecyclerView.Adapter<CurrentPlaylistAdapter.TrackItemHolder>() {
 
     var data: List<AudioTrack> = ArrayList()
         set(value) {

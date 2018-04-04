@@ -30,6 +30,7 @@ class PlayerViewModel(
 
     val currentTrack = MutableLiveData<AudioTrack?>()
     val musicRepo = MutableLiveData<MusicRepo>()
+
     val currentTrackIsLiked: LiveData<Boolean?> = Transformations.switchMap(currentTrack, { track ->
         if (track != null) {
             trackRepository.trackLikeState(track.id).toLiveData()

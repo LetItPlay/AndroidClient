@@ -11,12 +11,12 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollo
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackAdapter
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.CurrentPlaylistAdapter
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.channels_item_small.view.*
 
 typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
-typealias TrackVH = TrackAdapter.TrackItemHolder
+typealias TrackVH = CurrentPlaylistAdapter.TrackItemHolder
 
 class SearchResultsAdapter(
         private val musicService: MusicService?,

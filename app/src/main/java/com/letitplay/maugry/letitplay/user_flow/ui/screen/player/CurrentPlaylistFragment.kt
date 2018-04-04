@@ -16,16 +16,16 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.playlist_fragment.*
 import timber.log.Timber
 
-class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.RepoChangesListener {
+class CurrentPlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.RepoChangesListener {
 
-    private lateinit var trackAdapter: TrackAdapter
+    private lateinit var currentPlaylistAdapter: CurrentPlaylistAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val tracksRecycler = view.findViewById<RecyclerView>(R.id.tracks_list)
-        trackAdapter = TrackAdapter(musicService, ::playTrack)
+        currentPlaylistAdapter = CurrentPlaylistAdapter(musicService, ::playTrack)
         tracksRecycler.apply {
-            adapter = trackAdapter
+            adapter = currentPlaylistAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(listDivider(tracksRecycler.context, R.drawable.list_divider))
         }
@@ -50,7 +50,7 @@ class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.
 
     override fun onRepoChanged(repo: MusicRepo?) {
         Timber.d("Music repo changed")
-        trackAdapter.data = repo?.playlist ?: emptyList()
+        currentPlaylistAdapter.data = repo?.playlist ?: emptyList()
         repo?.playlist?.let {
             track_playlist_count?.text = it.size.toString()
             track_playlist_time?.text = DateHelper.getTime(it.sumBy { it.lengthInSeconds })
