@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
+import com.letitplay.maugry.letitplay.utils.ext.active
 import com.zhuinden.simplestack.StateChange
 import timber.log.Timber
 
@@ -39,8 +40,8 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
                 playerVm.fetchAndPlay(trackIdToPlay)
             }
             channelIdToShow != UNDEFINED_ID -> {
-                // TODO: Fetch channels and navigate to channel page
                 Timber.d("Intent to channel page $channelIdToShow")
+                navigationMenu?.active(R.id.action_channels)
                 backstackDelegate.backstack.setHistory(listOf(ChannelsKey(), ChannelPageKey(channelIdToShow)), StateChange.REPLACE)
             }
         }

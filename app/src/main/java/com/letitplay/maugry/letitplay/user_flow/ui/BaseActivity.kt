@@ -40,7 +40,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     protected lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
-    private var navigationMenu: BottomNavigationView? = null
+    protected var navigationMenu: BottomNavigationView? = null
     private val playerViewModel by lazy {
         ViewModelProvider(viewModelStore, ServiceLocator.viewModelFactory).get(PlayerViewModel::class.java)
     }
