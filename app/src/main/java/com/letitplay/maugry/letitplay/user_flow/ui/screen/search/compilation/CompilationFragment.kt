@@ -30,11 +30,6 @@ class CompilationFragment : BaseFragment(R.layout.compilation_fragment) {
                 .get(CompilationViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         vm.compilations.observe(this, Observer<List<CompilationModel>> {
@@ -59,17 +54,5 @@ class CompilationFragment : BaseFragment(R.layout.compilation_fragment) {
                 MusicRepo(audioTracks.map(TrackWithChannel::toAudioTrack).toMutableList()),
                 audioTracks
         )
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu_item, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_search) {
-            Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

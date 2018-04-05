@@ -3,11 +3,9 @@ package com.letitplay.maugry.letitplay.user_flow.ui.widget
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetDialog
-import android.support.v4.view.PagerAdapter
-import android.text.Selection
-import android.text.Spannable
-import android.text.Spanned
-import android.text.style.ClickableSpan
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent

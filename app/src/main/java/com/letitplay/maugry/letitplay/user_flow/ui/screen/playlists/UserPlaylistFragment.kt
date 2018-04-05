@@ -4,9 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
@@ -15,6 +13,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
@@ -22,6 +21,7 @@ import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.user_playlist_fragment.*
 import ru.rambler.libs.swipe_layout.SwipeLayout
+import timber.log.Timber
 
 
 class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
@@ -56,10 +56,14 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
         })
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val playlistRecycler = view.findViewById<RecyclerView>(R.id.playlist_track_list)
-        playlistAdapter.setHasStableIds(true)
         val beginSwipeHandler = BeginSwipeHandler(playlistRecycler)
         playlistAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         playlistRecycler.adapter = playlistAdapter
@@ -112,5 +116,4 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
             navigationActivity.updateRepo(track.id, playlistsRepo, it)
         }
     }
-
 }

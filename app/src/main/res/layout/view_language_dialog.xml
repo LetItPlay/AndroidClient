@@ -6,23 +6,29 @@
     android:theme="@style/LanguageDialog">
 
     <TextView
-        android:id="@+id/eng_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:tag="en"
-        android:text="@string/english" />
-
-    <TextView
         android:id="@+id/rus_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:tag="ru"
         android:text="@string/russian" />
+
+    <TextView
+        android:id="@+id/eng_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:tag="en"
+        android:text="@string/english" />
 
     <TextView
         android:id="@+id/fr_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:tag="fr"
         android:text="@string/french" />
 </LinearLayout>

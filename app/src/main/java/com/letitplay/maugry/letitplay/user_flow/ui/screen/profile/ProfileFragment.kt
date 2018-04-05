@@ -73,11 +73,6 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         })
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val profileRecycler = view.findViewById<RecyclerView>(R.id.profile_list)
@@ -146,17 +141,5 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList())
             navigationActivity.updateRepo(track.id, profileRepo, it)
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu_item, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_search) {
-            Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

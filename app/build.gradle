@@ -36,6 +36,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     lintOptions{
         checkReleaseBuilds false
     }
@@ -73,6 +77,7 @@ dependencies {
         transitive = true
     }
 
+    implementation "biz.laenger.android:vpbs:0.0.5"
     implementation "android.arch.persistence.room:runtime:1.0.0"
     kapt "android.arch.persistence.room:compiler:1.0.0"
     implementation "android.arch.paging:runtime:1.0.0-alpha6"
