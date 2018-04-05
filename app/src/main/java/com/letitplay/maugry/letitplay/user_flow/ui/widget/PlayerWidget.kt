@@ -35,7 +35,6 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     private val playerFragment by lazy { PlayerFragment() }
     private val playlistFragment by lazy { PlaylistFragment() }
     private val trackDetailedFragment by lazy { TrackDetailFragment() }
-    private val fakeFragment by lazy { FakeFragment() }
 
     private val preferenceHelper = PreferenceHelper(context)
 
@@ -93,6 +92,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         player_tabs.setupWithViewPager(player_pager)
         player_pager.offscreenPageLimit = 2
         player_pager.adapter = PlayerTabsAdapter(fm)
+        player_pager.currentItem=1
     }
 
     fun setExpandedState(musicService: MusicService?) {
@@ -134,8 +134,8 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
     inner class PlayerTabsAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 ->  playerFragment
-                1 ->  trackDetailedFragment
+                0 ->  trackDetailedFragment
+                1 ->  playerFragment
                 2 -> playlistFragment
                 else -> throw IllegalArgumentException()
             }

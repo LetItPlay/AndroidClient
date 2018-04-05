@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import biz.laenger.android.vpbs.BottomSheetUtils
+import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
@@ -34,10 +36,11 @@ import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
+import kotlinx.android.synthetic.main.player_container_fragment.*
 
 abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var bottomSheetBehavior: ViewPagerBottomSheetBehavior<View>
     private lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
@@ -73,11 +76,15 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
         setSupportActionBar(toolbar)
-        bottomSheetBehavior = BottomSheetBehavior.from(main_player)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        bottomSheetBehavior.setBottomSheetCallback(object : SimpleBottomSheetCallback() {
+        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(main_player)
+        bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.setBottomSheetCallback(object : ViewPagerBottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                if (newState == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
                     collapsePlayer()
                 }
             }
@@ -89,6 +96,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
         }
         main_player.setViewPager(supportFragmentManager)
+        BottomSheetUtils.setupViewPager(player_pager)
     }
 
     fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
@@ -190,12 +198,12 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun collapsePlayer() {
         main_player.setCollapsedState()
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_COLLAPSED
     }
 
     fun expandPlayer() {
         main_player.setExpandedState(musicService)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_EXPANDED
     }
 
     fun navigateTo(key: Any) {

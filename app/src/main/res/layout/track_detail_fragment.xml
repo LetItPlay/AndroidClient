@@ -144,7 +144,7 @@
                     tools:text="01:00:25" />
             </LinearLayout>
 
-            <com.letitplay.maugry.letitplay.user_flow.ui.widget.TrackDescriptionTextView
+            <TextView
                 android:id="@+id/player_track_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
