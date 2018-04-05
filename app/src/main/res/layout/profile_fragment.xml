@@ -46,7 +46,7 @@
 
             <FrameLayout
                 android:id="@+id/profile_user_name_background"
-                android:layout_width="244dp"
+                android:layout_width="0dp"
                 android:layout_height="14dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
@@ -54,9 +54,9 @@
                 android:alpha="0.2"
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toTopOf="@+id/cardView"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/profile_user_name"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/profile_user_name"
                 app:layout_constraintTop_toBottomOf="@id/profile_user_avatar" />
 
             <TextView
@@ -66,6 +66,8 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/profile_user_name"
                 android:textColor="#000000"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
                 android:textSize="24dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
