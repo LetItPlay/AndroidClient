@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="4dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/track_item" />
+        />
 
     <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
         android:id="@+id/profile_header"
@@ -26,13 +26,14 @@
                 android:id="@+id/profile_user_avatar"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
                 app:cardCornerRadius="100dp"
                 app:layout_constraintBottom_toTopOf="@+id/profile_user_name_background"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -47,14 +48,16 @@
                 android:id="@+id/profile_user_name_background"
                 android:layout_width="244dp"
                 android:layout_height="14dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:alpha="0.2"
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toTopOf="@+id/cardView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_user_avatar" />
 
             <TextView
                 android:id="@+id/profile_user_name"
@@ -65,22 +68,26 @@
                 android:textColor="#000000"
                 android:textSize="24dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_user_name_background"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_user_name_background" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="223dp"
                 android:layout_height="36dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:background="#19000000"
                 app:cardCornerRadius="2dp"
-                app:layout_constraintBottom_toTopOf="@+id/profile_separator"
+
+                app:layout_constraintBottom_toTopOf="@+id/profile_current_language"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_user_name_background">
 
                 <FrameLayout
                     android:id="@+id/change_content_language"
@@ -105,12 +112,14 @@
                 android:id="@+id/profile_current_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:gravity="center"
-                tools:text="@string/language_en"
                 app:layout_constraintBottom_toTopOf="@+id/profile_separator"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cardView" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                tools:text="@string/language_en" />
 
             <View
                 android:id="@+id/profile_separator"
@@ -123,13 +132,14 @@
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toTopOf="@+id/profile_favourite_track"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_current_language" />
 
             <TextView
                 android:id="@+id/profile_favourite_track"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:fontFamily="sans-serif"
@@ -141,7 +151,9 @@
                 android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@+id/profile_track_icon"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_separator" />
 
             <ImageView
                 android:id="@+id/profile_track_icon"
@@ -149,20 +161,23 @@
                 android:layout_height="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/track_ic"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_favourite_track" />
 
             <TextView
                 android:id="@+id/profile_track_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:textColor="#4a4a4a"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_track_icon"
-                app:layout_constraintTop_toTopOf="@+id/profile_track_icon"
+                app:layout_constraintTop_toBottomOf="@+id/profile_favourite_track"
                 tools:text="76" />
 
             <ImageView
@@ -171,23 +186,25 @@
                 android:layout_height="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/time_ic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_track_count"
-                app:layout_constraintTop_toTopOf="@+id/profile_track_count" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_favourite_track" />
 
             <TextView
                 android:id="@+id/profile_tracks_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif"
                 android:textColor="#4a4a4a"
                 android:textSize="12dp"
                 android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_time_icon"
-                app:layout_constraintTop_toTopOf="@+id/profile_time_icon"
+                app:layout_constraintTop_toBottomOf="@+id/profile_favourite_track"
                 tools:text="@tools:sample/date/hhmmss" />
 
             <FrameLayout
@@ -195,12 +212,12 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/profile_avatar_background"
+                android:elevation="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_user_avatar"
                 app:layout_constraintEnd_toEndOf="@+id/profile_user_avatar"
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="@+id/profile_user_avatar"
                 app:layout_constraintTop_toTopOf="@+id/profile_user_avatar"
-                android:elevation="8dp"
                 app:layout_constraintVertical_bias="0.85">
 
                 <ImageView
