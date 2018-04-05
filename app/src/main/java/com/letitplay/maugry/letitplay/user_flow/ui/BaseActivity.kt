@@ -184,10 +184,10 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
 
             MenuType.PLAYLISTS -> {
-                toolbar?.visibility = View.GONE
+                playlists_tabs?.visibility = View.VISIBLE
             }
             else -> {
-                toolbar?.visibility = View.VISIBLE
+                playlists_tabs?.visibility = View.GONE
                 navigationMenu?.visibility = View.VISIBLE
                 musicPlayerSmall?.let {
                     if (it.isPlaying()) it.visibility = View.VISIBLE
