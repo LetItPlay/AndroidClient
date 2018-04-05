@@ -1,5 +1,6 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
+
 import android.os.Bundle
 import android.text.Selection
 import android.text.Spannable
@@ -20,28 +21,14 @@ class TrackDetailFragment : BaseFragment(R.layout.track_detail_fragment) {
         track_detailed_scroll.setOnTouchListener(object : View.OnTouchListener {
             private var touchX = 0f
             private var touchY = 0f
+            private var link = emptyArray<ClickableSpan>()
+            private var text: CharSequence = ""
 
             override fun onTouch(view: View, event: MotionEvent): Boolean {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        touchX = event.x
-                        touchY = event.y
-                        view.parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                    
-                    MotionEvent.ACTION_MOVE -> {
-                        val dx = Math.abs(event.x - touchX)
-                        val dy = Math.abs(event.y - touchY)
-                        if ((dx == 0f || dy / dx > 1f) && (touchY > event.y || touchY < event.y && view.scrollY != 0))
-                            view.parent.requestDisallowInterceptTouchEvent(true)
-                        else view.parent.requestDisallowInterceptTouchEvent(false)
-                    }
 
-                    MotionEvent.ACTION_UP -> {
-
-                        view.parent.requestDisallowInterceptTouchEvent(false)
-
-                        val text = player_track_description.text
+                        text = player_track_description.text
                         if (text is Spanned) {
                             val buffer = text as Spannable
                             var x = event.x
@@ -57,10 +44,29 @@ class TrackDetailFragment : BaseFragment(R.layout.track_detail_fragment) {
                             val line = layout.getLineForVertical(y.toInt())
                             val off = layout.getOffsetForHorizontal(line, x.toFloat())
 
-                            val link = buffer.getSpans(off, off, ClickableSpan::class.java)
+                            link = buffer.getSpans(off, off, ClickableSpan::class.java)
                             if (link.size != 0) {
-                                link[0].onClick(player_track_description)
+                                Selection.setSelection(buffer, buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]))
                             }
+                        }
+
+                        touchX = event.x
+                        touchY = event.y
+                        view.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+
+                    MotionEvent.ACTION_MOVE -> {
+                        val dx = Math.abs(event.x - touchX)
+                        val dy = Math.abs(event.y - touchY)
+                        if ((dx == 0f || dy / dx > 1f) && (touchY > event.y || touchY < event.y && view.scrollY != 0))
+                            view.parent.requestDisallowInterceptTouchEvent(true)
+                        else view.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        view.parent.requestDisallowInterceptTouchEvent(false)
+                        if (link.size != 0) {
+                            link[0].onClick(player_track_description)
                         }
                     }
                 }

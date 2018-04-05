@@ -135,8 +135,8 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 ->  playerFragment
-                1 -> playlistFragment
-                2 -> trackDetailedFragment
+                1 ->  trackDetailedFragment
+                2 -> playlistFragment
                 else -> throw IllegalArgumentException()
             }
         }
