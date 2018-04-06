@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 project.ext {
-    support_library_version = "27.1.0"
+    support_library_version = "27.1.1"
     reactive_java_version = '2.1.0'
     reactive_java_android_version = '2.0.1'
     reactive_java_kotlin_version = '2.0.2'
