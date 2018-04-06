@@ -3,12 +3,9 @@ package com.letitplay.maugry.letitplay.user_flow.ui.widget
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetDialog
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.PagerAdapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -89,64 +86,6 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
                 adapter = currentPlaylistAdapter
                 addItemDecoration(listDivider(context, R.drawable.list_divider))
             }
-
-
-            detail.track_detailed_scroll.setOnTouchListener(object : View.OnTouchListener {
-                private var touchX = 0f
-                private var touchY = 0f
-                private var link = emptyArray<ClickableSpan>()
-                private var text: CharSequence = ""
-
-                override fun onTouch(view: View, event: MotionEvent): Boolean {
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN -> {
-
-                            text = detail.player_track_description.text
-                            if (text is Spanned) {
-                                val buffer = text as Spannable
-                                var x = event.x
-                                var y = event.y
-
-                                x -= detail.player_track_description.totalPaddingLeft
-                                y -= detail.player_track_description.totalPaddingTop
-
-                                x += detail.player_track_description.scrollX
-                                y += detail.player_track_description.scrollY
-
-                                val layout = detail.player_track_description.layout
-                                val line = layout.getLineForVertical(y.toInt())
-                                val off = layout.getOffsetForHorizontal(line, x.toFloat())
-
-                                link = buffer.getSpans(off, off, ClickableSpan::class.java)
-                                if (link.size != 0) {
-                                    Selection.setSelection(buffer, buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]))
-                                }
-                            }
-
-                            touchX = event.x
-                            touchY = event.y
-                            view.parent.requestDisallowInterceptTouchEvent(true)
-                        }
-
-                        MotionEvent.ACTION_MOVE -> {
-                            val dx = Math.abs(event.x - touchX)
-                            val dy = Math.abs(event.y - touchY)
-                            if ((dx == 0f || dy / dx > 1f) && (touchY > event.y || touchY < event.y && view.scrollY != 0))
-                                view.parent.requestDisallowInterceptTouchEvent(true)
-                            else view.parent.requestDisallowInterceptTouchEvent(false)
-                        }
-
-                        MotionEvent.ACTION_UP -> {
-                            view.parent.requestDisallowInterceptTouchEvent(false)
-                            if (link.size != 0) {
-                                link[0].onClick(detail.player_track_description)
-                            }
-                        }
-                    }
-                    view.onTouchEvent(event)
-                    return true
-                }
-            })
         }
     }
 

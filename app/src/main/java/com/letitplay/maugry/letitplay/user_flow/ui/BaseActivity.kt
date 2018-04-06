@@ -90,12 +90,11 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
             }
         })
         main_player.apply {
-            onCollapseClick = ::collapsePlayer
-            playerViewModel = this@BaseActivity.playerViewModel.apply {
+            this@BaseActivity.playerViewModel.apply {
                 setMusicService(musicService)
             }
+            setup(::collapsePlayer, this@BaseActivity.playerViewModel)
         }
-        main_player.setViewPager(supportFragmentManager)
         BottomSheetUtils.setupViewPager(player_pager)
     }
 
@@ -202,7 +201,7 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
     }
 
     fun expandPlayer() {
-        main_player.setExpandedState(musicService)
+        main_player.setExpandedState()
         bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_EXPANDED
     }
 
