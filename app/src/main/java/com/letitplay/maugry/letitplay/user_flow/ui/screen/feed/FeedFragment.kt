@@ -10,17 +10,21 @@ import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.ServiceLocator.router
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
+import kotlinx.android.synthetic.main.channels_fragment.*
 import kotlinx.android.synthetic.main.feed_fragment.*
 import timber.log.Timber
 
@@ -34,6 +38,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         FeedAdapter(musicService,
                 ::onTrackClick,
                 ::onLikeClick,
+                ::onChannelTitleClick,
                 swipeListener
         )
     }
@@ -119,6 +124,11 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private fun onLikeClick(trackData: TrackWithChannel) {
         if (feed_swipe_refresh.isRefreshing) return
         vm.onLikeClick(trackData)
+    }
+
+    private fun onChannelTitleClick(trackData: TrackWithChannel){
+        if (feed_swipe_refresh.isRefreshing) return
+        router.navigateTo(ChannelPageKey(trackData.channel.id))
     }
 
     private fun onTrackClick(trackData: TrackWithChannel) {
