@@ -121,10 +121,13 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     private fun playTrack(trackData: TrackWithChannel) {
         try {
             if (swipe_refresh?.isRefreshing == true) return
+            var currentId = musicService?.musicRepo?.currentAudioTrack?.id
             val trackId = trackData.track.id
             vm.onListen(trackData.track)
             if (trendsRepo != null && trendsRepo?.getAudioTrackAtId(trackId) != null) {
-                navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+                if (currentId != trackId)
+                    navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+                else navigationActivity.musicPlayerSmall?.playPause()
                 return
             }
             val tracks = vm.trends.value

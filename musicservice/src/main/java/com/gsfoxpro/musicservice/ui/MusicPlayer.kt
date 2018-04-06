@@ -106,7 +106,7 @@ abstract class MusicPlayer : FrameLayout {
         unregisterCallback()
     }
 
-    protected fun playPause() {
+     fun playPause() {
         mediaController?.let { controller ->
             when (playing) {
                 true -> controller.transportControls.pause()
