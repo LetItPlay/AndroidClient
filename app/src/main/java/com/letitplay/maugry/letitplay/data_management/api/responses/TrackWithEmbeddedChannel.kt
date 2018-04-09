@@ -6,7 +6,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import java.util.*
 
 
-data class FeedResponseItem(
+data class TrackWithEmbeddedChannel(
         @SerializedName("Id")
         val id: Int,
         @SerializedName("Lang")

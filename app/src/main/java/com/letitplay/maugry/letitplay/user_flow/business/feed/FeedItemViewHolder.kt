@@ -25,6 +25,7 @@ class FeedItemViewHolder(
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
+        onChannelTitleClick : (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
@@ -66,6 +67,11 @@ class FeedItemViewHolder(
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onLikeClick(feedData)
+                }
+            }
+            feed_title_container.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION){
+                    onChannelTitleClick(feedData)
                 }
             }
             left_menu.setOnClickListener {

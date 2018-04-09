@@ -10,12 +10,14 @@ import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.ServiceLocator.router
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -34,6 +36,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         FeedAdapter(musicService,
                 ::onTrackClick,
                 ::onLikeClick,
+                ::onChannelTitleClick,
                 swipeListener
         )
     }
@@ -121,20 +124,28 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         vm.onLikeClick(trackData)
     }
 
+    private fun onChannelTitleClick(trackData: TrackWithChannel) {
+        if (feed_swipe_refresh.isRefreshing) return
+        router.navigateTo(ChannelPageKey(trackData.channel.id))
+    }
+
     private fun onTrackClick(trackData: TrackWithChannel) {
         try {
             if (feed_swipe_refresh?.isRefreshing == true) return
+            var currentId = musicService?.musicRepo?.currentAudioTrack?.id
             val trackId = trackData.track.id
             vm.onListen(trackData.track)
-            if (feedRepo != null && feedRepo?.getAudioTrackAtId(trackId) != null) {
-                navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+            if (feedRepo != null && musicService?.musicRepo?.getAudioTrackAtId(trackId) != null) {
+                if (currentId != trackId)
+                    navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
+                else navigationActivity.musicPlayerSmall?.playPause()
                 return
             }
             val tracks = vm.state.value?.data
             val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
             feedRepo = MusicRepo(playlist)
             navigationActivity.updateRepo(trackData.track.id, feedRepo, tracks)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Timber.d("Feed")
         }
     }

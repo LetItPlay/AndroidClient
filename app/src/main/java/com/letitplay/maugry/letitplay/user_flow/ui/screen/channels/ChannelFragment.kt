@@ -21,10 +21,7 @@ import timber.log.Timber
 
 class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
-    private val channelsListAdapter: ChannelAdapter by lazy {
-        ChannelAdapter(::onChannelClick, ::onFollowClick)
-    }
-
+    private val channelsListAdapter = ChannelAdapter(::onChannelClick, ::onFollowClick)
     private val router by lazy { ServiceLocator.router }
 
     private val vm by lazy {

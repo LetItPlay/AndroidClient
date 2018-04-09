@@ -21,9 +21,7 @@ import timber.log.Timber
 
 class CompilationFragment : BaseFragment(R.layout.compilation_fragment) {
 
-    private val compilationAdapter: CompilationAdapter by lazy {
-        CompilationAdapter(::onCompilationClick)
-    }
+    private val compilationAdapter: CompilationAdapter = CompilationAdapter(::onCompilationClick)
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)

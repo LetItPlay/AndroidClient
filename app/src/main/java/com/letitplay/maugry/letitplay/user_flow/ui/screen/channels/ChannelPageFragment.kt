@@ -23,9 +23,7 @@ import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
-    private val recentAddedListAdapter by lazy {
-        ChannelPageAdapter(::onTrackClicked)
-    }
+    private val recentAddedListAdapter = ChannelPageAdapter(::onTrackClicked)
     private var channelPageRepo: MusicRepo? = null
 
     private val vm by lazy {
@@ -35,7 +33,8 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.channelPage(getKey()).observe(this, Observer<ChannelWithFollow> {
+        vm.channelId.value = getKey()
+        vm.channelWithFollow.observe(this, Observer<ChannelWithFollow> {
             it?.let { channelData ->
                 with(channelData.channel) {
                     channel_page_banner.loadImage(imageUrl)
@@ -51,7 +50,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 channel_page_follow.isFollowing = it.isFollowing
             }
         })
-        vm.recentAddedTracks(getKey()).observe(this, Observer<List<Track>> {
+        vm.recentAddedChannelTracks.observe(this, Observer<List<Track>> {
             it?.let {
                 recentAddedListAdapter.setData(it)
                 channel_page_recent_added.visibility = View.VISIBLE
@@ -78,13 +77,13 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
-        val channel = vm.channelPage(getKey()).value
-        val tracks = vm.recentAddedTracks(getKey()).value
+        val channel = vm.channelWithFollow.value
+        val tracks = vm.recentAddedChannelTracks.value
         if (channel != null && tracks != null) {
             val tracksList = tracks.map {
                 TrackWithChannel(it, channel.channel, null)
             }
-            channelPageRepo = MusicRepo(tracksList.map { it.toAudioTrack() }.toMutableList())
+            channelPageRepo = MusicRepo(tracksList.map(TrackWithChannel::toAudioTrack).toMutableList())
             navigationActivity.updateRepo(track.id, channelPageRepo, tracksList)
         }
     }

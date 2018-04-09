@@ -61,7 +61,7 @@ object ServiceLocator {
 
     private val trendRepository: TrendRepository by lazy { TrendDataRepository(db, serviceImpl, schedulerProvider, preferenceHelper) }
     private val channelRepository: ChannelRepository by lazy { ChannelDataRepository(db, serviceImpl, postServiceImpl, schedulerProvider, preferenceHelper) }
-    private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, postServiceImpl, schedulerProvider) }
+    private val trackRepository: TrackRepository by lazy { TrackDataRepository(db, serviceImpl, postServiceImpl, schedulerProvider) }
     private val feedRepository: FeedRepository by lazy { FeedDataRepository(db, serviceImpl, schedulerProvider, preferenceHelper) }
     private val profileRepository: ProfileRepository by lazy { ProfileDataRepository(db, schedulerProvider, preferenceHelper) }
     private val playlistsRepository: PlaylistsRepository by lazy { PlaylistsDataRepository(db, schedulerProvider) }
