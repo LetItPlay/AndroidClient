@@ -40,7 +40,7 @@ import kotlinx.android.synthetic.main.player_container_fragment.*
 abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), StateChanger {
 
     private lateinit var bottomSheetBehavior: ViewPagerBottomSheetBehavior<View>
-    private lateinit var backstackDelegate: BackstackDelegate
+    lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
     protected var navigationMenu: BottomNavigationView? = null
@@ -85,14 +85,22 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
     }
 
     private fun initPlayer() {
-        bottomSheetBehavior = BottomSheetBehavior.from(main_player)
+        bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(main_player)
         bottomSheetBehavior.apply {
-            state = BottomSheetBehavior.STATE_COLLAPSED
-            setOnStateChanged { _, newState ->
-                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    collapsePlayer()
-                }
-            }
+            state = ViewPagerBottomSheetBehavior.STATE_COLLAPSED
+            setBottomSheetCallback(
+                    object : ViewPagerBottomSheetBehavior.BottomSheetCallback() {
+                        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+                        }
+
+                        override fun onStateChanged(bottomSheet: View, newState: Int) {
+                            if (newState == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
+                                collapsePlayer()
+                            }
+                        }
+                    }
+            )
         }
         main_player.apply {
             onCollapseClick = ::collapsePlayer
