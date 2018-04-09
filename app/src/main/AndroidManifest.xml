@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="api.letitplay.io"
+                    android:host="beta.api.letitplay.io"
                     android:scheme="https" />
             </intent-filter>
             <intent-filter>
