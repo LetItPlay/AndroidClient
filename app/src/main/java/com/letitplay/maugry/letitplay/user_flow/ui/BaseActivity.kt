@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import biz.laenger.android.vpbs.BottomSheetUtils
+import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
@@ -33,11 +35,12 @@ import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import kotlinx.android.synthetic.main.navigation_main.*
+import kotlinx.android.synthetic.main.player_container_fragment.*
 
 abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), StateChanger {
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    protected lateinit var backstackDelegate: BackstackDelegate
+    private lateinit var bottomSheetBehavior: ViewPagerBottomSheetBehavior<View>
+    private lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
     protected var navigationMenu: BottomNavigationView? = null
@@ -98,6 +101,7 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             }
         }
         main_player.setViewPager(supportFragmentManager)
+        BottomSheetUtils.setupViewPager(player_pager)
     }
 
     fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
@@ -172,10 +176,10 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             }
 
             MenuType.PLAYLISTS -> {
-                toolbar?.visibility = View.GONE
+                playlists_tabs?.visibility = View.VISIBLE
             }
             else -> {
-                toolbar?.visibility = View.VISIBLE
+                playlists_tabs?.visibility = View.GONE
                 navigationMenu?.visibility = View.VISIBLE
                 musicPlayerSmall?.let {
                     if (it.isPlaying()) it.visibility = View.VISIBLE
@@ -186,12 +190,12 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
 
     fun collapsePlayer() {
         main_player.setCollapsedState()
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_COLLAPSED
     }
 
     fun expandPlayer() {
         main_player.setExpandedState(musicService)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_EXPANDED
     }
 
     fun navigateTo(key: Any) {

@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/feed_title_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

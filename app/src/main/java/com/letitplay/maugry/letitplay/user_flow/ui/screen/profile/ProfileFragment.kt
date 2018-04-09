@@ -36,6 +36,7 @@ import java.util.*
 
 
 class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
+    private val REQUEST_IMAGE_CAPTURE = 1
 
     private val likedTracksListAdapter: LikedTracksAdapter by lazy {
         LikedTracksAdapter(musicService, ::playTrack)
@@ -157,9 +158,5 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             navigationActivity.navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        private const val REQUEST_IMAGE_CAPTURE = 1
     }
 }
