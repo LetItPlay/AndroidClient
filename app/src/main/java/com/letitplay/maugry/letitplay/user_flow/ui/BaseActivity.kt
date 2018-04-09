@@ -108,20 +108,17 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             }
             setup(::collapsePlayer, this@BaseActivity.playerViewModel)
         }
-        BottomSheetUtils.setupViewPager(player_pager)
-    }
-
-    fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
-        musicService?.musicRepo = repo
-        playerViewModel.setMusicRepo(repo, tracks)
         musicPlayerSmall?.apply {
             setOnClickListener {
                 expandPlayer()
             }
-            show()
-            skipToQueueItem(trackId)
+            setup(this@BaseActivity.playerViewModel)
         }
+        BottomSheetUtils.setupViewPager(player_pager)
+    }
 
+    fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
+        playerViewModel.setMusicRepo(repo, tracks)
     }
 
     fun addTrackToStartRepo(track: AudioTrack) {

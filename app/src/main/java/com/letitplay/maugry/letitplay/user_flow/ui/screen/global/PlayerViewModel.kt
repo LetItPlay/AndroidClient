@@ -28,7 +28,7 @@ class PlayerViewModel(
         private val channelRepository: ChannelRepository
 ): AndroidViewModel(application) {
 
-    private var musicService: WeakReference<MusicService>? = null
+    private var musicService: MusicService? = null
     private val compositeDisposable = CompositeDisposable()
 
     val currentTrack = MutableLiveData<AudioTrack?>()
@@ -61,12 +61,13 @@ class PlayerViewModel(
 
     fun setMusicService(musicService: MusicService?) {
         musicService?.let {
-            this.musicService = WeakReference(it)
+            this.musicService = it
             it.mediaSession?.controller?.registerCallback(mediaControllerCallback)
         }
     }
 
     fun setMusicRepo(musicRepo: MusicRepo?, tracks: List<TrackWithChannel>) {
+        this.musicService?.musicRepo = musicRepo
         this.musicRepo.value = musicRepo
         this.tracksInRepo.value = tracks
     }
