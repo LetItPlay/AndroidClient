@@ -11,13 +11,13 @@ import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
-import com.letitplay.maugry.letitplay.ServiceLocator.router
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.Navigator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
@@ -115,7 +115,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
 
     private fun onChannelTitleClick(trackData: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
-        router.navigateTo(ChannelPageKey(trackData.channel.id))
+       Navigator.navigateTo(ChannelPageKey(trackData.channel.id))
     }
 
     private fun playTrack(trackData: TrackWithChannel) {
@@ -135,7 +135,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
                     ?: return
             trendsRepo = MusicRepo(playlist)
             navigationActivity.updateRepo(trackData.track.id, trendsRepo, tracks)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Timber.d("Trends")
         }
     }
@@ -162,7 +162,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
+            Navigator.navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
     }

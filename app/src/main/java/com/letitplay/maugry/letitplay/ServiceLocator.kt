@@ -40,7 +40,6 @@ import java.util.concurrent.Executors
 @SuppressLint("StaticFieldLeak")
 object ServiceLocator {
     lateinit var applicationContext: Context
-    lateinit var backstackDelegate: BackstackDelegate
     lateinit var application: Application
 
     val viewModelFactory by lazy {
@@ -74,12 +73,6 @@ object ServiceLocator {
         Room.databaseBuilder(applicationContext, LetItPlayDb::class.java, "letitplay.db")
                 .fallbackToDestructiveMigration()
                 .build()
-    }
-
-    val router = object : Router {
-        override fun navigateTo(key: Any) {
-            backstackDelegate.backstack.goTo(key)
-        }
     }
 
     val schedulerProvider: SchedulerProvider by lazy {

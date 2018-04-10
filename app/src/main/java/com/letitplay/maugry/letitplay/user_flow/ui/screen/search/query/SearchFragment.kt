@@ -18,6 +18,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.Navigator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.search_fragment.*
@@ -78,7 +79,7 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
     }
 
     private fun onChannelClick(channel: Channel) {
-        navigationActivity.navigateTo(ChannelPageKey(channel.id))
+        Navigator.navigateTo(ChannelPageKey(channel.id))
     }
 
     private fun onTrackClick(track: AudioTrack) {

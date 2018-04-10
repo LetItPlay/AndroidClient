@@ -10,13 +10,13 @@ import android.view.*
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
-import com.letitplay.maugry.letitplay.ServiceLocator.router
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.data_management.repo.NetworkState
 import com.letitplay.maugry.letitplay.data_management.repo.Status
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.Navigator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
@@ -85,10 +85,6 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         val divider = listDivider(feedRecycler.context, R.drawable.list_divider)
         feedRecycler.addItemDecoration(divider)
         feedRecycler.itemAnimator = DefaultItemAnimator().apply { supportsChangeAnimations = false }
-        val goToChannels = view.findViewById<View>(R.id.go_to_channels)
-        goToChannels.setOnClickListener {
-            seeAllChannelsClick()
-        }
         val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.feed_swipe_refresh)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
         swipeRefreshLayout.setOnRefreshListener {
@@ -97,10 +93,6 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         val beginSwipeHandler = BeginSwipeHandler(feedRecycler)
         feedListAdapter.onBeginSwipe = beginSwipeHandler::onSwipeBegin
         return view
-    }
-
-    private fun seeAllChannelsClick() {
-        navigationActivity.replaceHistory(R.id.action_channels)
     }
 
     override fun showProgress() {
@@ -126,7 +118,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     private fun onChannelTitleClick(trackData: TrackWithChannel) {
         if (feed_swipe_refresh.isRefreshing) return
-        router.navigateTo(ChannelPageKey(trackData.channel.id))
+        Navigator.navigateTo(ChannelPageKey(trackData.channel.id))
     }
 
     private fun onTrackClick(trackData: TrackWithChannel) {
@@ -173,7 +165,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
+            Navigator.navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
     }

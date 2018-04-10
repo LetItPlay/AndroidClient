@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.Navigator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.compilation.CompilationFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import kotlinx.android.synthetic.main.navigation_main.*
@@ -56,7 +57,7 @@ class PlaylistsFragment : BaseFragment(R.layout.playlists_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
+            Navigator.navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
     }

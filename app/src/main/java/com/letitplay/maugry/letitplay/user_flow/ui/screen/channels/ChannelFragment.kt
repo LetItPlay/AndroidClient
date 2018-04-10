@@ -11,6 +11,7 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.Navigator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Result
@@ -22,7 +23,6 @@ import timber.log.Timber
 class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     private val channelsListAdapter = ChannelAdapter(::onChannelClick, ::onFollowClick)
-    private val router by lazy { ServiceLocator.router }
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)
@@ -33,6 +33,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(vm)
@@ -44,7 +45,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
                 is Result.Failure -> Timber.e(result.e)
             }
         })
-        vm.isLoading.observe(this, Observer<Boolean>{
+        vm.isLoading.observe(this, Observer<Boolean> {
             when (it) {
                 true -> showProgress()
                 else -> hideProgress()
@@ -75,7 +76,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     private fun onChannelClick(channel: Channel) {
         if (swipe_refresh.isRefreshing) return
-        router.navigateTo(ChannelPageKey(channel.id))
+        Navigator.navigateTo(ChannelPageKey(channel.id))
     }
 
     private fun onFollowClick(channel: ChannelWithFollow) {
@@ -90,7 +91,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
+            Navigator.navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
     }

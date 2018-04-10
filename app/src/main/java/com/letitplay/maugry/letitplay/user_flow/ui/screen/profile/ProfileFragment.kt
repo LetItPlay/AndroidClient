@@ -21,6 +21,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.Navigator
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -155,7 +156,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_search) {
             Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
+            Navigator.navigateTo(SearchResultsKey())
         }
         return super.onOptionsItemSelected(item)
     }

@@ -42,7 +42,7 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
             }
             channelIdToShow != UNDEFINED_ID -> {
                 Timber.d("Intent to channel page $channelIdToShow")
-                navigateTo(ChannelPageKey(channelIdToShow))
+                Navigator.navigateTo(ChannelPageKey(channelIdToShow))
             }
         }
     }
