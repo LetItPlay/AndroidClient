@@ -97,8 +97,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
 
 
     private fun onPlaybackSpeedOptionClick(dialog: PlaybackSpeedDialog, options: List<PlaybackSpeed>, playbackSpeed: PlaybackSpeed) {
-        val player = player.music_player_big
-        player.changePlaybackSpeed(playbackSpeed.value)
+        (player as MusicPlayerBig).changePlaybackSpeed(playbackSpeed.value)
         dialog.selectAt(options.indexOf(playbackSpeed))
         preferenceHelper.playbackSpeed = playbackSpeed
     }

@@ -36,7 +36,6 @@ class MusicService : Service() {
     var musicRepo: MusicRepo? = null
         set(value) {
             field = value
-            notifyRepoChangedListeners(value)
             initTrack(value?.currentAudioTrack)
         }
 
@@ -51,7 +50,6 @@ class MusicService : Service() {
     private val updateIntervalMs = 1000L
     private val progressHandler = Handler()
     private var needUpdateProgress = false
-    private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
     private var initialPlaybackSpeed: Float = 1f
 
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
@@ -233,23 +231,14 @@ class MusicService : Service() {
 
     fun addTrackToStart(track: AudioTrack) {
         musicRepo?.addTrackToStart(track)
-        repoListeners.forEach {
-            it.onRepoChanged(musicRepo)
-        }
     }
 
     fun addTrackToEnd(track: AudioTrack) {
         musicRepo?.addTrackToEnd(track)
-        repoListeners.forEach {
-            it.onRepoChanged(musicRepo)
-        }
     }
 
     fun removeTrack(id:Int){
         musicRepo?.removeTrack(id)
-        repoListeners.forEach {
-            it.onRepoChanged(musicRepo)
-        }
     }
 
     private fun initTrack(audioTrack: AudioTrack?) {
@@ -366,23 +355,9 @@ class MusicService : Service() {
         }
     }
 
-    fun addRepoChangesListener(listener: RepoChangesListener) = repoListeners.add(listener)
-    fun removeRepoChangesListener(listener: RepoChangesListener) = repoListeners.remove(listener)
-
-    private fun notifyRepoChangedListeners(repo: MusicRepo?) {
-        repoListeners.forEach {
-            it.onRepoChanged(repo)
-        }
-    }
-
     override fun onBind(intent: Intent?) = binder
 
     inner class LocalBinder(val musicService: MusicService = this@MusicService) : Binder()
-
-
-    interface RepoChangesListener {
-        fun onRepoChanged(repo: MusicRepo?)
-    }
 
     companion object {
         const val UPDATE_INFO = "UPDATE_INFO"
