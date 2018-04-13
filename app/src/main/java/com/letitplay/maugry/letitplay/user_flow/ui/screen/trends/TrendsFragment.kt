@@ -124,7 +124,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             var currentId = musicService?.musicRepo?.currentAudioTrack?.id
             val trackId = trackData.track.id
             vm.onListen(trackData.track)
-            if (trendsRepo != null && trendsRepo?.getAudioTrackAtId(trackId) != null) {
+            if (trendsRepo != null && musicService?.musicRepo?.getAudioTrackAtId(trackId)!= null) {
                 if (currentId != trackId)
                     navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
                 else navigationActivity.musicPlayerSmall?.playPause()

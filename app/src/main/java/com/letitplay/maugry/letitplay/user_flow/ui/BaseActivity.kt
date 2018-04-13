@@ -4,10 +4,13 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.GestureDetector
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import biz.laenger.android.vpbs.BottomSheetUtils
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior
@@ -28,14 +31,17 @@ import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
 import com.letitplay.maugry.letitplay.utils.ext.active
 import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
-import com.letitplay.maugry.letitplay.utils.ext.setOnStateChanged
+import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.show
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
+import kotlinx.android.synthetic.main.music_player_small.view.*
 import kotlinx.android.synthetic.main.navigation_main.*
 import kotlinx.android.synthetic.main.player_container_fragment.*
+import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
 abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), StateChanger {
 
@@ -74,6 +80,7 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
         initPlayer()
+        initSmallPlayer()
     }
 
     private fun initNavigationMenu() {
@@ -112,14 +119,40 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
         BottomSheetUtils.setupViewPager(player_pager)
     }
 
+    private fun initSmallPlayer() {
+
+        musicPlayerSmall?.small_player_swipe_layout?.animateReset()
+
+        musicPlayerSmall?.small_player_swipe_layout?.setOnSwipeListener(object : SimpleOnSwipeListener {
+            override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                musicPlayerSmall?.apply {
+                    stop()
+                    updateRepo(-1, null, emptyList())
+                    gone()
+                }
+            }
+
+        })
+
+        musicPlayerSmall?.small_player_swipe_layout?.apply {
+            val gestureOnSwipeDetector = GestureDetectorCompat(this.context, object : GestureDetector.SimpleOnGestureListener() {
+
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    expandPlayer()
+                    return super.onSingleTapConfirmed(e)
+                }
+            })
+
+            musicPlayerSmall?.small_player_swipe_layout?.setOnTouchListener { _, motionEvent -> gestureOnSwipeDetector.onTouchEvent(motionEvent) }
+        }
+    }
+
     fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
         musicService?.musicRepo = repo
         playerViewModel.setMusicRepo(repo, tracks)
         musicPlayerSmall?.apply {
-            setOnClickListener {
-                expandPlayer()
-            }
             show()
+            small_player_swipe_layout.reset()
             skipToQueueItem(trackId)
         }
 

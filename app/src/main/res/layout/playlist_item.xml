@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ru.rambler.libs.swipe_layout.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/playlist_swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -27,8 +26,8 @@
             android:background="@drawable/feed_item_menu_right_background"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_vertical"
-            android:paddingStart="20dp"
             android:paddingEnd="0dp"
+            android:paddingStart="20dp"
             android:text="Remove"
             android:textColor="@color/white"
             android:textSize="24sp"
