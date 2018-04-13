@@ -37,7 +37,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         vm.channelWithFollow.observe(this, Observer<ChannelWithFollow> {
             it?.let { channelData ->
                 with(channelData.channel) {
-                    channel_page_banner.loadImage(imageUrl)
+                    channel_page_banner.loadImage(imageUrl,placeholder = R.drawable.channel_placeholder)
                     channel_page_preview.loadCircularImage(imageUrl)
                     channel_page_title.text = name
                     channel_page_followers.text = subscriptionCount.toString()

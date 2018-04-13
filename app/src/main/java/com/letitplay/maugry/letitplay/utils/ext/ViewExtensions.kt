@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.SimpleBottomSheetCallback
 import timber.log.Timber
 
@@ -84,11 +85,12 @@ fun ViewGroup.inflateHolder(layoutId: Int): View =
 @Suppress("UNCHECKED_CAST")
 fun <T> inflate(layoutId: Int, context: Context) = LayoutInflater.from(context).inflate(layoutId, null) as T
 
-fun ImageView.loadImage(url: String?, context: Context? = null) {
+fun ImageView.loadImage(url: String?, context: Context? = null, placeholder: Int) {
     if (url != null) {
         Glide.with(context ?: this.context)
                 .load(url)
                 .apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions().placeholder(placeholder))
                 .into(this)
     } else {
         Glide.with(context ?: this.context)
@@ -105,6 +107,7 @@ fun ImageView.loadCircularImage(uri: Uri?, context: Context? = null) {
         Glide.with(context ?: this.context)
                 .load(uri)
                 .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions().placeholder(R.drawable.channel_preview_placeholder))
                 .into(this)
     } else {
         Glide.with(context ?: this.context)

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
@@ -123,6 +124,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
                 ?: ""
         Glide.with(context)
                 .load(track.imageUrl)
+                .apply(RequestOptions().placeholder(R.drawable.channel_placeholder))
                 .into(trackDetailedFragment.track_detailed_channel_logo)
 
     }

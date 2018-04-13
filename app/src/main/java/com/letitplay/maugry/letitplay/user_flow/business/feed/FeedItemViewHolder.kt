@@ -119,8 +119,8 @@ class FeedItemViewHolder(
             feed_channel_title.text = feedData.channel.name
             feed_track_last_update.text = data
             feed_channel_logo.loadCircularImage(feedData.channel.imageUrl)
-            feed_track_image.loadImage(feedData.track.coverUrl)
-            feed_track_info_logo.loadImage(feedData.track.coverUrl)
+            feed_track_image.loadImage(feedData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
+            feed_track_info_logo.loadImage(feedData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
         }
         updateLike(feedData)
     }

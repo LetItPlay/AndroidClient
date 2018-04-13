@@ -54,7 +54,7 @@ class TrackAdapter(
                 track_time.text = DateHelper.getTime(track.lengthInSeconds)
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackId = track.id.toString()
-                track_logo.loadImage(track.imageUrl)
+                track_logo.loadImage(track.imageUrl, placeholder = R.drawable.feed_item_placeholder)
             }
         }
 

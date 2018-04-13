@@ -134,7 +134,7 @@ class PlaylistAdapter(
                 channel_name.text = trackData.channel.name
                 track_time.text = trackData.track.trackLengthShort
                 track_name.text = trackData.track.title
-                track_logo.loadImage(trackData.track.coverUrl)
+                track_logo.loadImage(trackData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
             }
         }
     }

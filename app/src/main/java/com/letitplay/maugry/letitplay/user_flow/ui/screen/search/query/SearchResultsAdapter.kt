@@ -90,7 +90,7 @@ class SearchResultsAdapter(
             this.channel = channelItem
             itemView.apply {
                 channel_name.text = channelItem.channel.name
-                channel_small_logo.loadImage(channelItem.channel.imageUrl)
+                channel_small_logo.loadImage(channelItem.channel.imageUrl, placeholder = R.drawable.feed_item_placeholder)
             }
             updateFollow(channelItem)
         }
