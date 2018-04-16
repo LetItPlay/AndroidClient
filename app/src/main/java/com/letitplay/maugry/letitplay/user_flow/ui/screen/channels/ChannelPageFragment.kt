@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -25,6 +26,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
     private val recentAddedListAdapter = ChannelPageAdapter(::onTrackClicked)
     private var channelPageRepo: MusicRepo? = null
+    private var channelPageData: ChannelWithFollow? = null
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)
@@ -37,7 +39,8 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         vm.channelWithFollow.observe(this, Observer<ChannelWithFollow> {
             it?.let { channelData ->
                 with(channelData.channel) {
-                    channel_page_banner.loadImage(imageUrl,placeholder = R.drawable.channel_banner)
+                    channelPageData = it
+                    channel_page_banner.loadImage(imageUrl, placeholder = R.drawable.channel_banner)
                     channel_page_preview.loadCircularImage(imageUrl)
                     channel_page_title.text = name
                     channel_page_followers.text = subscriptionCount.toString()
@@ -65,11 +68,23 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         recentAddedRecycler.adapter = recentAddedListAdapter
         recentAddedRecycler.addItemDecoration(listDivider)
         val followButton = view.findViewById<View>(R.id.channel_page_follow)
+        val shareButton = view.findViewById<View>(R.id.channel_page_share)
         followButton.setOnClickListener {
             channel_page_follow.isEnabled = false
             vm.onFollowClick()
         }
+        shareButton.setOnClickListener {
+            shareToFriends()
+        }
         return view
+    }
+
+    private fun shareToFriends() {
+        var sendIntent  = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, channelPageData?.channel?.name)
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
     }
 
     private fun onTrackClicked(track: Track) {
