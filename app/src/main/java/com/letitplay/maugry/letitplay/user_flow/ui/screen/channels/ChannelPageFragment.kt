@@ -17,6 +17,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
@@ -80,9 +81,9 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
     }
 
     private fun shareToFriends() {
-        var sendIntent  = Intent()
+        var sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, channelPageData?.channel?.name)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, SharedHelper.getChannelUrl(channelPageData?.channel?.name, channelPageData?.channel?.id))
         sendIntent.type = "text/plain"
         startActivity(sendIntent)
     }
