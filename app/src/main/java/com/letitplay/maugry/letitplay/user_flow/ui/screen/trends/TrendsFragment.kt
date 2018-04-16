@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.paging.PagedList
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
@@ -21,6 +22,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
@@ -34,6 +36,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         TrendAdapter(musicService,
                 ::playTrack,
                 ::onLikeClick,
+                ::onOtherClick,
                 ::onChannelTitleClick,
                 swipeListener)
     }
@@ -108,6 +111,14 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         }
     }
 
+    private fun onOtherClick(trackData: TrackWithChannel) {
+        var sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, SharedHelper.getTrackUrl(trackData.track.title, trackData.channel.name, trackData.track.id))
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
+    }
+
     private fun onLikeClick(track: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
         vm.onLikeClick(track)
@@ -124,7 +135,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             var currentId = musicService?.musicRepo?.currentAudioTrack?.id
             val trackId = trackData.track.id
             vm.onListen(trackData.track)
-            if (trendsRepo != null && musicService?.musicRepo?.getAudioTrackAtId(trackId)!= null) {
+            if (trendsRepo != null && musicService?.musicRepo?.getAudioTrackAtId(trackId) != null) {
                 if (currentId != trackId)
                     navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
                 else navigationActivity.musicPlayerSmall?.playPause()
@@ -135,7 +146,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
                     ?: return
             trendsRepo = MusicRepo(playlist)
             navigationActivity.updateRepo(trackData.track.id, trendsRepo, tracks)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Timber.d("Trends")
         }
     }

@@ -37,15 +37,14 @@
         android:id="@+id/track_last_seen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:alpha="0.6"
-        tools:text="6h"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="6h" />
 
 
     <TextView
@@ -78,10 +77,10 @@
         android:id="@+id/track_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/track_time_icon"
         android:textColor="#4a4a4a"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/track_time_icon"
+        app:layout_constraintTop_toTopOf="@id/track_time_icon"
         tools:text="01:00:25" />
 
     <com.letitplay.maugry.letitplay.user_flow.ui.widget.PlayingNowWidget
@@ -91,7 +90,19 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@id/track_time_icon"
         app:layout_constraintStart_toEndOf="@+id/track_time" />
-    
+
+    <ImageView
+        android:id="@+id/track_other"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginEnd="16dp"
+        android:rotation="90"
+        android:src="@drawable/other_inactive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
     <!-- Dirty trick to prevent constraint collapse -->
     <View
         android:layout_width="match_parent"

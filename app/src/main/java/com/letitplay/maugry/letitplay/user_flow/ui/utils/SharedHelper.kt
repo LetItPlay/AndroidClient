@@ -6,4 +6,6 @@ object SharedHelper {
 
     fun getChannelUrl(title: String?, id: Int?): String = "$title:  ${GL_DATA_SERVICE_URL}stations/$id"
 
+    fun getTrackUrl(trackTitle: String?, channelTitle: String?, id: Int?) = "$channelTitle-$trackTitle:  ${GL_DATA_SERVICE_URL}tracks/$id"
+
 }

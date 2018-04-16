@@ -22,6 +22,8 @@
     <string name="track_recent_added">Recent added</string>
     <string name="time_published_ago">ago</string>
     <string name="no_trends">There are no tracks</string>
+    <string name="track_share">Share</string>
+    <string name="track_report">Report</string>
 
     <!--Playlists-->
     <string name="playlists_no_tracks">There are no tracks</string>

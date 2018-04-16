@@ -22,6 +22,8 @@
     <string name="track_recent_added">Недавно добавленные</string>
     <string name="time_published_ago">назад</string>
     <string name="no_trends">Треки отсутствуют</string>
+    <string name="track_share">Поделиться</string>
+    <string name="track_report">Пожаловаться</string>
 
     <!--Playlists-->
     <string name="playlists_no_tracks">Треки отсутствуют</string>

@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
@@ -20,6 +21,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
@@ -36,6 +38,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         FeedAdapter(musicService,
                 ::onTrackClick,
                 ::onLikeClick,
+                ::onOtherClick,
                 ::onChannelTitleClick,
                 swipeListener
         )
@@ -117,6 +120,15 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         } else {
             super.hideProgress()
         }
+    }
+
+    private fun onOtherClick(trackData: TrackWithChannel) {
+        var sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, SharedHelper.getTrackUrl(trackData.track.title, trackData.channel.name, trackData.track.id))
+        sendIntent.type = "text/plain"
+        startActivity(sendIntent)
+
     }
 
     private fun onLikeClick(trackData: TrackWithChannel) {

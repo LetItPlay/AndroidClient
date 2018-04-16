@@ -121,7 +121,6 @@ class PlaylistAdapter(
                         onRemoveClick(trackData.track, adjustedAdapterPosition, itemView.playlist_swipe_layout)
                     }
                 }
-
             }
         }
 
