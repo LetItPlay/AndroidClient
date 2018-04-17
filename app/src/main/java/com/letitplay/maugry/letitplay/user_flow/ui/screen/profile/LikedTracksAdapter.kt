@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
@@ -41,8 +42,16 @@ class LikedTracksAdapter(
     }
 
     class ProfileItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.track_item) {
-
+        lateinit var trackData: TrackWithChannel
+        init{
+            itemView.apply {
+                track_other.setOnClickListener {
+                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id)
+                }
+            }
+        }
         fun update(trackData: TrackWithChannel) {
+            this.trackData = trackData
             itemView.apply {
                     track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
                     track_playing_now.trackListenerCount = trackData.track.listenCount

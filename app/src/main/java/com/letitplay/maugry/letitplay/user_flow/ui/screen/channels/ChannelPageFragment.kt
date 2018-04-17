@@ -2,7 +2,6 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -52,6 +51,12 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 }
                 channel_page_follow.isEnabled = true
                 channel_page_follow.isFollowing = it.isFollowing
+
+                channel_page_share?.let {
+                    it.setOnClickListener {
+                        SharedHelper.channelShare(it.context, name, id)
+                    }
+                }
             }
         })
         vm.recentAddedChannelTracks.observe(this, Observer<List<Track>> {
@@ -69,23 +74,11 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         recentAddedRecycler.adapter = recentAddedListAdapter
         recentAddedRecycler.addItemDecoration(listDivider)
         val followButton = view.findViewById<View>(R.id.channel_page_follow)
-        val shareButton = view.findViewById<View>(R.id.channel_page_share)
         followButton.setOnClickListener {
             channel_page_follow.isEnabled = false
             vm.onFollowClick()
         }
-        shareButton.setOnClickListener {
-            shareToFriends()
-        }
         return view
-    }
-
-    private fun shareToFriends() {
-        var sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, SharedHelper.getChannelUrl(channelPageData?.channel?.name, channelPageData?.channel?.id))
-        sendIntent.type = "text/plain"
-        startActivity(sendIntent)
     }
 
     private fun onTrackClicked(track: Track) {

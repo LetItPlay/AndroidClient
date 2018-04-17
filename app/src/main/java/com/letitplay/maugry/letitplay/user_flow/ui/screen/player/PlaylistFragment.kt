@@ -1,6 +1,5 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.player
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,7 +12,6 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.playlist_fragment.*
 import timber.log.Timber
@@ -25,7 +23,7 @@ class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val tracksRecycler = view.findViewById<RecyclerView>(R.id.tracks_list)
-        trackAdapter = TrackAdapter(musicService, ::playTrack, ::onOtherClick)
+        trackAdapter = TrackAdapter(musicService, ::playTrack)
         tracksRecycler.apply {
             adapter = trackAdapter
             layoutManager = LinearLayoutManager(context)
@@ -41,16 +39,6 @@ class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.
         }
         musicService?.addRepoChangesListener(this)
         header.attachTo(tracks_list)
-    }
-
-
-    private fun onOtherClick(trackData: AudioTrack) {
-        var sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, SharedHelper.getTrackUrl(trackData.title, trackData.channelTitle, trackData.id))
-        sendIntent.type = "text/plain"
-        startActivity(sendIntent)
-
     }
 
     private fun playTrack(track: AudioTrack) {

@@ -36,7 +36,6 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         TrendAdapter(musicService,
                 ::playTrack,
                 ::onLikeClick,
-                ::onOtherClick,
                 ::onChannelTitleClick,
                 swipeListener)
     }
@@ -110,15 +109,6 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             super.showProgress()
         }
     }
-
-    private fun onOtherClick(trackData: TrackWithChannel) {
-        var sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, SharedHelper.getTrackUrl(trackData.track.title, trackData.channel.name, trackData.track.id))
-        sendIntent.type = "text/plain"
-        startActivity(sendIntent)
-    }
-
     private fun onLikeClick(track: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
         vm.onLikeClick(track)

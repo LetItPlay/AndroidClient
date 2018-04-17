@@ -16,6 +16,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.utils.ext.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
@@ -30,7 +31,6 @@ class FeedItemViewHolder(
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
-        onOtherClick: (TrackWithChannel) -> Unit,
         onChannelTitleClick : (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?
@@ -69,19 +69,8 @@ class FeedItemViewHolder(
             feed_track_info_description.setOnClickListener {
                 hideInfo()
             }
-
             feed_other.setOnClickListener {
-                BottomSheetDialog(context).apply {
-                val dialogView = layoutInflater.inflate(R.layout.view_track_dialog, null)
-                    dialogView.share_button.setOnClickListener {
-                        onOtherClick(feedData)
-                        this.dismiss()
-                    }
-                setContentView(dialogView)
-                show()
-            }
-
-
+                SharedHelper.showTrackContextMenu(context,feedData.track.title,feedData.channel.name,feedData.track.id)
             }
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {

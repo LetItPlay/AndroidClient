@@ -14,7 +14,6 @@ class TrendAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (TrackWithChannel) -> Unit,
         private val onLikeClick: (TrackWithChannel) -> Unit,
-        private val onOtherClick: (TrackWithChannel) -> Unit,
         private val onChannelTitleClick : (TrackWithChannel) -> Unit,
         private val playlistActionsListener: OnPlaylistActionsListener? = null
 ) : PagedListAdapter<TrackWithChannel, FeedItemViewHolder>(FeedAdapter.TRACK_WITH_CHANNEL_COMPARATOR) {
@@ -27,7 +26,6 @@ class TrendAdapter(
                 playlistActionsListener,
                 onClickItem,
                 onLikeClick,
-                onOtherClick,
                 onChannelTitleClick,
                 { onBeginSwipe(it) },
                 musicService

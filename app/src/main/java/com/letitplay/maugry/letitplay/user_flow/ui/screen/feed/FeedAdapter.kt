@@ -14,7 +14,6 @@ class FeedAdapter(
         private val musicService: MusicService?,
         private val onClickItem: (TrackWithChannel) -> Unit,
         private val onLikeClick: (TrackWithChannel) -> Unit,
-        private val onOtherClick: (TrackWithChannel) -> Unit,
         private val onChannelTitleClick : (TrackWithChannel) -> Unit,
         private val playlistActionsListener: OnPlaylistActionsListener? = null
 ) : PagedListAdapter<TrackWithChannel, FeedItemViewHolder>(TRACK_WITH_CHANNEL_COMPARATOR) {
@@ -27,7 +26,6 @@ class FeedAdapter(
                 playlistActionsListener,
                 onClickItem,
                 onLikeClick,
-                onOtherClick,
                 onChannelTitleClick,
                 { onBeginSwipe(it) },
                 musicService
