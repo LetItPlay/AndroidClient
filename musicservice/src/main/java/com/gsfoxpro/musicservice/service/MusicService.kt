@@ -16,6 +16,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_IDLE
@@ -39,7 +40,7 @@ class MusicService : MediaBrowserServiceCompat() {
             field = value
             notifyRepoChangedListeners(value)
             initMetaDataList(value)
-            initTrack(value?.currentAudioTrack)
+          //  initTrack(value?.currentAudioTrack)
         }
 
     private val binder = LocalBinder()
@@ -55,7 +56,7 @@ class MusicService : MediaBrowserServiceCompat() {
     private var needUpdateProgress = false
     private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
     private var initialPlaybackSpeed: Float = 1f
-    private var currentRepoMediaItem : MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
+    private var currentRepoMediaItem: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
 
     private val MY_MEDIA_ROOT_ID = "root"
 
@@ -184,14 +185,15 @@ class MusicService : MediaBrowserServiceCompat() {
 
     override fun onLoadChildren(parentId: String,
                                 result: Result<MutableList<MediaBrowserCompat.MediaItem>>) {
+        Log.i("BADANINA", "onLoadChildren")
         result.sendResult(currentRepoMediaItem)
-
-
+        Log.i("BADANINA", "TTTTTTT")
     }
 
     override fun onGetRoot(clientPackageName: String,
                            clientUid: Int,
                            rootHints: Bundle?): MediaBrowserServiceCompat.BrowserRoot? {
+        Log.i("BADANINA", "onGetRoot")
         return BrowserRoot(MY_MEDIA_ROOT_ID, null)
 
     }
@@ -203,8 +205,19 @@ class MusicService : MediaBrowserServiceCompat() {
 
     }
 
+
     override fun onCreate() {
         super.onCreate()
+        musicRepo = MusicRepo(arrayListOf(AudioTrack(9874, 91,
+                "https://st1.letitplay.io/audio/Блог Торвальда/6_XreQNiTcw.mp3",
+                "Блог Торвальда", "Блог Торвальда",
+                "https://manage.letitplay.io/uploads/tracks/6_XreQNiTcw.jpg",
+                "Блог Торвальда", 1134000, 0, description = ""),
+                AudioTrack(10830, 60, "https://manage.letitplay.io/uploads/128_audiofiles/024-0047-_Почему_нужно_перестать_искать.mp3",
+                        "Почему нужно перестать искать хюгге, отказаться от путешествий и полюбить свою работу", "Жить интересно",
+                        "https://manage.letitplay.io/uploads/tracks/89ba46583db7285a551cf070273cb920.jpeg",
+                        "Жить интересно", 537626, 0, description = ""
+                )))
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
@@ -227,6 +240,8 @@ class MusicService : MediaBrowserServiceCompat() {
             setCallback(mediaSessionCallback)
             setMediaButtonReceiver(PendingIntent.getBroadcast(applicationContext, 0, mediaButtonIntent, 0))
         }
+
+        sessionToken = mediaSession?.sessionToken
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), DefaultTrackSelector(), DefaultLoadControl())
         exoPlayer.addListener(playerListener)
