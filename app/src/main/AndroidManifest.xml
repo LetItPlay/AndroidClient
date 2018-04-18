@@ -21,6 +21,14 @@
             android:name="io.fabric.ApiKey"
             android:value="fb78ed9a96aa52005e34cdb8a48b73973dcdd0f8" />
 
+        <meta-data
+            android:name="com.google.android.gms.car.notification.SmallIcon"
+            android:resource="@drawable/ic_like" />
+
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
         <activity
             android:name=".user_flow.ui.NavigationActivity"
             android:launchMode="singleTask"
@@ -69,13 +77,16 @@
         <service
             android:name="com.gsfoxpro.musicservice.service.MusicService"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MEDIA_BUTTON" />-->
+            <!--</intent-filter>-->
         </service>
 
     </application>

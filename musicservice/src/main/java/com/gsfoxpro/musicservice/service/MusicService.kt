@@ -1,7 +1,6 @@
 package com.gsfoxpro.musicservice.service
 
 import android.app.PendingIntent
-import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,6 +10,8 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
 import android.os.*
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
@@ -28,7 +29,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.ui.MusicPlayerNotification
 
 
-class MusicService : Service() {
+class MusicService : MediaBrowserServiceCompat() {
 
     var mediaSession: MediaSessionCompat? = null
         private set
@@ -37,6 +38,7 @@ class MusicService : Service() {
         set(value) {
             field = value
             notifyRepoChangedListeners(value)
+            initMetaDataList(value)
             initTrack(value?.currentAudioTrack)
         }
 
@@ -53,6 +55,9 @@ class MusicService : Service() {
     private var needUpdateProgress = false
     private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
     private var initialPlaybackSpeed: Float = 1f
+    private var currentRepoMediaItem : MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
+
+    private val MY_MEDIA_ROOT_ID = "root"
 
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
             .setActions(
@@ -63,7 +68,8 @@ class MusicService : Service() {
                             or PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                             or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
 
-    private val playbackSpeed get() = mediaSession?.controller?.playbackState?.playbackSpeed ?: initialPlaybackSpeed
+    private val playbackSpeed
+        get() = mediaSession?.controller?.playbackState?.playbackSpeed ?: initialPlaybackSpeed
 
     private val mediaSessionCallback = object : MediaSessionCompat.Callback() {
         override fun onCommand(command: String, extras: Bundle?, cb: ResultReceiver?) {
@@ -176,6 +182,27 @@ class MusicService : Service() {
         }
     }
 
+    override fun onLoadChildren(parentId: String,
+                                result: Result<MutableList<MediaBrowserCompat.MediaItem>>) {
+        result.sendResult(currentRepoMediaItem)
+
+
+    }
+
+    override fun onGetRoot(clientPackageName: String,
+                           clientUid: Int,
+                           rootHints: Bundle?): MediaBrowserServiceCompat.BrowserRoot? {
+        return BrowserRoot(MY_MEDIA_ROOT_ID, null)
+
+    }
+
+    fun initMetaDataList(musicRepo: MusicRepo?) {
+        musicRepo?.playlist?.forEach { audioTrack ->
+            currentRepoMediaItem.add(MediaBrowserCompat.MediaItem(buildMetadata(metadataBuilder, audioTrack).description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
+        }
+
+    }
+
     override fun onCreate() {
         super.onCreate()
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -245,7 +272,7 @@ class MusicService : Service() {
         }
     }
 
-    fun removeTrack(id:Int){
+    fun removeTrack(id: Int) {
         musicRepo?.removeTrack(id)
         repoListeners.forEach {
             it.onRepoChanged(musicRepo)
