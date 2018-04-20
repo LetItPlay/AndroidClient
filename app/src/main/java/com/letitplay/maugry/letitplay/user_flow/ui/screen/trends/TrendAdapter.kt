@@ -4,6 +4,7 @@ import android.arch.paging.PagedListAdapter
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedAdapter
@@ -11,7 +12,7 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class TrendAdapter(
-        private val musicService: MusicService? = null,
+        private val musicService: AutoMusicService? = null,
         private val onClickItem: (TrackWithChannel) -> Unit,
         private val onLikeClick: (TrackWithChannel) -> Unit,
         private val onChannelTitleClick : (TrackWithChannel) -> Unit,

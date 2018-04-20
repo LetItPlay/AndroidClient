@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
@@ -33,7 +34,7 @@ class FeedItemViewHolder(
         onLikeClick: (TrackWithChannel) -> Unit,
         onChannelTitleClick : (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
-        musicService: MusicService?
+        musicService: AutoMusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var feedData: TrackWithChannel
 

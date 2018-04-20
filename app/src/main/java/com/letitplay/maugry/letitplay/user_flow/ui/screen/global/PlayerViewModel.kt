@@ -13,6 +13,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.InitializedMutableLiveData
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.CompositeDisposable
@@ -28,7 +29,7 @@ class PlayerViewModel(
         private val channelRepository: ChannelRepository
 ): AndroidViewModel(application) {
 
-    private var musicService: WeakReference<MusicService>? = null
+    private var musicService: WeakReference<AutoMusicService>? = null
     private val compositeDisposable = CompositeDisposable()
 
     val currentTrack = MutableLiveData<AudioTrack?>()
@@ -58,7 +59,7 @@ class PlayerViewModel(
         }
     }
 
-    fun setMusicService(musicService: MusicService?) {
+    fun setMusicService(musicService: AutoMusicService?) {
         musicService?.let {
             this.musicService = WeakReference(it)
             it.mediaSession?.controller?.registerCallback(mediaControllerCallback)

@@ -3,6 +3,7 @@
     package="com.letitplay.maugry.letitplay">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="false" />
@@ -37,6 +38,11 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -74,19 +80,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <service
-            android:name="com.gsfoxpro.musicservice.service.MusicService"
-            android:enabled="true"
+            android:name=".user_flow.AutoMusicService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
-            <!--<intent-filter>-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MEDIA_BUTTON" />-->
-            <!--</intent-filter>-->
         </service>
 
     </application>

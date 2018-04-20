@@ -30,7 +30,7 @@ import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.ui.MusicPlayerNotification
 
 
-class MusicService : MediaBrowserServiceCompat() {
+open class MusicService : MediaBrowserServiceCompat() {
 
     var mediaSession: MediaSessionCompat? = null
         private set
@@ -39,11 +39,8 @@ class MusicService : MediaBrowserServiceCompat() {
         set(value) {
             field = value
             notifyRepoChangedListeners(value)
-            initMetaDataList(value)
-          //  initTrack(value?.currentAudioTrack)
+            initTrack(value?.currentAudioTrack)
         }
-
-    private val binder = LocalBinder()
     private lateinit var exoPlayer: SimpleExoPlayer
     private lateinit var audioManager: AudioManager
     private lateinit var audioFocusRequest: AudioFocusRequest
@@ -56,9 +53,10 @@ class MusicService : MediaBrowserServiceCompat() {
     private var needUpdateProgress = false
     private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
     private var initialPlaybackSpeed: Float = 1f
-    private var currentRepoMediaItem: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
 
-    private val MY_MEDIA_ROOT_ID = "root"
+
+    private var mCarConnectionReceiver: BroadcastReceiver? = null
+    private var mIsConnectedToCar: Boolean? = null
 
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
             .setActions(
@@ -73,6 +71,7 @@ class MusicService : MediaBrowserServiceCompat() {
         get() = mediaSession?.controller?.playbackState?.playbackSpeed ?: initialPlaybackSpeed
 
     private val mediaSessionCallback = object : MediaSessionCompat.Callback() {
+
         override fun onCommand(command: String, extras: Bundle?, cb: ResultReceiver?) {
             when (command) {
                 CHANGE_PLAYBACK_SPEED -> {
@@ -90,6 +89,7 @@ class MusicService : MediaBrowserServiceCompat() {
         }
 
         override fun onPlay() {
+            Log.i("DASHAB", "onPlay")
             play(musicRepo?.currentAudioTrack)
         }
 
@@ -134,7 +134,17 @@ class MusicService : MediaBrowserServiceCompat() {
         }
 
         override fun onSkipToQueueItem(id: Long) {
+            Log.i("DASHAB", "onSkipToQueueItem")
             play(musicRepo?.getAudioTrackAtId(id.toInt()))
+        }
+
+        override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+            Log.i("DASHAB", "onPlayFromMediaId")
+            play(AudioTrack(9874, 91,
+                    "https://st1.letitplay.io/audio/Блог Торвальда/6_XreQNiTcw.mp3",
+                    "Блог Торвальда", "Блог Торвальда",
+                    "https://manage.letitplay.io/uploads/tracks/6_XreQNiTcw.jpg",
+                    "Блог Торвальда", 1134000, 0, description = ""))
         }
     }
 
@@ -185,39 +195,30 @@ class MusicService : MediaBrowserServiceCompat() {
 
     override fun onLoadChildren(parentId: String,
                                 result: Result<MutableList<MediaBrowserCompat.MediaItem>>) {
-        Log.i("BADANINA", "onLoadChildren")
-        result.sendResult(currentRepoMediaItem)
-        Log.i("BADANINA", "TTTTTTT")
+        result.sendResult(mutableListOf())
     }
 
     override fun onGetRoot(clientPackageName: String,
                            clientUid: Int,
                            rootHints: Bundle?): MediaBrowserServiceCompat.BrowserRoot? {
-        Log.i("BADANINA", "onGetRoot")
-        return BrowserRoot(MY_MEDIA_ROOT_ID, null)
-
+        return BrowserRoot("root", null)
     }
 
-    fun initMetaDataList(musicRepo: MusicRepo?) {
-        musicRepo?.playlist?.forEach { audioTrack ->
-            currentRepoMediaItem.add(MediaBrowserCompat.MediaItem(buildMetadata(metadataBuilder, audioTrack).description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
+    private fun registerCarConnectionReceiver() {
+        val filter = IntentFilter("com.google.android.gms.car.media.STATUS")
+        mCarConnectionReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val connectionEvent = intent.getStringExtra("media_connection_status")
+                mIsConnectedToCar = "media_connected" == connectionEvent.toLowerCase()
+            }
         }
-
+        registerReceiver(mCarConnectionReceiver, filter)
     }
 
 
     override fun onCreate() {
         super.onCreate()
-        musicRepo = MusicRepo(arrayListOf(AudioTrack(9874, 91,
-                "https://st1.letitplay.io/audio/Блог Торвальда/6_XreQNiTcw.mp3",
-                "Блог Торвальда", "Блог Торвальда",
-                "https://manage.letitplay.io/uploads/tracks/6_XreQNiTcw.jpg",
-                "Блог Торвальда", 1134000, 0, description = ""),
-                AudioTrack(10830, 60, "https://manage.letitplay.io/uploads/128_audiofiles/024-0047-_Почему_нужно_перестать_искать.mp3",
-                        "Почему нужно перестать искать хюгге, отказаться от путешествий и полюбить свою работу", "Жить интересно",
-                        "https://manage.letitplay.io/uploads/tracks/89ba46583db7285a551cf070273cb920.jpeg",
-                        "Жить интересно", 537626, 0, description = ""
-                )))
+        Log.i("DASHAB", "onCreate")
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
@@ -235,16 +236,17 @@ class MusicService : MediaBrowserServiceCompat() {
 
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON, null, applicationContext, MediaButtonReceiver::class.java)
 
-        mediaSession = MediaSessionCompat(this, "MusicService").apply {
-            setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
-            setCallback(mediaSessionCallback)
-            setMediaButtonReceiver(PendingIntent.getBroadcast(applicationContext, 0, mediaButtonIntent, 0))
-        }
-
+        mediaSession = MediaSessionCompat(this, "MusicService")
         sessionToken = mediaSession?.sessionToken
+        mediaSession?.setCallback(mediaSessionCallback)
+        mediaSession?.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+        mediaSession?.setMediaButtonReceiver(PendingIntent.getBroadcast(applicationContext, 0, mediaButtonIntent, 0))
+
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), DefaultTrackSelector(), DefaultLoadControl())
         exoPlayer.addListener(playerListener)
+
+        // registerCarConnectionReceiver()
     }
 
     override fun onDestroy() {
@@ -305,6 +307,25 @@ class MusicService : MediaBrowserServiceCompat() {
         mediaSession?.setMetadata(buildMetadata(metadataBuilder, audioTrack))
         lastInitializedTrack = audioTrack
         sendPlaylistInfoEvent()
+    }
+
+    fun createPlayList(): MutableList<MediaBrowserCompat.MediaItem> {
+        val metadataBuilder = MediaMetadataCompat.Builder()
+        var mediaPlaylist: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
+        var playlist = arrayListOf(AudioTrack(9874, 91,
+                "https://st1.letitplay.io/audio/Блог Торвальда/6_XreQNiTcw.mp3",
+                "Блог Торвальда", "Блог Торвальда",
+                "https://manage.letitplay.io/uploads/tracks/6_XreQNiTcw.jpg",
+                "Блог Торвальда", 1134000, 0, description = ""),
+                AudioTrack(10830, 60, "https://manage.letitplay.io/uploads/128_audiofiles/024-0047-_Почему_нужно_перестать_искать.mp3",
+                        "Почему нужно перестать искать хюгге, отказаться от путешествий и полюбить свою работу", "Жить интересно",
+                        "https://manage.letitplay.io/uploads/tracks/89ba46583db7285a551cf070273cb920.jpeg",
+                        "Жить интересно", 537626, 0, description = ""
+                ))
+        musicRepo = MusicRepo(playlist)
+        playlist.forEach { mediaPlaylist.add(MediaBrowserCompat.MediaItem(buildMetadata(metadataBuilder, it).description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)) }
+
+        return mediaPlaylist
     }
 
     private fun buildMetadata(builder: MediaMetadataCompat.Builder, audioTrack: AudioTrack?): MediaMetadataCompat {
@@ -416,10 +437,6 @@ class MusicService : MediaBrowserServiceCompat() {
             it.onRepoChanged(repo)
         }
     }
-
-    override fun onBind(intent: Intent?) = binder
-
-    inner class LocalBinder(val musicService: MusicService = this@MusicService) : Binder()
 
 
     interface RepoChangesListener {

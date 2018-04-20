@@ -6,6 +6,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.track_item.view.*
 
 
 class LikedTracksAdapter(
-        private val musicService: MusicService? = null,
+        private val musicService: AutoMusicService? = null,
         private val onClickItem: (Track) -> Unit
 ) : RecyclerView.Adapter<LikedTracksAdapter.ProfileItemHolder>() {
 

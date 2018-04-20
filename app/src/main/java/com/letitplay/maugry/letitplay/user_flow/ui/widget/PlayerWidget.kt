@@ -15,6 +15,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.FakeFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
@@ -96,7 +97,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         player_pager.currentItem=1
     }
 
-    fun setExpandedState(musicService: MusicService?) {
+    fun setExpandedState(musicService: AutoMusicService?) {
         isExpanded = true
         music_player_big.apply {
             mediaSession = musicService?.mediaSession

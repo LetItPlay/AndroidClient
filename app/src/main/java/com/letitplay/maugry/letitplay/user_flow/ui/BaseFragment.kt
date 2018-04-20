@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.GL_PROGRESS_DELAY
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.ProgressView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,7 +24,7 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
         return inflater.inflate(layoutId, container, false)
     }
 
-    protected val musicService: MusicService?
+    protected val musicService: AutoMusicService?
         get() = (activity?.application as App).musicService
 
 

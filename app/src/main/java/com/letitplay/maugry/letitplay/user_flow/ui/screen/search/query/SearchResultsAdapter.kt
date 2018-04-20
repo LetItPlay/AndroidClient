@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackAdapter
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
@@ -19,7 +20,7 @@ typealias ChannelVH = SearchResultsAdapter.ChannelSmallViewHolder
 typealias TrackVH = TrackAdapter.TrackItemHolder
 
 class SearchResultsAdapter(
-        private val musicService: MusicService?,
+        private val musicService: AutoMusicService?,
         private val onChannelClick: ((Channel) -> Unit),
         private val onTrackClick: (AudioTrack) -> Unit,
         private val onFollowClick: (ChannelWithFollow) -> Unit

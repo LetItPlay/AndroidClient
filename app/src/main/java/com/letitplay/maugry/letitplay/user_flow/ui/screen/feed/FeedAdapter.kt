@@ -5,13 +5,14 @@ import android.support.v7.util.DiffUtil
 import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.feed.FeedItemViewHolder
 import com.letitplay.maugry.letitplay.user_flow.business.feed.OnPlaylistActionsListener
 import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class FeedAdapter(
-        private val musicService: MusicService?,
+        private val musicService: AutoMusicService?,
         private val onClickItem: (TrackWithChannel) -> Unit,
         private val onLikeClick: (TrackWithChannel) -> Unit,
         private val onChannelTitleClick : (TrackWithChannel) -> Unit,

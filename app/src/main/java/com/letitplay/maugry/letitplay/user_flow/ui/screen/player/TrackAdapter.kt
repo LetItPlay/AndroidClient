@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
@@ -12,7 +13,7 @@ import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
 class TrackAdapter(
-        private val musicService: MusicService? = null,
+        private val musicService: AutoMusicService? = null,
         private val onClickItem: ((AudioTrack) -> Unit)
 ) : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 

@@ -7,6 +7,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
@@ -19,7 +20,7 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 
 
 class PlaylistAdapter(
-        private val musicService: MusicService? = null,
+        private val musicService: AutoMusicService? = null,
         private val onClickItem: (Track) -> Unit,
         private val onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
         private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit,
@@ -85,7 +86,7 @@ class PlaylistAdapter(
 
     inner class PlaylistItemHolder(
             parent: ViewGroup?,
-            musicService: MusicService?,
+            musicService: AutoMusicService?,
             onClickItem: (Track) -> Unit,
             onBeginSwipe: (SwipeLayout) -> Unit,
             onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
