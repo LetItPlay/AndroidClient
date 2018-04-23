@@ -21,6 +21,7 @@ import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.user_flow.AutoMusicService
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
@@ -55,7 +56,7 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
         ViewModelProvider(viewModelStore, ServiceLocator.viewModelFactory).get(PlayerViewModel::class.java)
     }
 
-    protected val musicService: MusicService?
+    protected val musicService: AutoMusicService?
         get() = (application as App).musicService
 
     val musicPlayerSmall: MusicPlayerSmall?
@@ -155,7 +156,6 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             small_player_swipe_layout.reset()
             skipToQueueItem(trackId)
         }
-
     }
 
     fun addTrackToStartRepo(track: AudioTrack) {

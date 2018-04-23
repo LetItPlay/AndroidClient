@@ -9,7 +9,10 @@ import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.ResultReceiver
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -54,10 +57,6 @@ open class MusicService : MediaBrowserServiceCompat() {
     private val repoListeners: MutableSet<RepoChangesListener> = mutableSetOf()
     private var initialPlaybackSpeed: Float = 1f
 
-
-    private var mCarConnectionReceiver: BroadcastReceiver? = null
-    private var mIsConnectedToCar: Boolean? = null
-
     private val stateBuilder: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
             .setActions(
                     PlaybackStateCompat.ACTION_PLAY
@@ -89,7 +88,6 @@ open class MusicService : MediaBrowserServiceCompat() {
         }
 
         override fun onPlay() {
-            Log.i("DASHAB", "onPlay")
             play(musicRepo?.currentAudioTrack)
         }
 
@@ -134,17 +132,13 @@ open class MusicService : MediaBrowserServiceCompat() {
         }
 
         override fun onSkipToQueueItem(id: Long) {
-            Log.i("DASHAB", "onSkipToQueueItem")
             play(musicRepo?.getAudioTrackAtId(id.toInt()))
         }
 
         override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-            Log.i("DASHAB", "onPlayFromMediaId")
-            play(AudioTrack(9874, 91,
-                    "https://st1.letitplay.io/audio/Блог Торвальда/6_XreQNiTcw.mp3",
-                    "Блог Торвальда", "Блог Торвальда",
-                    "https://manage.letitplay.io/uploads/tracks/6_XreQNiTcw.jpg",
-                    "Блог Торвальда", 1134000, 0, description = ""))
+            mediaId?.let {
+                play(musicRepo?.getAudioTrackAtId(it.toInt()))
+            }
         }
     }
 
@@ -195,7 +189,6 @@ open class MusicService : MediaBrowserServiceCompat() {
 
     override fun onLoadChildren(parentId: String,
                                 result: Result<MutableList<MediaBrowserCompat.MediaItem>>) {
-        result.sendResult(mutableListOf())
     }
 
     override fun onGetRoot(clientPackageName: String,
@@ -204,21 +197,8 @@ open class MusicService : MediaBrowserServiceCompat() {
         return BrowserRoot("root", null)
     }
 
-    private fun registerCarConnectionReceiver() {
-        val filter = IntentFilter("com.google.android.gms.car.media.STATUS")
-        mCarConnectionReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                val connectionEvent = intent.getStringExtra("media_connection_status")
-                mIsConnectedToCar = "media_connected" == connectionEvent.toLowerCase()
-            }
-        }
-        registerReceiver(mCarConnectionReceiver, filter)
-    }
-
-
     override fun onCreate() {
         super.onCreate()
-        Log.i("DASHAB", "onCreate")
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
@@ -245,8 +225,6 @@ open class MusicService : MediaBrowserServiceCompat() {
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(DefaultRenderersFactory(this), DefaultTrackSelector(), DefaultLoadControl())
         exoPlayer.addListener(playerListener)
-
-        // registerCarConnectionReceiver()
     }
 
     override fun onDestroy() {
@@ -296,7 +274,7 @@ open class MusicService : MediaBrowserServiceCompat() {
         }
     }
 
-    private fun initTrack(audioTrack: AudioTrack?) {
+    fun initTrack(audioTrack: AudioTrack?) {
         if (audioTrack != null) {
             val mediaSource = ExtractorMediaSource.Factory(DefaultDataSourceFactory(applicationContext, "user-agent"))
                     .setExtractorsFactory(DefaultExtractorsFactory())
@@ -309,26 +287,7 @@ open class MusicService : MediaBrowserServiceCompat() {
         sendPlaylistInfoEvent()
     }
 
-    fun createPlayList(): MutableList<MediaBrowserCompat.MediaItem> {
-        val metadataBuilder = MediaMetadataCompat.Builder()
-        var mediaPlaylist: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
-        var playlist = arrayListOf(AudioTrack(9874, 91,
-                "https://st1.letitplay.io/audio/Блог Торвальда/6_XreQNiTcw.mp3",
-                "Блог Торвальда", "Блог Торвальда",
-                "https://manage.letitplay.io/uploads/tracks/6_XreQNiTcw.jpg",
-                "Блог Торвальда", 1134000, 0, description = ""),
-                AudioTrack(10830, 60, "https://manage.letitplay.io/uploads/128_audiofiles/024-0047-_Почему_нужно_перестать_искать.mp3",
-                        "Почему нужно перестать искать хюгге, отказаться от путешествий и полюбить свою работу", "Жить интересно",
-                        "https://manage.letitplay.io/uploads/tracks/89ba46583db7285a551cf070273cb920.jpeg",
-                        "Жить интересно", 537626, 0, description = ""
-                ))
-        musicRepo = MusicRepo(playlist)
-        playlist.forEach { mediaPlaylist.add(MediaBrowserCompat.MediaItem(buildMetadata(metadataBuilder, it).description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)) }
-
-        return mediaPlaylist
-    }
-
-    private fun buildMetadata(builder: MediaMetadataCompat.Builder, audioTrack: AudioTrack?): MediaMetadataCompat {
+    fun buildMetadata(builder: MediaMetadataCompat.Builder, audioTrack: AudioTrack?): MediaMetadataCompat {
         return builder.putString(MediaMetadataCompat.METADATA_KEY_ART_URI, audioTrack?.imageUrl)
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, audioTrack?.id?.toString())
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, audioTrack?.url)
@@ -432,12 +391,13 @@ open class MusicService : MediaBrowserServiceCompat() {
     fun addRepoChangesListener(listener: RepoChangesListener) = repoListeners.add(listener)
     fun removeRepoChangesListener(listener: RepoChangesListener) = repoListeners.remove(listener)
 
-    private fun notifyRepoChangedListeners(repo: MusicRepo?) {
+    fun notifyRepoChangedListeners(repo: MusicRepo?) {
         repoListeners.forEach {
             it.onRepoChanged(repo)
         }
     }
 
+    override fun onBind(intent: Intent?) = super.onBind(intent)
 
     interface RepoChangesListener {
         fun onRepoChanged(repo: MusicRepo?)
