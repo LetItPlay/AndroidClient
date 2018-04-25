@@ -31,6 +31,32 @@ class PreferenceHelper(context: Context) {
             }
         }
 
+    var userToken: String?
+        get() {
+            return sharedPreferences.getString(APP_SETTINGS_USER_TOKEN, null)
+        }
+        set(value) {
+            if (value != null) {
+                sharedPreferences
+                        .edit()
+                        .putString(APP_SETTINGS_USER_TOKEN, value)
+                        .apply()
+            }
+        }
+
+    var userJwt: String?
+        get() {
+            return sharedPreferences.getString(APP_SETTINGS_USER_JWT, null)
+        }
+        set(value) {
+            if (value != null) {
+                sharedPreferences
+                        .edit()
+                        .putString(APP_SETTINGS_USER_JWT, value)
+                        .apply()
+            }
+        }
+
     var playbackSpeed: PlaybackSpeed
         get() = PlaybackSpeed(sharedPreferences.getFloat(PLAYBACK_SPEED, DEFAULT_PLAYBACK_SPEED.value))
         set(value) {
@@ -64,6 +90,8 @@ class PreferenceHelper(context: Context) {
     companion object {
         private const val APP_SETTINGS = "APP_SETTINGS"
         private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
+        private const val APP_SETTINGS_USER_TOKEN = "APP_SETTINGS_USER_TOKEN"
+        private const val APP_SETTINGS_USER_JWT = "APP_SETTINGS_USER_JWT"
         private const val NO_VALUE = "NO_VALUE"
         private const val PLAYBACK_SPEED = "APP_PLAYBACK_SPEED"
         const val PROFILE_FILENAME = "user_avatar.jpg"

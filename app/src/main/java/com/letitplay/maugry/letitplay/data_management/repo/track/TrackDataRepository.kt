@@ -2,8 +2,9 @@ package com.letitplay.maugry.letitplay.data_management.repo.track
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayDeleteApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
-import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPutApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
@@ -19,6 +20,8 @@ class TrackDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val postApi: LetItPlayPostApi,
+        private val putApi: LetItPlayPutApi,
+        private val deleteApi: LetItPlayDeleteApi,
         private val schedulerProvider: SchedulerProvider
 ) : TrackRepository {
 
@@ -29,16 +32,22 @@ class TrackDataRepository(
         return isLiked
                 .flatMap {
                     val currentIsLiked = it
-                    val (request, handleLikeDb) = when {
-                        currentIsLiked -> UpdateRequestBody.UNLIKE to { likeDao.deleteLikeWithTrackId(trackId) }
-                        else -> UpdateRequestBody.LIKE to {
-                            channelDao.updateOrInsertChannel(listOf(track.channel))
-                            trackDao.insertTracks(listOf(track.track))
-                            likeDao.insert(Like(trackId))
-                        }
+
+                    when (currentIsLiked) {
+                        true -> deleteApi.unLikeTracks(trackId)
+                                .map {
+                                    it to { likeDao.deleteLikeWithTrackId(trackId) }
+                                }
+
+                        else -> putApi.updateFavouriteTracks(trackId)
+                                .map {
+                                    it to {
+                                        channelDao.updateOrInsertChannel(listOf(track.channel))
+                                        trackDao.insertTracks(listOf(track.track))
+                                        likeDao.insert(Like(trackId))
+                                    }
+                                }
                     }
-                    postApi.updateFavouriteTracks(trackId, request)
-                            .map { it to handleLikeDb }
                 }
                 .doOnSuccess {
                     db.runInTransaction {

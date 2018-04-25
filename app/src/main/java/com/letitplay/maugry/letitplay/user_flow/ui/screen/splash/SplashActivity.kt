@@ -4,11 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import java.util.*
 
 class SplashActivity : AppCompatActivity() {
+
     private val prefHelper by lazy { PreferenceHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
             }
             handleDeeplinking(intent)
         } else {
-            navigate()
+            authorization()
         }
     }
 
@@ -41,6 +44,35 @@ class SplashActivity : AppCompatActivity() {
 
     private fun setDefaultLanguage() {
         prefHelper.contentLanguage = Language.EN
+    }
+
+    private fun authorization() {
+        val prefHelper = this.let { PreferenceHelper(it) }
+        if (prefHelper.userToken == null) prefHelper.userToken = UUID.randomUUID().toString()
+
+        if (prefHelper.userJwt == null) {
+            ServiceLocator.profileRepository
+                    .signUp(prefHelper.userToken!!, "Dasha")
+                    .doOnSuccess {
+                        prefHelper.userJwt = it.headers().get("Authorization")
+                        navigate()
+                    }
+                    .doOnError {
+                        navigate()
+                    }
+                    .subscribe()
+        } else {
+            ServiceLocator.profileRepository
+                    .signIn(prefHelper.userToken!!, "Dasha")
+                    .doOnSuccess {
+                        prefHelper.userJwt = it.headers().get("Authorization")
+                        navigate()
+                    }
+                    .doOnError {
+                        navigate()
+                    }
+                    .subscribe()
+        }
     }
 
     private fun navigate() {

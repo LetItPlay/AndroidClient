@@ -2,7 +2,9 @@ package com.letitplay.maugry.letitplay.data_management.repo.channel
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayDeleteApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPutApi
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.*
@@ -19,6 +21,8 @@ class ChannelDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val postApi: LetItPlayPostApi,
+        private val putApi: LetItPlayPutApi,
+        private val deleteApi: LetItPlayDeleteApi,
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
@@ -67,15 +71,16 @@ class ChannelDataRepository(
         return isFollowing
                 .flatMap {
                     val currentIsFollowing = it
-                    val (request, handleFollowDb) = when {
-                        currentIsFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.id) }
-                        else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channelId)) }
+                    when(currentIsFollowing){
+                        true -> putApi.updateChannelFollowers(channelId)
+                                .map { it to { followDao.deleteFollowWithChannelId(channelData.id) } }
+                        else -> deleteApi.unFollowChannel(channelId)
+                                .map { it to { followDao.insertFollow(Follow(channelId)) } }
+
                     }
-                    postApi.updateChannelFollowers(channelId, request)
-                            .map { it to handleFollowDb }
                 }
                 .doOnSuccess {
-                    val channelModel = toChannelModel(it.first)
+                    val channelModel = it.first
                     db.runInTransaction {
                         db.channelDao().updateOrInsertChannel(listOf(channelModel))
                         it.second()
