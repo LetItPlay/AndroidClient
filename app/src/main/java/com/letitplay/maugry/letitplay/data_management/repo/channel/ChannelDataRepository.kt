@@ -72,9 +72,9 @@ class ChannelDataRepository(
                 .flatMap {
                     val currentIsFollowing = it
                     when(currentIsFollowing){
-                        true -> putApi.updateChannelFollowers(channelId)
+                        true -> deleteApi.unFollowChannel(channelId)
                                 .map { it to { followDao.deleteFollowWithChannelId(channelData.id) } }
-                        else -> deleteApi.unFollowChannel(channelId)
+                        else -> putApi.updateChannelFollowers(channelId)
                                 .map { it to { followDao.insertFollow(Follow(channelId)) } }
 
                     }
