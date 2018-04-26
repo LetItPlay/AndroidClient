@@ -31,7 +31,7 @@ private val logInterceptor = HttpLoggingInterceptor().apply {
 
 private val httpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
-        .addInterceptor { chain ->
+         .addInterceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder().header("Authorization", ServiceLocator.preferenceHelper.userJwt)
             val request = requestBuilder.build()

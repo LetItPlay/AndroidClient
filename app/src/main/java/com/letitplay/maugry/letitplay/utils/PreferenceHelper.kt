@@ -44,9 +44,9 @@ class PreferenceHelper(context: Context) {
             }
         }
 
-    var userJwt: String?
+    var userJwt: String
         get() {
-            return sharedPreferences.getString(APP_SETTINGS_USER_JWT, null)
+            return sharedPreferences.getString(APP_SETTINGS_USER_JWT, "")
         }
         set(value) {
             if (value != null) {
