@@ -31,7 +31,7 @@ private val logInterceptor = HttpLoggingInterceptor().apply {
 
 private val httpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
-         .addInterceptor { chain ->
+        .addInterceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder().header("Authorization", ServiceLocator.preferenceHelper.userJwt)
             val request = requestBuilder.build()
@@ -164,6 +164,9 @@ interface LetItPlayPutApi {
 
     @PUT("like/{id}")
     fun updateFavouriteTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
+
+    @PUT("/report/track/{id}")
+    fun repotOnTrack(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
 }
 
 interface LetItPlayDeleteApi {
@@ -173,5 +176,8 @@ interface LetItPlayDeleteApi {
 
     @DELETE("like/{id}")
     fun unLikeTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
+
+    @DELETE("/report/track/{id}")
+    fun repotOnTrack(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
 
 }

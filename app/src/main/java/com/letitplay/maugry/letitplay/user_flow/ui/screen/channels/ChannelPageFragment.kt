@@ -51,10 +51,9 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 }
                 channel_page_follow.isEnabled = true
                 channel_page_follow.isFollowing = it.isFollowing
-
                 channel_page_share?.let {
                     it.setOnClickListener {
-                        SharedHelper.channelShare(it.context, name, id)
+                        SharedHelper.channelShare(it.context, channelData.channel.name, channelData.channel.id)
                     }
                 }
             }

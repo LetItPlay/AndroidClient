@@ -29,11 +29,10 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun handleDeeplinking(intent: Intent) {
-        val data = intent.data
-        val path = data.path
-        val lastSegment = data.lastPathSegment
+        val data = intent.dataString
+        val lastSegment = data.split("=").last()
         // TODO: Parse query
-        val isChannelLink = path.contains("station")
+        val isChannelLink = data.contains("channel")
         val startIntent = Intent(this, NavigationActivity::class.java)
                 .apply {
                     val key = if (isChannelLink) NavigationActivity.ARG_CHANNEL_ID else NavigationActivity.ARG_TRACK_ID
@@ -50,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
         val prefHelper = this.let { PreferenceHelper(it) }
         if (prefHelper.userToken == null) prefHelper.userToken = UUID.randomUUID().toString()
 
-        if (prefHelper.userJwt == null) {
+        if (prefHelper.userJwt.isEmpty()) {
             ServiceLocator.profileRepository
                     .signUp(prefHelper.userToken!!, "Dasha")
                     .doOnSuccess {
