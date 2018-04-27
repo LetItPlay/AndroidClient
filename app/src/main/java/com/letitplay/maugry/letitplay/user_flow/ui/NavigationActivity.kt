@@ -37,6 +37,7 @@ class NavigationActivity : BaseActivity(R.layout.navigation_main) {
             trackIdToPlay != UNDEFINED_ID -> {
                 Timber.d("Intent to play track $trackIdToPlay")
                 playerVm.fetchAndPlay(trackIdToPlay) {
+                    navigateTo(ChannelPageKey(channelIdToShow))
                     updateRepo(trackIdToPlay, MusicRepo(mutableListOf(it.toAudioTrack())), listOf(it))
                 }
             }

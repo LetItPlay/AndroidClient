@@ -8,6 +8,7 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
+import com.letitplay.maugry.letitplay.utils.ext.getUrlParams
 import java.util.*
 
 class SplashActivity : AppCompatActivity() {
@@ -30,13 +31,12 @@ class SplashActivity : AppCompatActivity() {
 
     private fun handleDeeplinking(intent: Intent) {
         val data = intent.dataString
-        val lastSegment = data.split("=").last()
-        // TODO: Parse query
-        val isChannelLink = data.contains("channel")
+        val urlParams = data.getUrlParams()
+        val isTracklLink = data.contains("track")
         val startIntent = Intent(this, NavigationActivity::class.java)
                 .apply {
-                    val key = if (isChannelLink) NavigationActivity.ARG_CHANNEL_ID else NavigationActivity.ARG_TRACK_ID
-                    putExtra(key, lastSegment.toInt())
+                    putExtra(NavigationActivity.ARG_CHANNEL_ID, urlParams["channel"])
+                    if (isTracklLink) putExtra(NavigationActivity.ARG_TRACK_ID, urlParams["track"])
                 }
         startActivity(startIntent)
     }

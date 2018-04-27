@@ -45,7 +45,7 @@ class TrackAdapter(
                     onClick(track)
                 }
                 track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, track.title, track.channelTitle, track.id)
+                    SharedHelper.showTrackContextMenu(context, track.title, track.channelTitle, track.id,track.channelId)
                 }
                 track_playing_now.mediaSession = musicService?.mediaSession
             }

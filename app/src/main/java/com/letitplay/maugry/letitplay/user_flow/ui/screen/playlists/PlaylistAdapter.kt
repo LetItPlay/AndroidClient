@@ -119,7 +119,7 @@ class PlaylistAdapter(
                 })
 
                 track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id)
+                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id, trackData.track.stationId)
                 }
 
                 playlist_right_view.setOnClickListener {

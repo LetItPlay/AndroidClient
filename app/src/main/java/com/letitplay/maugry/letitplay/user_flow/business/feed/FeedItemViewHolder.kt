@@ -1,16 +1,13 @@
 package com.letitplay.maugry.letitplay.user_flow.business.feed
 
-import android.support.design.widget.BottomSheetDialog
 import android.support.transition.TransitionManager
 import android.support.v4.view.GestureDetectorCompat
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.RecyclerView
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
@@ -21,8 +18,6 @@ import com.letitplay.maugry.letitplay.utils.ext.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
 import kotlinx.android.synthetic.main.view_feed_card_info.view.*
-import kotlinx.android.synthetic.main.view_language_dialog.view.*
-import kotlinx.android.synthetic.main.view_track_dialog.view.*
 import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
 import ru.rambler.libs.swipe_layout.SwipeLayout
 
@@ -31,7 +26,7 @@ class FeedItemViewHolder(
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
-        onChannelTitleClick : (TrackWithChannel) -> Unit,
+        onChannelTitleClick: (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
@@ -70,7 +65,7 @@ class FeedItemViewHolder(
                 hideInfo()
             }
             feed_other.setOnClickListener {
-                SharedHelper.showTrackContextMenu(context,feedData.track.title,feedData.channel.name,feedData.track.id)
+                SharedHelper.showTrackContextMenu(context, feedData.track.title, feedData.channel.name, feedData.track.id, feedData.track.stationId)
             }
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -78,7 +73,7 @@ class FeedItemViewHolder(
                 }
             }
             feed_title_container.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION){
+                if (adapterPosition != RecyclerView.NO_POSITION) {
                     onChannelTitleClick(feedData)
                 }
             }

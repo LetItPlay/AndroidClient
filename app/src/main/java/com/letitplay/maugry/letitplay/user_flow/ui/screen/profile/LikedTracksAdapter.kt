@@ -43,23 +43,25 @@ class LikedTracksAdapter(
 
     class ProfileItemHolder(parent: ViewGroup?) : BaseViewHolder(parent, R.layout.track_item) {
         lateinit var trackData: TrackWithChannel
-        init{
+
+        init {
             itemView.apply {
                 track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id)
+                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id, trackData.track.stationId)
                 }
             }
         }
+
         fun update(trackData: TrackWithChannel) {
             this.trackData = trackData
             itemView.apply {
-                    track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
-                    track_playing_now.trackListenerCount = trackData.track.listenCount
-                    track_playing_now.trackId = trackData.track.id.toString()
-                    channel_name.text = trackData.channel.name
-                    track_time.text = trackData.track.trackLengthShort
-                    track_name.text = trackData.track.title
-                    track_logo.loadImage(trackData.track.coverUrl, placeholder = R.drawable.profile_placeholder)
+                track_last_seen.text = DateHelper.getLongPastDate(trackData.track.publishedAt, context)
+                track_playing_now.trackListenerCount = trackData.track.listenCount
+                track_playing_now.trackId = trackData.track.id.toString()
+                channel_name.text = trackData.channel.name
+                track_time.text = trackData.track.trackLengthShort
+                track_name.text = trackData.track.title
+                track_logo.loadImage(trackData.track.coverUrl, placeholder = R.drawable.profile_placeholder)
             }
         }
     }
