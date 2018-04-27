@@ -26,6 +26,7 @@ class FeedItemViewHolder(
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
+        onOtherClick: (TrackWithChannel, Int) -> Unit,
         onChannelTitleClick: (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?

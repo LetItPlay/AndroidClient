@@ -99,7 +99,7 @@ class ChannelDataRepository(
 
     override fun loadChannels(): Completable {
         return api.channels()
-                .doOnSuccess(db.channelDao()::updateOrInsertChannel)
+                .doOnSuccess{it -> db.channelDao()::updateOrInsertChannel}
                 .subscribeOn(schedulerProvider.io())
                 .toCompletable()
     }

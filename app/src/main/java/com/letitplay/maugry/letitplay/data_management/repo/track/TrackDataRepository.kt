@@ -24,6 +24,9 @@ class TrackDataRepository(
         private val deleteApi: LetItPlayDeleteApi,
         private val schedulerProvider: SchedulerProvider
 ) : TrackRepository {
+    override fun report(track: TrackWithChannel): Completable {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun like(track: TrackWithChannel): Completable {
         val trackId = track.track.id

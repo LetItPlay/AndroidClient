@@ -33,7 +33,9 @@ object SharedHelper {
     }
 
 
-    fun showTrackContextMenu(ctx: Context, trackTitle: String?, channelTitle: String?, trackId: Int?, channelId: Int?) {
+    fun showTrackContextMenu(ctx: Context, trackTitle: String?,
+                             channelTitle: String?,
+                             trackId: Int?, channelId: Int?) {
         BottomSheetDialog(ctx).apply {
             val dialogView = layoutInflater.inflate(R.layout.view_track_dialog, null)
             dialogView.share_button.setOnClickListener {
@@ -43,10 +45,11 @@ object SharedHelper {
             dialogView.report_button.setOnClickListener {
                 AlertDialog.Builder(ctx).apply {
                     setTitle("Причина")
-                    setItems(arrayOf("Спам", "Контент для взрослых", "Жестокий контент", "Отмена"), object : DialogInterface.OnClickListener {
+                    setItems(R.array.report_reason, object : DialogInterface.OnClickListener {
                         override fun onClick(p0: DialogInterface?, p1: Int) {
+                            when(p1){
 
-
+                            }
                         }
 
                     })

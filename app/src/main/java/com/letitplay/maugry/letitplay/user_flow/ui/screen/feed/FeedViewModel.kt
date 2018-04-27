@@ -64,6 +64,10 @@ class FeedViewModel(
         }
     }
 
+    fun onReportClick(trackData: TrackWithChannel, reason:Int){
+
+    }
+
     fun onSwipeTrackToTop(trackData: TrackWithChannel) {
         trackRepository.swipeTrackToTop(trackData)
                 .subscribe()
