@@ -30,6 +30,7 @@ class FeedViewModel(
     )
 
     private var likeDisposable: Disposable? = null
+    private var reportDisposable: Disposable? = null
     private val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
     private val feeds by lazy { repoResult.pagedList }
     private val noFollowedChannels by lazy {
@@ -64,7 +65,16 @@ class FeedViewModel(
         }
     }
 
-    fun onReportClick(trackData: TrackWithChannel, reason:Int){
+    fun onReportClick(trackData: TrackWithChannel, reason: Int) {
+        if (reportDisposable == null || reportDisposable!!.isDisposed) {
+            reportDisposable = trackRepository.report(trackData)
+                    .doOnComplete {
+
+                    }
+                    .subscribe({}, {
+                        Timber.e(it, "Error when liking")
+                    })
+        }
 
     }
 

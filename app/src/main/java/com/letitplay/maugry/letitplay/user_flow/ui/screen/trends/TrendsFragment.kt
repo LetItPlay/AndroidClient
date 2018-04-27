@@ -116,6 +116,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
 
     private fun onOtherClick(track: TrackWithChannel, reason: Int) {
         if (swipe_refresh.isRefreshing) return
+        vm.onReportClick(track, reason)
     }
 
     private fun onChannelTitleClick(trackData: TrackWithChannel) {

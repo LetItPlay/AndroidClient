@@ -39,7 +39,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     private val REQUEST_IMAGE_CAPTURE = 1
 
     private val likedTracksListAdapter: LikedTracksAdapter by lazy {
-        LikedTracksAdapter(musicService, ::playTrack)
+        LikedTracksAdapter(musicService, ::playTrack, ::onOtherClick)
     }
 
     private val vm by lazy {
@@ -148,6 +148,10 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList())
             navigationActivity.updateRepo(track.id, profileRepo, it)
         }
+    }
+
+    private fun onOtherClick(trackData: TrackWithChannel, reason: Int) {
+        vm.onReportClick(trackData, reason)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -4,7 +4,9 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
@@ -13,7 +15,6 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.BeginSwipeHandler
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.gone
@@ -21,13 +22,12 @@ import com.letitplay.maugry.letitplay.utils.ext.hide
 import com.letitplay.maugry.letitplay.utils.ext.show
 import kotlinx.android.synthetic.main.user_playlist_fragment.*
 import ru.rambler.libs.swipe_layout.SwipeLayout
-import timber.log.Timber
 
 
 class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
     private val playlistAdapter: PlaylistAdapter by lazy {
-        PlaylistAdapter(musicService, ::playTrack, ::onSwipeReached, ::onRemoveClick, ::onPlaylistClear)
+        PlaylistAdapter(musicService, ::playTrack, ::onOtherClick, ::onSwipeReached, ::onRemoveClick, ::onPlaylistClear)
     }
 
     private var playlistsRepo: MusicRepo? = null
@@ -116,4 +116,9 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
             navigationActivity.updateRepo(track.id, playlistsRepo, it)
         }
     }
+
+    private fun onOtherClick(trackData: TrackWithChannel, reason: Int) {
+        vm.onReportClick(trackData, reason)
+    }
+
 }

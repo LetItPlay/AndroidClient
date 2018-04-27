@@ -178,6 +178,6 @@ interface LetItPlayDeleteApi {
     fun unLikeTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
 
     @DELETE("/report/track/{id}")
-    fun repotOnTrack(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
+    fun unRepotOnTrack(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
 
 }

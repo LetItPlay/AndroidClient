@@ -66,7 +66,7 @@ class FeedItemViewHolder(
                 hideInfo()
             }
             feed_other.setOnClickListener {
-                SharedHelper.showTrackContextMenu(context, feedData.track.title, feedData.channel.name, feedData.track.id, feedData.track.stationId)
+                SharedHelper.showTrackContextMenu(context, feedData, onOtherClick)
             }
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {

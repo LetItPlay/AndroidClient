@@ -74,12 +74,14 @@ class ViewModelFactory(
                     )
                 isAssignableFrom(ProfileViewModel::class.java) ->
                     ProfileViewModel(
+                            trackRepository,
                             profileRepository,
                             schedulerProvider
                     )
                 isAssignableFrom(PlaylistsViewModel::class.java) ->
                     PlaylistsViewModel(
                             playlistRepository,
+                            trackRepository,
                             schedulerProvider
                     )
                 isAssignableFrom(CompilationViewModel::class.java) ->

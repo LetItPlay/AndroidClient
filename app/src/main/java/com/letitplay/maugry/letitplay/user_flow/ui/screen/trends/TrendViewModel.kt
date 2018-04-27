@@ -29,6 +29,7 @@ class TrendViewModel(
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), LifecycleObserver {
     private var likeDisposable: Disposable? = null
+    private var reportDisposable: Disposable? = null
 
     private val repoResult by lazy { trendRepository.trends(compositeDisposable) }
     val trends by lazy { repoResult.pagedList }
@@ -70,6 +71,16 @@ class TrendViewModel(
                         Timber.e(it, "Error while liking")
                     })
         }
+    }
+
+    fun onReportClick(trackData: TrackWithChannel, reason: Int) {
+        if (reportDisposable == null || reportDisposable!!.isDisposed) {
+            reportDisposable = trackRepository.report(trackData)
+                    .subscribe({}, {
+                        Timber.e(it, "Error when liking")
+                    })
+        }
+
     }
 
     fun onSwipeTrackToTop(trackData: TrackWithChannel) {
