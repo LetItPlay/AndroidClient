@@ -68,6 +68,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                     Language.RU -> R.string.language_ru
                     Language.EN -> R.string.language_en
                     Language.FR -> R.string.language_fr
+                    Language.ZH -> R.string.language_zh
                 })
             }
         })
@@ -102,6 +103,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 dialogView.rus_button.setOnClickListener(onLanguageClick)
                 dialogView.eng_button.setOnClickListener(onLanguageClick)
                 dialogView.fr_button.setOnClickListener(onLanguageClick)
+                dialogView.zh_button.setOnClickListener(onLanguageClick)
                 setContentView(dialogView)
                 show()
             }

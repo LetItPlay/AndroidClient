@@ -87,10 +87,12 @@
     <string name="language_en">Language: English</string>
     <string name="language_ru">Language: Русский</string>
     <string name="language_fr">Language: Français</string>
+    <string name="language_zh">Language: China</string>
 
     <string name="english" translatable="false">English</string>
     <string name="russian" translatable="false">Русский</string>
     <string name="french" translatable="false">Français</string>
+    <string name="china" translatable="false">China</string>
 
     <string name="filter_view_http_letitplay">filter_view_http_letitplay</string>
 </resources>

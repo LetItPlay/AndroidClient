@@ -5,11 +5,9 @@ import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayDeleteApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPutApi
-import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.*
 import com.letitplay.maugry.letitplay.data_management.model.embeddedItemToTrackWithChannels
-import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import io.reactivex.Completable
@@ -71,7 +69,7 @@ class ChannelDataRepository(
         return isFollowing
                 .flatMap {
                     val currentIsFollowing = it
-                    when(currentIsFollowing){
+                    when (currentIsFollowing) {
                         true -> deleteApi.unFollowChannel(channelId)
                                 .map { it to { followDao.deleteFollowWithChannelId(channelData.id) } }
                         else -> putApi.updateChannelFollowers(channelId)
@@ -99,7 +97,7 @@ class ChannelDataRepository(
 
     override fun loadChannels(): Completable {
         return api.channels()
-                .doOnSuccess{it -> db.channelDao()::updateOrInsertChannel}
+                .doOnSuccess(db.channelDao()::updateOrInsertChannel)
                 .subscribeOn(schedulerProvider.io())
                 .toCompletable()
     }
