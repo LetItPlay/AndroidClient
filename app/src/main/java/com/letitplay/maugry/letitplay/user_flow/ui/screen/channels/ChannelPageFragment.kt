@@ -43,6 +43,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                     channel_page_banner.loadImage(imageUrl, placeholder = R.drawable.channel_banner)
                     channel_page_preview.loadCircularImage(imageUrl)
                     channel_page_title.text = name
+                    channel_page_description.text = channelDescription
                     channel_page_followers.text = subscriptionCount.toString()
 
                     val tags = tags

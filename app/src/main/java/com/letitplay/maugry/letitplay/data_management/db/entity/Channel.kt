@@ -12,6 +12,8 @@ data class Channel(
         @ColumnInfo(name = "channel_lang")
         val lang: Language,
         val name: String,
+        @SerializedName("Description")
+        val channelDescription: String?,
         @SerializedName("ImageURL")
         val imageUrl: String?,
         val subscriptionCount: Int = 0,

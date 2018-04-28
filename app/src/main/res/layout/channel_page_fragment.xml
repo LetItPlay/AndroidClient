@@ -34,6 +34,7 @@
                 android:id="@+id/channel_page_info_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#FFF1F1"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,10 +44,9 @@
                     android:id="@+id/channel_page_preview"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="6dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/player_track_background"
+                    android:layout_marginTop="6dp"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -87,14 +87,14 @@
                     android:paddingEnd="8dp"
                     android:paddingStart="6dp"
                     android:paddingTop="8dp"
-                    app:layout_constraintEnd_toStartOf="@id/channel_page_follow"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/channel_page_follow"
                     app:layout_constraintTop_toTopOf="parent">
-                    
+
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="15dp"
-                        android:src="@drawable/channel_share"/>
+                        android:src="@drawable/channel_share" />
 
                 </FrameLayout>
 
@@ -138,16 +138,15 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
+                android:text="@string/channel_page_description"
                 android:textColor="#020202"
                 android:textSize="14dp"
                 android:textStyle="normal"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_tag_container"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/channel_page_title"
-                tools:text="@string/channel_page_description" />
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_title" />
 
             <com.letitplay.maugry.letitplay.user_flow.ui.widget.TagCloudView
                 android:id="@+id/channel_page_tag_container"
