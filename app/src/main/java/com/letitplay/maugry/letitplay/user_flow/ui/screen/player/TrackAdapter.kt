@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.track_item.view.*
 
 class TrackAdapter(
         private val musicService: MusicService? = null,
+        private val onOtherClick: (Int, Int) -> Unit,
         private val onClickItem: ((AudioTrack) -> Unit)
 ) : RecyclerView.Adapter<TrackAdapter.TrackItemHolder>() {
 
@@ -29,12 +30,13 @@ class TrackAdapter(
     override fun getItemCount(): Int = data.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackItemHolder {
-        return TrackItemHolder(parent, onClickItem, musicService)
+        return TrackItemHolder(parent, onClickItem, onOtherClick, musicService)
     }
 
     class TrackItemHolder(
             parent: ViewGroup?,
             onClick: (AudioTrack) -> Unit,
+            onOtherClick: (Int, Int) -> Unit,
             musicService: MusicService?
     ) : BaseViewHolder(parent, R.layout.track_item) {
         private lateinit var track: AudioTrack
@@ -45,7 +47,7 @@ class TrackAdapter(
                     onClick(track)
                 }
                 track_other.setOnClickListener {
-                    //SharedHelper.showTrackContextMenu(context, track, onOtherClick)
+                    SharedHelper.showTrackContextMenu(context, track.title, track.channelTitle, track.id, track.channelId, onOtherClick)
                 }
                 track_playing_now.mediaSession = musicService?.mediaSession
             }

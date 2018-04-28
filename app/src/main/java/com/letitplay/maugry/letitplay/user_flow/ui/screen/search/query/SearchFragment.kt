@@ -30,6 +30,7 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
     private val resultsAdapter by lazy {
         SearchResultsAdapter(
                 musicService,
+                ::onOtherClick,
                 ::onChannelClick,
                 ::onTrackClick,
                 ::onChannelFollowClick
@@ -95,6 +96,10 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
                 .map(SearchResultItem.TrackItem::track)
         resultsMusicRepo = MusicRepo(tracks.map(TrackWithChannel::toAudioTrack).toMutableList())
         navigationActivity.updateRepo(track.id, resultsMusicRepo, tracks)
+    }
+
+    private fun onOtherClick(trackId: Int, reason: Int){
+        vm.onReportClick(trackId, reason)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

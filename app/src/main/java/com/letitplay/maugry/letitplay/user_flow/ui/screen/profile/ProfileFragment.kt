@@ -150,8 +150,8 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         }
     }
 
-    private fun onOtherClick(trackData: TrackWithChannel, reason: Int) {
-        vm.onReportClick(trackData, reason)
+    private fun onOtherClick(trackId:Int, reason: Int) {
+        vm.onReportClick(trackId, reason)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

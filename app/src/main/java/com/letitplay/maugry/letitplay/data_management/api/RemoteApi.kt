@@ -166,7 +166,8 @@ interface LetItPlayPutApi {
     fun updateFavouriteTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
 
     @PUT("/report/track/{id}")
-    fun repotOnTrack(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
+    @FormUrlEncoded
+    fun repotOnTrack(@Path("id") idTrack: Int, @Field("reason") reason: Int): Single<TrackWithEmbeddedChannel>
 }
 
 interface LetItPlayDeleteApi {
@@ -176,8 +177,5 @@ interface LetItPlayDeleteApi {
 
     @DELETE("like/{id}")
     fun unLikeTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
-
-    @DELETE("/report/track/{id}")
-    fun unRepotOnTrack(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
 
 }

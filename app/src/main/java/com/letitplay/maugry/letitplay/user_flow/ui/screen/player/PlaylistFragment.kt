@@ -23,7 +23,7 @@ class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)!!
         val tracksRecycler = view.findViewById<RecyclerView>(R.id.tracks_list)
-        trackAdapter = TrackAdapter(musicService, ::playTrack)
+        trackAdapter = TrackAdapter(musicService, ::onOtherClick, ::playTrack)
         tracksRecycler.apply {
             adapter = trackAdapter
             layoutManager = LinearLayoutManager(context)
@@ -47,6 +47,11 @@ class PlaylistFragment : BaseFragment(R.layout.playlist_fragment), MusicService.
             return
         }
     }
+
+    private fun onOtherClick(trackId: Int, reason: Int) {
+        // vm.onReportClick(trackId, reason)
+    }
+
 
     override fun onRepoChanged(repo: MusicRepo?) {
         Timber.d("Music repo changed")

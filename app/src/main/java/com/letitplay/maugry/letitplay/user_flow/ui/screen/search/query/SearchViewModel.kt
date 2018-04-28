@@ -9,16 +9,22 @@ import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.player.PlayerRepository
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
+import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
 
 
 class SearchViewModel(
+        private val trackRepository: TrackRepository,
         private val searchRepository: SearchRepository,
         private val channelRepository: ChannelRepository,
         private val playerRepository: PlayerRepository
-): BaseViewModel() {
+) : BaseViewModel() {
+
+    private var reportDisposable: Disposable? = null
     private val submitClicks = MutableLiveData<Any>()
     val query = MutableLiveData<String>()
     val isLoading = MutableLiveData<Boolean>()
@@ -44,6 +50,15 @@ class SearchViewModel(
 
     fun queryChanged(query: String?) {
         this.query.postValue(query)
+    }
+
+    fun onReportClick(trackId: Int, reason: Int) {
+        if (reportDisposable == null || reportDisposable!!.isDisposed) {
+            reportDisposable = trackRepository.report(trackId,reason)
+                    .subscribe({}, {
+                        Timber.e(it, "Error when liking")
+                    })
+        }
     }
 
     fun onListen(track: AudioTrack) {

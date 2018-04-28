@@ -21,7 +21,7 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 class PlaylistAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (Track) -> Unit,
-        private val onOtherClick: (TrackWithChannel, Int) -> Unit,
+        private val onOtherClick: (Int, Int) -> Unit,
         private val onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
         private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit,
         private val onClearAll: () -> Unit
@@ -89,7 +89,7 @@ class PlaylistAdapter(
             parent: ViewGroup?,
             musicService: MusicService?,
             onClickItem: (Track) -> Unit,
-            onOtherClick: (TrackWithChannel, Int) -> Unit,
+            onOtherClick: (Int, Int) -> Unit,
             onBeginSwipe: (SwipeLayout) -> Unit,
             onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
             onRemoveClick: (Track, Int, SwipeLayout) -> Unit
@@ -122,7 +122,7 @@ class PlaylistAdapter(
                 })
 
                 track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, trackData, onOtherClick)
+                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id, trackData.channel.id, onOtherClick)
                 }
 
                 playlist_right_view.setOnClickListener {

@@ -26,7 +26,7 @@ class FeedItemViewHolder(
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
-        onOtherClick: (TrackWithChannel, Int) -> Unit,
+        onOtherClick: (Int, Int) -> Unit,
         onChannelTitleClick: (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?
@@ -66,7 +66,7 @@ class FeedItemViewHolder(
                 hideInfo()
             }
             feed_other.setOnClickListener {
-                SharedHelper.showTrackContextMenu(context, feedData, onOtherClick)
+                SharedHelper.showTrackContextMenu(context, feedData.track.title, feedData.channel.name, feedData.track.id, feedData.channel.id, onOtherClick)
             }
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {

@@ -90,6 +90,7 @@ class ViewModelFactory(
                     )
                 isAssignableFrom(SearchViewModel::class.java) ->
                     SearchViewModel(
+                            trackRepository,
                             searchRepository,
                             channelRepository,
                             playerRepository

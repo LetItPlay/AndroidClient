@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.track_item.view.*
 class LikedTracksAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (Track) -> Unit,
-        private val onOtherClick: (TrackWithChannel, Int) -> Unit
+        private val onOtherClick: (Int, Int) -> Unit
 ) : RecyclerView.Adapter<LikedTracksAdapter.ProfileItemHolder>() {
 
     var data: List<TrackWithChannel> = ArrayList()
@@ -42,13 +42,13 @@ class LikedTracksAdapter(
         }
     }
 
-    class ProfileItemHolder(parent: ViewGroup?, onOtherClick: (TrackWithChannel, Int) -> Unit) : BaseViewHolder(parent, R.layout.track_item) {
+    class ProfileItemHolder(parent: ViewGroup?, onOtherClick: (Int, Int) -> Unit) : BaseViewHolder(parent, R.layout.track_item) {
         lateinit var trackData: TrackWithChannel
 
         init {
             itemView.apply {
                 track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, trackData, onOtherClick)
+                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id, trackData.channel.id, onOtherClick)
                 }
             }
         }

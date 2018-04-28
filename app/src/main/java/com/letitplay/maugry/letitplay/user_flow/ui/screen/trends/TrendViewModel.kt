@@ -73,9 +73,9 @@ class TrendViewModel(
         }
     }
 
-    fun onReportClick(trackData: TrackWithChannel, reason: Int) {
+    fun onReportClick(trackId: Int, reason: Int) {
         if (reportDisposable == null || reportDisposable!!.isDisposed) {
-            reportDisposable = trackRepository.report(trackData)
+            reportDisposable = trackRepository.report(trackId,reason)
                     .subscribe({}, {
                         Timber.e(it, "Error when liking")
                     })

@@ -8,7 +8,7 @@ import io.reactivex.Single
 
 interface TrackRepository {
     fun like(track: TrackWithChannel): Completable
-    fun report(track: TrackWithChannel):Completable
+    fun report(track: Int, reason: Int): Completable
     fun swipeTrackToTop(track: TrackWithChannel): Completable
     fun swipeTrackToBottom(track: TrackWithChannel): Completable
     fun trackLikeState(trackId: Int): Flowable<Boolean>

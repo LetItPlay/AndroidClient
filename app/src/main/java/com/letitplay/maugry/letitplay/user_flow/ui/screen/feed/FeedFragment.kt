@@ -125,9 +125,9 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         vm.onLikeClick(trackData)
     }
 
-    private fun onOtherClick(trackData: TrackWithChannel, reason: Int) {
+    private fun onOtherClick(trackId: Int, reason: Int) {
         if (feed_swipe_refresh.isRefreshing) return
-        vm.onReportClick(trackData, reason)
+        vm.onReportClick(trackId, reason)
     }
 
     private fun onChannelTitleClick(trackData: TrackWithChannel) {

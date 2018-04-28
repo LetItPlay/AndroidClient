@@ -25,12 +25,9 @@ class TrackDataRepository(
         private val schedulerProvider: SchedulerProvider
 ) : TrackRepository {
 
-    override fun report(track: TrackWithChannel): Completable {
-        val trackId = track.track.id
-        return when (track.track.reported) {
-            true -> deleteApi.unRepotOnTrack(trackId)
-            else -> putApi.repotOnTrack(trackId)
-        }
+    override fun report(trackId: Int, reason: Int): Completable {
+        return putApi
+                .repotOnTrack(trackId, reason)
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
                 .toCompletable()
