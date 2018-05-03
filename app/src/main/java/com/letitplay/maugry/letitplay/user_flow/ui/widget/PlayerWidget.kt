@@ -16,7 +16,6 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.FakeFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlayerFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.PlaylistFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.player.TrackDetailFragment

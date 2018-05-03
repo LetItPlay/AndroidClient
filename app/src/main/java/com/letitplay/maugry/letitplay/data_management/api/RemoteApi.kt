@@ -7,7 +7,6 @@ import com.google.gson.*
 import com.letitplay.maugry.letitplay.BuildConfig
 import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.ServiceLocator
-import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.data_management.api.responses.*
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
@@ -142,8 +141,6 @@ interface LetItPlayApi {
 
 
 interface LetItPlayPostApi {
-    @POST("stations/{id}/counts/")
-    fun updateChannelFollowers(@Path("id") idStation: Int, @Body followers: UpdateFollowersRequestBody): Single<UpdatedChannelResponse>
 
     @POST("tracks/{id}/counts/")
     fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Single<UpdatedTrackResponse>
