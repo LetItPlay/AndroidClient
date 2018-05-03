@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,11 +10,11 @@ import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.categories.CategoriesFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.categories.CategoriesFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels.ChannelFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import kotlinx.android.synthetic.main.channels_and_categories_fragment.*
 import kotlinx.android.synthetic.main.navigation_main.*
-import kotlinx.android.synthetic.main.playlists_fragment.*
 import timber.log.Timber
 
 class ChannelsAndCategoriesFragment : BaseFragment(R.layout.channels_and_categories_fragment) {
@@ -25,7 +25,7 @@ class ChannelsAndCategoriesFragment : BaseFragment(R.layout.channels_and_categor
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navigationActivity.playlists_tabs.setupWithViewPager(playlists_pager)
+        navigationActivity.playlists_tabs.setupWithViewPager(channels_pager)
         channels_pager.adapter = ChannelsAndCategoriesAdapter(childFragmentManager)
     }
 

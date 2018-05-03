@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories
 
 import android.annotation.SuppressLint
 import com.letitplay.maugry.letitplay.R
@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class ChannelsKey : BaseKey(), StateKey {
+class ChannelsAndCategoriesKey : BaseKey(), StateKey {
 
     override fun layout(): Int = R.layout.channels_and_categories_fragment
 

@@ -7,7 +7,7 @@ import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import timber.log.Timber
 

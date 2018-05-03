@@ -13,8 +13,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.profile.ProfileReposi
 import com.letitplay.maugry.letitplay.data_management.repo.search.SearchRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageViewModel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels.ChannelPageViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsViewModel
@@ -60,8 +60,8 @@ class ViewModelFactory(
                             channelRepository,
                             schedulerProvider
                     )
-                isAssignableFrom(ChannelViewModel::class.java) ->
-                    ChannelViewModel(
+                isAssignableFrom(ChannelAndCategoriesViewModel::class.java) ->
+                    ChannelAndCategoriesViewModel(
                             channelRepository,
                             schedulerProvider
                     )

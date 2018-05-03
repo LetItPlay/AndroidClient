@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -19,7 +19,7 @@ class ChannelPageKey(private val channelId: Int) : BaseKey(), StateKey {
 
     override fun viewChangeHandler(): ViewChangeHandler = SegueViewChangeHandler()
 
-    override fun menuType(): MenuType = MenuType.CHANNELS
+    override fun menuType(): MenuType = MenuType.CHANNELPAGE
 
     override fun isRootFragment(): Boolean = false
 

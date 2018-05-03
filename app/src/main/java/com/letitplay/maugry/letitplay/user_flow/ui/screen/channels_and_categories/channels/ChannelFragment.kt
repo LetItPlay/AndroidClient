@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -11,7 +11,7 @@ import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
@@ -26,13 +26,9 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)
-                .get(ChannelViewModel::class.java)
+                .get(ChannelAndCategoriesViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(vm)
@@ -81,17 +77,5 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
     private fun onFollowClick(channel: ChannelWithFollow) {
         if (swipe_refresh.isRefreshing) return
         vm.onFollowClick(channel)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu_item, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_search) {
-            Timber.d("Navigate to results page")
-            navigationActivity.navigateTo(SearchResultsKey())
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

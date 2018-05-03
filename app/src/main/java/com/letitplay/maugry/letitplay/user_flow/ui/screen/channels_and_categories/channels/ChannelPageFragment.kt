@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider

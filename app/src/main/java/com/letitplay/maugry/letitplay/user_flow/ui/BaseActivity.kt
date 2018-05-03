@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.GestureDetector
 import android.view.MenuItem
@@ -21,7 +20,7 @@ import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelsKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.ChannelsAndCategoriesKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsKey
@@ -175,7 +174,7 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             R.id.action_feed -> replaceHistory(FeedKey())
             R.id.action_trands -> replaceHistory(TrendsKey())
             R.id.action_playlists -> replaceHistory(PlaylistsKey())
-            R.id.action_channels -> replaceHistory(ChannelsKey())
+            R.id.action_channels -> replaceHistory(ChannelsAndCategoriesKey())
             R.id.action_profile -> replaceHistory(ProfileKey())
         }
         return true
@@ -217,6 +216,9 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             }
 
             MenuType.PLAYLISTS -> {
+                playlists_tabs?.visibility = View.VISIBLE
+            }
+            MenuType.CHANNELS ->{
                 playlists_tabs?.visibility = View.VISIBLE
             }
             else -> {

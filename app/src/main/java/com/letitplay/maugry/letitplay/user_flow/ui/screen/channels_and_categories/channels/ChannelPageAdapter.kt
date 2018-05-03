@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories
 
 import android.arch.lifecycle.*
 import com.letitplay.maugry.letitplay.SchedulerProvider
@@ -13,7 +13,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 
 
-class ChannelViewModel(
+class ChannelAndCategoriesViewModel(
         private val channelRepo: ChannelRepository,
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), LifecycleObserver {
