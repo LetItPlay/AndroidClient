@@ -14,7 +14,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class ChannelsKey : BaseKey(), StateKey {
 
-    override fun layout(): Int = R.layout.channels_fragment
+    override fun layout(): Int = R.layout.channels_and_categories_fragment
 
     override fun viewChangeHandler(): ViewChangeHandler = SegueViewChangeHandler()
 
@@ -22,6 +22,6 @@ class ChannelsKey : BaseKey(), StateKey {
 
     override fun isRootFragment(): Boolean = true
 
-    override fun createFragment(): BaseFragment = ChannelFragment()
+    override fun createFragment(): BaseFragment = ChannelsAndCategoriesFragment()
 
 }

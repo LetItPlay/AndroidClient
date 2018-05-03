@@ -12,6 +12,7 @@
     <string name="channels_unfollowing">Слушать</string>
     <string name="channel_page_description">Нет описания</string>
     <string name="channel_page_recent_added">Недавно добавленные</string>
+    <string name="channels_categories">Категории</string>
 
     <!--FEED-->
     <string name="playing_now">играет сейчас</string>

@@ -12,6 +12,7 @@
     <string name="channels_unfollowing">Follow</string>
     <string name="channel_page_description">No description</string>
     <string name="channel_page_recent_added">Recent added</string>
+    <string name="channels_categories">Categories</string>
 
     <!--FEED-->
     <string name="playing_now">playing now</string>
