@@ -18,5 +18,6 @@ data class Channel(
         val imageUrl: String?,
         val subscriptionCount: Int = 0,
         @ColumnInfo(name = "channel_tags")
-        val tags: List<String>?
+        val tags: List<String>?,
+        val followed: Boolean? = false
 )

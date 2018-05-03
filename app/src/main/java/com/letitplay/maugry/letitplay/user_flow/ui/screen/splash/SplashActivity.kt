@@ -51,7 +51,7 @@ class SplashActivity : AppCompatActivity() {
 
         if (prefHelper.userJwt.isEmpty()) {
             ServiceLocator.profileRepository
-                    .signUp(prefHelper.userToken!!, "Dasha")
+                    .signUp(prefHelper.userToken!!, "Danil")
                     .doOnSuccess {
                         prefHelper.userJwt = it.headers().get("Authorization")
                         navigate()
@@ -75,10 +75,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigate() {
-        if (prefHelper.contentLanguage == null) {
-            startActivity(Intent(this, LanguageActivity::class.java))
-        } else {
-            startActivity(Intent(this, NavigationActivity::class.java))
-        }
+        startActivity(Intent(this, NavigationActivity::class.java))
+        prefHelper.contentLanguage = Language.fromString(Locale.getDefault().language) ?: Language.EN
     }
 }
