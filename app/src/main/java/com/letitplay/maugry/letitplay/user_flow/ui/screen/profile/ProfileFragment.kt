@@ -39,7 +39,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     private val REQUEST_IMAGE_CAPTURE = 1
 
     private val likedTracksListAdapter: LikedTracksAdapter by lazy {
-        LikedTracksAdapter(musicService, ::playTrack)
+        LikedTracksAdapter(musicService, ::playTrack, ::onOtherClick)
     }
 
     private val vm by lazy {
@@ -68,9 +68,15 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                     Language.RU -> R.string.language_ru
                     Language.EN -> R.string.language_en
                     Language.FR -> R.string.language_fr
+                    Language.ZH -> R.string.language_zh
                 })
             }
         })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -97,6 +103,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 dialogView.rus_button.setOnClickListener(onLanguageClick)
                 dialogView.eng_button.setOnClickListener(onLanguageClick)
                 dialogView.fr_button.setOnClickListener(onLanguageClick)
+                dialogView.zh_button.setOnClickListener(onLanguageClick)
                 setContentView(dialogView)
                 show()
             }
@@ -141,5 +148,21 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             profileRepo = MusicRepo(it.map(TrackWithChannel::toAudioTrack).toMutableList())
             navigationActivity.updateRepo(track.id, profileRepo, it)
         }
+    }
+
+    private fun onOtherClick(trackId:Int, reason: Int) {
+        vm.onReportClick(trackId, reason)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu_item, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_search) {
+            Timber.d("Navigate to results page")
+            navigationActivity.navigateTo(SearchResultsKey())
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

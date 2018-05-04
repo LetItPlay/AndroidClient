@@ -34,6 +34,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         TrendAdapter(musicService,
                 ::playTrack,
                 ::onLikeClick,
+                ::onOtherClick,
                 ::onChannelTitleClick,
                 swipeListener)
     }
@@ -113,6 +114,11 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         vm.onLikeClick(track)
     }
 
+    private fun onOtherClick(trackId: Int, reason: Int) {
+        if (swipe_refresh.isRefreshing) return
+        vm.onReportClick(trackId, reason)
+    }
+
     private fun onChannelTitleClick(trackData: TrackWithChannel) {
         if (swipe_refresh.isRefreshing) return
         router.navigateTo(ChannelPageKey(trackData.channel.id))
@@ -124,7 +130,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
             var currentId = musicService?.musicRepo?.currentAudioTrack?.id
             val trackId = trackData.track.id
             vm.onListen(trackData.track)
-            if (trendsRepo != null && trendsRepo?.getAudioTrackAtId(trackId) != null) {
+            if (trendsRepo != null && musicService?.musicRepo?.getAudioTrackAtId(trackId) != null) {
                 if (currentId != trackId)
                     navigationActivity.musicPlayerSmall?.skipToQueueItem(trackData.track.id)
                 else navigationActivity.musicPlayerSmall?.playPause()
@@ -135,7 +141,7 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
                     ?: return
             trendsRepo = MusicRepo(playlist)
             navigationActivity.updateRepo(trackData.track.id, trendsRepo, tracks)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Timber.d("Trends")
         }
     }

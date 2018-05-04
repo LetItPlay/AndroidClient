@@ -4,9 +4,13 @@ import android.support.v4.app.Fragment
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseKey
 import com.letitplay.maugry.letitplay.user_flow.ui.MenuType
 import com.zhuinden.simplestack.StateChange
+import timber.log.Timber
 
 
-class FragmentStateChanger(val fragmentManager: android.support.v4.app.FragmentManager, val containerId: Int) {
+class FragmentStateChanger(
+        private val fragmentManager: android.support.v4.app.FragmentManager,
+        private val containerId: Int
+) {
 
     fun handleStateChange(stateChange: StateChange, menuType: MenuType) {
 
@@ -15,11 +19,15 @@ class FragmentStateChanger(val fragmentManager: android.support.v4.app.FragmentM
             val newState: List<BaseKey> = stateChange.getNewState()
 
             previousState.forEach {
-                var fragment: Fragment = fragmentManager.findFragmentByTag(it.fragmentTag)
-                if (!newState.contains(it)) {
-                    remove(fragment)
-                } else if (!fragment.isDetached) {
-                    detach(fragment)
+                try {
+                    val fragment: Fragment = fragmentManager.findFragmentByTag(it.fragmentTag)
+                    if (!newState.contains(it)) {
+                        remove(fragment)
+                    } else if (!fragment.isDetached) {
+                        detach(fragment)
+                    }
+                } catch (e: IllegalStateException) {
+                    Timber.w("Previous state has already detached fragments", e)
                 }
             }
 

@@ -32,7 +32,8 @@ data class Track(
         @ColumnInfo(name = "track_tags")
         val tags: List<String>? = null,
         val listenCount: Int,
-        val publishedAt: Date
+        val publishedAt: Date,
+        val reported: Boolean? = false
 ) {
     @Ignore
     private var _trackLengthShort: String? = null

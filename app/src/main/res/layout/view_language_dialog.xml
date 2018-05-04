@@ -31,4 +31,13 @@
         android:layout_marginTop="4dp"
         android:tag="fr"
         android:text="@string/french" />
+
+    <TextView
+        android:id="@+id/zh_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:tag="zh"
+        android:text="@string/china" />
 </LinearLayout>

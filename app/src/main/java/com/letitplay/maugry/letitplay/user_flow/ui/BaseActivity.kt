@@ -3,12 +3,14 @@ package com.letitplay.maugry.letitplay.user_flow.ui
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.GestureDetector
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import biz.laenger.android.vpbs.BottomSheetUtils
 import biz.laenger.android.vpbs.ViewPagerBottomSheetBehavior
@@ -26,25 +28,29 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.profile.ProfileKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.trends.TrendsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.FragmentStateChanger
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.SimpleBottomSheetCallback
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.MusicPlayerSmall
 import com.letitplay.maugry.letitplay.utils.ext.active
 import com.letitplay.maugry.letitplay.utils.ext.disableShiftMode
+import com.letitplay.maugry.letitplay.utils.ext.gone
 import com.letitplay.maugry.letitplay.utils.ext.show
 import com.zhuinden.simplestack.BackstackDelegate
 import com.zhuinden.simplestack.HistoryBuilder
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
+import kotlinx.android.synthetic.main.music_player_small.view.*
 import kotlinx.android.synthetic.main.navigation_main.*
 import kotlinx.android.synthetic.main.player_container_fragment.*
+import ru.rambler.android.swipe_layout.SimpleOnSwipeListener
+import ru.rambler.libs.swipe_layout.SwipeLayout
 
-abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChanger {
+abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), StateChanger {
 
     private lateinit var bottomSheetBehavior: ViewPagerBottomSheetBehavior<View>
-    private lateinit var backstackDelegate: BackstackDelegate
+    lateinit var backstackDelegate: BackstackDelegate
     private lateinit var fragmentStateChanger: FragmentStateChanger
 
-    private var navigationMenu: BottomNavigationView? = null
+    protected var navigationMenu: BottomNavigationView? = null
+
     private val playerViewModel by lazy {
         ViewModelProvider(viewModelStore, ServiceLocator.viewModelFactory).get(PlayerViewModel::class.java)
     }
@@ -68,27 +74,41 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         backstackDelegate.registerForLifecycleCallbacks(this)
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
-        navigationMenu = findViewById(R.id.navigation)
+        setSupportActionBar(toolbar)
         toolbar?.setNavigationOnClickListener { onBackPressed() }
-        setNavigationMenu()
-        navigationMenu?.disableShiftMode()
-        navigationMenu?.active(R.id.action_feed)
+        initNavigationMenu()
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragment_container)
         backstackDelegate.setStateChanger(this)
-        setSupportActionBar(toolbar)
+        initPlayer()
+        initSmallPlayer()
+    }
+
+    private fun initNavigationMenu() {
+        navigationMenu = findViewById<BottomNavigationView>(R.id.navigation).apply {
+            setOnNavigationItemSelectedListener(this@BaseActivity::selectFragment)
+            disableShiftMode()
+            active(R.id.action_feed)
+        }
+    }
+
+    private fun initPlayer() {
         bottomSheetBehavior = ViewPagerBottomSheetBehavior.from(main_player)
-        bottomSheetBehavior.state = ViewPagerBottomSheetBehavior.STATE_COLLAPSED
-        bottomSheetBehavior.setBottomSheetCallback(object : ViewPagerBottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+        bottomSheetBehavior.apply {
+            state = ViewPagerBottomSheetBehavior.STATE_COLLAPSED
+            setBottomSheetCallback(
+                    object : ViewPagerBottomSheetBehavior.BottomSheetCallback() {
+                        override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
-            }
+                        }
 
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
-                    collapsePlayer()
-                }
-            }
-        })
+                        override fun onStateChanged(bottomSheet: View, newState: Int) {
+                            if (newState == ViewPagerBottomSheetBehavior.STATE_COLLAPSED) {
+                                collapsePlayer()
+                            }
+                        }
+                    }
+            )
+        }
         main_player.apply {
             onCollapseClick = ::collapsePlayer
             playerViewModel = this@BaseActivity.playerViewModel.apply {
@@ -99,14 +119,40 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
         BottomSheetUtils.setupViewPager(player_pager)
     }
 
+    private fun initSmallPlayer() {
+
+        musicPlayerSmall?.small_player_swipe_layout?.animateReset()
+
+        musicPlayerSmall?.small_player_swipe_layout?.setOnSwipeListener(object : SimpleOnSwipeListener {
+            override fun onSwipeClampReached(swipeLayout: SwipeLayout, moveToRight: Boolean) {
+                musicPlayerSmall?.apply {
+                    stop()
+                    updateRepo(-1, null, emptyList())
+                    gone()
+                }
+            }
+
+        })
+
+        musicPlayerSmall?.small_player_swipe_layout?.apply {
+            val gestureOnSwipeDetector = GestureDetectorCompat(this.context, object : GestureDetector.SimpleOnGestureListener() {
+
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    expandPlayer()
+                    return super.onSingleTapConfirmed(e)
+                }
+            })
+
+            musicPlayerSmall?.small_player_swipe_layout?.setOnTouchListener { _, motionEvent -> gestureOnSwipeDetector.onTouchEvent(motionEvent) }
+        }
+    }
+
     fun updateRepo(trackId: Int, repo: MusicRepo?, tracks: List<TrackWithChannel>) {
         musicService?.musicRepo = repo
         playerViewModel.setMusicRepo(repo, tracks)
         musicPlayerSmall?.apply {
-            setOnClickListener {
-                expandPlayer()
-            }
             show()
+            small_player_swipe_layout.reset()
             skipToQueueItem(trackId)
         }
 
@@ -122,11 +168,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
 
     fun removeTrack(id: Int) {
         musicService?.removeTrack(id)
-    }
-
-
-    private fun setNavigationMenu() {
-        navigationMenu?.setOnNavigationItemSelectedListener { item: MenuItem -> selectFragment(item) }
     }
 
     private fun selectFragment(item: MenuItem?): Boolean {
@@ -160,14 +201,6 @@ abstract class BaseActivity(val layoutId: Int) : AppCompatActivity(), StateChang
                 this.startActivity(intent)
             }
         }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     private fun setBackNavigationIcon(key: BaseKey) {

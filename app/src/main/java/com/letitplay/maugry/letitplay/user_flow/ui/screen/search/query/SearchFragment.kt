@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
@@ -19,6 +20,7 @@ import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels.ChannelPageKey
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.search_fragment.*
 
@@ -26,7 +28,13 @@ import kotlinx.android.synthetic.main.search_fragment.*
 class SearchFragment : BaseFragment(R.layout.search_fragment) {
 
     private val resultsAdapter by lazy {
-        SearchResultsAdapter(musicService, ::onChannelClick, ::onTrackClick, ::onChannelFollowClick)
+        SearchResultsAdapter(
+                musicService,
+                ::onOtherClick,
+                ::onChannelClick,
+                ::onTrackClick,
+                ::onChannelFollowClick
+        )
     }
 
     private val vm by lazy {
@@ -88,6 +96,10 @@ class SearchFragment : BaseFragment(R.layout.search_fragment) {
                 .map(SearchResultItem.TrackItem::track)
         resultsMusicRepo = MusicRepo(tracks.map(TrackWithChannel::toAudioTrack).toMutableList())
         navigationActivity.updateRepo(track.id, resultsMusicRepo, tracks)
+    }
+
+    private fun onOtherClick(trackId: Int, reason: Int){
+        vm.onReportClick(trackId, reason)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

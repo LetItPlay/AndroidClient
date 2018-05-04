@@ -5,6 +5,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.gsfoxpro.musicservice.ui.MusicPlayer
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
@@ -43,6 +44,7 @@ class MusicPlayerBig @JvmOverloads constructor(context: Context, attrs: Attribut
         player_channel_title.updateText(metadata.description?.subtitle)
         Glide.with(context)
                 .load(metadata.description.iconUri)
+                .apply(RequestOptions().placeholder(R.drawable.player_placeholder))
                 .into(player_track_image)
     }
 

@@ -19,4 +19,15 @@ fun String.toHtml(): Spanned {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) Html.fromHtml(this, Html.FROM_HTML_MODE_COMPACT) else Html.fromHtml(this)
 }
 
+fun String.getUrlParams(): MutableMap<String, Int> {
+    val map: MutableMap<String, Int> = mutableMapOf()
+    this.split("?")
+            .last().split("&")
+            .forEach {
+                val pair = it.split("=")
+                map[pair[0]] = pair[1].toInt()
+            }
+    return map
+}
+
 fun List<Int>.joinWithComma() = this.joinToString(",")

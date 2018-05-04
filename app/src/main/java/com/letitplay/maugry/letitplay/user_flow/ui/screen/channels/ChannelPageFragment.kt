@@ -16,6 +16,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.ext.loadCircularImage
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
@@ -23,10 +24,9 @@ import kotlinx.android.synthetic.main.channel_page_fragment.*
 
 class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
-    private val recentAddedListAdapter by lazy {
-        ChannelPageAdapter(::onTrackClicked)
-    }
+    private val recentAddedListAdapter = ChannelPageAdapter(::onTrackClicked)
     private var channelPageRepo: MusicRepo? = null
+    private var channelPageData: ChannelWithFollow? = null
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)
@@ -35,12 +35,18 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.channelPage(getKey()).observe(this, Observer<ChannelWithFollow> {
+        vm.channelId.value = getKey()
+        vm.channelWithFollow.observe(this, Observer<ChannelWithFollow> {
             it?.let { channelData ->
                 with(channelData.channel) {
-                    channel_page_banner.loadImage(imageUrl)
+                    channelPageData = it
+                    channel_page_banner.loadImage(imageUrl, placeholder = R.drawable.channel_banner)
                     channel_page_preview.loadCircularImage(imageUrl)
                     channel_page_title.text = name
+                    if (!channelDescription.isNullOrEmpty()) {
+                        channel_page_description.text = channelDescription
+                        channel_page_description.visibility = View.VISIBLE
+                    }
                     channel_page_followers.text = subscriptionCount.toString()
 
                     val tags = tags
@@ -49,9 +55,14 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 }
                 channel_page_follow.isEnabled = true
                 channel_page_follow.isFollowing = it.isFollowing
+                channel_page_share?.let {
+                    it.setOnClickListener {
+                        SharedHelper.channelShare(it.context, channelData.channel.name, channelData.channel.id)
+                    }
+                }
             }
         })
-        vm.recentAddedTracks(getKey()).observe(this, Observer<List<Track>> {
+        vm.recentAddedChannelTracks.observe(this, Observer<List<Track>> {
             it?.let {
                 recentAddedListAdapter.setData(it)
                 channel_page_recent_added.visibility = View.VISIBLE
@@ -78,13 +89,13 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
             navigationActivity.musicPlayerSmall?.skipToQueueItem(track.id)
             return
         }
-        val channel = vm.channelPage(getKey()).value
-        val tracks = vm.recentAddedTracks(getKey()).value
+        val channel = vm.channelWithFollow.value
+        val tracks = vm.recentAddedChannelTracks.value
         if (channel != null && tracks != null) {
             val tracksList = tracks.map {
                 TrackWithChannel(it, channel.channel, null)
             }
-            channelPageRepo = MusicRepo(tracksList.map { it.toAudioTrack() }.toMutableList())
+            channelPageRepo = MusicRepo(tracksList.map(TrackWithChannel::toAudioTrack).toMutableList())
             navigationActivity.updateRepo(track.id, channelPageRepo, tracksList)
         }
     }

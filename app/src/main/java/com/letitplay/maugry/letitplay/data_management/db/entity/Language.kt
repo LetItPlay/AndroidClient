@@ -8,7 +8,9 @@ enum class Language(val strValue: String) {
     @SerializedName("en")
     EN("en"),
     @SerializedName("fr")
-    FR("fr");
+    FR("fr"),
+    @SerializedName("zh")
+    ZH("zh");
 
     companion object {
         fun fromString(strValue: String): Language? {

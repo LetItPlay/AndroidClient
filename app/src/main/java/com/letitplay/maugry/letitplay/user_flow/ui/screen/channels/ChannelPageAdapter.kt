@@ -46,7 +46,7 @@ class ChannelPageAdapter(
                 channel_page_playing_now.text = track.listenCount.toString()
                 channel_page_track_title.text = track.title
                 channel_page_last_update.text = DateHelper.getShortPastDate(track.publishedAt, context)
-                channel_page_track_preview.loadImage(track.coverUrl)
+                channel_page_track_preview.loadImage(track.coverUrl, placeholder = R.drawable.channel_placeholder)
             }
         }
 

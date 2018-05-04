@@ -22,68 +22,101 @@
                 android:layout_width="match_parent"
                 android:layout_height="134dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/channel_page_preview"
+                app:layout_constraintBottom_toTopOf="@+id/channel_page_info_container"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread_inside"
-                tools:src="@drawable/channel_placeholder" />
+                tools:src="@drawable/channel_banner" />
 
-            <ImageView
-                android:id="@+id/channel_page_preview"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/player_track_background"
-                android:scaleType="centerCrop"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/channel_page_info_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFF1F1"
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/channel_page_banner"
-                tools:src="@drawable/feed_preview_placeholder" />
-
-            <ImageView
-                android:id="@+id/channel_preview_followers_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/followers_ic"
-                app:layout_constraintBottom_toBottomOf="@+id/channel_page_preview"
-                app:layout_constraintStart_toEndOf="@+id/channel_page_preview"
-                app:layout_constraintTop_toTopOf="@+id/channel_page_preview" />
-
-            <TextView
-                android:id="@+id/channel_page_followers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="@+id/channel_preview_followers_icon"
-                app:layout_constraintStart_toEndOf="@+id/channel_preview_followers_icon"
-                app:layout_constraintTop_toTopOf="@+id/channel_preview_followers_icon"
-                tools:text="345 567" />
-
-            <com.letitplay.maugry.letitplay.user_flow.ui.widget.FollowWidget
-                android:id="@+id/channel_page_follow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/channel_page_preview"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/channel_page_followers"
-                app:layout_constraintTop_toTopOf="@+id/channel_page_preview" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_banner">
+
+                <ImageView
+                    android:id="@+id/channel_page_preview"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/feed_preview_placeholder" />
+
+                <ImageView
+                    android:id="@+id/channel_preview_followers_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/followers_ic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/channel_page_preview"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/channel_page_followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:textSize="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/channel_preview_followers_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="345 567" />
+
+                <FrameLayout
+                    android:id="@+id/channel_page_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/like_background"
+                    android:paddingBottom="9dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="6dp"
+                    android:paddingTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/channel_page_follow"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/channel_share" />
+
+                </FrameLayout>
+
+                <com.letitplay.maugry.letitplay.user_flow.ui.widget.FollowWidget
+                    android:id="@+id/channel_page_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </android.support.constraint.ConstraintLayout>
 
             <TextView
                 android:id="@+id/channel_page_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:fontFamily="sans-serif"
@@ -95,14 +128,13 @@
                 app:layout_constraintBottom_toTopOf="@+id/channel_page_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/channel_page_preview"
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_info_container"
                 tools:text="Disgusting men" />
 
             <TextView
                 android:id="@+id/channel_page_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:textColor="#020202"
@@ -113,8 +145,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/channel_page_title"
-                tools:text="@string/channel_page_description" />
+                app:layout_constraintTop_toBottomOf="@+id/channel_page_title" />
 
             <com.letitplay.maugry.letitplay.user_flow.ui.widget.TagCloudView
                 android:id="@+id/channel_page_tag_container"
@@ -174,12 +205,12 @@
                 android:orientation="horizontal"
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/channel_page_recent_added"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 tools:listitem="@layout/channel_page_item" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>

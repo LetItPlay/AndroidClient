@@ -2,14 +2,12 @@ package com.letitplay.maugry.letitplay.data_management.repo.channel
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayDeleteApi
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
-import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateFollowersRequestBody
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPutApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
-import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
-import com.letitplay.maugry.letitplay.data_management.db.entity.Follow
-import com.letitplay.maugry.letitplay.data_management.db.entity.Track
-import com.letitplay.maugry.letitplay.data_management.model.toChannelModel
+import com.letitplay.maugry.letitplay.data_management.db.entity.*
+import com.letitplay.maugry.letitplay.data_management.model.embeddedItemToTrackWithChannels
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
 import io.reactivex.Completable
@@ -21,6 +19,8 @@ class ChannelDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
         private val postApi: LetItPlayPostApi,
+        private val putApi: LetItPlayPutApi,
+        private val deleteApi: LetItPlayDeleteApi,
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
@@ -31,7 +31,18 @@ class ChannelDataRepository(
     }
 
     override fun channel(channelId: Int): Flowable<ChannelWithFollow> {
-        return db.channelDao().getChannelWithFollow(channelId)
+        val localChannel = db.channelDao().getChannelWithFollow(channelId)
+                .switchMap {
+                    if (it.isEmpty()) {
+                        api.getChannelPiece(channelId)
+                                .doOnSuccess { db.channelDao().updateOrInsertChannel(listOf(it)) }
+                                .map { ChannelWithFollow(it, null) }
+                                .toFlowable()
+                    } else {
+                        Flowable.just(it.first())
+                    }
+                }
+        return localChannel
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
@@ -58,15 +69,16 @@ class ChannelDataRepository(
         return isFollowing
                 .flatMap {
                     val currentIsFollowing = it
-                    val (request, handleFollowDb) = when {
-                        currentIsFollowing -> UpdateFollowersRequestBody.UNFOLLOW to { followDao.deleteFollowWithChannelId(channelData.id) }
-                        else -> UpdateFollowersRequestBody.FOLLOW to { followDao.insertFollow(Follow(channelId)) }
+                    when (currentIsFollowing) {
+                        true -> deleteApi.unFollowChannel(channelId)
+                                .map { it to { followDao.deleteFollowWithChannelId(channelData.id) } }
+                        else -> putApi.updateChannelFollowers(channelId)
+                                .map { it to { followDao.insertFollow(Follow(channelId)) } }
+
                     }
-                    postApi.updateChannelFollowers(channelId, request)
-                            .map { it to handleFollowDb }
                 }
                 .doOnSuccess {
-                    val channelModel = toChannelModel(it.first)
+                    val channelModel = it.first
                     db.runInTransaction {
                         db.channelDao().updateOrInsertChannel(listOf(channelModel))
                         it.second()
@@ -85,16 +97,21 @@ class ChannelDataRepository(
 
     override fun loadChannels(): Completable {
         return api.channels()
-                .doOnSuccess {
-                    db.channelDao().updateOrInsertChannel(it)
-                }
+                .doOnSuccess(db.channelDao()::updateOrInsertChannel)
                 .subscribeOn(schedulerProvider.io())
                 .toCompletable()
     }
 
     override fun recentAddedTracks(channelId: Int): Flowable<List<Track>> {
         return api.getChannelTracks(channelId)
-                .doOnSuccess { db.trackDao().insertTracks(it) }
+                .map {
+                    val channel = it.first().channel
+                    val tracks = embeddedItemToTrackWithChannels(it).map(TrackWithChannel::track)
+                    db.runInTransaction {
+                        db.channelDao().updateOrInsertChannel(listOf(channel))
+                        db.trackDao().insertTracks(tracks)
+                    }
+                }
                 .map { Result.success(it) }
                 .onErrorReturn { Result.failure(it.message, it) }
                 .flatMapPublisher { db.trackDao().getChannelTracksByDate(channelId) }

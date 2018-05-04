@@ -36,6 +36,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
         FeedAdapter(musicService,
                 ::onTrackClick,
                 ::onLikeClick,
+                ::onOtherClick,
                 ::onChannelTitleClick,
                 swipeListener
         )
@@ -122,6 +123,11 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
     private fun onLikeClick(trackData: TrackWithChannel) {
         if (feed_swipe_refresh.isRefreshing) return
         vm.onLikeClick(trackData)
+    }
+
+    private fun onOtherClick(trackId: Int, reason: Int) {
+        if (feed_swipe_refresh.isRefreshing) return
+        vm.onReportClick(trackId, reason)
     }
 
     private fun onChannelTitleClick(trackData: TrackWithChannel) {

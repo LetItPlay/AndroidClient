@@ -70,7 +70,7 @@ class ChannelAdapter(
             itemView.apply {
                 with(channelData.channel) {
                     channel_title.text = name
-                    channel_logo.loadImage(imageUrl)
+                    channel_logo.loadImage(imageUrl, placeholder = R.drawable.channel_placeholder)
                     tag_container.setTagList(tags ?: emptyList())
                 }
             }

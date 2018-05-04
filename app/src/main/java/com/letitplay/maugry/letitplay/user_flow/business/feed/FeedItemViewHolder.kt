@@ -13,6 +13,7 @@ import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.utils.ext.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 import kotlinx.android.synthetic.main.view_feed_card.view.*
@@ -25,7 +26,8 @@ class FeedItemViewHolder(
         playlistActionsListener: OnPlaylistActionsListener?,
         onClick: (TrackWithChannel) -> Unit,
         onLikeClick: (TrackWithChannel) -> Unit,
-        onChannelTitleClick : (TrackWithChannel) -> Unit,
+        onOtherClick: (Int, Int) -> Unit,
+        onChannelTitleClick: (TrackWithChannel) -> Unit,
         onBeginSwipe: (SwipeLayout) -> Unit,
         musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
@@ -63,14 +65,16 @@ class FeedItemViewHolder(
             feed_track_info_description.setOnClickListener {
                 hideInfo()
             }
-
+            feed_other.setOnClickListener {
+                SharedHelper.showTrackContextMenu(context, feedData.track.title, feedData.channel.name, feedData.track.id, feedData.channel.id, onOtherClick)
+            }
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onLikeClick(feedData)
                 }
             }
             feed_title_container.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION){
+                if (adapterPosition != RecyclerView.NO_POSITION) {
                     onChannelTitleClick(feedData)
                 }
             }
@@ -119,8 +123,8 @@ class FeedItemViewHolder(
             feed_channel_title.text = feedData.channel.name
             feed_track_last_update.text = data
             feed_channel_logo.loadCircularImage(feedData.channel.imageUrl)
-            feed_track_image.loadImage(feedData.track.coverUrl)
-            feed_track_info_logo.loadImage(feedData.track.coverUrl)
+            feed_track_image.loadImage(feedData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
+            feed_track_info_logo.loadImage(feedData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
         }
         updateLike(feedData)
     }

@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
+import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.playlist_header.view.*
 import kotlinx.android.synthetic.main.playlist_item.view.*
@@ -20,6 +21,7 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 class PlaylistAdapter(
         private val musicService: MusicService? = null,
         private val onClickItem: (Track) -> Unit,
+        private val onOtherClick: (Int, Int) -> Unit,
         private val onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
         private val onRemoveClick: (Track, Int, SwipeLayout) -> Unit,
         private val onClearAll: () -> Unit
@@ -40,7 +42,7 @@ class PlaylistAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return if (position != 0) data[position-1].track.id.toLong() else 0
+        return if (position != 0) data[position - 1].track.id.toLong() else 0
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -59,6 +61,7 @@ class PlaylistAdapter(
                     parent,
                     musicService,
                     onClickItem,
+                    onOtherClick,
                     { onBeginSwipe(it) },
                     onSwipeReached,
                     onRemoveClick
@@ -86,6 +89,7 @@ class PlaylistAdapter(
             parent: ViewGroup?,
             musicService: MusicService?,
             onClickItem: (Track) -> Unit,
+            onOtherClick: (Int, Int) -> Unit,
             onBeginSwipe: (SwipeLayout) -> Unit,
             onSwipeReached: (Track, Int, SwipeLayout) -> Unit,
             onRemoveClick: (Track, Int, SwipeLayout) -> Unit
@@ -116,12 +120,16 @@ class PlaylistAdapter(
                         }
                     }
                 })
+
+                track_other.setOnClickListener {
+                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id, trackData.channel.id, onOtherClick)
+                }
+
                 playlist_right_view.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
                         onRemoveClick(trackData.track, adjustedAdapterPosition, itemView.playlist_swipe_layout)
                     }
                 }
-
             }
         }
 
@@ -134,7 +142,7 @@ class PlaylistAdapter(
                 channel_name.text = trackData.channel.name
                 track_time.text = trackData.track.trackLengthShort
                 track_name.text = trackData.track.title
-                track_logo.loadImage(trackData.track.coverUrl)
+                track_logo.loadImage(trackData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
             }
         }
     }

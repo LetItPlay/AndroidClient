@@ -20,6 +20,7 @@ typealias TrackVH = TrackAdapter.TrackItemHolder
 
 class SearchResultsAdapter(
         private val musicService: MusicService?,
+        private val onOtherClick: (Int, Int) -> Unit,
         private val onChannelClick: ((Channel) -> Unit),
         private val onTrackClick: (AudioTrack) -> Unit,
         private val onFollowClick: (ChannelWithFollow) -> Unit
@@ -45,7 +46,7 @@ class SearchResultsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             CHANNEL_ITEM_TYPE -> ChannelVH(parent, onChannelClick, onFollowClick)
-            TRACK_ITEM_TYPE -> TrackVH(parent, onTrackClick, musicService)
+            TRACK_ITEM_TYPE -> TrackVH(parent, onTrackClick, onOtherClick, musicService)
             else -> throw IllegalStateException()
         }
     }
@@ -90,7 +91,7 @@ class SearchResultsAdapter(
             this.channel = channelItem
             itemView.apply {
                 channel_name.text = channelItem.channel.name
-                channel_small_logo.loadImage(channelItem.channel.imageUrl)
+                channel_small_logo.loadImage(channelItem.channel.imageUrl, placeholder = R.drawable.feed_item_placeholder)
             }
             updateFollow(channelItem)
         }
