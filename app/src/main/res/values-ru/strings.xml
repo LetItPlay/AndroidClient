@@ -94,6 +94,7 @@
     <string name="all">все</string>
     <string name="no_internet_connection">Нет интернет соединения</string>
     <string name="clear_all">Очистить</string>
+    <string name="see_all">смотреть</string>
     <string name="my_playlist">Мой плейлист</string>
     <string name="recommended">Рекомендуемое</string>
     <string name="to_the_top_of_the_playlist">Вверх плей-листа</string>

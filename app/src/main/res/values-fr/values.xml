@@ -87,6 +87,7 @@
     <string name="all">tout</string>
     <string name="no_internet_connection">Pas de connexion Internet</string>
     <string name="clear_all">Effacer</string>
+    <string name="see_all">see all</string>
     <string name="my_playlist">Ma playlist</string>
     <string name="to_the_top_of_the_playlist">En haut de la playliste</string>
     <string name="to_the_bottom_of_the_playlist">Au bas de la playlist</string>

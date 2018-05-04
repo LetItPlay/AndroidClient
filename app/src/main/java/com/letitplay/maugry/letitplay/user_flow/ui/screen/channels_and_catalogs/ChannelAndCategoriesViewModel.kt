@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs
 
 import android.arch.lifecycle.*
 import com.letitplay.maugry.letitplay.SchedulerProvider

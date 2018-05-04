@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.channels
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData

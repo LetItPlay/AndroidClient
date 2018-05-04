@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,14 +10,14 @@ import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.categories.CategoriesFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_categories.channels.ChannelFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.catalogs.CatalogsFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.channels.ChannelFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
-import kotlinx.android.synthetic.main.channels_and_categories_fragment.*
+import kotlinx.android.synthetic.main.channels_and_catalogs_fragment.*
 import kotlinx.android.synthetic.main.navigation_main.*
 import timber.log.Timber
 
-class ChannelsAndCategoriesFragment : BaseFragment(R.layout.channels_and_categories_fragment) {
+class ChannelsAndCategoriesFragment : BaseFragment(R.layout.channels_and_catalogs_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -44,7 +44,7 @@ class ChannelsAndCategoriesFragment : BaseFragment(R.layout.channels_and_categor
     inner class ChannelsAndCategoriesAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> CategoriesFragment()
+                0 -> CatalogsFragment()
                 1 -> ChannelFragment()
                 else -> throw IllegalStateException("No page at $position")
             }
