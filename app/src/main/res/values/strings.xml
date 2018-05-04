@@ -25,7 +25,7 @@
     <string name="track_share">Share</string>
     <string name="track_report">Report</string>
 
-    <!--Playlists-->
+    <!--PLAYLIST-->
     <string name="playlists_no_tracks">There are no tracks</string>
 
     <!--PROFILE-->
@@ -41,6 +41,14 @@
     <!--LANGUAGE-->
     <string name="language_select_language">Select\nyour language</string>
     <string name="language_logo_text">let it play</string>
+
+    <!--GLOBAL-->
+    <string name="report_dialog_title">Reason</string>
+    <string name="report_message">Your complaint will be reviewed by moderators</string>
+
+    <!--REMOTE-->
+    <string name="default_user_name" translatable="false">user</string>
+    <string name="authorization_header" translatable="false">Authorization</string>
 
 
     <plurals name="weeks_long">
@@ -87,12 +95,13 @@
     <string name="language_en">Language: English</string>
     <string name="language_ru">Language: Русский</string>
     <string name="language_fr">Language: Français</string>
-    <string name="language_zh">Language: China</string>
+    <string name="language_zh">Language: Chinese</string>
 
     <string name="english" translatable="false">English</string>
     <string name="russian" translatable="false">Русский</string>
     <string name="french" translatable="false">Français</string>
-    <string name="china" translatable="false">China</string>
+    <string name="china" translatable="false">Chinese</string>
+
 
     <string name="filter_view_http_letitplay">filter_view_http_letitplay</string>
 </resources>

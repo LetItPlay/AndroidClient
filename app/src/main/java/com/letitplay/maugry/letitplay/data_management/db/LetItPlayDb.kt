@@ -7,7 +7,7 @@ import com.letitplay.maugry.letitplay.data_management.db.dao.*
 import com.letitplay.maugry.letitplay.data_management.db.entity.*
 
 @Database(
-        version = 1,
+        version = 2,
         entities = [Channel::class, Track::class, Like::class, Follow::class, TrackInPlaylist::class],
         exportSchema = false
 )
