@@ -58,13 +58,13 @@ object SharedHelper {
             }
             dialogView.report_button.setOnClickListener {
                 AlertDialog.Builder(ctx).apply {
-                    setTitle("Причина")
+                    setTitle(R.string.report_dialog_title)
                     setItems(R.array.report_reason, object : DialogInterface.OnClickListener {
                         override fun onClick(p0: DialogInterface?, p1: Int) {
                             when (p1) {
-                                0 -> doReport(ctx, trackId, 0)
-                                1 -> doReport(ctx, trackId, 1)
-                                2 -> doReport(ctx, trackId, 2)
+                                0 -> doReport(ctx, trackId, p1)
+                                1 -> doReport(ctx, trackId, p1)
+                                2 -> doReport(ctx, trackId, p1)
                             }
                         }
 

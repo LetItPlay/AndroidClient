@@ -43,8 +43,12 @@
     <string name="language_select_language">Выберете\nваш язык</string>
     <string name="language_logo_text">let it play</string>
 
-    <!--Report-->
+    <!--GLOBAL-->
+    <string name="report_dialog_title">Причина</string>
     <string name="report_message">Ваша жалоба будет рассмотрена нашими модераторами</string>
+
+    <!--REMOTE-->
+    <string name="default_user_name" translatable="false">user</string>
 
     <plurals name="weeks_long">
         <item quantity="one">%d нед. назад</item>
@@ -99,4 +103,6 @@
     <string name="language_en">Язык: English</string>
     <string name="language_ru">Язык: Русский</string>
     <string name="language_fr">Язык: Français</string>
+    <string name="language_zh">Язык: Chinese</string>
+
 </resources>

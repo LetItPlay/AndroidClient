@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.user_flow.ui.NavigationActivity
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.ext.getUrlParams
+import timber.log.Timber
 import java.util.*
 
 class SplashActivity : AppCompatActivity() {
@@ -51,26 +52,24 @@ class SplashActivity : AppCompatActivity() {
 
         if (prefHelper.userJwt.isEmpty()) {
             ServiceLocator.profileRepository
-                    .signUp(prefHelper.userToken!!, "Danil")
+                    .signUp(prefHelper.userToken!!, getString(R.string.default_user_name))
                     .doOnSuccess {
-                        prefHelper.userJwt = it.headers().get("Authorization")
-                        navigate()
+                        prefHelper.userJwt = it.headers().get(getString(R.string.authorization_header))
                     }
-                    .doOnError {
-                        navigate()
-                    }
-                    .subscribe()
+                    .doFinally { navigate() }
+                    .subscribe({}, {
+                        Timber.e(it.message)
+                    })
         } else {
             ServiceLocator.profileRepository
-                    .signIn(prefHelper.userToken!!, "Dasha")
+                    .signIn(prefHelper.userToken!!, getString(R.string.default_user_name))
                     .doOnSuccess {
-                        prefHelper.userJwt = it.headers().get("Authorization")
-                        navigate()
+                        prefHelper.userJwt = it.headers().get(getString(R.string.authorization_header))
                     }
-                    .doOnError {
-                        navigate()
-                    }
-                    .subscribe()
+                    .doFinally { navigate() }
+                    .subscribe({}, {
+                        Timber.e(it.message)
+                    })
         }
     }
 

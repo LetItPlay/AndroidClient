@@ -45,6 +45,13 @@
     <string name="language_select_language">Choisissez\nvotre langue</string>
     <string name="language_logo_text">let it play</string>
 
+    <!--GLOBAL-->
+    <string name="report_dialog_title">Reason</string>
+    <string name="report_message">Your complaint will be reviewed by moderators</string>
+
+    <!--REMOTE-->
+    <string name="default_user_name" translatable="false">user</string>
+
     <plurals name="weeks_long">
         <item quantity="one">il y a %d sem.</item>
         <item quantity="other">il y a %d sem.</item>
@@ -88,4 +95,5 @@
     <string name="language_en">Langue: English</string>
     <string name="language_ru">Langue: Русский</string>
     <string name="language_fr">Langue: Français</string>
+    <string name="language_zh">Langue: Chinese</string>
 </resources>
