@@ -51,25 +51,19 @@ class SplashActivity : AppCompatActivity() {
 
         if (prefHelper.userJwt.isEmpty()) {
             ServiceLocator.profileRepository
-                    .signUp(prefHelper.userToken!!, "Danil")
+                    .signUp(prefHelper.userToken!!, "User")
                     .doOnSuccess {
                         prefHelper.userJwt = it.headers().get("Authorization")
-                        navigate()
                     }
-                    .doOnError {
-                        navigate()
-                    }
+                    .doFinally { navigate() }
                     .subscribe()
         } else {
             ServiceLocator.profileRepository
-                    .signIn(prefHelper.userToken!!, "Dasha")
+                    .signIn(prefHelper.userToken!!, "User")
                     .doOnSuccess {
                         prefHelper.userJwt = it.headers().get("Authorization")
-                        navigate()
                     }
-                    .doOnError {
-                        navigate()
-                    }
+                    .doFinally { navigate() }
                     .subscribe()
         }
     }
