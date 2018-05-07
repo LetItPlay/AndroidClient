@@ -12,9 +12,12 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.GL_PROGRESS_DELAY
+import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.ProgressView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.universal_progress.view.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
@@ -73,7 +76,9 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
 
     override fun showProgress() {
         if (progress == null)
-            progress = ProgressView(context).also { progress ->
+            progress = ProgressView(context)
+                    .apply { this.id = Random().nextInt()}
+                    .also { progress ->
                 (view as? ConstraintLayout)?.let { parent ->
                     parent.addView(progress)
                     ConstraintSet().apply {

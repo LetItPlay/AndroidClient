@@ -9,9 +9,11 @@ import com.letitplay.maugry.letitplay.GL_DATA_SERVICE_URL
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.api.requests.UpdateRequestBody
 import com.letitplay.maugry.letitplay.data_management.api.responses.*
+import com.letitplay.maugry.letitplay.data_management.db.entity.Category
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -85,22 +87,9 @@ val serviceImpl = serviceBuilder
         .build()
         .create(LetItPlayApi::class.java)
 
-val postServiceImpl = serviceBuilder
-        .baseUrl(GL_DATA_SERVICE_URL)
-        .build()
-        .create(LetItPlayPostApi::class.java)
-
-val putServiceImpl = serviceBuilder
-        .baseUrl(GL_DATA_SERVICE_URL)
-        .build()
-        .create(LetItPlayPutApi::class.java)
-
-val deleteServiceImpl = serviceBuilder
-        .baseUrl(GL_DATA_SERVICE_URL)
-        .build()
-        .create(LetItPlayDeleteApi::class.java)
-
 interface LetItPlayApi {
+
+    /*GET_API*/
 
     @GET("stations")
     fun channels(): Single<List<Channel>>
@@ -137,10 +126,12 @@ interface LetItPlayApi {
 
     @GET("search")
     fun search(@Query("q") query: String): Single<SearchResponse>
-}
+
+    @GET("catalog")
+    fun catalog(): Flowable<List<Category>>
 
 
-interface LetItPlayPostApi {
+    /*POST_API*/
 
     @POST("tracks/{id}/counts/")
     fun updateFavouriteTracks(@Path("id") idTrack: Int, @Body likes: UpdateRequestBody): Single<UpdatedTrackResponse>
@@ -152,9 +143,8 @@ interface LetItPlayPostApi {
     @POST("/auth/signin")
     fun signin(@Query("uid") uid: String,
                @Query("username") username: String): Single<Response<Any>>
-}
 
-interface LetItPlayPutApi {
+    /*PUT_API*/
 
     @PUT("follow/channel/{id}")
     fun updateChannelFollowers(@Path("id") idStation: Int): Single<Channel>
@@ -165,14 +155,12 @@ interface LetItPlayPutApi {
     @PUT("/report/track/{id}")
     @FormUrlEncoded
     fun repotOnTrack(@Path("id") idTrack: Int, @Field("reason") reason: Int): Single<TrackWithEmbeddedChannel>
-}
 
-interface LetItPlayDeleteApi {
+    /*DELETE_API*/
 
     @DELETE("follow/channel/{id}")
     fun unFollowChannel(@Path("id") idStation: Int): Single<Channel>
 
     @DELETE("like/{id}")
     fun unLikeTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
-
 }

@@ -1,7 +1,7 @@
 package com.letitplay.maugry.letitplay.data_management.repo.profile
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
+import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
@@ -15,18 +15,18 @@ import retrofit2.Response
 
 class ProfileDataRepository(
         private val db: LetItPlayDb,
-        private val postApi: LetItPlayPostApi,
+        private val api: LetItPlayApi,
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ProfileRepository {
 
     override fun signIn(uuid: String, username: String): Single<Response<Any>> {
-        return postApi.signin(uuid, username).subscribeOn(schedulerProvider.io())
+        return api.signin(uuid, username).subscribeOn(schedulerProvider.io())
     }
 
 
     override fun signUp(uuid: String, username: String): Single<Response<Any>> {
-        return postApi.signup(uuid, username).subscribeOn(schedulerProvider.io())
+        return api.signup(uuid, username).subscribeOn(schedulerProvider.io())
     }
 
     override fun changeLanguage(language: Language): Completable {

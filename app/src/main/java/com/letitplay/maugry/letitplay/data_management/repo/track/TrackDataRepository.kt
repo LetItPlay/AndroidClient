@@ -2,9 +2,6 @@ package com.letitplay.maugry.letitplay.data_management.repo.track
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayDeleteApi
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPutApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
@@ -19,14 +16,11 @@ import io.reactivex.Single
 class TrackDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
-        private val postApi: LetItPlayPostApi,
-        private val putApi: LetItPlayPutApi,
-        private val deleteApi: LetItPlayDeleteApi,
         private val schedulerProvider: SchedulerProvider
 ) : TrackRepository {
 
     override fun report(trackId: Int, reason: Int): Completable {
-        return putApi
+        return api
                 .repotOnTrack(trackId, reason)
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
@@ -42,12 +36,12 @@ class TrackDataRepository(
                     val currentIsLiked = it
 
                     when (currentIsLiked) {
-                        true -> deleteApi.unLikeTracks(trackId)
+                        true -> api.unLikeTracks(trackId)
                                 .map {
                                     it to { likeDao.deleteLikeWithTrackId(trackId) }
                                 }
 
-                        else -> putApi.updateFavouriteTracks(trackId)
+                        else -> api.updateFavouriteTracks(trackId)
                                 .map {
                                     it to {
                                         channelDao.updateOrInsertChannel(listOf(track.channel))

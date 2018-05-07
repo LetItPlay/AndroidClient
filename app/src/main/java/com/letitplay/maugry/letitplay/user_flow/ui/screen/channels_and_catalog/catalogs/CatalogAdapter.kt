@@ -1,15 +1,15 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.catalogs
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalogs
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
-import com.letitplay.maugry.letitplay.data_management.db.entity.Catalog
+import com.letitplay.maugry.letitplay.data_management.db.entity.Category
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import kotlinx.android.synthetic.main.catalog_item.view.*
 
-class CatalogsAdapter : RecyclerView.Adapter<CatalogsAdapter.CatalogItemHolder>() {
+class CatalogAdapter : RecyclerView.Adapter<CatalogAdapter.CatalogItemHolder>() {
 
-    var data: List<Catalog> = ArrayList()
+    var data: List<Category> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -26,9 +26,9 @@ class CatalogsAdapter : RecyclerView.Adapter<CatalogsAdapter.CatalogItemHolder>(
 
     inner class CatalogItemHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.catalog_item) {
 
-        fun update(catalog: Catalog) {
+        fun update(category: Category) {
             itemView.apply {
-                catalog_name.text = catalog.name
+                catalog_name.text = category.name
             }
         }
     }

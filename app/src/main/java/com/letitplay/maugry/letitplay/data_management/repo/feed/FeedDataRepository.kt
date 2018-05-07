@@ -38,7 +38,7 @@ class FeedDataRepository(
         val dataSourceFactory = FeedDataSourceFactory(compositeDisposable)
 
         val livePagedList = LivePagedListBuilder(dataSourceFactory, pagedListConfig)
-                .setBackgroundThreadExecutor(schedulerProvider.ioExecutor())
+                .setFetchExecutor(schedulerProvider.ioExecutor())
                 .setInitialLoadKey(0)
                 .build()
 

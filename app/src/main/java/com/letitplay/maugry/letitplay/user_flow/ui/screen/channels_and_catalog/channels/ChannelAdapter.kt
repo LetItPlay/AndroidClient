@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.channels
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView

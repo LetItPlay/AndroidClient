@@ -13,7 +13,7 @@ import java.io.IOException
 abstract class TracksDataSourceFactory(
         protected val preferenceHelper: PreferenceHelper,
         private val supportPaging: Boolean = true
-) : DataSource.Factory<Int, TrackWithChannel> {
+) : DataSource.Factory<Int, TrackWithChannel>() {
     protected val tracks = mutableListOf<TrackWithChannel>()
     private val tracksLock = Any()
 

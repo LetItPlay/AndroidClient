@@ -80,10 +80,10 @@ dependencies {
     implementation "biz.laenger.android:vpbs:0.0.5"
     implementation "android.arch.persistence.room:runtime:1.0.0"
     kapt "android.arch.persistence.room:compiler:1.0.0"
-    implementation "android.arch.paging:runtime:1.0.0-alpha6"
-    kapt "android.arch.lifecycle:compiler:1.1.0"
+    implementation "android.arch.paging:runtime:1.0.0-rc1"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
     implementation "android.arch.persistence.room:rxjava2:1.0.0"
-    implementation 'android.arch.lifecycle:reactivestreams:1.1.0'
+    implementation 'android.arch.lifecycle:reactivestreams:1.1.1'
 
     implementation project(path: ':musicservice')
 }

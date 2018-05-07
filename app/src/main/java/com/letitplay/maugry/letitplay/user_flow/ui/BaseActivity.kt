@@ -20,7 +20,7 @@ import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.ChannelsAndCategoriesKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelsAndCategoriesKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.feed.FeedKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists.PlaylistsKey

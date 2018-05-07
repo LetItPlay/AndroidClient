@@ -2,9 +2,6 @@ package com.letitplay.maugry.letitplay.data_management.repo.channel
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayDeleteApi
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPostApi
-import com.letitplay.maugry.letitplay.data_management.api.LetItPlayPutApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.*
 import com.letitplay.maugry.letitplay.data_management.model.embeddedItemToTrackWithChannels
@@ -18,9 +15,6 @@ import io.reactivex.Single
 class ChannelDataRepository(
         private val db: LetItPlayDb,
         private val api: LetItPlayApi,
-        private val postApi: LetItPlayPostApi,
-        private val putApi: LetItPlayPutApi,
-        private val deleteApi: LetItPlayDeleteApi,
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ChannelRepository {
@@ -55,6 +49,13 @@ class ChannelDataRepository(
                 .subscribeOn(schedulerProvider.io())
     }
 
+    override fun catalog(): Flowable<List<Category>> {
+        return api
+                .catalog()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+    }
+
     override fun channelFollowState(channelId: Int): Flowable<Boolean> {
         return db.followDao().getFollow(channelId)
                 .map(List<Follow>::isNotEmpty)
@@ -70,9 +71,9 @@ class ChannelDataRepository(
                 .flatMap {
                     val currentIsFollowing = it
                     when (currentIsFollowing) {
-                        true -> deleteApi.unFollowChannel(channelId)
+                        true -> api.unFollowChannel(channelId)
                                 .map { it to { followDao.deleteFollowWithChannelId(channelData.id) } }
-                        else -> putApi.updateChannelFollowers(channelId)
+                        else -> api.updateChannelFollowers(channelId)
                                 .map { it to { followDao.insertFollow(Follow(channelId)) } }
 
                     }

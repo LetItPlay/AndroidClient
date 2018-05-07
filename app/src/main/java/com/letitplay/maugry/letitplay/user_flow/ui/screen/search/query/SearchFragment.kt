@@ -18,7 +18,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.SearchResultItem
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.channels.ChannelPageKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.search_fragment.*
 

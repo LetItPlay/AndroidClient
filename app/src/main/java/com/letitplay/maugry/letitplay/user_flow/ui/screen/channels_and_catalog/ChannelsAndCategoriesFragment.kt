@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,8 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.catalogs.CatalogsFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalogs.channels.ChannelFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalogs.CatalogFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import kotlinx.android.synthetic.main.channels_and_catalogs_fragment.*
 import kotlinx.android.synthetic.main.navigation_main.*
@@ -44,7 +44,7 @@ class ChannelsAndCategoriesFragment : BaseFragment(R.layout.channels_and_catalog
     inner class ChannelsAndCategoriesAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> CatalogsFragment()
+                0 -> CatalogFragment()
                 1 -> ChannelFragment()
                 else -> throw IllegalStateException("No page at $position")
             }
