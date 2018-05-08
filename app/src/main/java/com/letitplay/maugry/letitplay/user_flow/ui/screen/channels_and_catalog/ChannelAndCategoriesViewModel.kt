@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog
 import android.arch.lifecycle.*
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Category
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
@@ -12,7 +13,6 @@ import com.letitplay.maugry.letitplay.utils.toResult
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
-import timber.log.Timber
 
 
 class ChannelAndCategoriesViewModel(
@@ -32,10 +32,13 @@ class ChannelAndCategoriesViewModel(
                 .toLiveData()
     }
 
-//    val catalog: LiveData<List<Category>> by lazy {
-//        channelRepo.catalog().toResult(schedulerProvider).toLiveData()
-//    }
-
+    val catalog: LiveData<Result<List<Category>>> by lazy {
+        channelRepo.catalog()
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doOnEach { isLoading.postValue(false) }
+                .toResult(schedulerProvider)
+                .toLiveData()
+    }
     val refreshing = MutableLiveData<Boolean>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

@@ -27,7 +27,7 @@ import retrofit2.http.*
 import java.lang.reflect.Type
 
 private val logInterceptor = HttpLoggingInterceptor().apply {
-    level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.HEADERS else HttpLoggingInterceptor.Level.NONE
+    level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
 }
 
 private val httpClient = OkHttpClient.Builder()
@@ -129,6 +129,12 @@ interface LetItPlayApi {
 
     @GET("catalog")
     fun catalog(): Flowable<List<Category>>
+
+    @GET("user/favorites/channels")
+    fun favouriteChannels(): Flowable<List<Channel>>
+
+    @GET("categories/{categoryId}/stations")
+    fun getChannelsFrmoCategory(@Path("categoryId") categoryId: Int): Flowable<List<Channel>>
 
 
     /*POST_API*/

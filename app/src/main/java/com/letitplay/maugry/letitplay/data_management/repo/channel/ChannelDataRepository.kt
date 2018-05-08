@@ -10,6 +10,7 @@ import com.letitplay.maugry.letitplay.utils.Result
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 
 
 class ChannelDataRepository(
@@ -50,8 +51,11 @@ class ChannelDataRepository(
     }
 
     override fun catalog(): Flowable<List<Category>> {
-        return api
-                .catalog()
+
+        return Flowable.zip(api.favouriteChannels(), api.catalog(),
+                BiFunction { channels: List<Channel>, catalog: List<Category> ->
+                    listOf(Category(1, "You are subscribed", channels)) + catalog
+                })
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
