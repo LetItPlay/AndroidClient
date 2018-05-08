@@ -77,7 +77,6 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
     override fun showProgress() {
         if (progress == null)
             progress = ProgressView(context)
-                    .apply { this.id = Random().nextInt()}
                     .also { progress ->
                 (view as? ConstraintLayout)?.let { parent ->
                     parent.addView(progress)
