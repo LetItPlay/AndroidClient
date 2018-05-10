@@ -19,5 +19,6 @@ data class Channel(
         val subscriptionCount: Int = 0,
         @ColumnInfo(name = "channel_tags")
         val tags: List<String>?,
+        @SerializedName("followed")
         val followed: Boolean? = false
 )

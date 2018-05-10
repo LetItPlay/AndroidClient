@@ -134,7 +134,7 @@ interface LetItPlayApi {
     fun favouriteChannels(): Flowable<List<Channel>>
 
     @GET("categories/{categoryId}/stations")
-    fun getChannelsFrmoCategory(@Path("categoryId") categoryId: Int): Flowable<List<Channel>>
+    fun channelsFrmoCategory(@Path("categoryId") categoryId: Int): Flowable<List<Channel>>
 
 
     /*POST_API*/

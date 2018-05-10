@@ -50,15 +50,25 @@ class ChannelDataRepository(
                 .subscribeOn(schedulerProvider.io())
     }
 
-    override fun catalog(): Flowable<List<Category>> {
-
+    override fun catalog(): Flowable<Pair<List<Channel>, List<Category>>> {
         return Flowable.zip(api.favouriteChannels(), api.catalog(),
                 BiFunction { channels: List<Channel>, catalog: List<Category> ->
-                    listOf(Category(1, "You are subscribed", channels)) + catalog
+                    Pair(channels, catalog)
                 })
+                .onErrorReturnItem(Pair(emptyList(), emptyList()))
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
+
+    override fun channelsFromCategory(categoryId: Int): Flowable<List<Channel>> {
+        val channels = if (categoryId == -1) api.favouriteChannels() else api.channelsFrmoCategory(categoryId)
+        return channels
+                .doOnNext { db.channelDao().updateOrInsertChannel(it) }
+                .onErrorReturnItem(emptyList())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+    }
+
 
     override fun channelFollowState(channelId: Int): Flowable<Boolean> {
         return db.followDao().getFollow(channelId)

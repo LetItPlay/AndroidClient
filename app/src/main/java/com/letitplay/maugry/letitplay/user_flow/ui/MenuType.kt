@@ -6,6 +6,7 @@ enum class MenuType {
     SEARCH,
     CHANNELS,
     CHANNELPAGE,
+    CATEGORYPAGE,
     PLAYLISTS,
     COMPILATION,
     PLAYER;

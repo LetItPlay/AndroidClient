@@ -19,7 +19,6 @@ class CatalogAdapter : RecyclerView.Adapter<CatalogAdapter.CatalogItemHolder>() 
         }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogItemHolder = CatalogItemHolder(parent)
 
     override fun getItemCount(): Int = categories.size
@@ -35,7 +34,8 @@ class CatalogAdapter : RecyclerView.Adapter<CatalogAdapter.CatalogItemHolder>() 
                 if (category.stations != null) {
                     catalog_see_all.visibility = View.VISIBLE
                     catalog_item.addItemDecoration(listDivider(context, R.drawable.list_transparent_divider_16dp, LinearLayoutManager.HORIZONTAL))
-                    catalog_item.adapter = CategoryAdapter().also {
+                    val type = if (category.id == -1) CategoryAdapter.FAVOURITE else CategoryAdapter.CATEGORY
+                    catalog_item.adapter = CategoryAdapter(type).also {
                         it.channels = category.stations
                     }
                     catalog_name.text = category.name

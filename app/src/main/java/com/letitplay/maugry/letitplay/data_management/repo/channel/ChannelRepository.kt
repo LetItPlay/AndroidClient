@@ -12,7 +12,8 @@ import io.reactivex.Single
 interface ChannelRepository {
     fun channels(): Flowable<List<Channel>>
     fun channelsWithFollow(): Flowable<List<ChannelWithFollow>>
-    fun catalog(): Flowable<List<Category>>
+    fun catalog(): Flowable<Pair<List<Channel>,List<Category>>>
+    fun channelsFromCategory(categoryId: Int): Flowable<List<Channel>>
     fun channel(channelId: Int): Flowable<ChannelWithFollow>
     fun follow(channel: Channel): Completable
     fun loadChannels(): Completable

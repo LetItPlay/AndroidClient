@@ -7,6 +7,7 @@ import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Category
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.utils.Result
@@ -24,10 +25,10 @@ class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.catalog.observe(this, Observer<Result<List<Category>>> { result ->
+        vm.catalog.observe(this, Observer<Result<Pair<List<Channel>, List<Category>>>> { result ->
             when (result) {
                 is Result.Success -> {
-                    catalogAdapter.categories = result.data
+                    catalogAdapter.categories = listOf(Category(-1, getString(R.string.channels_you_subscribed), result.data.first)) + result.data.second
                 }
                 is Result.Failure -> Timber.e(result.e)
             }
@@ -36,6 +37,10 @@ class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
+        swipe_refresh.setOnClickListener {
+            vm.onRefreshChannels()
+        }
         catalog_list.adapter = catalogAdapter
     }
 }

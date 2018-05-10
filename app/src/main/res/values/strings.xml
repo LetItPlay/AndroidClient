@@ -13,6 +13,7 @@
     <string name="channel_page_description">No description</string>
     <string name="channel_page_recent_added">Recent added</string>
     <string name="channels_categories">Categories</string>
+    <string name="channels_you_subscribed">You are subscribed</string>
 
     <!--FEED-->
     <string name="playing_now">playing now</string>

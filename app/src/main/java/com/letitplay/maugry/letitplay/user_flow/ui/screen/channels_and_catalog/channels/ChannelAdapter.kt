@@ -80,10 +80,11 @@ class ChannelAdapter(
         fun updateFollow(channelData: ChannelWithFollow) {
             this.channelData = channelData
             itemView.apply {
-                channel_follow.isFollowing = channelData.isFollowing
+                channel_follow.isFollowing = channelData.channel.followed ?: false
                 follower_count.text = channelData.channel.subscriptionCount.toString()
             }
         }
+
     }
 
     companion object {

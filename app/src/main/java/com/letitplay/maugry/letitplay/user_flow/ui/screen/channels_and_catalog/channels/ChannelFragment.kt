@@ -29,6 +29,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
                 .get(ChannelAndCategoriesViewModel::class.java)
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(vm)
