@@ -18,7 +18,7 @@ class ChannelsAndCategoriesKey : BaseKey(), StateKey {
 
     override fun viewChangeHandler(): ViewChangeHandler = SegueViewChangeHandler()
 
-    override fun menuType(): MenuType = MenuType.CHANNELS
+    override fun menuType(): MenuType = MenuType.CHANNELSANDCATEGORIES
 
     override fun isRootFragment(): Boolean = true
 

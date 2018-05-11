@@ -5,6 +5,7 @@ enum class MenuType {
     TRENDS,
     SEARCH,
     CHANNELS,
+    CHANNELSANDCATEGORIES,
     CHANNELPAGE,
     CATEGORYPAGE,
     PLAYLISTS,

@@ -218,7 +218,7 @@ abstract class BaseActivity(private val layoutId: Int) : AppCompatActivity(), St
             MenuType.PLAYLISTS -> {
                 playlists_tabs?.visibility = View.VISIBLE
             }
-            MenuType.CHANNELS ->{
+            MenuType.CHANNELSANDCATEGORIES ->{
                 playlists_tabs?.visibility = View.VISIBLE
             }
             else -> {

@@ -5,11 +5,12 @@ import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.RecyclerView
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -32,8 +33,9 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        vm.categorylId = getKey()
         lifecycle.addObserver(vm)
-        vm.channels.observe(this, Observer<Result<List<ChannelWithFollow>>> { result ->
+        vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
             when (result) {
                 is Result.Success -> {
                     channelsListAdapter.updateChannels(result.data)
@@ -41,7 +43,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
                 is Result.Failure -> Timber.e(result.e)
             }
         })
-        vm.isLoading.observe(this, Observer<Boolean>{
+        vm.isLoading.observe(this, Observer<Boolean> {
             when (it) {
                 true -> showProgress()
                 else -> hideProgress()
@@ -75,7 +77,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
         router.navigateTo(ChannelPageKey(channel.id))
     }
 
-    private fun onFollowClick(channel: ChannelWithFollow) {
+    private fun onFollowClick(channel: Channel) {
         if (swipe_refresh.isRefreshing) return
         vm.onFollowClick(channel)
     }

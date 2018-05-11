@@ -59,13 +59,14 @@
                 app:layout_constraintStart_toStartOf="@+id/profile_user_name"
                 app:layout_constraintTop_toBottomOf="@id/profile_user_avatar" />
 
-            <TextView
+            <EditText
                 android:id="@+id/profile_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/profile_user_name"
+                tools:text="@string/profile_user_name"
                 android:textColor="#000000"
+                android:background="@null"
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"
                 android:textSize="24dp"

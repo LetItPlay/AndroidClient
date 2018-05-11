@@ -31,30 +31,38 @@ class PreferenceHelper(context: Context) {
             }
         }
 
-    var userToken: String?
+    var userName: String
         get() {
-            return sharedPreferences.getString(APP_SETTINGS_USER_TOKEN, null)
+            return sharedPreferences.getString(APP_SETTINGS_USER_NAME, DEFAULT_USER_NAME)
         }
         set(value) {
-            if (value != null) {
-                sharedPreferences
-                        .edit()
-                        .putString(APP_SETTINGS_USER_TOKEN, value)
-                        .apply()
-            }
+            sharedPreferences
+                    .edit()
+                    .putString(APP_SETTINGS_USER_NAME, value)
+                    .apply()
+
+        }
+
+    var userToken: String
+        get() {
+            return sharedPreferences.getString(APP_SETTINGS_USER_TOKEN, NO_VALUE)
+        }
+        set(value) {
+            sharedPreferences
+                    .edit()
+                    .putString(APP_SETTINGS_USER_TOKEN, value)
+                    .apply()
         }
 
     var userJwt: String
         get() {
-            return sharedPreferences.getString(APP_SETTINGS_USER_JWT, "")
+            return sharedPreferences.getString(APP_SETTINGS_USER_JWT, NO_VALUE)
         }
         set(value) {
-            if (value != null) {
-                sharedPreferences
-                        .edit()
-                        .putString(APP_SETTINGS_USER_JWT, value)
-                        .apply()
-            }
+            sharedPreferences
+                    .edit()
+                    .putString(APP_SETTINGS_USER_JWT, value)
+                    .apply()
         }
 
     var playbackSpeed: PlaybackSpeed
@@ -92,8 +100,10 @@ class PreferenceHelper(context: Context) {
         private const val APP_SETTINGS_CONTENT_LANG = "APP_SETTINGS_CONTENT_LANG"
         private const val APP_SETTINGS_USER_TOKEN = "APP_SETTINGS_USER_TOKEN"
         private const val APP_SETTINGS_USER_JWT = "APP_SETTINGS_USER_JWT"
-        private const val NO_VALUE = "NO_VALUE"
-        private const val PLAYBACK_SPEED = "APP_PLAYBACK_SPEED"
+        private const val APP_SETTINGS_USER_NAME = "APP_SETTINGS_USER_NAME"
+        const val DEFAULT_USER_NAME = "default user"
+        const val NO_VALUE = "NO_VALUE"
+        const val PLAYBACK_SPEED = "APP_PLAYBACK_SPEED"
         const val PROFILE_FILENAME = "user_avatar.jpg"
     }
 }

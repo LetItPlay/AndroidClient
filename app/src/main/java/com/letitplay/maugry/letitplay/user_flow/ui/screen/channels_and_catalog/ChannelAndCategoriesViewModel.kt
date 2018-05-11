@@ -24,18 +24,10 @@ class ChannelAndCategoriesViewModel(
 
     val isLoading = MutableLiveData<Boolean>()
 
-    var categorylId: Int = -1
+    var categorylId: Int? = null
 
-    val channels: LiveData<Result<List<ChannelWithFollow>>> by lazy {
-        channelRepo.channelsWithFollow()
-                .doOnSubscribe { isLoading.postValue(true) }
-                .doOnEach { isLoading.postValue(false) }
-                .toResult(schedulerProvider)
-                .toLiveData()
-    }
-
-    val channelFromCategory: LiveData<Result<List<Channel>>> by lazy {
-        channelRepo.channelsFromCategory(categorylId)
+    val channels: LiveData<Result<List<Channel>>> by lazy {
+        channelRepo.channelsWithFollow(categorylId)
                 .doOnSubscribe { isLoading.postValue(true) }
                 .doOnEach { isLoading.postValue(false) }
                 .toResult(schedulerProvider)
@@ -76,9 +68,9 @@ class ChannelAndCategoriesViewModel(
                 .addTo(compositeDisposable)
     }
 
-    fun onFollowClick(channelData: ChannelWithFollow) {
+    fun onFollowClick(channelData: Channel) {
         if (followingDisposable == null || followingDisposable!!.isDisposed) {
-            followingDisposable = channelRepo.follow(channelData.channel)
+            followingDisposable = channelRepo.follow(channelData)
                     .doOnSubscribe {
                         isLoading.postValue(true)
                     }

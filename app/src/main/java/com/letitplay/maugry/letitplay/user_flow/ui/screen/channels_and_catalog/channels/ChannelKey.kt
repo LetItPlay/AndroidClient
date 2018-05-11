@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalogs
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,22 +13,22 @@ import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class CategoryPageKey(private val channelId: Int) : BaseKey(), StateKey {
-    override fun menuType(): MenuType = MenuType.CATEGORYPAGE
+class ChannelKey(private val categoryId: Int) : BaseKey(), StateKey {
+
+    override fun layout(): Int = R.layout.channels_fragment
+
+    override fun viewChangeHandler(): ViewChangeHandler = SegueViewChangeHandler()
+
+    override fun menuType(): MenuType = MenuType.CHANNELS
 
     override fun isRootFragment(): Boolean = false
 
     override fun createFragment(): BaseFragment {
-        val fragment: BaseFragment = CategoryPageFragment()
-
+        val fragment: BaseFragment = ChannelFragment()
         val bundle: Bundle? = fragment.arguments ?: Bundle()
-        bundle?.putInt("KEY", channelId)
+        bundle?.putInt("KEY", categoryId)
         fragment.arguments = bundle
-
         return fragment
     }
 
-    override fun layout(): Int = R.layout.category_page_fragments
-
-    override fun viewChangeHandler(): ViewChangeHandler = SegueViewChangeHandler()
 }

@@ -48,9 +48,6 @@
     <string name="report_dialog_title">Причина</string>
     <string name="report_message">Ваша жалоба будет рассмотрена нашими модераторами</string>
 
-    <!--REMOTE-->
-    <string name="default_user_name" translatable="false">user</string>
-
     <plurals name="weeks_long">
         <item quantity="one">%d нед. назад</item>
         <item quantity="few">%d нед. назад</item>

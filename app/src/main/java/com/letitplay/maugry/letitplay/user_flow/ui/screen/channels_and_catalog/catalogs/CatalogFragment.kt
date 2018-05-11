@@ -6,17 +6,19 @@ import android.os.Bundle
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.ServiceLocator.router
 import com.letitplay.maugry.letitplay.data_management.db.entity.Category
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelAndCategoriesViewModel
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelKey
 import com.letitplay.maugry.letitplay.utils.Result
 import kotlinx.android.synthetic.main.catalogs_fragment.*
 import timber.log.Timber
 
 class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
-    private val catalogAdapter: CatalogAdapter by lazy { CatalogAdapter() }
+    private val catalogAdapter: CatalogAdapter by lazy { CatalogAdapter(::seeAllClick) }
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)
@@ -42,5 +44,9 @@ class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
             vm.onRefreshChannels()
         }
         catalog_list.adapter = catalogAdapter
+    }
+
+    private fun seeAllClick(categoryId: Int) {
+        router.navigateTo(ChannelKey(categoryId))
     }
 }

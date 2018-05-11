@@ -47,12 +47,11 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun authorization() {
-        val prefHelper = this.let { PreferenceHelper(it) }
-        if (prefHelper.userToken == null) prefHelper.userToken = UUID.randomUUID().toString()
+        if (prefHelper.userToken==PreferenceHelper.NO_VALUE) prefHelper.userToken = UUID.randomUUID().toString()
 
         if (prefHelper.userJwt.isEmpty()) {
             ServiceLocator.profileRepository
-                    .signUp(prefHelper.userToken!!, getString(R.string.default_user_name))
+                    .signUp(prefHelper.userToken, prefHelper.userName)
                     .doOnSuccess {
                         prefHelper.userJwt = it.headers().get(getString(R.string.authorization_header))
                     }
@@ -62,7 +61,7 @@ class SplashActivity : AppCompatActivity() {
                     })
         } else {
             ServiceLocator.profileRepository
-                    .signIn(prefHelper.userToken!!, getString(R.string.default_user_name))
+                    .signIn(prefHelper.userToken, prefHelper.userName)
                     .doOnSuccess {
                         prefHelper.userJwt = it.headers().get(getString(R.string.authorization_header))
                     }

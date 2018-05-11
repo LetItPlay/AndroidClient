@@ -104,9 +104,14 @@ class ChannelDataRepository(
                 .toCompletable()
     }
 
-    override fun channelsWithFollow(): Flowable<List<ChannelWithFollow>> {
-        return db.channelDao()
-                .getAllChannelsWithFollow(preferenceHelper.contentLanguage!!)
+    override fun channelsWithFollow(categoryId: Int?): Flowable<List<Channel>> {
+        val source = when (categoryId) {
+            null -> db.channelDao()
+                    .getAllChannels(preferenceHelper.contentLanguage!!)
+            -1 -> api.favouriteChannels()
+            else -> api.channelsFrmoCategory(categoryId)
+        }
+        return source
                 .subscribeOn(schedulerProvider.io())
     }
 

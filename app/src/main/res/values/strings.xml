@@ -49,7 +49,6 @@ s    <string name="report_dialog_title">Reason</string>
     <string name="report_message">Your complaint will be reviewed by moderators</string>
 
     <!--REMOTE-->
-    <string name="default_user_name" translatable="false">user</string>
     <string name="authorization_header" translatable="false">Authorization</string>
 
 

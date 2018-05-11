@@ -10,7 +10,7 @@ import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import kotlinx.android.synthetic.main.catalog_item.view.*
 
-class CatalogAdapter : RecyclerView.Adapter<CatalogAdapter.CatalogItemHolder>() {
+class CatalogAdapter(private val seeAllClick: ((Int) -> Unit)) : RecyclerView.Adapter<CatalogAdapter.CatalogItemHolder>() {
 
     var categories: List<Category> = ArrayList()
         set(value) {
@@ -39,6 +39,9 @@ class CatalogAdapter : RecyclerView.Adapter<CatalogAdapter.CatalogItemHolder>() 
                         it.channels = category.stations
                     }
                     catalog_name.text = category.name
+                    catalog_see_all.setOnClickListener {
+                        seeAllClick(category.id)
+                    }
                 }
             }
         }

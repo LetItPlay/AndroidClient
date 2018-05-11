@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.TextView
 import com.bumptech.glide.Glide
@@ -25,6 +27,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchRes
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
 import com.letitplay.maugry.letitplay.utils.Optional
+import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper.Companion.PROFILE_FILENAME
 import com.letitplay.maugry.letitplay.utils.ext.getUriForFile
 import com.letitplay.maugry.letitplay.utils.ext.getUriForImageFile
@@ -48,6 +51,13 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     }
 
     private var profileRepo: MusicRepo? = null
+
+    val keyboardListener = object : View.OnKeyListener {
+        override fun onKey(p0: View?, p1: Int, keyevent: KeyEvent?): Boolean {
+            if ((keyevent?.action == KeyEvent.ACTION_DOWN)) Timber.d("KEYBOARD_ACTION" + keyevent.action)
+            return true
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -90,6 +100,26 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val prefHelper = context?.let { PreferenceHelper(it) }
+        if (prefHelper?.userName != PreferenceHelper.DEFAULT_USER_NAME)
+            profile_user_name.setText(prefHelper?.userName, TextView.BufferType.EDITABLE)
+        else profile_user_name.setText(getString(R.string.profile_user_name), TextView.BufferType.EDITABLE)
+        profile_user_name.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+             Timber.d("afterTextChanged")
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Timber.d(" beforeTextChanged")
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Timber.d("onTextChanged")
+            }
+
+        })
+
         profile_header.attachTo(profile_list)
         loadProfileAvatar()
         profile_photo_icon.setOnClickListener(::takePhoto)
@@ -150,7 +180,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         }
     }
 
-    private fun onOtherClick(trackId:Int, reason: Int) {
+    private fun onOtherClick(trackId: Int, reason: Int) {
         vm.onReportClick(trackId, reason)
     }
 
