@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalogs
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalog
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -12,13 +12,14 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelKey
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelPageKey
 import com.letitplay.maugry.letitplay.utils.Result
 import kotlinx.android.synthetic.main.catalogs_fragment.*
 import timber.log.Timber
 
 class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
-    private val catalogAdapter: CatalogAdapter by lazy { CatalogAdapter(::seeAllClick) }
+    private val catalogAdapter: CatalogAdapter by lazy { CatalogAdapter(::seeAllClick, ::onChannelClick) }
 
     private val vm by lazy {
         ViewModelProvider(this, ServiceLocator.viewModelFactory)
@@ -48,5 +49,10 @@ class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
     private fun seeAllClick(categoryId: Int) {
         router.navigateTo(ChannelKey(categoryId))
+    }
+
+    private fun onChannelClick(channelId: Int) {
+        if (swipe_refresh.isRefreshing) return
+        router.navigateTo(ChannelPageKey(channelId))
     }
 }

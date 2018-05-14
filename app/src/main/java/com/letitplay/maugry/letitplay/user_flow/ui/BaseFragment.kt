@@ -37,7 +37,7 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
         isFragmentDestroying = false
     }
 
-    fun getKey(): Int = arguments?.getInt("KEY") ?: -1
+    fun getKey(): Int? = arguments?.getInt("KEY")
 
     override val name: String
         get() = this.toString()

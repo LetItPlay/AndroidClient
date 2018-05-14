@@ -14,10 +14,8 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
-import com.letitplay.maugry.letitplay.utils.Result
 import com.letitplay.maugry.letitplay.utils.ext.defaultItemAnimator
 import kotlinx.android.synthetic.main.channels_fragment.*
-import timber.log.Timber
 
 
 class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
@@ -35,12 +33,9 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
         super.onActivityCreated(savedInstanceState)
         vm.categorylId = getKey()
         lifecycle.addObserver(vm)
-        vm.channels.observe(this, Observer<Result<List<Channel>>> { result ->
-            when (result) {
-                is Result.Success -> {
-                    channelsListAdapter.updateChannels(result.data)
-                }
-                is Result.Failure -> Timber.e(result.e)
+        vm.channels.observe(this, Observer<List<Channel>> {
+            it?.let {
+                channelsListAdapter.updateChannels(it)
             }
         })
         vm.isLoading.observe(this, Observer<Boolean> {

@@ -35,13 +35,6 @@ class TrendViewModel(
     val trends by lazy { repoResult.pagedList }
     val loadingState by lazy { repoResult.refreshState }
 
-    val channels: LiveData<Result<List<Channel>>> by lazy {
-        channelRepository.channels()
-                .subscribeOn(schedulerProvider.io())
-                .toResult(schedulerProvider)
-                .toLiveData()
-    }
-
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         refreshChannels()

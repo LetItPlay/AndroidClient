@@ -25,50 +25,43 @@ class ChannelDataRepository(
                 .subscribeOn(schedulerProvider.io())
     }
 
-    override fun channel(channelId: Int): Flowable<ChannelWithFollow> {
-        val localChannel = db.channelDao().getChannelWithFollow(channelId)
-                .switchMap {
-                    if (it.isEmpty()) {
-                        api.getChannelPiece(channelId)
-                                .doOnSuccess { db.channelDao().updateOrInsertChannel(listOf(it)) }
-                                .map { ChannelWithFollow(it, null) }
-                                .toFlowable()
-                    } else {
-                        Flowable.just(it.first())
-                    }
-                }
-        return localChannel
+    override fun channel(channelId: Int): Flowable<Channel> {
+        return api.getChannelPiece(channelId)
+                .toFlowable()
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun channels(): Flowable<List<Channel>> {
-        return api.channels()
-                .doOnSuccess { db.channelDao().updateOrInsertChannel(it) }
+    override fun channels(categoryId: Int?): Single<List<Channel>> {
+        val source = when (categoryId) {
+            null -> api.channels()
+            -1 -> api.favouriteChannels()
+            else -> api.channelsFrmoCategory(categoryId)
+        }
+        return source
                 .onErrorReturnItem(emptyList())
-                .flatMapPublisher { db.channelDao().getAllChannels(preferenceHelper.contentLanguage!!) }
                 .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
     }
 
     override fun catalog(): Flowable<Pair<List<Channel>, List<Category>>> {
-        return Flowable.zip(api.favouriteChannels(), api.catalog(),
+        return Single.zip(api.favouriteChannels(), api.catalog(),
                 BiFunction { channels: List<Channel>, catalog: List<Category> ->
                     Pair(channels, catalog)
                 })
+                .toFlowable()
                 .onErrorReturnItem(Pair(emptyList(), emptyList()))
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun channelsFromCategory(categoryId: Int): Flowable<List<Channel>> {
-        val channels = if (categoryId == -1) api.favouriteChannels() else api.channelsFrmoCategory(categoryId)
-        return channels
-                .doOnNext { db.channelDao().updateOrInsertChannel(it) }
-                .onErrorReturnItem(emptyList())
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-    }
 
+    override fun loadChannels(): Completable {
+        return api.channels()
+                .doOnSuccess(db.channelDao()::updateOrInsertChannel)
+                .subscribeOn(schedulerProvider.io())
+                .toCompletable()
+    }
 
     override fun channelFollowState(channelId: Int): Flowable<Boolean> {
         return db.followDao().getFollow(channelId)
@@ -77,49 +70,18 @@ class ChannelDataRepository(
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun follow(channelData: Channel): Completable {
-        val followDao = db.followDao()
-        val channelId = channelData.id
-        val isFollowing = Single.fromCallable { followDao.getFollowSync(channelId) != null }
+    override fun follow(channelData: Channel): Single<Channel> {
+        val isFollowing = Single.fromCallable { channelData.followed != null }
         return isFollowing
                 .flatMap {
                     val currentIsFollowing = it
                     when (currentIsFollowing) {
-                        true -> api.unFollowChannel(channelId)
-                                .map { it to { followDao.deleteFollowWithChannelId(channelData.id) } }
-                        else -> api.updateChannelFollowers(channelId)
-                                .map { it to { followDao.insertFollow(Follow(channelId)) } }
-
-                    }
-                }
-                .doOnSuccess {
-                    val channelModel = it.first
-                    db.runInTransaction {
-                        db.channelDao().updateOrInsertChannel(listOf(channelModel))
-                        it.second()
+                        true -> api.unFollowChannel(channelData.id)
+                        else -> api.updateChannelFollowers(channelData.id)
                     }
                 }
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
-                .toCompletable()
-    }
-
-    override fun channelsWithFollow(categoryId: Int?): Flowable<List<Channel>> {
-        val source = when (categoryId) {
-            null -> db.channelDao()
-                    .getAllChannels(preferenceHelper.contentLanguage!!)
-            -1 -> api.favouriteChannels()
-            else -> api.channelsFrmoCategory(categoryId)
-        }
-        return source
-                .subscribeOn(schedulerProvider.io())
-    }
-
-    override fun loadChannels(): Completable {
-        return api.channels()
-                .doOnSuccess(db.channelDao()::updateOrInsertChannel)
-                .subscribeOn(schedulerProvider.io())
-                .toCompletable()
     }
 
     override fun recentAddedTracks(channelId: Int): Flowable<List<Track>> {

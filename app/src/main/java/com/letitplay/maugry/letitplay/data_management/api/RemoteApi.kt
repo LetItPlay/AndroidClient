@@ -128,13 +128,13 @@ interface LetItPlayApi {
     fun search(@Query("q") query: String): Single<SearchResponse>
 
     @GET("catalog")
-    fun catalog(): Flowable<List<Category>>
+    fun catalog(): Single<List<Category>>
 
     @GET("user/favorites/channels")
-    fun favouriteChannels(): Flowable<List<Channel>>
+    fun favouriteChannels(): Single<List<Channel>>
 
     @GET("categories/{categoryId}/stations")
-    fun channelsFrmoCategory(@Path("categoryId") categoryId: Int): Flowable<List<Channel>>
+    fun channelsFrmoCategory(@Path("categoryId") categoryId: Int): Single<List<Channel>>
 
 
     /*POST_API*/

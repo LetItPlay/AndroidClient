@@ -1,4 +1,4 @@
-package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalogs
+package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalog
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.category_item_holder.view.*
 import kotlinx.android.synthetic.main.favourite_item.view.*
 
-class CategoryAdapter(private val type: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CategoryAdapter(private val type: String, private val onChannelClick: ((Int) -> Unit)) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val FAVOURITE = "favourite"
@@ -55,6 +55,9 @@ class CategoryAdapter(private val type: String) : RecyclerView.Adapter<RecyclerV
     inner class CategoryItemHolder(parent: ViewGroup) : BaseViewHolder(parent, R.layout.category_item_holder) {
         fun update(channel: Channel) {
             itemView.apply {
+                setOnClickListener {
+                    onChannelClick(channel.id)
+                }
                 category_channel_title.text = channel.name
                 category_channel_preview.loadImage(channel.imageUrl, placeholder = R.drawable.channel_placeholder)
             }

@@ -6,15 +6,14 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollo
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 
 interface ChannelRepository {
-    fun channels(): Flowable<List<Channel>>
-    fun channelsWithFollow(categoryId: Int? = null): Flowable<List<Channel>>
+    fun channels(categoryId: Int?): Single<List<Channel>>
     fun catalog(): Flowable<Pair<List<Channel>, List<Category>>>
-    fun channelsFromCategory(categoryId: Int): Flowable<List<Channel>>
-    fun channel(channelId: Int): Flowable<ChannelWithFollow>
-    fun follow(channel: Channel): Completable
+    fun channel(channelId: Int): Flowable<Channel>
+    fun follow(channel: Channel): Single<Channel>
     fun loadChannels(): Completable
     fun recentAddedTracks(channelId: Int): Flowable<List<Track>>
     fun followedChannelsId(): Flowable<List<Int>>

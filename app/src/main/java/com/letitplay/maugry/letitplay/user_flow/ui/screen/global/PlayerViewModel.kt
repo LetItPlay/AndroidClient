@@ -85,7 +85,7 @@ class PlayerViewModel(
         val channel = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }?.channel
         if (channel != null) {
             channelRepository.follow(channel)
-                    .subscribeBy(::onError)
+                    .subscribeBy({})
                     .addTo(compositeDisposable)
         }
     }

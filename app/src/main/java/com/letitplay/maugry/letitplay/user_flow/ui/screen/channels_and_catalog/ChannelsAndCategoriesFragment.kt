@@ -10,7 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
-import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalogs.CatalogFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.catalog.CatalogFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelFragment
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import kotlinx.android.synthetic.main.channels_and_catalogs_fragment.*

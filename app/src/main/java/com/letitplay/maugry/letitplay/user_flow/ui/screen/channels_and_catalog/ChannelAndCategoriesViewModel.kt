@@ -4,7 +4,6 @@ import android.arch.lifecycle.*
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Category
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
-import com.letitplay.maugry.letitplay.data_management.db.entity.ChannelWithFollow
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.Result
@@ -26,13 +25,7 @@ class ChannelAndCategoriesViewModel(
 
     var categorylId: Int? = null
 
-    val channels: LiveData<Result<List<Channel>>> by lazy {
-        channelRepo.channelsWithFollow(categorylId)
-                .doOnSubscribe { isLoading.postValue(true) }
-                .doOnEach { isLoading.postValue(false) }
-                .toResult(schedulerProvider)
-                .toLiveData()
-    }
+    var channels: MutableLiveData<List<Channel>> = MutableLiveData()
 
     val catalog: LiveData<Result<Pair<List<Channel>, List<Category>>>> by lazy {
         channelRepo.catalog()
@@ -60,7 +53,9 @@ class ChannelAndCategoriesViewModel(
     }
 
     private fun refreshChannels() {
-        channelRepo.loadChannels()
+        channelRepo.channels(categorylId)
+                .doOnSubscribe { refreshing.postValue(true) }
+                .doOnSuccess { channels.value = it }
                 .doFinally {
                     refreshing.postValue(false)
                 }
@@ -73,6 +68,17 @@ class ChannelAndCategoriesViewModel(
             followingDisposable = channelRepo.follow(channelData)
                     .doOnSubscribe {
                         isLoading.postValue(true)
+                    }
+                    .doOnSuccess {
+                        val channel = it
+                        val currentList: MutableList<Channel> = channels.value?.toMutableList()
+                                ?: mutableListOf()
+                        val updatedChannel = currentList.find { it.id == channel.id }
+                        val updatedIndex = currentList.indexOf(updatedChannel)
+                        currentList.removeAt(updatedIndex)
+                        currentList.add(updatedIndex, channel)
+
+                        channels.value = currentList
                     }
                     .doFinally {
                         isLoading.postValue(false)
