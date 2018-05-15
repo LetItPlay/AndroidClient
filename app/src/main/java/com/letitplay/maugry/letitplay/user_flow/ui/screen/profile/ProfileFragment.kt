@@ -109,7 +109,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         profile_user_name.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(p0: Editable?) {
-
+                prefHelper?.userName = p0.toString()
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -119,8 +119,6 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
-
-
         })
 
         profile_header.attachTo(profile_list)
