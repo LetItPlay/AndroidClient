@@ -10,6 +10,7 @@ import android.support.v4.media.session.MediaControllerCompat
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
@@ -26,13 +27,14 @@ class PlayerViewModel(
         application: Application,
         private val trackRepository: TrackRepository,
         private val channelRepository: ChannelRepository
-): AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private var musicService: WeakReference<MusicService>? = null
     private val compositeDisposable = CompositeDisposable()
 
     val currentTrack = MutableLiveData<AudioTrack?>()
     val musicRepo = MutableLiveData<MusicRepo>()
+
     val currentTrackIsLiked: LiveData<Boolean?> = Transformations.switchMap(currentTrack, { track ->
         if (track != null) {
             trackRepository.trackLikeState(track.id).toLiveData()
@@ -40,17 +42,18 @@ class PlayerViewModel(
             InitializedMutableLiveData<Boolean?>(null)
         }
     })
-    val currentChannelIsFollow: LiveData<Boolean?> = Transformations.switchMap(currentTrack, { track ->
+
+    val currentChannelIsFollow: LiveData<Channel?> = Transformations.switchMap(currentTrack, { track ->
         if (track != null) {
-            channelRepository.channelFollowState(track.channelId).toLiveData()
+            channelRepository.channel(track.channelId).toLiveData()
         } else {
-            InitializedMutableLiveData<Boolean?>(null)
+            InitializedMutableLiveData<Channel?>(null)
         }
     })
 
-    private val tracksInRepo: MutableLiveData<List<TrackWithChannel>> = MutableLiveData()
+    private var tracksInRepo: MutableLiveData<List<TrackWithChannel>> = MutableLiveData()
 
-    private val mediaControllerCallback = object: MediaControllerCompat.Callback() {
+    private val mediaControllerCallback = object : MediaControllerCompat.Callback() {
         override fun onMetadataChanged(metadata: MediaMetadataCompat?) {
             val currentTrackInRepo = musicRepo.value?.currentAudioTrack
             if (currentTrackInRepo?.id != currentTrack.value?.id)
@@ -81,10 +84,19 @@ class PlayerViewModel(
     }
 
     fun followChannelForCurrentTrack() {
-        val currentTrackId = currentTrack.value?.id
-        val channel = tracksInRepo.value?.firstOrNull { it.track.id == currentTrackId }?.channel
-        if (channel != null) {
-            channelRepository.follow(channel)
+        val channelWithTrack = tracksInRepo.value?.firstOrNull { it.track.id == currentTrack.value?.id }
+        val currentList: MutableList<TrackWithChannel> = tracksInRepo.value?.toMutableList()
+                ?: mutableListOf()
+        val updatedIndex = currentList.indexOf(channelWithTrack)
+        channelWithTrack?.let {
+            channelRepository
+                    .follow(channelWithTrack.channel)
+                    .doOnSuccess {
+                        currentList.removeAt(updatedIndex)
+                        currentList.add(updatedIndex, TrackWithChannel(channelWithTrack.track, it, channelWithTrack.likeId))
+                        tracksInRepo.value = currentList
+                        currentTrack.postValue(currentTrack.value)
+                    }
                     .subscribeBy({})
                     .addTo(compositeDisposable)
         }

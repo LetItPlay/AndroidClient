@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.model.PlaybackSpeed
 import com.letitplay.maugry.letitplay.data_management.model.availableSpeeds
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.global.PlayerViewModel
@@ -69,13 +70,16 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
                 setFollowState(it)
             }
         }
+
         playerViewModel?.currentTrack?.observeForever {
             if (it != null)
                 setDetailedTrack(it)
         }
+
         player_like_button.setOnClickListener {
             playerViewModel?.likeCurrentTrack()
         }
+
         collapse.setOnClickListener {
             onCollapseClick()
         }
@@ -92,7 +96,7 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         player_tabs.setupWithViewPager(player_pager)
         player_pager.offscreenPageLimit = 2
         player_pager.adapter = PlayerTabsAdapter(fm)
-        player_pager.currentItem=1
+        player_pager.currentItem = 1
     }
 
     fun setExpandedState(musicService: MusicService?) {
@@ -128,15 +132,15 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     }
 
-    private fun setFollowState(isFollow: Boolean) {
-        trackDetailedFragment.player_channel_follow.isFollowing = isFollow
+    private fun setFollowState(channel: Channel?) {
+        trackDetailedFragment.player_channel_follow.isFollowing = channel?.followed ?: false
     }
 
     inner class PlayerTabsAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 ->  trackDetailedFragment
-                1 ->  playerFragment
+                0 -> trackDetailedFragment
+                1 -> playerFragment
                 2 -> playlistFragment
                 else -> throw IllegalArgumentException()
             }

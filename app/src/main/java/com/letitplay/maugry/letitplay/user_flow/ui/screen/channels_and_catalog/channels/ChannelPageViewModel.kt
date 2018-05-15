@@ -9,6 +9,7 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
@@ -37,8 +38,8 @@ class ChannelPageViewModel(
                     .follow(it)
                     .doOnSuccess { channelId.value = it.id }
                     .subscribeBy({})
+                    .addTo(compositeDisposable)
         }
-
     }
 
 

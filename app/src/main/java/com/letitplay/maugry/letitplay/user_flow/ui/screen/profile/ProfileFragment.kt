@@ -105,18 +105,21 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         if (prefHelper?.userName != PreferenceHelper.DEFAULT_USER_NAME)
             profile_user_name.setText(prefHelper?.userName, TextView.BufferType.EDITABLE)
         else profile_user_name.setText(getString(R.string.profile_user_name), TextView.BufferType.EDITABLE)
+
         profile_user_name.addTextChangedListener(object : TextWatcher {
+
             override fun afterTextChanged(p0: Editable?) {
-             Timber.d("afterTextChanged")
+
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Timber.d(" beforeTextChanged")
+
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Timber.d("onTextChanged")
+
             }
+
 
         })
 
