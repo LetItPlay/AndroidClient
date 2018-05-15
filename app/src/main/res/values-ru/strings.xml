@@ -33,6 +33,7 @@
     <!--PROFILE-->
     <string name="profile_favourite_tracks">Треки, понравившиеся вам</string>
     <string name="profile_user_name">Ваш будущий профиль</string>
+    <string name="profile_hidden_channels">Скрытые каналы</string>
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>

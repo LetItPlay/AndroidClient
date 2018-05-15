@@ -35,6 +35,7 @@
     <!--PROFILE-->
     <string name="profile_favourite_tracks">Titres que vous aimez</string>
     <string name="profile_user_name">Votre futur profil</string>
+    <string name="profile_hidden_channels">Hidden channels</string>
 
     <!-- SEARCH -->
     <string name="search_title">Rechercher</string>

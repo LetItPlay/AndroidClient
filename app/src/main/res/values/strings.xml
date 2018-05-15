@@ -33,6 +33,7 @@
     <!--PROFILE-->
     <string name="profile_favourite_tracks">Tracks you’ve liked</string>
     <string name="profile_user_name">Your future profile</string>
+    <string name="profile_hidden_channels">Hidden channels</string>
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>

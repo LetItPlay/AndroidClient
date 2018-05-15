@@ -46,6 +46,20 @@ object SharedHelper {
                 })
     }
 
+    fun showChannelContextMenu(ctx: Context, channelTitle: String?, channelId: Int?) {
+        AlertDialog.Builder(ctx).apply {
+            setItems(R.array.channel_dialog, object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    when (p1) {
+                        0 -> channelShare(ctx, channelTitle, channelId)
+                        1 -> channelShare(ctx, channelTitle, channelId)
+                    }
+                }
+
+            })
+        }.create().show()
+    }
+
     fun showTrackContextMenu(ctx: Context,
                              trackTitle: String?, channelTitle: String?,
                              trackId: Int, channelId: Int?,

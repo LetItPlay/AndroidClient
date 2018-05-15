@@ -81,20 +81,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/like_background"
-                    android:paddingBottom="9dp"
-                    android:paddingEnd="8dp"
-                    android:paddingStart="6dp"
-                    android:paddingTop="8dp"
+                    android:background="@drawable/other_channel_bk"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/channel_page_follow"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="15dp"
-                        android:src="@drawable/channel_share" />
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/other_inactive" />
 
                 </FrameLayout>
 
@@ -105,8 +101,9 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/channel_page_share"
                     app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@id/channel_page_followers"
                     app:layout_constraintTop_toTopOf="parent" />
 
 

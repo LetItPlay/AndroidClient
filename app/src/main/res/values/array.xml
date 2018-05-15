@@ -6,4 +6,9 @@
         <item>Жесткий контент</item>
         <item>Отмена</item>
     </string-array>
+
+    <string-array name="channel_dialog">
+        <item>Скрыть</item>
+        <item>Поделиться</item>
+    </string-array>
 </resources>
