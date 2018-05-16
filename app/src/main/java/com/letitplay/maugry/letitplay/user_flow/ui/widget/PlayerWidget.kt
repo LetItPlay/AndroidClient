@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gsfoxpro.musicservice.model.AudioTrack
@@ -74,6 +75,12 @@ class PlayerWidget @JvmOverloads constructor(context: Context, attrs: AttributeS
         playerViewModel?.currentTrack?.observeForever {
             if (it != null)
                 setDetailedTrack(it)
+        }
+
+        playerViewModel?.isReported?.observeForever {
+            it?.let {
+                if (it) Toast.makeText(context, R.string.report_message, Toast.LENGTH_LONG).show()
+            }
         }
 
         player_like_button.setOnClickListener {

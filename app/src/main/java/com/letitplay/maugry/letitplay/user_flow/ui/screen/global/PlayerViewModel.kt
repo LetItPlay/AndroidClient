@@ -31,7 +31,7 @@ class PlayerViewModel(
 
     private var musicService: WeakReference<MusicService>? = null
     private val compositeDisposable = CompositeDisposable()
-
+    var isReported = MutableLiveData<Boolean>()
     val currentTrack = MutableLiveData<AudioTrack?>()
     val musicRepo = MutableLiveData<MusicRepo>()
 
@@ -82,6 +82,16 @@ class PlayerViewModel(
                     .addTo(compositeDisposable)
         }
     }
+
+    fun onReportClick(trackId: Int, reason: Int) {
+        trackRepository.report(trackId, reason)
+                .doOnSuccess {
+                    isReported.postValue(true)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
+    }
+
 
     fun followChannelForCurrentTrack() {
         val channelWithTrack = tracksInRepo.value?.firstOrNull { it.track.id == currentTrack.value?.id }

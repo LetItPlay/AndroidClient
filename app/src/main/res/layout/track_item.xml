@@ -91,15 +91,12 @@
         app:layout_constraintBottom_toBottomOf="@id/track_time_icon"
         app:layout_constraintStart_toEndOf="@+id/track_time" />
 
-    <ImageView
+    <com.letitplay.maugry.letitplay.user_flow.ui.widget.OtherAudioTrackWidget
         android:id="@+id/track_other"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginBottom="7dp"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        android:rotation="90"
-        android:src="@drawable/other_inactive"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

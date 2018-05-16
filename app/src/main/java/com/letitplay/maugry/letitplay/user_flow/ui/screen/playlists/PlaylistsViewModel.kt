@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.playlists
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
@@ -11,6 +12,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
 
@@ -20,7 +22,7 @@ class PlaylistsViewModel(
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel() {
 
-    private var reportDisposable: Disposable? = null
+    var isReported = MutableLiveData<Boolean>()
 
     data class ViewState(val showTracks: Boolean, val tracks: List<TrackWithChannel>)
 
@@ -48,12 +50,12 @@ class PlaylistsViewModel(
                 .addTo(compositeDisposable)
     }
 
-    fun onReportClick(trackId:Int, reason: Int) {
-        if (reportDisposable == null || reportDisposable!!.isDisposed) {
-            reportDisposable = trackRepository.report(trackId,reason)
-                    .subscribe({}, {
-                        Timber.e(it, "Error when liking")
-                    })
-        }
+    fun onReportClick(trackId: Int, reason: Int) {
+        trackRepository.report(trackId, reason)
+                .doOnSuccess {
+                    isReported.postValue(true)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
     }
 }

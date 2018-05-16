@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.gsfoxpro.musicservice.MusicRepo
 import com.gsfoxpro.musicservice.model.AudioTrack
 import com.letitplay.maugry.letitplay.R
@@ -39,6 +40,12 @@ class UserPlaylistFragment : BaseFragment(R.layout.user_playlist_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.isReported.observe(this, Observer<Boolean> {
+            it?.let {
+                if (it) Toast.makeText(ctx, R.string.report_message, Toast.LENGTH_LONG).show()
+            }
+        })
+
         vm.state.observe(this, Observer<PlaylistsViewModel.ViewState> {
             if (it != null) {
                 when {

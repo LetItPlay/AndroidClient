@@ -7,6 +7,7 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
+import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
@@ -121,9 +122,6 @@ class PlaylistAdapter(
                     }
                 })
 
-                track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, trackData.track.title, trackData.channel.name, trackData.track.id, trackData.channel.id, onOtherClick)
-                }
 
                 playlist_right_view.setOnClickListener {
                     if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -143,6 +141,10 @@ class PlaylistAdapter(
                 track_time.text = trackData.track.trackLengthShort
                 track_name.text = trackData.track.title
                 track_logo.loadImage(trackData.track.coverUrl, placeholder = R.drawable.feed_item_placeholder)
+                track_other.apply {
+                    this.track = trackData.toAudioTrack()
+                    this.report = onOtherClick
+                }
             }
         }
     }

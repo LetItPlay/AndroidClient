@@ -23,15 +23,16 @@ import ru.rambler.libs.swipe_layout.SwipeLayout
 
 class FeedItemViewHolder(
         parent: ViewGroup?,
-        playlistActionsListener: OnPlaylistActionsListener?,
-        onClick: (TrackWithChannel) -> Unit,
-        onLikeClick: (TrackWithChannel) -> Unit,
-        onOtherClick: (Int, Int) -> Unit,
-        onChannelTitleClick: (TrackWithChannel) -> Unit,
-        onBeginSwipe: (SwipeLayout) -> Unit,
-        musicService: MusicService?
+        val playlistActionsListener: OnPlaylistActionsListener?,
+        val onClick: (TrackWithChannel) -> Unit,
+        val onLikeClick: (TrackWithChannel) -> Unit,
+        val onOtherClick: (Int, Int) -> Unit,
+        val onChannelTitleClick: (TrackWithChannel) -> Unit,
+        val onBeginSwipe: (SwipeLayout) -> Unit,
+        val musicService: MusicService?
 ) : BaseViewHolder(parent, R.layout.feed_item) {
     lateinit var feedData: TrackWithChannel
+
 
     init {
         val addToTop = {
@@ -65,9 +66,7 @@ class FeedItemViewHolder(
             feed_track_info_description.setOnClickListener {
                 hideInfo()
             }
-            feed_other.setOnClickListener {
-                SharedHelper.showTrackContextMenu(context, feedData.track.title, feedData.channel.name, feedData.track.id, feedData.channel.id, onOtherClick)
-            }
+
             feed_like.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     onLikeClick(feedData)
@@ -107,6 +106,10 @@ class FeedItemViewHolder(
         }
         this.feedData = feedData
         itemView.apply {
+            feed_other.apply {
+                this.track = feedData
+                this.report = onOtherClick
+            }
             val data = DateHelper.getLongPastDate(feedData.track.publishedAt, context)
             feed_card.show()
             feed_card_info.gone()

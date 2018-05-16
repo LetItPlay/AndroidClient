@@ -1,6 +1,7 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
@@ -10,9 +11,8 @@ import com.letitplay.maugry.letitplay.data_management.repo.track.TrackRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.Optional
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import timber.log.Timber
+import io.reactivex.rxkotlin.subscribeBy
 
 
 class ProfileViewModel(
@@ -21,7 +21,7 @@ class ProfileViewModel(
         private val schedulerProvider: SchedulerProvider
 ) : BaseViewModel() {
 
-    private var reportDisposable: Disposable? = null
+    var isReported = MutableLiveData<Boolean>()
 
     val language: LiveData<Optional<Language>> by lazy {
         profileRepository.getLanguage().toLiveData()
@@ -43,13 +43,13 @@ class ProfileViewModel(
                 .addTo(compositeDisposable)
     }
 
-    fun onReportClick(trackId:Int, reason: Int) {
-        if (reportDisposable == null || reportDisposable!!.isDisposed) {
-            reportDisposable = trackRepository.report(trackId,reason)
-                    .subscribe({}, {
-                        Timber.e(it, "Error when liking")
-                    })
-        }
+    fun onReportClick(trackId: Int, reason: Int) {
+        trackRepository.report(trackId, reason)
+                .doOnSuccess {
+                    isReported.postValue(true)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
 
     }
 

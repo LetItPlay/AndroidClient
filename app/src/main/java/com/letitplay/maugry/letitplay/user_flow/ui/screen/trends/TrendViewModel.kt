@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.trends
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.OnLifecycleEvent
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
@@ -11,6 +12,7 @@ import com.letitplay.maugry.letitplay.data_management.repo.trend.TrendRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
 
@@ -21,6 +23,8 @@ class TrendViewModel(
 ) : BaseViewModel(), LifecycleObserver {
     private var likeDisposable: Disposable? = null
     private var reportDisposable: Disposable? = null
+
+    var isReported = MutableLiveData<Boolean>()
 
     private val repoResult by lazy { trendRepository.trends(compositeDisposable) }
     val trends by lazy { repoResult.pagedList }
@@ -49,13 +53,12 @@ class TrendViewModel(
     }
 
     fun onReportClick(trackId: Int, reason: Int) {
-        if (reportDisposable == null || reportDisposable!!.isDisposed) {
-            reportDisposable = trackRepository.report(trackId, reason)
-                    .subscribe({}, {
-                        Timber.e(it, "Error when liking")
-                    })
-        }
-
+        trackRepository.report(trackId, reason)
+                .doOnSuccess {
+                    isReported.postValue(true)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
     }
 
     fun onSwipeTrackToTop(trackData: TrackWithChannel) {

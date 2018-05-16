@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.Toast
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -66,6 +67,11 @@ class TrendsFragment : BaseFragment(R.layout.trends_fragment) {
         vm.trends.observe(this, Observer<PagedList<TrackWithChannel>> {
             it?.let {
                 trendsListAdapter.submitList(it)
+            }
+        })
+        vm.isReported.observe(this, Observer<Boolean>{
+            it?.let{
+                if (it)  Toast.makeText(ctx, R.string.report_message, Toast.LENGTH_LONG).show()
             }
         })
     }

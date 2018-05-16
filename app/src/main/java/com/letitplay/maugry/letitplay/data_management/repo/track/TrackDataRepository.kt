@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.data_management.repo.track
 
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
+import com.letitplay.maugry.letitplay.data_management.api.responses.TrackWithEmbeddedChannel
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
 import com.letitplay.maugry.letitplay.data_management.db.entity.Like
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackInPlaylist
@@ -19,12 +20,11 @@ class TrackDataRepository(
         private val schedulerProvider: SchedulerProvider
 ) : TrackRepository {
 
-    override fun report(trackId: Int, reason: Int): Completable {
+    override fun report(trackId: Int, reason: Int): Single<TrackWithEmbeddedChannel> {
         return api
                 .repotOnTrack(trackId, reason)
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
-                .toCompletable()
     }
 
     override fun like(track: TrackWithChannel): Completable {

@@ -12,6 +12,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
@@ -61,6 +62,12 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        vm.isReported.observe(this, Observer<Boolean> {
+            it?.let {
+                if (it) Toast.makeText(ctx, R.string.report_message, Toast.LENGTH_LONG).show()
+            }
+        })
         vm.likedTracks.observe(this, Observer<List<TrackWithChannel>> {
 
             profile_track_count.text = it?.count()?.toString() ?: "0"

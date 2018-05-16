@@ -7,7 +7,6 @@ import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.business.BaseViewHolder
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
-import com.letitplay.maugry.letitplay.user_flow.ui.utils.SharedHelper
 import com.letitplay.maugry.letitplay.utils.ext.loadImage
 import kotlinx.android.synthetic.main.track_item.view.*
 
@@ -34,10 +33,10 @@ class TrackAdapter(
     }
 
     class TrackItemHolder(
-            parent: ViewGroup?,
-            onClick: (AudioTrack) -> Unit,
-            onOtherClick: (Int, Int) -> Unit,
-            musicService: MusicService?
+            val parent: ViewGroup?,
+            val onClick: (AudioTrack) -> Unit,
+            val onOtherClick: (Int, Int) -> Unit,
+            val musicService: MusicService?
     ) : BaseViewHolder(parent, R.layout.track_item) {
         private lateinit var track: AudioTrack
 
@@ -45,9 +44,6 @@ class TrackAdapter(
             itemView.apply {
                 setOnClickListener {
                     onClick(track)
-                }
-                track_other.setOnClickListener {
-                    SharedHelper.showTrackContextMenu(context, track.title, track.channelTitle, track.id, track.channelId, onOtherClick)
                 }
                 track_playing_now.mediaSession = musicService?.mediaSession
             }
@@ -63,6 +59,10 @@ class TrackAdapter(
                 track_playing_now.trackListenerCount = track.listenCount
                 track_playing_now.trackId = track.id.toString()
                 track_logo.loadImage(track.imageUrl, placeholder = R.drawable.feed_item_placeholder)
+                track_other.apply {
+                    this.track = track
+                    this.report = onOtherClick
+                }
             }
         }
 

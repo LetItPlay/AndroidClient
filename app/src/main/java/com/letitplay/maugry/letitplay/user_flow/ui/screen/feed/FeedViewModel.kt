@@ -3,6 +3,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PagedList
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
@@ -14,6 +15,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
 
@@ -29,8 +31,8 @@ class FeedViewModel(
             val noChannels: Boolean = false
     )
 
+    var isReported = MutableLiveData<Boolean>()
     private var likeDisposable: Disposable? = null
-    private var reportDisposable: Disposable? = null
     private val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
     private val feeds by lazy { repoResult.pagedList }
     private val noFollowedChannels by lazy {
@@ -66,16 +68,12 @@ class FeedViewModel(
     }
 
     fun onReportClick(trackId: Int, reason: Int) {
-        if (reportDisposable == null || reportDisposable!!.isDisposed) {
-            reportDisposable = trackRepository.report(trackId,reason)
-                    .doOnComplete {
-
-                    }
-                    .subscribe({}, {
-                        Timber.e(it, "Error when liking")
-                    })
-        }
-
+        trackRepository.report(trackId, reason)
+                .doOnSuccess {
+                    isReported.postValue(true)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
     }
 
     fun onSwipeTrackToTop(trackData: TrackWithChannel) {
