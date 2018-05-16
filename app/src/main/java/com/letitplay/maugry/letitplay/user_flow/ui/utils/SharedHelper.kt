@@ -15,9 +15,9 @@ import timber.log.Timber
 
 object SharedHelper {
 
-    private fun getChannelUrl(title: String?, id: Int?): String = "$title:  ${GL_DEEP_LINK_SERVICE_URL}channel=$id"
+    fun getChannelUrl(title: String?, id: Int?): String = "$title:  ${GL_DEEP_LINK_SERVICE_URL}channel=$id"
 
-    private fun getTrackUrl(trackTitle: String?, channelTitle: String?, trackId: Int?, channelId: Int?) = "$channelTitle-$trackTitle:  ${GL_DEEP_LINK_SERVICE_URL}channel=$channelId&track=$trackId"
+    fun getTrackUrl(trackTitle: String?, channelTitle: String?, trackId: Int?, channelId: Int?) = "$channelTitle-$trackTitle:  ${GL_DEEP_LINK_SERVICE_URL}channel=$channelId&track=$trackId"
 
     private fun onOtherClick(ctx: Context, trackTitle: String?, channelTitle: String?, trackId: Int?, channelId: Int?) {
         var sendIntent = Intent()
@@ -46,19 +46,6 @@ object SharedHelper {
                 })
     }
 
-    fun showChannelContextMenu(ctx: Context, channelTitle: String?, channelId: Int?) {
-        AlertDialog.Builder(ctx).apply {
-            setItems(R.array.channel_dialog, object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    when (p1) {
-                        0 -> channelShare(ctx, channelTitle, channelId)
-                        1 -> channelShare(ctx, channelTitle, channelId)
-                    }
-                }
-
-            })
-        }.create().show()
-    }
 
     fun showTrackContextMenu(ctx: Context,
                              trackTitle: String?, channelTitle: String?,

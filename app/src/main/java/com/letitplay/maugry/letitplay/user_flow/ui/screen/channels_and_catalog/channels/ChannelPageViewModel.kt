@@ -3,7 +3,6 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
-import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
@@ -11,15 +10,14 @@ import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
 import com.letitplay.maugry.letitplay.utils.ext.toLiveData
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
-import timber.log.Timber
 
 
 class ChannelPageViewModel(
-        private val channelRepository: ChannelRepository,
-        private val schedulerProvider: SchedulerProvider
+        private val channelRepository: ChannelRepository
 ) : BaseViewModel() {
 
     val channelId = MutableLiveData<Int>()
+    val isHidden = MutableLiveData<Boolean>()
 
     var channel: LiveData<Channel> = Transformations.switchMap(channelId,
             { channelId ->
@@ -42,8 +40,14 @@ class ChannelPageViewModel(
         }
     }
 
-
-    private fun onError(throwable: Throwable) {
-        Timber.e("Error: ", throwable)
+    fun hideChannel(channelId: Int) {
+        channelRepository
+                .hideChannel(channelId)
+                .doOnSuccess {
+                    isHidden.postValue(true)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
     }
+
 }

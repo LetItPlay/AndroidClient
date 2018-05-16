@@ -1,13 +1,17 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels
 
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
@@ -57,9 +61,15 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 channel_page_follow.isFollowing = it.followed ?: false
                 channel_page_share?.let {
                     it.setOnClickListener {
-                        SharedHelper.showChannelContextMenu(it.context, channelData.name, channelData.id)
+                        showChannelContextMenu(it.context, channelData.name, channelData.id)
                     }
                 }
+            }
+        })
+        vm.isHidden.observe(this, Observer<Boolean> {
+            it?.let {
+                if (it) Toast.makeText(context, R.string.hide_message, Toast.LENGTH_LONG).show()
+                else Toast.makeText(context, R.string.hide_message, Toast.LENGTH_LONG).show()
             }
         })
         vm.recentAddedChannelTracks.observe(this, Observer<List<Track>> {
@@ -98,6 +108,20 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
             channelPageRepo = MusicRepo(tracksList.map(TrackWithChannel::toAudioTrack).toMutableList())
             navigationActivity.updateRepo(track.id, channelPageRepo, tracksList)
         }
+    }
+
+    fun showChannelContextMenu(ctx: Context, channelTitle: String?, channelId: Int) {
+        AlertDialog.Builder(ctx).apply {
+            setItems(R.array.channel_dialog, object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    when (p1) {
+                        0 -> vm.hideChannel(channelId)
+                        1 -> SharedHelper.channelShare(ctx, channelTitle, channelId)
+                    }
+                }
+
+            })
+        }.create().show()
     }
 
 }

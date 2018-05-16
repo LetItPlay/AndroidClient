@@ -46,8 +46,10 @@
     <string name="language_logo_text">let it play</string>
 
     <!--GLOBAL-->
-s    <string name="report_dialog_title">Reason</string>
+    <string name="report_dialog_title">Reason</string>
     <string name="report_message">Your complaint will be reviewed by moderators</string>
+    <string name="hide_message">The channel will be hidden from the tape. To restore go to profile screen.</string>
+
 
     <!--REMOTE-->
     <string name="authorization_header" translatable="false">Authorization</string>

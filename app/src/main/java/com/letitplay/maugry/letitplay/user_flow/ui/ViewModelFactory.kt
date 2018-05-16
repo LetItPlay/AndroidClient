@@ -50,15 +50,12 @@ class ViewModelFactory(
                 isAssignableFrom(TrendViewModel::class.java) ->
                     TrendViewModel(
                             trendRepository,
-                            channelRepository,
                             trackRepository,
-                            playerRepository,
-                            schedulerProvider
+                            playerRepository
                     )
                 isAssignableFrom(ChannelPageViewModel::class.java) ->
                     ChannelPageViewModel(
-                            channelRepository,
-                            schedulerProvider
+                            channelRepository
                     )
                 isAssignableFrom(ChannelAndCategoriesViewModel::class.java) ->
                     ChannelAndCategoriesViewModel(

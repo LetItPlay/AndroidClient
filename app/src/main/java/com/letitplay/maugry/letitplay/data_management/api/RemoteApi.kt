@@ -13,7 +13,6 @@ import com.letitplay.maugry.letitplay.data_management.db.entity.Category
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
-import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -134,7 +133,10 @@ interface LetItPlayApi {
     fun favouriteChannels(): Single<List<Channel>>
 
     @GET("categories/{categoryId}/stations")
-    fun channelsFrmoCategory(@Path("categoryId") categoryId: Int): Single<List<Channel>>
+    fun channelsFromCategory(@Path("categoryId") categoryId: Int): Single<List<Channel>>
+
+    @GET("/blacklist/channel")
+    fun channelsFromBlackList(): Single<List<Channel>>
 
 
     /*POST_API*/
@@ -162,6 +164,9 @@ interface LetItPlayApi {
     @FormUrlEncoded
     fun repotOnTrack(@Path("id") idTrack: Int, @Field("reason") reason: Int): Single<TrackWithEmbeddedChannel>
 
+    @PUT("/blacklist/channel/{id}")
+    fun putChannelToBlacklist(@Path("id") idStation: Int): Single<Channel>
+
     /*DELETE_API*/
 
     @DELETE("follow/channel/{id}")
@@ -169,4 +174,7 @@ interface LetItPlayApi {
 
     @DELETE("like/{id}")
     fun unLikeTracks(@Path("id") idTrack: Int): Single<TrackWithEmbeddedChannel>
+
+    @DELETE("/blacklist/channel/{id}")
+    fun deleteChannelFromBlacklist(@Path("id") idStation: Int): Single<Channel>
 }

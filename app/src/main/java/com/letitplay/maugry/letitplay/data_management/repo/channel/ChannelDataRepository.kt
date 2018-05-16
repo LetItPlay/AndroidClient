@@ -36,7 +36,7 @@ class ChannelDataRepository(
         val source = when (categoryId) {
             null -> api.channels()
             -1 -> api.favouriteChannels()
-            else -> api.channelsFrmoCategory(categoryId)
+            else -> api.channelsFromCategory(categoryId)
         }
         return source
                 .onErrorReturnItem(emptyList())
@@ -56,33 +56,26 @@ class ChannelDataRepository(
     }
 
 
-    override fun loadChannels(): Completable {
-        return api.channels()
-                .doOnSuccess(db.channelDao()::updateOrInsertChannel)
-                .subscribeOn(schedulerProvider.io())
-                .toCompletable()
-    }
-
-    override fun channelFollowState(channelId: Int): Flowable<Boolean> {
-        return db.followDao().getFollow(channelId)
-                .map(List<Follow>::isNotEmpty)
+    override fun hideChannel(channelId: Int): Single<Channel> {
+        return api.putChannelToBlacklist(channelId)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun follow(channelData: Channel): Single<Channel> {
-        val isFollowing = Single.fromCallable { channelData.followed != null }
+    override fun follow(channel: Channel): Single<Channel> {
+        val isFollowing = Single.fromCallable { channel.followed != null }
         return isFollowing
                 .flatMap {
                     val currentIsFollowing = it
                     when (currentIsFollowing) {
-                        true -> api.unFollowChannel(channelData.id)
-                        else -> api.updateChannelFollowers(channelData.id)
+                        true -> api.unFollowChannel(channel.id)
+                        else -> api.updateChannelFollowers(channel.id)
                     }
                 }
                 .observeOn(schedulerProvider.ui())
                 .subscribeOn(schedulerProvider.io())
     }
+
 
     override fun recentAddedTracks(channelId: Int): Flowable<List<Track>> {
         return api.getChannelTracks(channelId)
