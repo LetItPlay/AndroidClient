@@ -13,7 +13,7 @@ import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class ChannelKey(private val categoryId: Int) : BaseKey(), StateKey {
+class ChannelKey(private val listType: Int) : BaseKey(), StateKey {
 
     override fun layout(): Int = R.layout.channels_fragment
 
@@ -26,7 +26,7 @@ class ChannelKey(private val categoryId: Int) : BaseKey(), StateKey {
     override fun createFragment(): BaseFragment {
         val fragment: BaseFragment = ChannelFragment()
         val bundle: Bundle? = fragment.arguments ?: Bundle()
-        bundle?.putInt("KEY", categoryId)
+        bundle?.putInt("KEY", listType)
         fragment.arguments = bundle
         return fragment
     }

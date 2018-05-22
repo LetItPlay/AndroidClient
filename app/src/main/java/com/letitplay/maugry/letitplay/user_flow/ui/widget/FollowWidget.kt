@@ -14,20 +14,29 @@ class FollowWidget @JvmOverloads constructor(context: Context?, attrs: Attribute
 
     init {
         LayoutInflater.from(context).inflate(R.layout.follow_button, this)
-        updateState(false)
+        updateState(false, false)
     }
 
     var isFollowing: Boolean by Delegates.vetoable(false, { _, old, new ->
-        updateState(new)
+        updateState(new, isHidden)
+        old != new
+    })
+
+    var isHidden: Boolean by Delegates.vetoable(false, { _, old, new ->
+        updateState(isFollowing, new)
         old != new
     })
 
 
-    private fun updateState(isFollowing: Boolean) {
-        if (isFollowing) {
-            setUnfollow()
+    private fun updateState(isFollowing: Boolean, isHidden: Boolean) {
+        if (isHidden) {
+            setShow()
         } else {
-            setFollow()
+            if (isFollowing) {
+                setUnfollow()
+            } else {
+                setFollow()
+            }
         }
     }
 
@@ -39,5 +48,10 @@ class FollowWidget @JvmOverloads constructor(context: Context?, attrs: Attribute
     private fun setUnfollow() {
         follow_button.isSelected = true
         follow_button.text = context.getString(R.string.channels_following)
+    }
+
+    private fun setShow() {
+        follow_button.isSelected = true
+        follow_button.text = context.getString(R.string.channels_show)
     }
 }

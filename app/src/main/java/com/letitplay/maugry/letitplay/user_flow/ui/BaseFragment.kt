@@ -12,12 +12,9 @@ import android.view.ViewGroup
 import com.gsfoxpro.musicservice.service.MusicService
 import com.letitplay.maugry.letitplay.App
 import com.letitplay.maugry.letitplay.GL_PROGRESS_DELAY
-import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.user_flow.ui.widget.ProgressView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.universal_progress.view.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
@@ -37,7 +34,7 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
         isFragmentDestroying = false
     }
 
-    fun getKey(): Int? = arguments?.getInt("KEY")
+    fun getKey(): Int? = arguments?.getInt("KEY") ?: ChannelListType.NORMAL
 
     override val name: String
         get() = this.toString()
@@ -78,19 +75,19 @@ abstract class BaseFragment(open val layoutId: Int) : Fragment(), IMvpView {
         if (progress == null)
             progress = ProgressView(context)
                     .also { progress ->
-                (view as? ConstraintLayout)?.let { parent ->
-                    parent.addView(progress)
-                    ConstraintSet().apply {
-                        connect(progress.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-                        connect(progress.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-                        connect(progress.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT)
-                        connect(progress.id, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT)
-                        constrainWidth(progress.id, ConstraintSet.MATCH_CONSTRAINT)
-                        constrainHeight(progress.id, ConstraintSet.MATCH_CONSTRAINT)
-                        applyTo(parent)
+                        (view as? ConstraintLayout)?.let { parent ->
+                            parent.addView(progress)
+                            ConstraintSet().apply {
+                                connect(progress.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                                connect(progress.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+                                connect(progress.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT)
+                                connect(progress.id, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT)
+                                constrainWidth(progress.id, ConstraintSet.MATCH_CONSTRAINT)
+                                constrainHeight(progress.id, ConstraintSet.MATCH_CONSTRAINT)
+                                applyTo(parent)
+                            }
+                        }
                     }
-                }
-            }
     }
 
     override fun hideProgress() {

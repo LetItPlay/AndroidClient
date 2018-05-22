@@ -20,5 +20,7 @@ data class Channel(
         @ColumnInfo(name = "channel_tags")
         val tags: List<String>?,
         @SerializedName("followed")
-        val followed: Boolean? = false
+        val followed: Boolean? = false,
+        @SerializedName("hidden")
+        val hidden: Boolean? = true
 )

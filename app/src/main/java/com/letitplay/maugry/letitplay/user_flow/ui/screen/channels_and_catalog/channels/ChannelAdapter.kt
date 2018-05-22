@@ -80,6 +80,7 @@ class ChannelAdapter(
             this.channelData = channelData
             itemView.apply {
                 channel_follow.isFollowing = channelData.followed ?: false
+                channel_follow.isHidden = channelData.hidden ?: false
                 follower_count.text = channelData.subscriptionCount.toString()
             }
         }

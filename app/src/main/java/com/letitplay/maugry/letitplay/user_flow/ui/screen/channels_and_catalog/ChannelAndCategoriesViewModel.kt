@@ -23,7 +23,7 @@ class ChannelAndCategoriesViewModel(
 
     val isLoading = MutableLiveData<Boolean>()
 
-    var categorylId: Int? = null
+    var listType = MutableLiveData<Int>()
 
     var channels: MutableLiveData<List<Channel>> = MutableLiveData()
 
@@ -53,14 +53,16 @@ class ChannelAndCategoriesViewModel(
     }
 
     private fun refreshChannels() {
-        channelRepo.channels(categorylId)
-                .doOnSubscribe { refreshing.postValue(true) }
-                .doOnSuccess { channels.value = it }
-                .doFinally {
-                    refreshing.postValue(false)
-                }
-                .subscribeBy({})
-                .addTo(compositeDisposable)
+        listType.value?.let {
+            channelRepo.channels(it)
+                    .doOnSubscribe { refreshing.postValue(true) }
+                    .doOnSuccess { channels.value = it }
+                    .doFinally {
+                        refreshing.postValue(false)
+                    }
+                    .subscribeBy({})
+                    .addTo(compositeDisposable)
+        }
     }
 
     fun onFollowClick(channelData: Channel) {

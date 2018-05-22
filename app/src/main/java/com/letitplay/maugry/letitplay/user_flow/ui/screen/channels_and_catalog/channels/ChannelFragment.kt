@@ -31,7 +31,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.categorylId = getKey()
+        vm.listType.value = getKey()
         lifecycle.addObserver(vm)
         vm.channels.observe(this, Observer<List<Channel>> {
             it?.let {

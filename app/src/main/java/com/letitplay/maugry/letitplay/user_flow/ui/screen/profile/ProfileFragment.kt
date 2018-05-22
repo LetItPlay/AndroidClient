@@ -19,11 +19,14 @@ import com.bumptech.glide.signature.ObjectKey
 import com.gsfoxpro.musicservice.MusicRepo
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
+import com.letitplay.maugry.letitplay.ServiceLocator.router
 import com.letitplay.maugry.letitplay.data_management.db.entity.Language
 import com.letitplay.maugry.letitplay.data_management.db.entity.Track
 import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.toAudioTrack
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseFragment
+import com.letitplay.maugry.letitplay.user_flow.ui.ChannelListType
+import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.search.query.SearchResultsKey
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.DateHelper
 import com.letitplay.maugry.letitplay.user_flow.ui.utils.listDivider
@@ -128,6 +131,9 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             }
         })
 
+        profile_hidden_channels_card.setOnClickListener {
+            onHideChannelClick()
+        }
         profile_header.attachTo(profile_list)
         loadProfileAvatar()
         profile_photo_icon.setOnClickListener(::takePhoto)
@@ -146,6 +152,10 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 show()
             }
         }
+    }
+
+    private fun onHideChannelClick() {
+        router.navigateTo(ChannelKey(ChannelListType.BLACKLIST))
     }
 
     private fun takePhoto(view: View) {

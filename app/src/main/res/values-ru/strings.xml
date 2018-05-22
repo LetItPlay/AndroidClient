@@ -14,6 +14,7 @@
     <string name="channel_page_recent_added">Недавно добавленные</string>
     <string name="channels_categories">Категории</string>
     <string name="channels_you_subscribed">Вы подписаны</string>
+    <string name="channels_show">Показать</string>
 
     <!--FEED-->
     <string name="playing_now">играет сейчас</string>

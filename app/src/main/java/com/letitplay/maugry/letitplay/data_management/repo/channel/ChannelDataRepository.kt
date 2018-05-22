@@ -3,11 +3,14 @@ package com.letitplay.maugry.letitplay.data_management.repo.channel
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.api.LetItPlayApi
 import com.letitplay.maugry.letitplay.data_management.db.LetItPlayDb
-import com.letitplay.maugry.letitplay.data_management.db.entity.*
+import com.letitplay.maugry.letitplay.data_management.db.entity.Category
+import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
+import com.letitplay.maugry.letitplay.data_management.db.entity.Track
+import com.letitplay.maugry.letitplay.data_management.db.entity.TrackWithChannel
 import com.letitplay.maugry.letitplay.data_management.model.embeddedItemToTrackWithChannels
+import com.letitplay.maugry.letitplay.user_flow.ui.ChannelListType
 import com.letitplay.maugry.letitplay.utils.PreferenceHelper
 import com.letitplay.maugry.letitplay.utils.Result
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -32,11 +35,12 @@ class ChannelDataRepository(
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun channels(categoryId: Int?): Single<List<Channel>> {
-        val source = when (categoryId) {
-            null -> api.channels()
-            -1 -> api.favouriteChannels()
-            else -> api.channelsFromCategory(categoryId)
+    override fun channels(listType: Int): Single<List<Channel>> {
+        val source = when (listType) {
+            ChannelListType.NORMAL -> api.channels()
+            ChannelListType.BLACKLIST -> api.channelsFromBlackList()
+            ChannelListType.FAVOURITE -> api.favouriteChannels()
+            else -> api.channelsFromCategory(listType)
         }
         return source
                 .onErrorReturnItem(emptyList())

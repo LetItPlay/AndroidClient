@@ -9,7 +9,7 @@ import io.reactivex.Single
 
 
 interface ChannelRepository {
-    fun channels(categoryId: Int?): Single<List<Channel>>
+    fun channels(categoryId: Int): Single<List<Channel>>
     fun catalog(): Flowable<Pair<List<Channel>, List<Category>>>
     fun channel(channelId: Int): Flowable<Channel>
     fun follow(channel: Channel): Single<Channel>
