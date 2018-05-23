@@ -121,18 +121,25 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
                 tools:text="@string/language_en" />
 
-            <Switch
+            <FrameLayout
                 android:id="@+id/profile_adult_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/profile_adult_content"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                android:textStyle="normal"
                 app:layout_constraintBottom_toTopOf="@id/profile_hidden_channels_card"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profile_current_language" />
+                app:layout_constraintTop_toBottomOf="@id/profile_current_language">
+
+                <Switch
+                    android:id="@+id/profile_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/profile_adult_content"
+                    android:textColor="#000000"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+            </FrameLayout>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/profile_hidden_channels_card"

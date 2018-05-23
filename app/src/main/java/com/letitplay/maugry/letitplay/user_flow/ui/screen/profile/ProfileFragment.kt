@@ -80,7 +80,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         vm.isAdult.observe(this, Observer<Boolean> {
             it?.let {
                 prefHelper.isAdult = it
-                profile_adult_content.isChecked = it
+                profile_switch.isChecked = it
             }
         })
         vm.language.observe(this, Observer<Optional<Language>> {
@@ -136,6 +136,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
             })
             vm.isAdult.value = prefHelper.isAdult
         }
+        profile_switch.isClickable = false
         profile_adult_content.setOnClickListener {
             AlertDialog.Builder(activity)
                     .apply {
