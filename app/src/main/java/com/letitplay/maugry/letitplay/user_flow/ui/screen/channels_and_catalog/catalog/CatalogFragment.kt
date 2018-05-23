@@ -3,7 +3,10 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.letitplay.maugry.letitplay.R
 import com.letitplay.maugry.letitplay.ServiceLocator
 import com.letitplay.maugry.letitplay.ServiceLocator.router
@@ -14,9 +17,7 @@ import com.letitplay.maugry.letitplay.user_flow.ui.ChannelListType
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.ChannelAndCategoriesViewModel
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelKey
 import com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog.channels.ChannelPageKey
-import com.letitplay.maugry.letitplay.utils.Result
 import kotlinx.android.synthetic.main.catalogs_fragment.*
-import timber.log.Timber
 
 class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
@@ -29,22 +30,37 @@ class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.catalog.observe(this, Observer<Result<Pair<List<Channel>, List<Category>>>> { result ->
-            when (result) {
-                is Result.Success -> {
-                    catalogAdapter.categories = listOf(Category(ChannelListType.FAVOURITE, getString(R.string.channels_you_subscribed), result.data.first)) + result.data.second
-                }
-                is Result.Failure -> Timber.e(result.e)
+        lifecycle.addObserver(vm)
+        vm.catalog.observe(this, Observer<Pair<List<Channel>, List<Category>>> {
+            it?.let {
+                catalogAdapter.categories = listOf(Category(ChannelListType.FAVOURITE, getString(R.string.channels_you_subscribed), it.first)) + it.second
+            }
+        })
+        vm.isLoading.observe(this, Observer<Boolean> {
+            when (it) {
+                true -> showProgress()
+                else -> hideProgress()
+            }
+        })
+        vm.refreshing.observe(this, Observer<Boolean> {
+            it?.let {
+                swipe_refresh.isRefreshing = it
             }
         })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
-        swipe_refresh.setOnClickListener {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)!!
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
+        swipeRefreshLayout.setOnRefreshListener {
             vm.onRefreshChannels()
         }
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         catalog_list.adapter = catalogAdapter
     }
 

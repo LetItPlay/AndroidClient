@@ -1,8 +1,10 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.profile
 
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
@@ -55,13 +57,7 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
     }
 
     private var profileRepo: MusicRepo? = null
-
-    val keyboardListener = object : View.OnKeyListener {
-        override fun onKey(p0: View?, p1: Int, keyevent: KeyEvent?): Boolean {
-            if ((keyevent?.action == KeyEvent.ACTION_DOWN)) Timber.d("KEYBOARD_ACTION" + keyevent.action)
-            return true
-        }
-    }
+    lateinit var prefHelper: PreferenceHelper
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -79,6 +75,12 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
 
             it?.let {
                 likedTracksListAdapter.data = it
+            }
+        })
+        vm.isAdult.observe(this, Observer<Boolean> {
+            it?.let {
+                prefHelper.isAdult = it
+                profile_adult_content.isChecked = it
             }
         })
         vm.language.observe(this, Observer<Optional<Language>> {
@@ -105,31 +107,51 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         profileRecycler.adapter = likedTracksListAdapter
         val divider = listDivider(profileRecycler.context, R.drawable.list_divider)
         profileRecycler.addItemDecoration(divider)
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val prefHelper = context?.let { PreferenceHelper(it) }
-        if (prefHelper?.userName != PreferenceHelper.DEFAULT_USER_NAME)
-            profile_user_name.setText(prefHelper?.userName, TextView.BufferType.EDITABLE)
-        else profile_user_name.setText(getString(R.string.profile_user_name), TextView.BufferType.EDITABLE)
+        context?.let {
+            prefHelper = it.let { PreferenceHelper(it) }
+            if (prefHelper.userName != PreferenceHelper.DEFAULT_USER_NAME)
+                profile_user_name.setText(prefHelper.userName, TextView.BufferType.EDITABLE)
+            else profile_user_name.setText(getString(R.string.profile_user_name), TextView.BufferType.EDITABLE)
 
-        profile_user_name.addTextChangedListener(object : TextWatcher {
+            profile_user_name.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(p0: Editable?) {
-                prefHelper?.userName = p0.toString()
-            }
+                override fun afterTextChanged(p0: Editable?) {
+                    prefHelper.userName = p0.toString()
+                }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+                }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
-        })
+                }
+            })
+            vm.isAdult.value = prefHelper.isAdult
+        }
+        profile_adult_content.setOnClickListener {
+            AlertDialog.Builder(activity)
+                    .apply {
+                        setMessage(R.string.profile_adult_message)
+                        setPositiveButton(R.string.profile_yes, object : DialogInterface.OnClickListener {
+                            override fun onClick(p0: DialogInterface?, p1: Int) {
+                                vm.putIsAdult()
+                            }
+                        })
+                        setNegativeButton(R.string.profile_no, object : DialogInterface.OnClickListener {
+                            override fun onClick(p0: DialogInterface?, p1: Int) {
+                                vm.deleteIsAdult()
+                            }
+                        })
+                    }.create().show()
+        }
 
         profile_hidden_channels_card.setOnClickListener {
             onHideChannelClick()

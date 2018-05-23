@@ -74,6 +74,7 @@ class ChannelFragment : BaseFragment(R.layout.channels_fragment) {
 
     private fun onFollowClick(channel: Channel) {
         if (swipe_refresh.isRefreshing) return
-        vm.onFollowClick(channel)
+        if (channel.hidden == true) vm.onShowClick(channel)
+        else vm.onFollowClick(channel)
     }
 }

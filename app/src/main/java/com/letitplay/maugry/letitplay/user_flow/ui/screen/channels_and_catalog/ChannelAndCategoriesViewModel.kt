@@ -1,14 +1,14 @@
 package com.letitplay.maugry.letitplay.user_flow.ui.screen.channels_and_catalog
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.OnLifecycleEvent
 import com.letitplay.maugry.letitplay.SchedulerProvider
 import com.letitplay.maugry.letitplay.data_management.db.entity.Category
 import com.letitplay.maugry.letitplay.data_management.db.entity.Channel
 import com.letitplay.maugry.letitplay.data_management.repo.channel.ChannelRepository
 import com.letitplay.maugry.letitplay.user_flow.ui.BaseViewModel
-import com.letitplay.maugry.letitplay.utils.Result
-import com.letitplay.maugry.letitplay.utils.ext.toLiveData
-import com.letitplay.maugry.letitplay.utils.toResult
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -27,19 +27,15 @@ class ChannelAndCategoriesViewModel(
 
     var channels: MutableLiveData<List<Channel>> = MutableLiveData()
 
-    val catalog: LiveData<Result<Pair<List<Channel>, List<Category>>>> by lazy {
-        channelRepo.catalog()
-                .doOnSubscribe { isLoading.postValue(true) }
-                .doOnEach { isLoading.postValue(false) }
-                .toResult(schedulerProvider)
-                .toLiveData()
-    }
+    var catalog: MutableLiveData<Pair<List<Channel>, List<Category>>> = MutableLiveData()
 
     val refreshing = MutableLiveData<Boolean>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
+        isLoading.postValue(true)
         refreshChannels()
+        refreshCatalog()
     }
 
     fun onRefreshChannels() {
@@ -49,16 +45,25 @@ class ChannelAndCategoriesViewModel(
     }
 
     private fun refreshCatalog() {
+        channelRepo.catalog()
+                .doOnSuccess { catalog.value = it }
+                .doFinally {
+                    isLoading.postValue(false)
+                    refreshing.postValue(false)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
+
 
     }
 
     private fun refreshChannels() {
         listType.value?.let {
             channelRepo.channels(it)
-                    .doOnSubscribe { refreshing.postValue(true) }
                     .doOnSuccess { channels.value = it }
                     .doFinally {
                         refreshing.postValue(false)
+                        isLoading.postValue(false)
                     }
                     .subscribeBy({})
                     .addTo(compositeDisposable)
@@ -66,27 +71,47 @@ class ChannelAndCategoriesViewModel(
     }
 
     fun onFollowClick(channelData: Channel) {
-        if (followingDisposable == null || followingDisposable!!.isDisposed) {
-            followingDisposable = channelRepo.follow(channelData)
-                    .doOnSubscribe {
-                        isLoading.postValue(true)
-                    }
-                    .doOnSuccess {
-                        val channel = it
-                        val currentList: MutableList<Channel> = channels.value?.toMutableList()
-                                ?: mutableListOf()
-                        val updatedChannel = currentList.find { it.id == channel.id }
-                        val updatedIndex = currentList.indexOf(updatedChannel)
-                        currentList.removeAt(updatedIndex)
-                        currentList.add(updatedIndex, channel)
+        channelRepo.follow(channelData)
+                .doOnSubscribe {
+                    isLoading.postValue(true)
+                }
+                .doOnSuccess {
+                    val channel = it
+                    val currentList: MutableList<Channel> = channels.value?.toMutableList()
+                            ?: mutableListOf()
+                    val updatedChannel = currentList.find { it.id == channel.id }
+                    val updatedIndex = currentList.indexOf(updatedChannel)
+                    currentList.removeAt(updatedIndex)
+                    currentList.add(updatedIndex, channel)
+                    channels.value = currentList
+                }
+                .doFinally {
+                    isLoading.postValue(false)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
 
-                        channels.value = currentList
-                    }
-                    .doFinally {
-                        isLoading.postValue(false)
-                    }
-                    .subscribeBy({})
-        }
+    }
+
+    fun onShowClick(channelData: Channel) {
+        channelRepo.showChannel(channelData.id)
+                .doOnSubscribe {
+                    isLoading.postValue(true)
+                }
+                .doOnSuccess {
+                    val channel = it
+                    val currentList: MutableList<Channel> = channels.value?.toMutableList()
+                            ?: mutableListOf()
+                    val updatedChannel = currentList.find { it.id == channel.id }
+                    val updatedIndex = currentList.indexOf(updatedChannel)
+                    currentList.removeAt(updatedIndex)
+                    channels.value = currentList
+                }
+                .doFinally {
+                    isLoading.postValue(false)
+                }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
     }
 
     override fun onCleared() {

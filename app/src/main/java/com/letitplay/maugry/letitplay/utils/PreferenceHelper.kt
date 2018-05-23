@@ -31,6 +31,17 @@ class PreferenceHelper(context: Context) {
             }
         }
 
+    var isAdult: Boolean
+        get() {
+            return sharedPreferences.getBoolean(APP_SETTINGS_IS_ADULT, false)
+        }
+        set(value) {
+            sharedPreferences
+                    .edit()
+                    .putBoolean(APP_SETTINGS_IS_ADULT, value)
+                    .apply()
+        }
+
     var userName: String
         get() {
             return sharedPreferences.getString(APP_SETTINGS_USER_NAME, DEFAULT_USER_NAME)
@@ -101,6 +112,7 @@ class PreferenceHelper(context: Context) {
         private const val APP_SETTINGS_USER_TOKEN = "APP_SETTINGS_USER_TOKEN"
         private const val APP_SETTINGS_USER_JWT = "APP_SETTINGS_USER_JWT"
         private const val APP_SETTINGS_USER_NAME = "APP_SETTINGS_USER_NAME"
+        private const val APP_SETTINGS_IS_ADULT = "APP_SETTINGS_IS_ADULT"
         const val DEFAULT_USER_NAME = "default user"
         const val NO_VALUE = "NO_VALUE"
         const val PLAYBACK_SPEED = "APP_PLAYBACK_SPEED"

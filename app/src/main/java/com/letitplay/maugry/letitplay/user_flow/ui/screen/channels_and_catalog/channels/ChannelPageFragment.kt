@@ -59,6 +59,7 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
                 }
                 channel_page_follow.isEnabled = true
                 channel_page_follow.isFollowing = it.followed ?: false
+                channel_page_follow.isHidden = it.hidden ?: false
                 channel_page_share?.let {
                     it.setOnClickListener {
                         showChannelContextMenu(it.context, channelData.name, channelData.id)
@@ -89,7 +90,8 @@ class ChannelPageFragment : BaseFragment(R.layout.channel_page_fragment) {
         val followButton = view.findViewById<View>(R.id.channel_page_follow)
         followButton.setOnClickListener {
             channel_page_follow.isEnabled = false
-            vm.onFollowClick()
+            if (vm.channel.value?.hidden == true) vm.onShowClick()
+            else vm.onFollowClick()
         }
         return view
     }

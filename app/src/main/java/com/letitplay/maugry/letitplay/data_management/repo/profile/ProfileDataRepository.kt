@@ -19,6 +19,13 @@ class ProfileDataRepository(
         private val schedulerProvider: SchedulerProvider,
         private val preferenceHelper: PreferenceHelper
 ) : ProfileRepository {
+    override fun putIsAdult(): Single<Response<Any>> {
+        return api.putAdultContent().subscribeOn(schedulerProvider.io())
+    }
+
+    override fun deleteIsAdult(): Single<Response<Any>> {
+        return api.deleteAdultContent().subscribeOn(schedulerProvider.io())
+    }
 
     override fun signIn(uuid: String, username: String): Single<Response<Any>> {
         return api.signin(uuid, username).subscribeOn(schedulerProvider.io())

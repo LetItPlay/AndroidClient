@@ -35,6 +35,10 @@
     <string name="profile_favourite_tracks">Треки, понравившиеся вам</string>
     <string name="profile_user_name">Ваш будущий профиль</string>
     <string name="profile_hidden_channels">Скрытые каналы</string>
+    <string name="profile_adult_content">Allow adult content</string>
+    <string name="profile_adult_message">Вам точно есть 18?</string>
+    <string name="profile_yes">Да</string>
+    <string name="profile_no">Нет</string>
 
     <!-- SEARCH -->
     <string name="search_title">Search</string>

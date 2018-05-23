@@ -51,7 +51,7 @@ class FollowWidget @JvmOverloads constructor(context: Context?, attrs: Attribute
     }
 
     private fun setShow() {
-        follow_button.isSelected = true
+        follow_button.isSelected = false
         follow_button.text = context.getString(R.string.channels_show)
     }
 }

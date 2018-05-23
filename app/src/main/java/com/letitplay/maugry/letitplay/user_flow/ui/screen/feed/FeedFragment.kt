@@ -2,6 +2,7 @@ package com.letitplay.maugry.letitplay.user_flow.ui.screen.feed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.arch.paging.PagedList
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
@@ -47,15 +48,15 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        vm.state.observe(this, Observer<FeedViewModel.ViewState> {
+        vm.feeds.observe(this, Observer<PagedList<TrackWithChannel>?> {
             it?.let {
-                if (it.noChannels) {
+                if (it.isEmpty()) {
                     feed_no_tracks.show()
                     feed_no_internet.hide()
                 } else {
                     feed_no_tracks.hide()
+                    feedListAdapter.submitList(it)
                 }
-                feedListAdapter.submitList(it.data)
                 feed_swipe_refresh?.isRefreshing = false
             }
         })
@@ -74,9 +75,9 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
             }
         })
 
-        vm.isReported.observe(this, Observer<Boolean>{
-            it?.let{
-                if (it)  Toast.makeText(ctx, R.string.report_message, Toast.LENGTH_LONG).show()
+        vm.isReported.observe(this, Observer<Boolean> {
+            it?.let {
+                if (it) Toast.makeText(ctx, R.string.report_message, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -154,7 +155,7 @@ class FeedFragment : BaseFragment(R.layout.feed_fragment) {
                 else navigationActivity.musicPlayerSmall?.playPause()
                 return
             }
-            val tracks = vm.state.value?.data
+            val tracks = vm.feeds.value
             val playlist = tracks?.map(TrackWithChannel::toAudioTrack)?.toMutableList() ?: return
             feedRepo = MusicRepo(playlist)
             navigationActivity.updateRepo(trackData.track.id, feedRepo, tracks)

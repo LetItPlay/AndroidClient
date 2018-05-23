@@ -22,6 +22,7 @@ class ProfileViewModel(
 ) : BaseViewModel() {
 
     var isReported = MutableLiveData<Boolean>()
+    var isAdult = MutableLiveData<Boolean>()
 
     val language: LiveData<Optional<Language>> by lazy {
         profileRepository.getLanguage().toLiveData()
@@ -40,6 +41,23 @@ class ProfileViewModel(
         val lang = Language.fromString(shortStr) ?: throw IllegalArgumentException()
         profileRepository.changeLanguage(lang)
                 .subscribe()
+                .addTo(compositeDisposable)
+    }
+
+    fun putIsAdult() {
+        profileRepository
+                .putIsAdult()
+                .doOnSuccess { isAdult.postValue(true) }
+                .subscribeBy({})
+                .addTo(compositeDisposable)
+
+    }
+
+    fun deleteIsAdult() {
+        profileRepository
+                .deleteIsAdult()
+                .doOnSuccess { isAdult.postValue(false) }
+                .subscribeBy({})
                 .addTo(compositeDisposable)
     }
 

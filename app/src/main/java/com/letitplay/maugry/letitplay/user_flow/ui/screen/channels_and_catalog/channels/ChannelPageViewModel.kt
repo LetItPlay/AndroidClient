@@ -40,10 +40,24 @@ class ChannelPageViewModel(
         }
     }
 
-    fun hideChannel(channelId: Int) {
+
+    fun onShowClick() {
+        channel.value?.let {
+            channelRepository.showChannel(it.id)
+                    .doOnSuccess {
+                        channelId.value = it.id
+                    }
+                    .subscribeBy({})
+                    .addTo(compositeDisposable)
+        }
+    }
+
+
+    fun hideChannel(id: Int) {
         channelRepository
-                .hideChannel(channelId)
+                .hideChannel(id)
                 .doOnSuccess {
+                    channelId.value = it.id
                     isHidden.postValue(true)
                 }
                 .subscribeBy({})

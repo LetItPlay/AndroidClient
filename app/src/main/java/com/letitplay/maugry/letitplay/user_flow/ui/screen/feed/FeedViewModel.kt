@@ -32,31 +32,11 @@ class FeedViewModel(
     )
 
     var isReported = MutableLiveData<Boolean>()
-    private var likeDisposable: Disposable? = null
-    private val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
-    private val feeds by lazy { repoResult.pagedList }
-    private val noFollowedChannels by lazy {
-        channelRepository.followedChannelsId()
-                .map(List<Int>::isEmpty)
-                .distinctUntilChanged()
-                .doOnNext {
-                    refreshFeed()
-                }
-                .toLiveData()
-    }
-    private val stateMediator = MediatorLiveData<ViewState>()
-            .also { mediator ->
-                mediator.addSource(feeds, {
-                    mediator.setValue(ViewState(it, mediator.value?.noChannels ?: false))
-                })
-                mediator.addSource(noFollowedChannels, {
-                    mediator.setValue(ViewState(mediator.value?.data, it ?: false))
-                })
-            }
-
-    val state: LiveData<ViewState> by lazy { stateMediator }
-
+    var likeDisposable: Disposable? = null
+    val repoResult by lazy { feedRepository.feeds(compositeDisposable) }
+    val feeds by lazy { repoResult.pagedList }
     val refreshState by lazy { repoResult.refreshState }
+
 
     fun onLikeClick(trackData: TrackWithChannel) {
         if (likeDisposable == null || likeDisposable!!.isDisposed) {

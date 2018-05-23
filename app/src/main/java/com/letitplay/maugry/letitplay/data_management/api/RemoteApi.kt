@@ -138,6 +138,9 @@ interface LetItPlayApi {
     @GET("/blacklist/channel")
     fun channelsFromBlackList(): Single<List<Channel>>
 
+    @GET("/user/adult")
+    fun getAdultContent(): Single<Response<Any>>
+
 
     /*POST_API*/
 
@@ -167,6 +170,9 @@ interface LetItPlayApi {
     @PUT("/blacklist/channel/{id}")
     fun putChannelToBlacklist(@Path("id") idStation: Int): Single<Channel>
 
+    @PUT("/user/adult")
+    fun putAdultContent(): Single<Response<Any>>
+
     /*DELETE_API*/
 
     @DELETE("follow/channel/{id}")
@@ -177,4 +183,7 @@ interface LetItPlayApi {
 
     @DELETE("/blacklist/channel/{id}")
     fun deleteChannelFromBlacklist(@Path("id") idStation: Int): Single<Channel>
+
+    @DELETE("/user/adult")
+    fun deleteAdultContent(): Single<Response<Any>>
 }

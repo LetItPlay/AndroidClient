@@ -48,12 +48,11 @@ class ChannelDataRepository(
                 .observeOn(schedulerProvider.ui())
     }
 
-    override fun catalog(): Flowable<Pair<List<Channel>, List<Category>>> {
+    override fun catalog(): Single<Pair<List<Channel>, List<Category>>> {
         return Single.zip(api.favouriteChannels(), api.catalog(),
-                BiFunction { channels: List<Channel>, catalog: List<Category> ->
-                    Pair(channels, catalog)
+                BiFunction { channels: List<Channel>?, catalog: List<Category>? ->
+                    Pair(channels ?: emptyList(), catalog ?: emptyList())
                 })
-                .toFlowable()
                 .onErrorReturnItem(Pair(emptyList(), emptyList()))
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
@@ -62,6 +61,12 @@ class ChannelDataRepository(
 
     override fun hideChannel(channelId: Int): Single<Channel> {
         return api.putChannelToBlacklist(channelId)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+    }
+
+    override fun showChannel(channelId: Int): Single<Channel> {
+        return api.deleteChannelFromBlacklist(channelId)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
     }
