@@ -33,7 +33,12 @@ class CatalogFragment : BaseFragment(R.layout.catalogs_fragment) {
         lifecycle.addObserver(vm)
         vm.catalog.observe(this, Observer<Pair<List<Channel>, List<Category>>> {
             it?.let {
-                catalogAdapter.categories = listOf(Category(ChannelListType.FAVOURITE, getString(R.string.channels_you_subscribed), it.first)) + it.second
+                val catalog: MutableList<Category> = mutableListOf()
+                if (it.first.isNotEmpty()) catalog.add(Category(ChannelListType.FAVOURITE, getString(R.string.channels_you_subscribed), it.first))
+                it.second.forEach {
+                    if (it.stations != null && it.stations.isNotEmpty()) catalog.add(it)
+                }
+                catalogAdapter.categories = catalog
             }
         })
         vm.isLoading.observe(this, Observer<Boolean> {
