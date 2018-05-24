@@ -138,20 +138,11 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
         }
         profile_switch.isClickable = false
         profile_adult_content.setOnClickListener {
-            AlertDialog.Builder(activity)
-                    .apply {
-                        setMessage(R.string.profile_adult_message)
-                        setPositiveButton(R.string.profile_yes, object : DialogInterface.OnClickListener {
-                            override fun onClick(p0: DialogInterface?, p1: Int) {
-                                vm.putIsAdult()
-                            }
-                        })
-                        setNegativeButton(R.string.profile_no, object : DialogInterface.OnClickListener {
-                            override fun onClick(p0: DialogInterface?, p1: Int) {
-                                vm.deleteIsAdult()
-                            }
-                        })
-                    }.create().show()
+            if (profile_switch.isChecked) {
+                vm.deleteIsAdult()
+            } else {
+                requestAgreement()
+            }
         }
 
         profile_hidden_channels_card.setOnClickListener {
@@ -201,6 +192,24 @@ class ProfileFragment : BaseFragment(R.layout.profile_fragment) {
                 .apply(RequestOptions().signature(ObjectKey(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_placeholder))
                 .into(profile_user_avatar_pic)
+    }
+
+    private fun requestAgreement() {
+        AlertDialog.Builder(activity)
+                .apply {
+                    setTitle(R.string.profile_adult_title)
+                    setMessage(R.string.profile_adult_message)
+                    setPositiveButton(R.string.profile_yes, object : DialogInterface.OnClickListener {
+                        override fun onClick(p0: DialogInterface?, p1: Int) {
+                            vm.putIsAdult()
+                        }
+                    })
+                    setNegativeButton(R.string.profile_no, object : DialogInterface.OnClickListener {
+                        override fun onClick(p0: DialogInterface?, p1: Int) {
+                            vm.deleteIsAdult()
+                        }
+                    })
+                }.create().show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

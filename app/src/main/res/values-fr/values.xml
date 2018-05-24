@@ -38,7 +38,8 @@
     <string name="profile_user_name">Votre futur profil</string>
     <string name="profile_hidden_channels">Hidden channels</string>
     <string name="profile_adult_content">Allow adult content</string>
-    <string name="profile_adult_message">Вам точно есть 18?</string>
+    <string name="profile_adult_message">After clicking «Yes» materials for adults will be available</string>
+    <string name="profile_adult_title">Confirm that you are already 18 years old</string>
     <string name="profile_yes">Yes</string>
     <string name="profile_no">No</string>
 
